@@ -23,13 +23,15 @@ To change a page, edit its file in `src/pages/` (or `src/layout.html` for the me
 
 ## One-time setup
 
-1. **Register the web app.** Firebase console → Project settings (gear) → General → *Your apps* → Web (`</>`). Name it `website`, then copy the `firebaseConfig` values into `public/assets/js/firebase-config.js`. These values are public by design.
-2. **Create the database.** Firebase console → Build → Firestore Database → Create database → *Production mode* → location `asia-south1 (Mumbai)`.
-3. **Deploy key.**
-   1. Firebase console → Project settings → Service accounts → *Generate new private key*. A `.json` file downloads.
-   2. Google Cloud console → IAM (project `boardgamesite-80e80`) → find the `firebase-adminsdk-…` account → edit → add the role **Firebase Admin**.
-   3. GitHub → this repo → Settings → Secrets and variables → Actions → *New repository secret*: name `FIREBASE_SERVICE_ACCOUNT`, value = the whole contents of the `.json` file. Then delete the file from your computer.
-   4. GitHub → Actions → *Deploy to Firebase* → *Run workflow*.
+Steps 1–3 are done (October 2026); they're kept here for reference.
+
+1. **Register the web app.** Firebase console → Settings → Project settings → General → *Your apps* → Web (`</>`). Name it `website`, then copy the `firebaseConfig` values into `public/assets/js/firebase-config.js`. These values are public by design.
+2. **Create the database.** Firebase console → Databases & Storage → Firestore → Create database → Standard edition → location `asia-south1 (Mumbai)` → *Production mode*.
+3. **Deploy key.** Deploys run as a dedicated service account with only the access it needs.
+   1. Google Cloud → IAM & Admin → Service Accounts (project `boardgamesite-80e80`): `github-deployer` with the roles **Firebase Hosting Admin**, **Firebase Rules Admin** and **Service Usage Consumer**.
+   2. Its JSON key is stored as the GitHub secret `FIREBASE_SERVICE_ACCOUNT` (Settings → Secrets and variables → Actions). The key file itself should not be kept anywhere else.
+   3. The organisation blocks key creation by default (`iam.disableServiceAccountKeyCreation`). To make a new key (for example to replace a leaked one), temporarily override that policy for this project, create the key, then set it back to *Inherit parent's policy*.
+   4. To redeploy without a code change: GitHub → Actions → *Deploy to Firebase* → *Run workflow*.
 4. **Connect the domain.** Firebase console → Hosting → *Add custom domain* → `boardgamesite.com` (and `www.boardgamesite.com`, redirecting to it). Add the records Firebase shows in GoDaddy → My Products → boardgamesite.com → DNS. HTTPS is set up automatically once the records are live.
 
 ## Reading signups and messages
