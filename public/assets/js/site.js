@@ -69,7 +69,7 @@ function accountsDialog() {
     '<button type="button" class="dialog-close" aria-label="Close">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
     '<div class="dialog-inner">' +
-    '<img src="/assets/img/mascot-wave.webp" alt="" width="177" height="135">' +
+    '<img src="/assets/img/mascot-wave.webp" alt="" width="175" height="132">' +
     '<h2 id="acc-title">Accounts are coming soon</h2>' +
     '<p class="text-2">Profiles, saved stats and leaderboards are on the way. Leave your email and we’ll tell you when they open.</p>' +
     '<form class="nl-form" data-newsletter="accounts" novalidate>' +
