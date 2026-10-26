@@ -1,4 +1,20 @@
 /* BoardGameSite — shared styles */
+/* Fonts are hosted on the site itself (Latin subset) so text shows without a trip to another server.
+   DM Sans and Instrument Serif are under the SIL Open Font License, see /assets/fonts/. */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/assets/fonts/dm-sans-latin.woff') format('woff');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/assets/fonts/instrument-serif-latin.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
   /* BoardGameSite brand: Merlot & Gold */
   color-scheme: dark;
@@ -287,6 +303,41 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .page p, .page li { color: var(--text-2); }
 .page ul { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
 .page a { color: var(--accent-text); }
+.page h3 { font-size: 22px; margin-top: 6px; }
+.page ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.page strong { color: var(--text); font-weight: 600; }
+
+/* Guides and the text under each game */
+.crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; color: var(--muted); }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--text); }
+.crumbs span[aria-hidden] { opacity: .6; }
+.lede { font-size: 18px; }
+.game-guide { padding-top: 8px; border-top: 1px solid var(--border); }
+.callout { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 20px; margin-top: 8px; }
+.callout p { color: var(--text-2); margin: 0; }
+.callout .btn { flex: none; }
+.faq { display: flex; flex-direction: column; gap: 10px; }
+.faq h3 { font-family: var(--body); font-size: 17px; font-weight: 600 !important; color: var(--text); margin-top: 10px; line-height: 1.35; }
+.guide-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.guide-card { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; text-decoration: none; color: var(--text); }
+.guide-card b { font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1.15; }
+.guide-card span { color: var(--text-2); font-size: 15px; }
+.guide-card small { color: var(--accent-text); font-weight: 500; font-size: 14px; margin-top: 4px; }
+.guide-card:hover { border-color: var(--border-strong); }
+.related { display: flex; flex-direction: column; gap: 16px; }
+.related h2 { font-size: 28px; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.related-card { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; text-decoration: none; color: var(--text); }
+.related-card b { font-size: 17px; }
+.related-card span { color: var(--text-2); font-size: 14px; }
+.related-card:hover { border-color: var(--border-strong); }
+.game-card .learn-link { align-self: center; font-size: 14px; color: var(--muted); text-decoration: none; padding: 6px 0; }
+.game-card .learn-link:hover { color: var(--text); }
+.intro { max-width: 760px; display: flex; flex-direction: column; gap: 12px; }
+.intro h2 { font-size: 30px; }
+.intro p { color: var(--text-2); }
+.intro a { color: var(--accent-text); }
 .updated { color: var(--muted); font-size: 14px; }
 .contact-form { display: flex; flex-direction: column; gap: 14px; padding: 24px; }
 .contact-form label { font-weight: 700; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }

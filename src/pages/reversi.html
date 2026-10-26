@@ -1,9 +1,11 @@
-<!-- title: Reversi – Play free online | BoardGameSite -->
+<!-- title: Reversi Online – Play Free vs the Computer | BoardGameSite -->
 <!-- description: Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser. -->
 <!-- path: /play/reversi -->
 <!-- out: play/reversi.html -->
 <!-- nav: play -->
 <!-- script: /assets/js/reversi.js -->
+<!-- kind: game -->
+<!-- game: reversi -->
 <div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
   <a class="back" href="/">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
@@ -59,3 +61,44 @@
     </aside>
   </div>
 </div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Reversi</h2>
+  <p>Reversi is played on an 8×8 board with discs that are a different colour on each side. The game starts with four discs in the centre, two of each colour. You play gold and move first.</p>
+  <ol>
+    <li><strong>Place a disc</strong> so that one or more of the computer’s discs are trapped in a straight line between your new disc and another gold disc. Lines can run across, up and down, or diagonally.</li>
+    <li><strong>Flip the trapped discs.</strong> Every computer disc caught in a line flips to gold, in every direction at once.</li>
+    <li><strong>Every move must flip something.</strong> The squares where you can play are marked with a gold dot.</li>
+    <li><strong>No move? You pass.</strong> If you can’t flip anything, your turn is skipped and the computer plays again.</li>
+    <li><strong>The game ends</strong> when neither side can move, usually when the board is full. Whoever has more discs wins.</li>
+  </ol>
+
+  <h2>Quick tips to beat the computer</h2>
+  <ul>
+    <li><strong>Grab the corners.</strong> A disc in a corner can never be flipped, and it anchors the edges next to it.</li>
+    <li><strong>Avoid the squares next to the corners</strong>, especially the diagonal ones, early in the game. Playing there often hands the corner to your opponent.</li>
+    <li><strong>Don’t chase discs early.</strong> Having fewer discs in the opening usually means more choices later. The disc count only matters at the very end.</li>
+    <li><strong>Limit the computer’s moves.</strong> The best move is often the one that leaves your opponent with the fewest good replies.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn about mobility, edges and how to plan the endgame.</p>
+    <a class="btn btn-outline" href="/learn/reversi">Read the Reversi guide</a>
+  </div>
+
+  <h2>Reversi FAQ</h2>
+  <section class="faq">
+    <h3>Is this Reversi game free?</h3>
+    <p>Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s no download and no account needed.</p>
+    <h3>What happens if I can’t make a move?</h3>
+    <p>Your turn is skipped and the computer moves again. You get your turn back as soon as you have a move that flips at least one disc.</p>
+    <h3>Can a game of Reversi end in a draw?</h3>
+    <p>Yes. If both sides finish with the same number of discs, the game is a draw.</p>
+    <h3>Why are corners so important in Reversi?</h3>
+    <p>A disc can only be flipped if it can be trapped between two enemy discs. Nothing can sit on the far side of a corner, so a corner disc is safe for the rest of the game, and the discs you build out from it along the edges often become safe too.</p>
+    <h3>Which level should I start on?</h3>
+    <p>Easy is good for learning how flipping works. Medium plays sensibly and takes corners when it can. Hard thinks several moves ahead and is a real test of strategy.</p>
+  </section>
+</section>
+
+{{related:reversi}}

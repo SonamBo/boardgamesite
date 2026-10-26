@@ -3,17 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reversi – Play free online | BoardGameSite</title>
+<title>Reversi Online – Play Free vs the Computer | BoardGameSite</title>
 <meta name="description" content="Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser.">
 <link rel="canonical" href="https://boardgamesite.com/play/reversi">
 <meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BoardGameSite">
-<meta property="og:title" content="Reversi – Play free online | BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Reversi Online – Play Free vs the Computer | BoardGameSite">
 <meta property="og:description" content="Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser.">
 <meta property="og:url" content="https://boardgamesite.com/play/reversi">
-<meta property="og:image" content="https://boardgamesite.com/assets/img/og.png">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/reversi.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Reversi on BoardGameSite">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reversi Online – Play Free vs the Computer | BoardGameSite">
+<meta name="twitter:description" content="Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/reversi.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -21,12 +29,124 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BoardGameSite">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Instrument+Serif&display=swap">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
 <script type="module" src="/assets/js/reversi.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": [
+    "VideoGame",
+    "WebApplication"
+   ],
+   "@id": "https://boardgamesite.com/play/reversi#game",
+   "name": "Reversi",
+   "url": "https://boardgamesite.com/play/reversi",
+   "description": "Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser.",
+   "image": "https://boardgamesite.com/assets/img/og/reversi.jpg",
+   "genre": [
+    "Board game",
+    "Strategy"
+   ],
+   "gamePlatform": "Web browser",
+   "applicationCategory": "GameApplication",
+   "operatingSystem": "Any",
+   "playMode": "SinglePlayer",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": 0,
+    "priceCurrency": "USD"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   }
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Reversi",
+     "item": "https://boardgamesite.com/play/reversi"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Is this Reversi game free?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s no download and no account needed."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What happens if I can’t make a move?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Your turn is skipped and the computer moves again. You get your turn back as soon as you have a move that flips at least one disc."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can a game of Reversi end in a draw?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. If both sides finish with the same number of discs, the game is a draw."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why are corners so important in Reversi?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A disc can only be flipped if it can be trapped between two enemy discs. Nothing can sit on the far side of a corner, so a corner disc is safe for the rest of the game, and the discs you build out from it along the edges often become safe too."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Which level should I start on?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Easy is good for learning how flipping works. Medium plays sensibly and takes corners when it can. Hard thinks several moves ahead and is a real test of strategy."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -47,6 +167,10 @@
     <a href="/play/four-in-a-row?mode=daily">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
       Daily challenge
+    </a>
+    <a href="/learn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
     </a>
     <a href="/#leaderboards">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
@@ -128,6 +252,63 @@
   </div>
 </div>
 
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Reversi</h2>
+  <p>Reversi is played on an 8×8 board with discs that are a different colour on each side. The game starts with four discs in the centre, two of each colour. You play gold and move first.</p>
+  <ol>
+    <li><strong>Place a disc</strong> so that one or more of the computer’s discs are trapped in a straight line between your new disc and another gold disc. Lines can run across, up and down, or diagonally.</li>
+    <li><strong>Flip the trapped discs.</strong> Every computer disc caught in a line flips to gold, in every direction at once.</li>
+    <li><strong>Every move must flip something.</strong> The squares where you can play are marked with a gold dot.</li>
+    <li><strong>No move? You pass.</strong> If you can’t flip anything, your turn is skipped and the computer plays again.</li>
+    <li><strong>The game ends</strong> when neither side can move, usually when the board is full. Whoever has more discs wins.</li>
+  </ol>
+
+  <h2>Quick tips to beat the computer</h2>
+  <ul>
+    <li><strong>Grab the corners.</strong> A disc in a corner can never be flipped, and it anchors the edges next to it.</li>
+    <li><strong>Avoid the squares next to the corners</strong>, especially the diagonal ones, early in the game. Playing there often hands the corner to your opponent.</li>
+    <li><strong>Don’t chase discs early.</strong> Having fewer discs in the opening usually means more choices later. The disc count only matters at the very end.</li>
+    <li><strong>Limit the computer’s moves.</strong> The best move is often the one that leaves your opponent with the fewest good replies.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn about mobility, edges and how to plan the endgame.</p>
+    <a class="btn btn-outline" href="/learn/reversi">Read the Reversi guide</a>
+  </div>
+
+  <h2>Reversi FAQ</h2>
+  <section class="faq">
+    <h3>Is this Reversi game free?</h3>
+    <p>Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s no download and no account needed.</p>
+    <h3>What happens if I can’t make a move?</h3>
+    <p>Your turn is skipped and the computer moves again. You get your turn back as soon as you have a move that flips at least one disc.</p>
+    <h3>Can a game of Reversi end in a draw?</h3>
+    <p>Yes. If both sides finish with the same number of discs, the game is a draw.</p>
+    <h3>Why are corners so important in Reversi?</h3>
+    <p>A disc can only be flipped if it can be trapped between two enemy discs. Nothing can sit on the far side of a corner, so a corner disc is safe for the rest of the game, and the discs you build out from it along the edges often become safe too.</p>
+    <h3>Which level should I start on?</h3>
+    <p>Easy is good for learning how flipping works. Medium plays sensibly and takes corners when it can. Hard thinks several moves ahead and is a real test of strategy.</p>
+  </section>
+</section>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/solitaire">
+      <b>Solitaire</b>
+      <span>Classic Klondike with draw 1 or draw 3 and unlimited undo.</span>
+    </a>
+    <a class="related-card card" href="/play/checkers">
+      <b>Checkers</b>
+      <span>Jump pieces, crown kings and clear the board.</span>
+    </a>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    </a>
+  </div>
+</section>
+
 <footer class="footer">
   <div class="footer-brand">
     <img src="/assets/img/logo.webp" alt="" width="256" height="256">
@@ -135,6 +316,7 @@
   </div>
   <nav class="footer-links" aria-label="Footer">
     <a href="/about">About</a>
+    <a href="/learn">How to play</a>
     <a href="/contact">Contact</a>
     <a href="/privacy">Privacy Policy</a>
     <a href="/terms">Terms</a>

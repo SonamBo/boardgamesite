@@ -4,6 +4,8 @@
 <!-- out: play/solitaire.html -->
 <!-- nav: play -->
 <!-- script: /assets/js/solitaire.js -->
+<!-- kind: game -->
+<!-- game: solitaire -->
 <svg width="0" height="0" style="position: absolute" aria-hidden="true">
   <symbol id="suit-0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>
   <symbol id="suit-1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>
@@ -47,14 +49,50 @@
   </div>
   <p class="board-hint">Tap a card to move it to the best spot, or drag it. Tap the deck to draw. Your record: <span id="record">0 games won</span></p>
 
-  <div class="duo">
-    <div class="panel-box card-dark">
-      <h2>How to play</h2>
-      <p>Move all 52 cards onto the four foundations at the top right, building each suit up from Ace to King. In the seven columns, stack cards downwards in alternating colours (a red 6 on a black 7). You can move a whole run of face-up cards together, and only a King can go into an empty column. When you’re stuck, draw from the deck.</p>
-    </div>
-    <div class="panel-box card-dark">
-      <h2>Draw 1 or Draw 3?</h2>
-      <p>Draw 1 turns over one card at a time and wins far more often, which makes it good for a relaxed game. Draw 3 is the classic, harder version: only the top card of each three is playable.</p>
-    </div>
-  </div>
 </div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Solitaire</h2>
+  <p>This is Klondike, the most popular version of Solitaire. The aim is to move all 52 cards onto the four foundations at the top right, one pile per suit, building each from Ace up to King.</p>
+  <ol>
+    <li><strong>The deal.</strong> Cards are dealt into seven columns. The first column has one card, the second two, and so on up to seven. Only the top card of each column is face up. The rest of the deck sits face down at the top left.</li>
+    <li><strong>Build down in alternating colours.</strong> In the columns, put a card on one that’s one higher and the opposite colour: a red 6 on a black 7, a black Jack on a red Queen.</li>
+    <li><strong>Move runs together.</strong> You can move a whole run of face-up cards in order to another column. When you uncover a face-down card, it turns over.</li>
+    <li><strong>Only Kings go into empty columns.</strong> An empty column can be filled by a King, or by a run that starts with a King.</li>
+    <li><strong>Draw when you’re stuck.</strong> Tap the deck to turn over cards. When the deck runs out, tap it again to turn the pile back over and go through it again, as many times as you like.</li>
+    <li><strong>Win</strong> by getting all four suits up to their Kings.</li>
+  </ol>
+  <p>Tap a card to send it to the best place automatically, or drag it where you want it. Made a mistake? Undo as many moves as you like. Once every card is face up and the deck is empty, a <strong>Finish</strong> button plays the rest of the cards up for you.</p>
+
+  <h2>Draw 1 or Draw 3?</h2>
+  <p><strong>Draw 1</strong> turns over one card at a time, so every card in the deck is always reachable. It wins far more often and makes a good relaxed game. <strong>Draw 3</strong> is the classic, harder version: cards come three at a time and only the top one is playable, so some cards stay buried until the next pass. Switching between them starts a new game.</p>
+
+  <h2>Quick tips for winning more games</h2>
+  <ul>
+    <li><strong>Turn over face-down cards first.</strong> Every hidden card you reveal gives you new options. Work on the columns with the most face-down cards.</li>
+    <li><strong>Play Aces and Twos straight away.</strong> They’re never useful anywhere else.</li>
+    <li><strong>Don’t empty a column without a King to put there.</strong> An empty column you can’t fill is wasted.</li>
+    <li><strong>Don’t rush cards to the foundations.</strong> A 5 or 6 left in the columns can still hold a 4 or 5 of the other colour you need to move.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Want to win more often? The full guide covers which moves to make first and when to hold back.</p>
+    <a class="btn btn-outline" href="/learn/solitaire">Read the Solitaire guide</a>
+  </div>
+
+  <h2>Solitaire FAQ</h2>
+  <section class="faq">
+    <h3>Is this Solitaire game free?</h3>
+    <p>Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s nothing to download and no account to make.</p>
+    <h3>Is every game of Solitaire winnable?</h3>
+    <p>No. Some deals can’t be won however well you play, especially in Draw 3. If you’re truly stuck, start a new game; it doesn’t mean you did anything wrong.</p>
+    <h3>How many times can I go through the deck?</h3>
+    <p>As many times as you like. When the deck is empty, tap it to turn the pile back over.</p>
+    <h3>Is there a limit on undo?</h3>
+    <p>No. You can undo every move back to the start of the game.</p>
+    <h3>What’s the difference between Klondike and Solitaire?</h3>
+    <p>Solitaire is the name for any card game you play on your own. Klondike is the specific version most people mean when they say Solitaire, and it’s the one you can play here.</p>
+  </section>
+</section>
+
+{{related:solitaire}}

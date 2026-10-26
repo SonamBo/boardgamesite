@@ -1,9 +1,11 @@
-<!-- title: Checkers – Play free online | BoardGameSite -->
+<!-- title: Checkers Online – Play Free vs the Computer | BoardGameSite -->
 <!-- description: Play Checkers free against the computer at three difficulty levels. Forced captures, double jumps and kings, in your browser with no download. -->
 <!-- path: /play/checkers -->
 <!-- out: play/checkers.html -->
 <!-- nav: play -->
 <!-- script: /assets/js/checkers.js -->
+<!-- kind: game -->
+<!-- game: checkers -->
 <div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
   <a class="back" href="/">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
@@ -59,3 +61,45 @@
     </aside>
   </div>
 </div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Checkers</h2>
+  <p>Checkers (also called draughts) is played on the dark squares of an 8×8 board. You have 12 gold pieces at the bottom and the computer has 12 at the top. You move first. This version uses the standard American rules.</p>
+  <ol>
+    <li><strong>Move diagonally forward</strong> one square at a time onto an empty dark square.</li>
+    <li><strong>Capture by jumping.</strong> If an opponent’s piece is diagonally next to yours with an empty square behind it, jump over it to remove it.</li>
+    <li><strong>Captures are compulsory.</strong> If you can jump, you must. If, after a jump, you can jump again with the same piece, you keep going in the same turn.</li>
+    <li><strong>Crown a king</strong> by reaching the far row. Kings move one square diagonally in any direction, forwards or backwards.</li>
+    <li><strong>Win</strong> by capturing all of the computer’s pieces, or by leaving it with no legal move.</li>
+  </ol>
+  <p>To move, tap one of your pieces and then tap the square you want it to go to. Legal squares are highlighted, so you can’t make an illegal move by accident.</p>
+
+  <h2>Quick tips to beat the computer</h2>
+  <ul>
+    <li><strong>Guard your back row.</strong> Pieces on your home row stop the computer from crowning kings. Move them last.</li>
+    <li><strong>Take the centre.</strong> Pieces in the middle of the board have more moves and are harder to trap than pieces on the edge.</li>
+    <li><strong>Look for forced jumps.</strong> Because capturing is compulsory, you can offer one piece to drag the computer into a position where you jump two back.</li>
+    <li><strong>Trade when you’re ahead.</strong> Swapping one piece for one piece makes a lead bigger in relative terms.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Want the full rules, opening ideas and how to win endgames with kings?</p>
+    <a class="btn btn-outline" href="/learn/checkers">Read the Checkers guide</a>
+  </div>
+
+  <h2>Checkers FAQ</h2>
+  <section class="faq">
+    <h3>Is this Checkers game free?</h3>
+    <p>Yes. You can play as many games as you like for free in your browser, on a phone, tablet or computer. There’s nothing to download and you don’t need an account.</p>
+    <h3>Do I have to take a jump in Checkers?</h3>
+    <p>Yes. Under the standard rules used here, if any of your pieces can capture, you must make a capture. If one jump leads straight into another, you must keep jumping with the same piece.</p>
+    <h3>Can a king move backwards?</h3>
+    <p>Yes. A king moves and captures one square diagonally in any direction. Ordinary pieces can only move and capture forwards.</p>
+    <h3>How does a game of Checkers end in a draw?</h3>
+    <p>Here, if both sides make 40 moves in a row with only kings moving and nothing captured, the game is declared a draw.</p>
+    <h3>Which level should I start on?</h3>
+    <p>Start on Easy to learn how jumps and kings work. Medium looks a few moves ahead and punishes loose pieces. Hard looks much further ahead and rarely blunders, so beating it takes real planning.</p>
+  </section>
+</section>
+
+{{related:checkers}}

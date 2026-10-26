@@ -9,8 +9,12 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | Path | What it is |
 |---|---|
 | `src/layout.html` | The shared frame for every page: head tags, menu, footer |
-| `src/pages/*.html` | One file per page (settings lines at the top, then the content) |
-| `build.py` | Combines layout + pages into `public/` (`python3 build.py`) |
+| `src/pages/*.html` | One file per page (settings lines at the top, then the content). The settings are listed at the top of `build.py` |
+| `src/pages/learn/*.html` | The rules and strategy guides (`/learn/checkers` and so on) |
+| `build.py` | Combines layout + pages into `public/` (`python3 build.py`), writes the sitemap and structured data, and checks every page for SEO basics |
+| `tools/make_share_images.py` | Draws each game's link-preview picture into `public/assets/img/og/` |
+| `tools/indexnow.py` | Run after each deploy: tells Bing and other IndexNow search engines which pages changed |
+| `public/assets/fonts/` | The site's two fonts, hosted here instead of Google Fonts (Latin characters only) |
 | `public/` | The website that gets deployed. Images, CSS and JS live in `public/assets/` |
 | `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Reversi, Solitaire), no page code |
 | `public/assets/js/four-in-a-row.js`, `checkers.js`, `reversi.js`, `solitaire.js` | Each game's page |
@@ -20,6 +24,14 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `firestore.rules` | Database rules: visitors can only add newsletter signups and contact messages |
 
 To change a page, edit its file in `src/pages/` (or `src/layout.html` for the menu/footer), run `python3 build.py`, and push.
+
+## SEO
+
+- **Every build checks the basics** and stops (so nothing deploys) if a page has a missing or duplicate title or description, more or fewer than one `<h1>`, a link to a page that doesn't exist, an image with no alt text, or a missing share image. Warnings (titles over ~60 characters, very short or long descriptions) are printed but don't stop the build.
+- **Structured data** (the hidden labels Google reads) is added automatically from each page's settings: the site and organisation on the home page, a free web game on each game page, an article on each guide, breadcrumbs everywhere, and FAQ data from any `<section class="faq">` (pairs of `<h3>` question and `<p>` answer).
+- **The sitemap** lists every page with the date its source file last changed in git.
+- **Adding a game:** add it to `GAMES` in `build.py` and `tools/make_share_images.py`, give its page `kind: game` and `game: <slug>`, write `src/pages/learn/<slug>.html`, run `python3 tools/make_share_images.py`, then `python3 build.py`.
+- **Fonts** are cached by browsers for a year. If you ever replace a font file, give it a new file name and update `site.css` and `layout.html`.
 
 ## One-time setup
 

@@ -7,13 +7,21 @@
 <meta name="description" content="Play free board games in your browser. No download, no account needed. Strategy, card and puzzle games, plus a new daily challenge every day.">
 <link rel="canonical" href="https://boardgamesite.com">
 <meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="BoardGameSite – Play free board games online">
 <meta property="og:description" content="Play free board games in your browser. No download, no account needed. Strategy, card and puzzle games, plus a new daily challenge every day.">
 <meta property="og:url" content="https://boardgamesite.com">
 <meta property="og:image" content="https://boardgamesite.com/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Board games, ready when you are. on BoardGameSite">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BoardGameSite – Play free board games online">
+<meta name="twitter:description" content="Play free board games in your browser. No download, no account needed. Strategy, card and puzzle games, plus a new daily challenge every day.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og.png">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -21,12 +29,75 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BoardGameSite">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Instrument+Serif&display=swap">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
 
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://boardgamesite.com/#website",
+   "name": "BoardGameSite",
+   "alternateName": "Board Game Site",
+   "url": "https://boardgamesite.com/",
+   "description": "Play free board games in your browser. No download, no account needed. Strategy, card and puzzle games, plus a new daily challenge every day.",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   }
+  },
+  {
+   "@type": "ItemList",
+   "name": "Free board games on BoardGameSite",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "url": "https://boardgamesite.com/play/solitaire",
+     "name": "Solitaire"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "url": "https://boardgamesite.com/play/checkers",
+     "name": "Checkers"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "url": "https://boardgamesite.com/play/reversi",
+     "name": "Reversi"
+    },
+    {
+     "@type": "ListItem",
+     "position": 4,
+     "url": "https://boardgamesite.com/play/four-in-a-row",
+     "name": "Four in a Row"
+    }
+   ]
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -47,6 +118,10 @@
     <a href="/play/four-in-a-row?mode=daily">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
       Daily challenge
+    </a>
+    <a href="/learn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
     </a>
     <a href="/#leaderboards">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
@@ -117,7 +192,8 @@
         <h3>Solitaire</h3>
         <p>Classic Klondike. Build each suit from Ace to King, with draw 1 or draw 3 and unlimited undo.</p>
         <div class="chips"><span class="chip">Cards</span><span class="chip">Single player</span><span class="chip">5 min</span></div>
-        <a class="btn btn-green btn-block" href="/play/solitaire" style="margin-top: 6px">Play</a>
+        <a class="btn btn-green btn-block" href="/play/solitaire" style="margin-top: 6px" aria-label="Play Solitaire">Play</a>
+        <a class="learn-link" href="/learn/solitaire">How to play Solitaire</a>
       </div>
     </article>
     <article class="game-card card">
@@ -128,7 +204,8 @@
         <h3>Checkers</h3>
         <p>Jump your opponent’s pieces, crown kings and clear the board. Captures are compulsory.</p>
         <div class="chips"><span class="chip">Strategy</span><span class="chip">vs Computer</span><span class="chip">3 levels</span></div>
-        <a class="btn btn-green btn-block" href="/play/checkers" style="margin-top: 6px">Play</a>
+        <a class="btn btn-green btn-block" href="/play/checkers" style="margin-top: 6px" aria-label="Play Checkers">Play</a>
+        <a class="learn-link" href="/learn/checkers">How to play Checkers</a>
       </div>
     </article>
     <article class="game-card card">
@@ -139,7 +216,8 @@
         <h3>Reversi</h3>
         <p>Trap the computer’s discs between yours to flip them. Most discs when the board fills wins.</p>
         <div class="chips"><span class="chip">Strategy</span><span class="chip">vs Computer</span><span class="chip">3 levels</span></div>
-        <a class="btn btn-green btn-block" href="/play/reversi" style="margin-top: 6px">Play</a>
+        <a class="btn btn-green btn-block" href="/play/reversi" style="margin-top: 6px" aria-label="Play Reversi">Play</a>
+        <a class="learn-link" href="/learn/reversi">How to play Reversi</a>
       </div>
     </article>
     <article class="game-card card">
@@ -157,7 +235,8 @@
         <h3>Four in a Row</h3>
         <p>Drop your discs and line up four before the computer does: across, down or diagonally.</p>
         <div class="chips"><span class="chip">Strategy</span><span class="chip">vs Computer</span><span class="chip">2 min</span></div>
-        <a class="btn btn-green btn-block" href="/play/four-in-a-row" style="margin-top: 6px">Play</a>
+        <a class="btn btn-green btn-block" href="/play/four-in-a-row" style="margin-top: 6px" aria-label="Play Four in a Row">Play</a>
+        <a class="learn-link" href="/learn/four-in-a-row">How to play Four in a Row</a>
       </div>
     </article>
     <article class="soon-card">
@@ -207,6 +286,12 @@
   </a>
 </section>
 
+<section class="intro" aria-labelledby="intro-h">
+  <h2 id="intro-h">Free board games, no download</h2>
+  <p>BoardGameSite is a home for classic board and card games you can play straight away in your browser, on your phone, tablet or computer. There’s nothing to install and no account needed. Play <a href="/play/solitaire">Klondike Solitaire</a> with Draw 1 or Draw 3, take on the computer at <a href="/play/checkers">Checkers</a>, <a href="/play/reversi">Reversi</a> and <a href="/play/four-in-a-row">Four in a Row</a> at three levels from Easy to Hard, and test yourself with a new daily puzzle.</p>
+  <p>New to a game? Our <a href="/learn">rules and strategy guides</a> explain how to play in plain language and share the ideas that win games.</p>
+</section>
+
 <section id="newsletter" class="newsletter">
   <div class="newsletter-copy">
     <h2>Be first to play new games</h2>
@@ -229,6 +314,7 @@
   </div>
   <nav class="footer-links" aria-label="Footer">
     <a href="/about">About</a>
+    <a href="/learn">How to play</a>
     <a href="/contact">Contact</a>
     <a href="/privacy">Privacy Policy</a>
     <a href="/terms">Terms</a>
