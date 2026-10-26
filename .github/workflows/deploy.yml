@@ -1,0 +1,46 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build pages
+        run: python3 build.py
+
+      - name: Check deploy key
+        id: key
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$SA" ]; then
+            echo "::warning::FIREBASE_SERVICE_ACCOUNT secret is not set yet - skipping deploy. See README.md."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy site and database rules
+        if: steps.key.outputs.ready == 'true'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+        run: npx --yes firebase-tools@latest deploy --only hosting,firestore:rules --project boardgamesite-80e80 --non-interactive
+
+      - name: Remove key file
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sa.json"

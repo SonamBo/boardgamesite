@@ -1,0 +1,65 @@
+<!-- title: Four in a Row – Play free online | BoardGameSite -->
+<!-- description: Play Four in a Row free against the computer, or try today's daily challenge. Drop your discs and line up four to win. -->
+<!-- path: /play/four-in-a-row -->
+<!-- out: play/four-in-a-row.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/four-in-a-row.js -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Four in a Row</h1>
+        <p id="status" class="status" role="status" aria-live="polite">Your turn</p>
+      </div>
+      <div id="board" class="board" role="group" aria-label="Game board, 7 columns. Press 1 to 7 to drop a disc."></div>
+      <p id="board-hint" class="board-hint">Click a column, or press 1–7, to drop your disc.</p>
+    </section>
+
+    <aside class="panel">
+      <nav class="mode-tabs" aria-label="Game mode">
+        <a href="/play/four-in-a-row" data-mode-link="classic">Vs computer</a>
+        <a href="/play/four-in-a-row?mode=daily" data-mode-link="daily">Daily challenge</a>
+      </nav>
+
+      <div id="classic-panel" class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b>You</b><small id="score-you">0 wins</small></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b>Computer</b><small id="score-cpu">0 wins</small></div>
+        <p class="muted" style="font-size: 14px">Draws: <span id="score-draws">0</span></p>
+      </div>
+
+      <div id="daily-panel" class="panel-box card" hidden>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <img src="/assets/img/flame.webp" alt="" width="97" height="121" style="width: 40px">
+          <div>
+            <p class="muted" style="font-size: 14px">Your streak</p>
+            <p id="daily-streak" style="font-family: var(--display); font-weight: 800; font-size: 26px; color: var(--text)">0 days</p>
+          </div>
+        </div>
+        <p>You’re gold. One move wins the game right now, but blue is threatening too, so look carefully. You get one try.</p>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-wave.webp" alt="" width="208" height="181">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Take turns dropping discs into the board. Each one falls to the lowest open space. Line up four of your discs across, down or diagonally to win.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to save your record and get on the leaderboard.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
