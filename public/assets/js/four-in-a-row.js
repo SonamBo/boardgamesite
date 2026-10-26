@@ -6,7 +6,8 @@ import { track } from './firebase.js';
 const $ = (id) => document.getElementById(id);
 const boardEl = $('board');
 const statusEl = $('status');
-const mode = new URLSearchParams(location.search).get('mode') === 'daily' ? 'daily' : 'classic';
+const mode = (new URLSearchParams(location.search).get('mode') === 'daily' || location.hash === '#daily') ? 'daily' : 'classic';
+window.addEventListener('hashchange', () => location.reload());
 
 const MASCOT = {
   win: '/assets/img/mascot-trophy.webp',
