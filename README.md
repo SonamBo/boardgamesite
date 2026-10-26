@@ -12,8 +12,9 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `src/pages/*.html` | One file per page (settings lines at the top, then the content) |
 | `build.py` | Combines layout + pages into `public/` (`python3 build.py`) |
 | `public/` | The website that gets deployed. Images, CSS and JS live in `public/assets/` |
-| `public/assets/js/c4-engine.js` | Four in a Row rules, computer player, daily puzzle |
-| `public/assets/js/four-in-a-row.js` | Four in a Row page |
+| `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Reversi, Solitaire), no page code |
+| `public/assets/js/four-in-a-row.js`, `checkers.js`, `reversi.js`, `solitaire.js` | Each game's page |
+| `public/assets/js/game-ui.js` | Shared game page pieces: status line, result panel, difficulty switch, win/loss record |
 | `public/assets/js/site.js` | Menu, cookie banner, sign-up dialog, newsletter and contact forms |
 | `public/assets/js/firebase-config.js` | Firebase web app settings (fill in once, see below) |
 | `firestore.rules` | Database rules: visitors can only add newsletter signups and contact messages |

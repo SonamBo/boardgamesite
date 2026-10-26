@@ -1,0 +1,58 @@
+<!-- title: Reversi – Play free online | BoardGameSite -->
+<!-- description: Play Reversi free against the computer at three difficulty levels. Flip your opponent's discs and own the board, right in your browser. -->
+<!-- path: /play/reversi -->
+<!-- out: play/reversi.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/reversi.js -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Reversi</h1>
+        <p id="status" class="status" role="status" aria-live="polite">Your turn</p>
+      </div>
+      <div class="board-wrap">
+        <div id="board" class="grid8 rv" role="group" aria-label="Reversi board. You play gold and move first."></div>
+      </div>
+      <p class="board-hint">Tap a square with a gold dot. Every dark disc caught in a line between your discs flips to gold.</p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b>You</b><small id="count-you">2 discs</small></div>
+        <div id="row-cpu" class="player"><span class="dot" aria-hidden="true" style="background: #262A27; box-shadow: 0 0 0 2px #4C544E"></span><b>Computer</b><small id="count-cpu">2 discs</small></div>
+        <p class="muted" style="font-size: 14px">Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+      </div>
+
+      <p class="seg-label">Computer level</p>
+      <div class="seg" role="group" aria-label="Computer level">
+        <button type="button" data-level="easy">Easy</button>
+        <button type="button" data-level="medium">Medium</button>
+        <button type="button" data-level="hard">Hard</button>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-wave.webp" alt="" width="254" height="196">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Place a disc so that one or more of the computer’s discs sit in a straight line between your new disc and another of yours, in any direction. Those discs flip to your colour. If you can’t move, your turn is skipped. When neither side can move, whoever has more discs wins. Corners can never be flipped, so they’re worth grabbing.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to save your record and get on the leaderboard.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="reversi">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>

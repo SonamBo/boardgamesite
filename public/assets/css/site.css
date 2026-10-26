@@ -312,3 +312,112 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .panel-box h2 { font-weight: 700; font-size: 18px; }
 .panel-box p { color: var(--text-2); font-size: 15px; }
 [hidden] { display: none !important; }
+
+/* ---------- Difficulty switch ---------- */
+.seg { display: flex; gap: 4px; padding: 4px; background: var(--side); border: 1px solid var(--border); border-radius: 12px; }
+.seg button {
+  flex: 1; min-height: 44px; white-space: nowrap; padding: 0 14px; border: 0; border-radius: 9px; background: transparent; color: var(--muted);
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--text); }
+.seg-label { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: -8px; }
+
+/* ---------- 8×8 boards (Checkers, Reversi) ---------- */
+.grid8 {
+  width: 100%; max-width: 640px; aspect-ratio: 1; display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: repeat(8, minmax(0, 1fr));
+  border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 10px #3B2A1D, 0 18px 40px rgba(0,0,0,.45);
+}
+.grid8 button { border: 0; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; position: relative; min-width: 0; cursor: default; }
+.grid8 button.can { cursor: pointer; }
+.ck .light { background: #E8DDBF; }
+.ck .dark { background: #5E7F5E; }
+.ck .dark.last { background: #6F9168; }
+.ck .dark.sel { background: #7FA470; }
+.piece {
+  width: 78%; aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  transition: transform .15s;
+}
+.piece.you { background: radial-gradient(circle at 50% 42%, #F5CF6A 0 46%, #E0AC37 47% 100%); box-shadow: inset 0 -5px 0 #B98A22, 0 4px 6px rgba(0,0,0,.35); }
+.piece.cpu { background: radial-gradient(circle at 50% 42%, #3A403C 0 46%, #262A27 47% 100%); box-shadow: inset 0 -5px 0 #141714, 0 0 0 2px #4C544E, 0 4px 6px rgba(0,0,0,.35); }
+.piece svg { width: 52%; height: 52%; }
+.piece.you svg { fill: #8A5F0E; }
+.piece.cpu svg { fill: #E9B949; }
+.ck button.sel .piece { transform: scale(1.08); }
+.hint-dot { width: 30%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: 0 0 0 3px rgba(233,185,73,.8); }
+.must .piece.you { box-shadow: inset 0 -5px 0 #B98A22, 0 0 0 4px #fff; }
+
+.rv { background: #2F7D4F; gap: 2px; padding: 2px; box-shadow: 0 0 0 10px #23603C, 0 18px 40px rgba(0,0,0,.45); }
+.rv button { background: #2F7D4F; outline: 1px solid #23603C; }
+.rv button.last::after { content: ""; position: absolute; width: 14%; aspect-ratio: 1; border-radius: 50%; background: #E9583A; }
+.rv .disc { width: 80%; aspect-ratio: 1; border-radius: 50%; transition: background .25s, box-shadow .25s; }
+.rv .disc.you { background: var(--gold); box-shadow: inset 0 -5px 0 var(--gold-shadow); }
+.rv .disc.cpu { background: #262A27; box-shadow: inset 0 -5px 0 #141714, 0 0 0 2px #4C544E; }
+.rv .move-dot { width: 26%; aspect-ratio: 1; border-radius: 50%; background: rgba(233,185,73,.55); }
+.board-wrap { width: 100%; max-width: 660px; padding: 10px; }
+@media (max-width: 600px) { .sol-table { padding: 8px; border-radius: 12px; } }
+
+/* ---------- Solitaire ---------- */
+.sol-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sol-bar .btn { min-height: 44px; padding: 0 16px; }
+.sol-stats { display: flex; gap: 16px; color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; margin-left: auto; }
+.sol-stats b { color: var(--text); }
+.sol-table {
+  position: relative; width: 100%; background: radial-gradient(ellipse at 50% 0%, #2F6B45, #1F4A30 70%);
+  border-radius: 16px; padding: 14px; box-shadow: inset 0 0 0 1px #2E5A3D; touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+.sol-area { position: relative; }
+.slot { position: absolute; border-radius: 8px; border: 2px dashed rgba(233,239,230,.25); box-sizing: border-box; display: flex; align-items: center; justify-content: center; color: rgba(233,239,230,.35); }
+.slot svg { width: 40%; height: 40%; fill: currentColor; }
+.slot.stock { cursor: pointer; border-style: solid; }
+.slot.stock svg { stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pc {
+  position: absolute; border-radius: 8px; box-sizing: border-box; background: #FBF8EF; border: 1px solid #CFC6AE;
+  box-shadow: 0 1px 2px rgba(0,0,0,.25); color: #1C1F1D;
+  transition: left .18s ease, top .18s ease; will-change: left, top;
+}
+.pc.red { color: #C23B22; }
+.pc .ix { position: absolute; left: 7%; top: 4%; display: flex; flex-direction: column; align-items: center; line-height: 1; font-weight: 700; font-family: var(--body); }
+.pc .ix span { font-size: calc(var(--cw) * 0.24); letter-spacing: -0.04em; }
+.pc .ix svg { width: calc(var(--cw) * 0.17); height: calc(var(--cw) * 0.17); margin-top: 2px; fill: currentColor; }
+.pc .ix.br { left: auto; top: auto; right: 7%; bottom: 4%; transform: rotate(180deg); }
+.pc .pip { position: absolute; left: 50%; top: 55%; width: 42%; height: 42%; transform: translate(-50%, -50%); fill: currentColor; }
+.pc.face { cursor: grab; touch-action: none; }
+.pc.back {
+  background: repeating-linear-gradient(45deg, #2F7D4F 0 6px, #2A7046 6px 12px);
+  border: 3px solid #F3EBD6; box-shadow: inset 0 0 0 2px #E9B949, 0 1px 2px rgba(0,0,0,.3);
+}
+.pc.dragging { transition: none; cursor: grabbing; box-shadow: 0 10px 22px rgba(0,0,0,.45); }
+.pc.shake { animation: shake .3s; }
+@keyframes shake { 25% { translate: -4px 0; } 75% { translate: 4px 0; } }
+.pc:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .pc { transition: none; } .pc.shake { animation: none; } }
+.sol-result { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(15,30,20,.6); border-radius: 16px; z-index: 300; }
+.sol-result .result { max-width: 340px; width: calc(100% - 32px); }
+
+/* ---------- Home game-card art ---------- */
+.mini8 { width: 100%; max-width: 200px; aspect-ratio: 1; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border-radius: 8px; overflow: hidden; box-shadow: 0 0 0 6px #3B2A1D, 0 10px 24px rgba(0,0,0,.35); }
+.mini8 i { display: flex; align-items: center; justify-content: center; }
+.mini8 i::after { content: ""; width: 72%; aspect-ratio: 1; border-radius: 50%; }
+.mini8.ck i:nth-child(16n+1), .mini8.ck i:nth-child(16n+3), .mini8.ck i:nth-child(16n+5), .mini8.ck i:nth-child(16n+7),
+.mini8.ck i:nth-child(16n+10), .mini8.ck i:nth-child(16n+12), .mini8.ck i:nth-child(16n+14), .mini8.ck i:nth-child(16n+16) { background: #E8DDBF; }
+.mini8.ck i { background: #5E7F5E; }
+.mini8.rv { background: #23603C; gap: 1px; padding: 1px; box-shadow: 0 0 0 6px #23603C, 0 10px 24px rgba(0,0,0,.35); }
+.mini8.rv i { background: #2F7D4F; }
+.mini8 i.y::after { background: var(--gold); box-shadow: inset 0 -2px 0 var(--gold-shadow); }
+.mini8 i.c::after { background: #262A27; box-shadow: inset 0 -2px 0 #141714, 0 0 0 1px #4C544E; }
+.mini-cards { position: relative; width: 180px; height: 150px; }
+.mini-cards .mc {
+  position: absolute; top: 14px; width: 84px; height: 118px; border-radius: 8px; background: #FBF8EF; border: 1px solid #CFC6AE;
+  box-shadow: 0 6px 14px rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; color: #1C1F1D;
+}
+.mini-cards .mc svg { width: 44px; height: 44px; fill: currentColor; }
+.mini-cards .mc b { position: absolute; left: 8px; top: 6px; font-size: 18px; }
+.mini-cards .mc.red { color: #C23B22; }
+.mini-cards .mc:nth-child(1) { left: 6px; transform: rotate(-14deg); }
+.mini-cards .mc:nth-child(2) { left: 48px; top: 6px; }
+.mini-cards .mc:nth-child(3) { left: 90px; transform: rotate(14deg); }
+
+/* Face-down cards never show their face (kept last so it wins) */
+.sol-area .pc.back > * { display: none; }
