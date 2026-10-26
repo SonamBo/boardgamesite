@@ -31,6 +31,33 @@ if (sidebar && toggle) {
   });
 }
 
+// ---------- Home-screen app ----------
+// Offline helper: only on the real site (not in previews).
+const APP_HOSTS = /(^|\.)boardgamesite\.com$|\.web\.app$|\.firebaseapp\.com$|^localhost$|^127\.0\.0\.1$/;
+if ('serviceWorker' in navigator && APP_HOSTS.test(location.hostname)) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+// "Install app" button, shown only when the browser offers installing.
+const installBtn = document.getElementById('install-app');
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e;
+  if (installBtn) installBtn.hidden = false;
+});
+installBtn?.addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  const choice = await installPrompt.userChoice.catch(() => null);
+  track('app_install_prompt', { outcome: choice ? choice.outcome : 'unknown' });
+  installPrompt = null;
+  installBtn.hidden = true;
+});
+window.addEventListener('appinstalled', () => {
+  if (installBtn) installBtn.hidden = true;
+  track('app_installed');
+});
+
 // ---------- Footer year ----------
 document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
 

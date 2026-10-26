@@ -1,0 +1,23 @@
+{
+  "name": "BoardGameSite",
+  "short_name": "BoardGameSite",
+  "description": "Free board games in your browser: Solitaire, Checkers, Reversi and Four in a Row.",
+  "id": "/",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#161A17",
+  "theme_color": "#161A17",
+  "icons": [
+    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Solitaire", "url": "/play/solitaire", "icons": [{ "src": "/assets/icons/maskable-192.png", "sizes": "192x192" }] },
+    { "name": "Checkers", "url": "/play/checkers", "icons": [{ "src": "/assets/icons/maskable-192.png", "sizes": "192x192" }] },
+    { "name": "Reversi", "url": "/play/reversi", "icons": [{ "src": "/assets/icons/maskable-192.png", "sizes": "192x192" }] },
+    { "name": "Daily challenge", "url": "/play/four-in-a-row?mode=daily", "icons": [{ "src": "/assets/icons/maskable-192.png", "sizes": "192x192" }] }
+  ]
+}

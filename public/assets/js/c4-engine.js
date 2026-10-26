@@ -42,8 +42,29 @@ export function findLine(b, p) {
 
 export const winningCols = (b, p) => validCols(b).filter((c) => findLine(place(b, c, p), p));
 
-// Computer: win if it can, block if it must, avoid handing over a win, prefer the centre.
-export function pickComputerMove(b, rnd = Math.random) {
+// ---- Computer players ----
+// easy:   takes a win when it sees one, blocks only half the time, otherwise plays loosely
+// medium: wins, blocks, avoids handing over a win, prefers the centre
+// hard:   looks 8 moves ahead
+export function pickComputerMove(b, level = 'medium', rnd = Math.random) {
+  if (level === 'easy') return easyMove(b, rnd);
+  if (level === 'hard') return hardMove(b);
+  return mediumMove(b, rnd);
+}
+
+function easyMove(b, rnd) {
+  const win = winningCols(b, CPU);
+  if (win.length) return win[0];
+  const block = winningCols(b, YOU);
+  if (block.length && rnd() < 0.5) return block[0];
+  const v = validCols(b);
+  const weights = v.map((c) => 4 - Math.abs(3 - c));
+  let r = rnd() * weights.reduce((a, w) => a + w, 0);
+  for (let i = 0; i < v.length; i++) { r -= weights[i]; if (r <= 0) return v[i]; }
+  return v[v.length - 1];
+}
+
+function mediumMove(b, rnd) {
   const v = validCols(b);
   const win = winningCols(b, CPU);
   if (win.length) return win[0];
@@ -94,4 +115,94 @@ export function dailyPuzzle(key) {
     if (!fallback) fallback = { board: b, answer: wins[0] };
   }
   return fallback;
+}
+
+// ---- Hard: negamax search with alpha-beta pruning ----
+const ORDER = [3, 2, 4, 1, 5, 0, 6];
+const HARD_DEPTH = 8;
+const WIN_SCORE = 1000000;
+const WINDOWS = (() => {
+  const out = [];
+  const dirs = [[0, 1], [1, 0], [1, 1], [1, -1]];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      for (const [dr, dc] of dirs) {
+        const er = r + dr * 3, ec = c + dc * 3;
+        if (er < 0 || er >= ROWS || ec < 0 || ec >= COLS) continue;
+        out.push([0, 1, 2, 3].map((k) => (r + dr * k) * COLS + (c + dc * k)));
+      }
+    }
+  }
+  return out;
+})();
+
+function winsAt(b, idx, p) {
+  const r0 = Math.floor(idx / COLS), c0 = idx % COLS;
+  for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+    let n = 1;
+    for (const s of [1, -1]) {
+      let r = r0 + dr * s, c = c0 + dc * s;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && b[r * COLS + c] === p) { n++; r += dr * s; c += dc * s; }
+    }
+    if (n >= 4) return true;
+  }
+  return false;
+}
+
+// Position score for player p: open threes and twos, plus the centre column.
+function evaluate(b, p) {
+  const o = p === YOU ? CPU : YOU;
+  let s = 0;
+  for (let r = 0; r < ROWS; r++) {
+    const v = b[r * COLS + 3];
+    if (v === p) s += 3; else if (v === o) s -= 3;
+  }
+  for (const w of WINDOWS) {
+    let mine = 0, theirs = 0;
+    for (const i of w) { if (b[i] === p) mine++; else if (b[i] === o) theirs++; }
+    if (theirs === 0) { if (mine === 3) s += 5; else if (mine === 2) s += 2; }
+    else if (mine === 0) { if (theirs === 3) s -= 4; else if (theirs === 2) s -= 1; }
+  }
+  return s;
+}
+
+function negamax(b, p, depth, alpha, beta) {
+  const o = p === YOU ? CPU : YOU;
+  const cols = ORDER.filter((c) => lowestRow(b, c) >= 0);
+  if (!cols.length) return 0;
+  for (const c of cols) {
+    const idx = lowestRow(b, c) * COLS + c;
+    b[idx] = p;
+    const w = winsAt(b, idx, p);
+    b[idx] = 0;
+    if (w) return WIN_SCORE + depth;          // quicker wins score higher
+  }
+  if (depth === 0) return evaluate(b, p);
+  let best = -Infinity;
+  for (const c of cols) {
+    const idx = lowestRow(b, c) * COLS + c;
+    b[idx] = p;
+    const v = -negamax(b, o, depth - 1, -beta, -alpha);
+    b[idx] = 0;
+    if (v > best) best = v;
+    if (v > alpha) alpha = v;
+    if (alpha >= beta) break;
+  }
+  return best;
+}
+
+function hardMove(board) {
+  const b = board.slice();
+  let bestCol = -1, bestV = -Infinity;
+  for (const c of ORDER) {
+    const r = lowestRow(b, c);
+    if (r < 0) continue;
+    const idx = r * COLS + c;
+    b[idx] = CPU;
+    if (winsAt(b, idx, CPU)) return c;
+    const v = -negamax(b, YOU, HARD_DEPTH - 1, -Infinity, -bestV);
+    b[idx] = 0;
+    if (v > bestV || bestCol < 0) { bestV = v; bestCol = c; }
+  }
+  return bestCol;
 }

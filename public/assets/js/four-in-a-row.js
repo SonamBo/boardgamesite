@@ -1,6 +1,8 @@
-// Four in a Row page: vs-computer mode and the daily challenge.
+// Four in a Row page: vs-computer mode (Easy/Medium/Hard) and the daily challenge.
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
+import { levelSwitch } from './game-ui.js';
+import { play } from './sound.js';
 import { track } from './firebase.js';
 
 const $ = (id) => document.getElementById(id);
@@ -9,6 +11,7 @@ const statusEl = $('status');
 const mode = (new URLSearchParams(location.search).get('mode') === 'daily' || location.hash === '#daily') ? 'daily' : 'classic';
 window.addEventListener('hashchange', () => location.reload());
 
+const SAVE = 'bgs-c4-game';
 const MASCOT = {
   win: '/assets/img/mascot-trophy.webp',
   lose: '/assets/img/mascot-confused.webp',
@@ -16,7 +19,7 @@ const MASCOT = {
 };
 
 let board = E.emptyBoard();
-let busy = false;        // computer thinking or animation running
+let busy = false;        // computer thinking
 let over = false;
 let highlight = [];      // winning cells
 let answerCell = -1;     // daily: where the right move would land
@@ -86,9 +89,11 @@ function drop(c, p) {
   const r = E.lowestRow(board, c);
   board = E.place(board, c, p);
   lastDropped = r * E.COLS + c;
+  play('drop');
 }
 
 // ---------- Classic: vs computer ----------
+const getLevel = mode === 'classic' ? levelSwitch('c4') : () => 'medium';
 const score = store.get('bgs-c4-score', { w: 0, l: 0, d: 0 });
 function renderScore() {
   $('score-you').textContent = score.w + (score.w === 1 ? ' win' : ' wins');
@@ -99,43 +104,68 @@ function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
   $('row-cpu').classList.toggle('turn-cpu', who === 'cpu');
 }
+const saveGame = (toMove) => store.set(SAVE, { board, toMove });
+const clearGame = () => store.set(SAVE, null);
+
 function finishClassic(result) {
   over = true;
+  clearGame();
   setTurn(null);
   if (result === 'win') { score.w++; setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
   if (result === 'lose') { score.l++; setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
   if (result === 'draw') { score.d++; setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
+  play(result);
   store.set('bgs-c4-score', score);
   renderScore();
-  track('game_end', { game: 'four_in_a_row', result });
+  track('game_end', { game: 'four_in_a_row', result, level: getLevel() });
 }
-function classicMove(c) {
-  if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic' }); }
-  drop(c, E.YOU);
-  const line = E.findLine(board, E.YOU);
-  if (line) { highlight = line; finishClassic('win'); render(); return; }
-  if (E.isFull(board)) { finishClassic('draw'); render(); return; }
+function startComputerTurn() {
   busy = true;
   setTurn('cpu');
   setStatus('Computer is thinking…', 'cpu');
   render();
-  setTimeout(() => {
-    drop(E.pickComputerMove(board), E.CPU);
-    busy = false;
-    const cpuLine = E.findLine(board, E.CPU);
-    if (cpuLine) { highlight = cpuLine; finishClassic('lose'); }
-    else if (E.isFull(board)) finishClassic('draw');
-    else { setTurn('you'); setStatus('Your turn'); }
-    render();
-  }, 550);
+  setTimeout(computerMove, 550);
+}
+function computerMove() {
+  drop(E.pickComputerMove(board, getLevel()), E.CPU);
+  busy = false;
+  const cpuLine = E.findLine(board, E.CPU);
+  if (cpuLine) { highlight = cpuLine; finishClassic('lose'); }
+  else if (E.isFull(board)) finishClassic('draw');
+  else { saveGame(E.YOU); setTurn('you'); setStatus('Your turn'); }
+  render();
+}
+function classicMove(c) {
+  if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic', level: getLevel() }); }
+  drop(c, E.YOU);
+  const line = E.findLine(board, E.YOU);
+  if (line) { highlight = line; finishClassic('win'); render(); return; }
+  if (E.isFull(board)) { finishClassic('draw'); render(); return; }
+  saveGame(E.CPU);
+  startComputerTurn();
 }
 function newGame() {
   board = E.emptyBoard();
   over = false; busy = false; highlight = []; started = false;
+  clearGame();
   $('result').hidden = true;
   setTurn('you');
   setStatus('Your turn');
   render();
+}
+// Pick up an unfinished game after a refresh or a return visit.
+function resumeClassic() {
+  const g = store.get(SAVE, null);
+  if (!g || !Array.isArray(g.board) || g.board.length !== E.ROWS * E.COLS) return false;
+  if (!g.board.some(Boolean) || E.findLine(g.board, E.YOU) || E.findLine(g.board, E.CPU) || E.isFull(g.board)) return false;
+  board = g.board;
+  over = false; highlight = []; started = true;
+  $('result').hidden = true;
+  if (g.toMove === E.CPU) { startComputerTurn(); return true; }
+  setTurn('you');
+  setStatus('Welcome back. Your turn');
+  render();
+  return true;
 }
 
 // ---------- Daily challenge ----------
@@ -146,7 +176,8 @@ function renderStreak(d) {
 }
 function dailyMove(c, restoring) {
   const right = c === puzzle.answer;
-  drop(c, E.YOU);
+  if (restoring) board = E.place(board, c, E.YOU);
+  else drop(c, E.YOU);
   over = true;
   if (right) {
     highlight = E.findLine(board, E.YOU) || [];
@@ -161,6 +192,7 @@ function dailyMove(c, restoring) {
     const streak = right ? ((d && d.lastSolved === yesterdayKey()) ? d.streak + 1 : 1) : 0;
     d = { date: today, solved: right, col: c, streak, lastSolved: right ? today : (d && d.lastSolved) || null };
     store.set('bgs-daily', d);
+    play(right ? 'win' : 'lose', 0.15);
     track('daily_attempt', { game: 'four_in_a_row', solved: right });
   }
   renderStreak(d);
@@ -188,6 +220,7 @@ if (mode === 'daily') {
   });
   document.title = 'Daily Challenge – Four in a Row | BoardGameSite';
   $('classic-panel').hidden = true;
+  $('level-box').hidden = true;
   $('daily-panel').hidden = false;
   $('new-game').hidden = true;
   $('board-title').textContent = 'Daily challenge';
@@ -200,5 +233,5 @@ if (mode === 'daily') {
 } else {
   renderScore();
   $('new-game').addEventListener('click', newGame);
-  newGame();
+  if (!resumeClassic()) newGame();
 }

@@ -2,6 +2,16 @@
 import * as E from './reversi-engine.js';
 import { setStatus, showResult, hideResult, setTurn, levelSwitch, record } from './game-ui.js';
 import { track } from './firebase.js';
+import { store } from './site.js';
+import { play } from './sound.js';
+
+const SAVE = 'bgs-rv-game';
+const saveGame = (toMove) => store.set(SAVE, { board, last, toMove });
+const clearGame = () => store.set(SAVE, null);
+function placeSound(flips) {
+  play('place');
+  flips.slice(0, 12).forEach((_, k) => play('flip', 0.08 + k * 0.035));
+}
 
 const boardEl = document.getElementById('board');
 const FILES = 'abcdefgh';
@@ -46,9 +56,11 @@ function render() {
 
 function finish() {
   over = true; busy = false;
+  clearGame();
   setTurn(null);
   const c = E.count(board);
   const result = c.you > c.cpu ? 'win' : c.you < c.cpu ? 'lose' : 'draw';
+  play(result, 0.4);
   const line = c.you + ' – ' + c.cpu;
   if (result === 'win') { setStatus('You win ' + line); showResult('win', 'You win!', 'Final score ' + line + '.'); }
   if (result === 'lose') { setStatus('Computer wins ' + line, 'cpu'); showResult('lose', 'Computer wins', 'Final score ' + line + '. Have another go?'); }
@@ -61,8 +73,11 @@ function finish() {
 function onSquare(i) {
   if (over || busy || !E.flipsFor(board, i, E.YOU).length) return;
   if (!started) { started = true; track('game_start', { game: 'reversi', level: getLevel() }); }
-  board = E.play(board, i, E.YOU).board;
+  const r = E.play(board, i, E.YOU);
+  placeSound(r.flips);
+  board = r.board;
   last = i;
+  saveGame(E.CPU);
   afterMove(E.CPU);
 }
 
@@ -99,19 +114,36 @@ function afterMove(next) {
 function computerMove() {
   const m = E.pickComputerMove(board, getLevel());
   if (m < 0) { busy = false; return afterMove(E.YOU); }
-  board = E.play(board, m, E.CPU).board;
+  const r = E.play(board, m, E.CPU);
+  placeSound(r.flips);
+  board = r.board;
   last = m;
+  saveGame(E.YOU);
   afterMove(E.YOU);
 }
 
 function newGame() {
   board = E.startBoard();
   over = false; busy = false; last = -1; started = false;
+  clearGame();
   hideResult();
   setTurn('you');
   setStatus('Your turn');
   render();
 }
 
+// Pick up an unfinished game after a refresh or a return visit.
+function resume() {
+  const g = store.get(SAVE, null);
+  if (!g || !Array.isArray(g.board) || g.board.length !== 64 || E.isOver(g.board)) return false;
+  board = g.board;
+  last = typeof g.last === 'number' ? g.last : -1;
+  over = false; busy = false; started = true;
+  hideResult();
+  afterMove(g.toMove === E.CPU ? E.CPU : E.YOU);
+  if (g.toMove !== E.CPU && !busy) setStatus('Welcome back. Your turn');
+  return true;
+}
+
 document.getElementById('new-game').addEventListener('click', newGame);
-newGame();
+if (!resume()) newGame();

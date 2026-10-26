@@ -17,6 +17,10 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
@@ -59,6 +63,10 @@
     <div class="nav-divider"></div>
     <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
     <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
   </nav>
 </header>
 
@@ -74,7 +82,10 @@
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Reversi</h1>
-        <p id="status" class="status" role="status" aria-live="polite">Your turn</p>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Your turn</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
       </div>
       <div class="board-wrap">
         <div id="board" class="grid8 rv" role="group" aria-label="Reversi board. You play gold and move first."></div>

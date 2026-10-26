@@ -3,10 +3,15 @@ import * as S from './solitaire-engine.js';
 import { store } from './site.js';
 import { setStatus } from './game-ui.js';
 import { track } from './firebase.js';
+import { play } from './sound.js';
+
+const SAVE = 'bgs-sol-game';
+const DEFAULT_STATUS = 'Build each suit from Ace to King';
 
 const $ = (id) => document.getElementById(id);
 const area = $('area');
 const table = $('table');
+const statusEl = $('status');
 
 let state, history, moves, started, won, startTime, timerId, finishing;
 let drawMode = store.get('bgs-sol-draw', 1) === 3 ? 3 : 1;
@@ -106,10 +111,12 @@ function render() {
 }
 
 // ---------- Moves ----------
-function commit(next) {
+function commit(next, sound) {
   history.push(state);
   state = next;
   moves++;
+  if (sound) play(sound);
+  if (statusEl.textContent !== DEFAULT_STATUS && !won) setStatus(DEFAULT_STATUS);
   if (!started) {
     started = true;
     startTime = Date.now();
@@ -120,11 +127,12 @@ function commit(next) {
   }
   render();
   if (S.isWon(state)) onWin();
+  else saveGame();
 }
 
 function draw() {
   if (won || finishing || !S.canDraw(state)) return;
-  commit(S.drawCards(state));
+  commit(S.drawCards(state), state.stock.length ? 'card' : 'shuffle');
 }
 
 function srcFor(loc) {
@@ -138,6 +146,7 @@ function shake(el) {
   el.classList.remove('shake');
   void el.offsetWidth;
   el.classList.add('shake');
+  play('error');
   setTimeout(() => el.classList.remove('shake'), 320);
 }
 
@@ -148,7 +157,7 @@ function tapCard(c) {
   const src = srcFor(loc);
   if (!src || !S.cardsAt(state, src)) return;
   const dest = S.autoDest(state, src);
-  if (dest) commit(S.move(state, src, dest));
+  if (dest) commit(S.move(state, src, dest), dest.to === 'found' ? 'found' : 'card');
   else shake(cardEls[c]);
 }
 
@@ -196,7 +205,7 @@ function endDrag(e, cancelled) {
   const cy = d.starts[0][1] + (e.clientY - d.y0) + L.ch / 2;
   const col = Math.max(0, Math.min(6, Math.floor((cx - L.left0 + L.gap / 2) / (L.cw + L.gap))));
   const dest = cy < L.tabY - L.gap ? (col >= 3 ? { to: 'found' } : null) : { to: 'tab', col };
-  if (dest && S.canMove(state, d.src, dest)) commit(S.move(state, d.src, dest));
+  if (dest && S.canMove(state, d.src, dest)) commit(S.move(state, d.src, dest), dest.to === 'found' ? 'found' : 'card');
   else render();
 }
 area.addEventListener('pointerup', (e) => endDrag(e, false));
@@ -231,6 +240,8 @@ function onWin() {
   setStatus('You won in ' + fmt(t) + '!');
   $('result-sub').textContent = moves + ' moves in ' + fmt(t) + '.';
   $('sol-result').hidden = false;
+  store.set(SAVE, null);
+  play('win', 0.15);
   track('game_end', { game: 'solitaire', result: 'win', draw: state.draw, seconds: Math.round(t / 1000) });
   render();
 }
@@ -245,6 +256,7 @@ function autoFinish() {
     history.push(state);
     state = S.move(state, m.src, m.dest);
     moves++;
+    play('found');
     render();
     if (S.isWon(state)) { finishing = false; onWin(); return; }
     setTimeout(step, 70);
@@ -255,20 +267,57 @@ function newGame() {
   clearInterval(timerId);
   state = S.deal(Math.random, drawMode);
   history = []; moves = 0; started = false; won = false; finishing = false;
+  store.set(SAVE, null);
   $('time').textContent = '0:00';
   $('sol-result').hidden = true;
-  setStatus('Build each suit from Ace to King');
+  setStatus(DEFAULT_STATUS);
   render();
 }
 
+// ---------- Save and resume ----------
+function saveGame() {
+  if (won || !started) return;
+  store.set(SAVE, { state, history: history.slice(-150), moves, elapsed: Date.now() - startTime });
+}
+function validState(s) {
+  if (!s || !Array.isArray(s.stock) || !Array.isArray(s.waste) || !Array.isArray(s.found) || !Array.isArray(s.tab)) return false;
+  if (s.found.length !== 4 || s.tab.length !== 7) return false;
+  const cards = [...s.stock, ...s.waste, ...s.found.flat(), ...s.tab.flat().map((x) => x && x.c)];
+  return cards.length === 52 && new Set(cards).size === 52 && cards.every((c) => Number.isInteger(c) && c >= 0 && c < 52);
+}
+function resume() {
+  const g = store.get(SAVE, null);
+  if (!g || !validState(g.state) || S.isWon(g.state)) return false;
+  state = g.state;
+  history = Array.isArray(g.history) ? g.history.filter(validState) : [];
+  moves = g.moves | 0;
+  started = true; won = false; finishing = false;
+  drawMode = state.draw === 3 ? 3 : 1;
+  paintDraw();
+  startTime = Date.now() - (Number(g.elapsed) || 0);
+  tick();
+  timerId = setInterval(tick, 1000);
+  $('sol-result').hidden = true;
+  setStatus('Welcome back. Your game is where you left it');
+  render();
+  return true;
+}
+// Keep the clock right if the page is closed or hidden.
+window.addEventListener('pagehide', saveGame);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveGame(); });
+
+function paintDraw() {
+  document.querySelectorAll('[data-draw]').forEach((o) => o.setAttribute('aria-pressed', String(Number(o.dataset.draw) === drawMode)));
+}
+
+paintDraw();
 document.querySelectorAll('[data-draw]').forEach((b) => {
-  b.setAttribute('aria-pressed', String(Number(b.dataset.draw) === drawMode));
   b.addEventListener('click', () => {
     const n = Number(b.dataset.draw);
-    document.querySelectorAll('[data-draw]').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
     if (n === drawMode) return;
     drawMode = n;
     store.set('bgs-sol-draw', n);
+    paintDraw();
     newGame();
   });
 });
@@ -278,7 +327,9 @@ $('undo').addEventListener('click', () => {
   if (!history.length || won || finishing) return;
   state = history.pop();
   moves++;
+  play('card');
   render();
+  saveGame();
 });
 $('finish').addEventListener('click', autoFinish);
 
@@ -290,4 +341,4 @@ window.addEventListener('resize', () => {
 
 measure();
 paintRecord();
-newGame();
+if (!resume()) newGame();

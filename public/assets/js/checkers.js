@@ -2,6 +2,10 @@
 import * as E from './checkers-engine.js';
 import { setStatus, showResult, hideResult, setTurn, levelSwitch, record } from './game-ui.js';
 import { track } from './firebase.js';
+import { store } from './site.js';
+import { play } from './sound.js';
+
+const SAVE = 'bgs-ck-game';
 
 const boardEl = document.getElementById('board');
 const FILES = 'abcdefgh';
@@ -71,6 +75,7 @@ function onSquare(i) {
   const firstPicks = new Set(moves.map((m) => m.path[0]));
   if (partial.length <= 1 && firstPicks.has(i)) {
     partial = partial[0] === i ? [] : [i];
+    if (partial.length) play('select');
     render();
     return;
   }
@@ -88,8 +93,20 @@ function noteQuiet(m) {
   quiet = m.caps.length || !wasKing ? 0 : quiet + 1;
 }
 
+function moveSound(m) {
+  const p = board[m.path[0]];
+  const row = m.path[m.path.length - 1] >> 3;
+  play(m.caps.length ? 'capture' : 'move');
+  if ((p === 1 && row === 0) || (p === -1 && row === 7)) play('king', 0.2);
+}
+
+const saveGame = (toMove) => store.set(SAVE, { board, quiet, toMove, lastPath });
+const clearGame = () => store.set(SAVE, null);
+
 function finish(result) {
   over = true;
+  clearGame();
+  play(result, 0.25);
   setTurn(null);
   if (result === 'win') { setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
   if (result === 'lose') { setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
@@ -102,11 +119,17 @@ function finish(result) {
 function playerMove(m) {
   if (!started) { started = true; track('game_start', { game: 'checkers', level: getLevel() }); }
   noteQuiet(m);
+  moveSound(m);
   board = E.applyMove(board, m);
   lastPath = m.path;
   partial = [];
   if (!E.legalMoves(board, E.CPU).length) return finish('win');
   if (quiet >= DRAW_AFTER) return finish('draw');
+  saveGame(E.CPU);
+  startComputerTurn();
+}
+
+function startComputerTurn() {
   busy = true;
   setTurn('cpu');
   setStatus('Computer is thinking…', 'cpu');
@@ -119,10 +142,12 @@ function computerMove() {
   busy = false;
   if (!m) return finish('win');
   noteQuiet(m);
+  moveSound(m);
   board = E.applyMove(board, m);
   lastPath = m.path;
   if (!E.legalMoves(board, E.YOU).length) return finish('lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
+  saveGame(E.YOU);
   setTurn('you');
   render();
 }
@@ -130,10 +155,28 @@ function computerMove() {
 function newGame() {
   board = E.startBoard();
   over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false;
+  clearGame();
   hideResult();
   setTurn('you');
   render();
 }
 
+// Pick up an unfinished game after a refresh or a return visit.
+function resume() {
+  const g = store.get(SAVE, null);
+  if (!g || !Array.isArray(g.board) || g.board.length !== 64) return false;
+  if (!E.legalMoves(g.board, E.YOU).length || !E.legalMoves(g.board, E.CPU).length) return false;
+  board = g.board;
+  quiet = g.quiet | 0;
+  lastPath = Array.isArray(g.lastPath) ? g.lastPath : null;
+  over = false; busy = false; partial = []; started = true;
+  hideResult();
+  if (g.toMove === E.CPU) { startComputerTurn(); return true; }
+  setTurn('you');
+  render();
+  setStatus('Welcome back. Your turn');
+  return true;
+}
+
 document.getElementById('new-game').addEventListener('click', newGame);
-newGame();
+if (!resume()) newGame();
