@@ -19,10 +19,30 @@ function getApp() {
   return appPromise;
 }
 
+// App Check: proves database requests come from this website (blocks bots and scripts).
+// Uses a reCAPTCHA Enterprise key (Google Cloud → Security → Fraud Defense), registered in
+// Firebase console → App Check. Only started on the real site, and only when the database is used.
+const RECAPTCHA_SITE_KEY = '6LfAZAMuAAAAAKgIxSoggZr9_p1Xnhvd6bDWN_ma';
+const REAL_SITE = /(^|\.)boardgamesite\.com$|^boardgamesite-80e80\.web\.app$/.test(location.hostname);
+let appCheckPromise = null;
+function startAppCheck(app) {
+  if (!REAL_SITE) return Promise.resolve();
+  if (!appCheckPromise) {
+    appCheckPromise = import(SDK + 'firebase-app-check.js')
+      .then((m) => m.initializeAppCheck(app, {
+        provider: new m.ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY),
+        isTokenAutoRefreshEnabled: false // fetch a token only when one is needed
+      }))
+      .catch(() => {});
+  }
+  return appCheckPromise;
+}
+
 let dbPromise = null;
 function getDb() {
   if (!dbPromise) {
-    dbPromise = Promise.all([getApp(), import(SDK + 'firebase-firestore.js')]).then(([app, m]) => ({ m, db: m.getFirestore(app) }));
+    dbPromise = Promise.all([getApp(), import(SDK + 'firebase-firestore.js')])
+      .then(async ([app, m]) => { await startAppCheck(app); return { m, db: m.getFirestore(app) }; });
   }
   return dbPromise;
 }
