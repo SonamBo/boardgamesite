@@ -19,9 +19,12 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Reversi, Solitaire), no page code |
 | `public/assets/js/four-in-a-row.js`, `checkers.js`, `reversi.js`, `solitaire.js` | Each game's page |
 | `public/assets/js/game-ui.js` | Shared game page pieces: status line, result panel, difficulty switch, win/loss record |
-| `public/assets/js/site.js` | Menu, cookie banner, sign-up dialog, newsletter and contact forms |
+| `public/assets/js/site.js` | Menu, cookie banner, newsletter and contact forms |
+| `public/assets/js/accounts.js` | Sign-up / log-in dialog (Google or email), the signed-in menu, and copying each player's record to their account |
+| `public/assets/js/account-page.js` | The `/account` page: record, name change, log out, delete account |
+| `public/assets/js/store.js` | Browser storage helper; tells `accounts.js` when progress changes |
 | `public/assets/js/firebase-config.js` | Firebase web app settings (fill in once, see below) |
-| `firestore.rules` | Database rules: visitors can only add newsletter signups and contact messages |
+| `firestore.rules` | Database rules: visitors can only add newsletter signups and contact messages; signed-in players can read and change only their own record (`users/{id}`) |
 
 To change a page, edit its file in `src/pages/` (or `src/layout.html` for the menu/footer), run `python3 build.py`, and push.
 
@@ -49,3 +52,10 @@ Steps 1–3 are done (October 2026); they're kept here for reference.
 ## Reading signups and messages
 
 Firebase console → Firestore Database → `newsletter` (email signups) and `messages` (contact form).
+
+## Accounts
+
+- **Sign-in** is Firebase Authentication with Google and email + password (Firebase console → Authentication). Google sign-in runs through `boardgamesite.com/__/auth/handler`, which is listed in Google Cloud → Google Auth Platform → Clients → *Web client* (authorised origins and redirect URIs).
+- **What's saved:** each player's record (the `SYNC_KEYS` in `accounts.js`) lives in their browser as before, and is also copied to `users/{their id}` in Firestore while they're signed in. On sign-in the two are combined (higher numbers win). Logging out removes the account's copy from that browser.
+- **Adding a game with a record:** add its storage key to `SYNC_KEYS` and `MERGE` in `accounts.js`, to the list in `firestore.rules`, and a card to `account-page.js`.
+- **The browser API key** is restricted to the site's four addresses (Google Cloud → APIs & Services → Credentials). Add any new domain there and in Authentication → Settings → Authorised domains.

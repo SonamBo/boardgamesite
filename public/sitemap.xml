@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/contact</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/learn/checkers</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/four-in-a-row</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/reversi</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/solitaire</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/play/checkers</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/play/four-in-a-row</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/play/reversi</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/checkers</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/four-in-a-row</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/reversi</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/solitaire</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/privacy</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://boardgamesite.com/terms</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://boardgamesite.com/privacy</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/terms</loc><lastmod>2026-10-27</lastmod></url>
 </urlset>

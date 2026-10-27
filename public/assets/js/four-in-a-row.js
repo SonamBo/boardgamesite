@@ -1,6 +1,7 @@
 // Four in a Row page: vs-computer mode (Easy/Medium/Hard) and the daily challenge.
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
+import { onProgressLoaded } from './store.js';
 import { levelSwitch } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
@@ -100,6 +101,15 @@ function renderScore() {
   $('score-cpu').textContent = score.l + (score.l === 1 ? ' win' : ' wins');
   $('score-draws').textContent = String(score.d);
 }
+// An account's saved progress arrived after sign-in: show it.
+onProgressLoaded(() => {
+  Object.assign(score, { w: 0, l: 0, d: 0 }, store.get('bgs-c4-score', {}));
+  if (mode === 'classic') renderScore();
+  else {
+    const d = store.get('bgs-daily', null);
+    renderStreak(d && (d.lastSolved === today || d.lastSolved === yesterdayKey()) ? d : null);
+  }
+});
 function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
   $('row-cpu').classList.toggle('turn-cpu', who === 'cpu');

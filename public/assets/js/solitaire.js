@@ -1,6 +1,7 @@
 // Klondike Solitaire page: tap a card to auto-move it, or drag it.
 import * as S from './solitaire-engine.js';
 import { store } from './site.js';
+import { onProgressLoaded } from './store.js';
 import { setStatus } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
@@ -228,6 +229,8 @@ function paintRecord() {
   $('record').textContent = stats.won + ' of ' + stats.played + (stats.played === 1 ? ' game' : ' games') + ' won' +
     (stats.best ? ' · best time ' + fmt(stats.best) : '');
 }
+// An account's saved stats arrived after sign-in: show them.
+onProgressLoaded(() => { Object.assign(stats, { played: 0, won: 0, best: null }, store.get('bgs-sol-stats', {})); paintRecord(); });
 function onWin() {
   won = true;
   clearInterval(timerId);

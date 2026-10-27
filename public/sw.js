@@ -1,6 +1,6 @@
 // Offline helper. Always tries the network first, so visitors get the latest version;
 // falls back to the last copy it saw when there is no connection.
-const CACHE = 'bgs-v2';
+const CACHE = 'bgs-v3';
 const CORE = [
   '/',
   '/play/solitaire',
@@ -11,6 +11,8 @@ const CORE = [
   '/assets/fonts/dm-sans-latin.woff',
   '/assets/fonts/instrument-serif-latin.woff',
   '/assets/js/site.js',
+  '/assets/js/store.js',
+  '/assets/js/accounts.js',
   '/assets/js/firebase.js',
   '/assets/js/firebase-config.js',
   '/assets/js/game-ui.js',
@@ -51,6 +53,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;   // fonts, Firebase and analytics go straight to the network
+  if (url.pathname.startsWith('/__/')) return;         // Firebase's own sign-in pages
   event.respondWith(
     fetch(req)
       .then((res) => {

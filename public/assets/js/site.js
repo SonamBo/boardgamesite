@@ -1,17 +1,10 @@
-// Shared behaviour for every page: menu, cookie consent, accounts dialog, forms, daily streak.
+// Shared behaviour for every page: menu, cookie consent, accounts, forms, daily streak.
 import { configured, startAnalytics, track, addEntry } from './firebase.js';
+import { store } from './store.js';
+import { startAccounts, openAccounts, currentUser } from './accounts.js';
 
+export { store };
 const CONTACT_EMAIL = 'pixelartgames000@gmail.com';
-
-// ---------- Safe localStorage ----------
-export const store = {
-  get(key, fallback) {
-    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
-  },
-  set(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage blocked */ }
-  }
-};
 
 export function dateKey(d = new Date()) {
   const p = (n) => String(n).padStart(2, '0');
@@ -86,38 +79,19 @@ function showConsent() {
   document.body.appendChild(box);
 }
 
-// ---------- Accounts "coming soon" dialog ----------
-let dialog = null;
-function accountsDialog() {
-  if (dialog) return dialog;
-  dialog = document.createElement('dialog');
-  dialog.setAttribute('aria-labelledby', 'acc-title');
-  dialog.innerHTML =
-    '<button type="button" class="dialog-close" aria-label="Close">' +
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
-    '<div class="dialog-inner">' +
-    '<img src="/assets/img/mascot-wave.webp" alt="" width="280" height="287">' +
-    '<h2 id="acc-title">Accounts are coming soon</h2>' +
-    '<p class="text-2">Profiles, saved stats and leaderboards are on the way. Leave your email and we’ll tell you when they open.</p>' +
-    '<form class="nl-form" data-newsletter="accounts" novalidate>' +
-    '<label class="visually-hidden" for="acc-email">Email address</label>' +
-    '<input id="acc-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>' +
-    '<button type="submit" class="btn btn-gold btn-block">Notify me</button>' +
-    '<p class="form-msg" role="status"></p></form></div>';
-  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-  document.body.appendChild(dialog);
-  wireNewsletter(dialog.querySelector('form'));
-  return dialog;
-}
+// ---------- Accounts ----------
+// Buttons with data-open-accounts open the sign-up / log-in dialog (or the account page once signed in).
+// data-open-accounts="sidebar-login" opens it on the log-in tab.
 document.addEventListener('click', (e) => {
   const opener = e.target.closest('[data-open-accounts]');
   if (!opener) return;
   e.preventDefault();
   sidebar?.classList.remove('open');
-  accountsDialog().showModal();
-  track('accounts_interest', { from: opener.dataset.openAccounts || 'button' });
+  if (currentUser()) { location.href = '/account'; return; }
+  const from = opener.dataset.openAccounts || 'button';
+  openAccounts(/login/.test(from) ? 'login' : 'signup', from);
 });
+startAccounts();
 
 // ---------- Forms ----------
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;

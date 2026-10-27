@@ -6,12 +6,119 @@ const filled = (v) => typeof v === 'string' && v.length > 0 && !v.startsWith('PA
 
 export const configured = filled(firebaseConfig.apiKey) && filled(firebaseConfig.appId);
 
+// On the real site, sign-in pages are served from boardgamesite.com itself (not firebaseapp.com),
+// so Google sign-in keeps working in browsers that block third-party storage.
+const ownDomain = /(^|\.)boardgamesite\.com$/.test(location.hostname);
+const config = ownDomain ? { ...firebaseConfig, authDomain: 'boardgamesite.com' } : firebaseConfig;
+
 let appPromise = null;
 function getApp() {
   if (!appPromise) {
-    appPromise = import(SDK + 'firebase-app.js').then((m) => m.initializeApp(firebaseConfig));
+    appPromise = import(SDK + 'firebase-app.js').then((m) => m.initializeApp(config));
   }
   return appPromise;
+}
+
+let dbPromise = null;
+function getDb() {
+  if (!dbPromise) {
+    dbPromise = Promise.all([getApp(), import(SDK + 'firebase-firestore.js')]).then(([app, m]) => ({ m, db: m.getFirestore(app) }));
+  }
+  return dbPromise;
+}
+
+// ---- Accounts ----
+let authPromise = null;
+function getAuth() {
+  if (!authPromise) {
+    authPromise = Promise.all([getApp(), import(SDK + 'firebase-auth.js')]).then(([app, m]) => {
+      const auth = m.getAuth(app);
+      auth.useDeviceLanguage();
+      return { m, auth };
+    });
+  }
+  return authPromise;
+}
+
+// Calls back with the signed-in user (or null) now and whenever it changes.
+export function onUser(callback) {
+  if (!configured) { callback(null); return; }
+  getAuth().then(({ m, auth }) => m.onAuthStateChanged(auth, callback)).catch(() => callback(null));
+}
+
+export async function signInWithGoogle() {
+  const { m, auth } = await getAuth();
+  const provider = new m.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try {
+    return (await m.signInWithPopup(auth, provider)).user;
+  } catch (err) {
+    // Popups blocked (common on phones in some in-app browsers): fall back to a full-page redirect.
+    if (err && (err.code === 'auth/popup-blocked' || err.code === 'auth/operation-not-supported-in-this-environment')) {
+      await m.signInWithRedirect(auth, provider);
+      return null;
+    }
+    throw err;
+  }
+}
+
+export async function signUpWithEmail(name, email, password) {
+  const { m, auth } = await getAuth();
+  const cred = await m.createUserWithEmailAndPassword(auth, email, password);
+  if (name) await m.updateProfile(cred.user, { displayName: name });
+  m.sendEmailVerification(cred.user, { url: location.origin + '/account' }).catch(() => {});
+  return cred.user;
+}
+
+export async function signInWithEmail(email, password) {
+  const { m, auth } = await getAuth();
+  return (await m.signInWithEmailAndPassword(auth, email, password)).user;
+}
+
+export async function resetPassword(email) {
+  const { m, auth } = await getAuth();
+  await m.sendPasswordResetEmail(auth, email, { url: location.origin + '/' });
+}
+
+export async function updateName(name) {
+  const { m, auth } = await getAuth();
+  await m.updateProfile(auth.currentUser, { displayName: name });
+}
+
+export async function resendVerification() {
+  const { m, auth } = await getAuth();
+  if (auth.currentUser) await m.sendEmailVerification(auth.currentUser, { url: location.origin + '/account' });
+}
+
+export async function signOutUser() {
+  const { m, auth } = await getAuth();
+  await m.signOut(auth);
+}
+
+// Deletes the player's saved data, then the account itself.
+// Throws auth/requires-recent-login if they signed in too long ago; the caller asks them to sign in again.
+export async function deleteAccount() {
+  const { m, auth } = await getAuth();
+  const user = auth.currentUser;
+  if (!user) return;
+  const { m: fm, db } = await getDb();
+  await fm.deleteDoc(fm.doc(db, 'users', user.uid));
+  await m.deleteUser(user);
+}
+
+// ---- The signed-in player's saved progress (users/{uid}) ----
+export async function loadProfile(uid) {
+  const { m, db } = await getDb();
+  const snap = await m.getDoc(m.doc(db, 'users', uid));
+  return snap.exists() ? snap.data() : null;
+}
+
+export async function saveProfile(uid, data, isNew) {
+  const { m, db } = await getDb();
+  const ref = m.doc(db, 'users', uid);
+  const payload = { ...data, updatedAt: m.serverTimestamp() };
+  if (isNew) payload.createdAt = m.serverTimestamp();
+  await m.setDoc(ref, payload, { merge: true });
 }
 
 // ---- Analytics (only started after the visitor accepts the cookie banner) ----
@@ -31,7 +138,6 @@ export function track(name, params) {
 // ---- Firestore: add-only entries (newsletter, contact messages) ----
 export async function addEntry(collectionName, data) {
   if (!configured) throw new Error('not-configured');
-  const [app, m] = await Promise.all([getApp(), import(SDK + 'firebase-firestore.js')]);
-  const db = m.getFirestore(app);
+  const { m, db } = await getDb();
   await m.addDoc(m.collection(db, collectionName), { ...data, createdAt: m.serverTimestamp() });
 }

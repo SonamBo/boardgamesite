@@ -1,5 +1,6 @@
 // Shared bits for game pages: status line, result panel, computer level switch, win/loss record.
 import { store } from './site.js';
+import { onProgressLoaded } from './store.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -55,6 +56,8 @@ export function record(gameKey) {
     if (el) el.textContent = plural(score.w, 'win', 'wins') + ' · ' + plural(score.l, 'loss', 'losses') + ' · ' + plural(score.d, 'draw', 'draws');
   };
   paint();
+  // An account's saved record arrived after sign-in: show it.
+  onProgressLoaded(() => { Object.assign(score, { w: 0, l: 0, d: 0 }, store.get(key, {})); paint(); });
   return {
     add(result) {
       if (result === 'win') score.w++;

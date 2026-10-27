@@ -1,0 +1,55 @@
+<!-- title: Your account | BoardGameSite -->
+<!-- description: Your BoardGameSite account: your name, your record in every game, and your account settings. -->
+<!-- path: /account -->
+<!-- out: account.html -->
+<!-- sitemap: no -->
+<!-- robots: noindex -->
+<!-- script: /assets/js/account-page.js -->
+<article class="page account">
+  <h1>Your account</h1>
+
+  <div id="acc-loading" class="muted">Loading…</div>
+
+  <section id="acc-out" class="card account-card" hidden>
+    <img src="/assets/img/mascot-wave.webp" alt="" width="280" height="287">
+    <div>
+      <h2>Save your progress</h2>
+      <p>Create a free account to keep your wins, streaks and best times, and pick them up on any device.</p>
+      <div class="account-actions">
+        <button type="button" class="btn btn-gold" data-open-accounts="account-signup">Create free account</button>
+        <button type="button" class="btn btn-outline" data-open-accounts="account-login">Log in</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="acc-in" hidden>
+    <section class="card account-card">
+      <span class="avatar avatar-lg" id="acc-avatar" aria-hidden="true"></span>
+      <div class="account-who">
+        <p class="account-name" id="acc-name"></p>
+        <p class="muted" id="acc-email"></p>
+        <p class="muted" id="acc-since"></p>
+      </div>
+    </section>
+
+    <p id="acc-verify" class="notice" hidden>Please confirm your email address: we sent you a link when you signed up. <button type="button" class="link-btn" id="acc-resend">Send it again</button></p>
+
+    <h2>Your record</h2>
+    <div class="stat-grid" id="acc-stats"></div>
+
+    <h2>Name on leaderboards</h2>
+    <form class="name-form" id="acc-name-form" novalidate>
+      <label class="visually-hidden" for="acc-name-input">Name</label>
+      <input id="acc-name-input" name="name" maxlength="40" autocomplete="nickname">
+      <button type="submit" class="btn btn-outline">Save name</button>
+      <p class="form-msg" role="status"></p>
+    </form>
+
+    <h2>Account</h2>
+    <div class="account-actions">
+      <button type="button" class="btn btn-outline" id="acc-signout">Log out</button>
+      <button type="button" class="btn btn-danger" id="acc-delete">Delete account</button>
+    </div>
+    <p class="form-msg" id="acc-msg" role="status"></p>
+  </div>
+</article>

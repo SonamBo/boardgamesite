@@ -1,8 +1,8 @@
 rules_version = '2';
 
-// Visitors can only ADD newsletter signups and contact messages.
-// Nobody can read, change or delete anything from the website.
-// You read the entries yourself in the Firebase console (Firestore Database).
+// Visitors can only ADD newsletter signups and contact messages; nobody can read those from the website.
+// Signed-in players can read, save and delete their own progress (users/{their id}) and nothing else.
+// You read everything yourself in the Firebase console (Firestore Database).
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -30,6 +30,25 @@ service cloud.firestore {
         && request.resource.data.message.size() <= 5000
         && request.resource.data.createdAt == request.time;
       allow read, update, delete: if false;
+    }
+
+    // A player's saved progress. Keys must match SYNC_KEYS in public/assets/js/accounts.js.
+    function validProfile(d) {
+      return d.keys().hasOnly(['name', 'progress', 'createdAt', 'updatedAt'])
+        && (!('name' in d) || (d.name is string && d.name.size() <= 40))
+        && (!('progress' in d) || (d.progress is map
+          && d.progress.keys().hasOnly(['bgs-c4-score', 'bgs-ck-score', 'bgs-rv-score', 'bgs-sol-stats', 'bgs-daily'])))
+        && d.updatedAt == request.time;
+    }
+
+    match /users/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && validProfile(request.resource.data)
+        && request.resource.data.createdAt == request.time;
+      allow update: if request.auth != null && request.auth.uid == uid
+        && validProfile(request.resource.data)
+        && request.resource.data.get('createdAt', null) == resource.data.get('createdAt', null);
     }
 
     match /{document=**} {
