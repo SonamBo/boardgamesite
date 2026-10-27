@@ -1,5 +1,6 @@
 // The /account page: who's signed in, their record, name change, log out, delete account.
 import { store } from './store.js';
+import { GAMES } from './games-data.js';
 import { whenReady, currentUser, displayName, signOutEverywhere, refreshUserUI, setLocalName, SYNC_KEYS } from './accounts.js';
 import { updateName, saveProfile, deleteAccount, resendVerification, track } from './firebase.js';
 
@@ -25,17 +26,24 @@ function statCard(title, href, lines) {
 function paintStats() {
   const grid = $('acc-stats');
   grid.textContent = '';
-  const score = (key) => store.get(key, { w: 0, l: 0, d: 0 });
-  const vs = (s) => [plural(s.w || 0, 'win', 'wins'), plural(s.l || 0, 'loss', 'losses') + ' · ' + plural(s.d || 0, 'draw', 'draws')];
-  const sol = store.get('bgs-sol-stats', { played: 0, won: 0, best: null });
+  const cards = [];
+  for (const g of GAMES) {
+    if (g.record === 'wld') {
+      const s = store.get(g.key, { w: 0, l: 0, d: 0 });
+      cards.push({ played: (s.w || 0) + (s.l || 0) + (s.d || 0), el: statCard(g.name, '/play/' + g.slug,
+        [plural(s.w || 0, 'win', 'wins'), plural(s.l || 0, 'loss', 'losses') + ' · ' + plural(s.d || 0, 'draw', 'draws')]) });
+    } else {
+      const s = store.get(g.key, { played: 0, won: 0, best: null });
+      const extra = s.best ? ' · best ' + fmtTime(s.best) : s.top ? ' · top ' + s.top : '';
+      cards.push({ played: s.played || 0, el: statCard(g.name, '/play/' + g.slug,
+        [plural(s.won || 0, 'win', 'wins'), 'of ' + plural(s.played || 0, 'game', 'games') + extra]) });
+    }
+  }
   const daily = store.get('bgs-daily', null);
-  grid.append(
-    statCard('Solitaire', '/play/solitaire', [plural(sol.won || 0, 'win', 'wins'), 'of ' + plural(sol.played || 0, 'game', 'games') + (sol.best ? ' · best ' + fmtTime(sol.best) : '')]),
-    statCard('Checkers', '/play/checkers', vs(score('bgs-ck-score'))),
-    statCard('Reversi', '/play/reversi', vs(score('bgs-rv-score'))),
-    statCard('Four in a Row', '/play/four-in-a-row', vs(score('bgs-c4-score'))),
-    statCard('Daily challenge', '/play/four-in-a-row?mode=daily', [plural(daily && daily.streak ? daily.streak : 0, 'day', 'days'), 'current streak'])
-  );
+  cards.push({ played: daily ? 1 : 0, el: statCard('Daily challenge', '/play/four-in-a-row?mode=daily',
+    [plural(daily && daily.streak ? daily.streak : 0, 'day', 'days'), 'current streak']) });
+  // Games they've played first; the rest keep the site's order.
+  cards.sort((x, y) => (y.played > 0) - (x.played > 0)).forEach((c) => grid.append(c.el));
 }
 
 function paint() {

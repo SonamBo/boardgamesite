@@ -1,6 +1,6 @@
 // Offline helper. Always tries the network first, so visitors get the latest version;
 // falls back to the last copy it saw when there is no connection.
-const CACHE = 'bgs-v3';
+const CACHE = 'bgs-v4';
 const CORE = [
   '/',
   '/play/solitaire',
@@ -13,6 +13,7 @@ const CORE = [
   '/assets/js/site.js',
   '/assets/js/store.js',
   '/assets/js/accounts.js',
+  '/assets/js/games-data.js',
   '/assets/js/firebase.js',
   '/assets/js/firebase-config.js',
   '/assets/js/game-ui.js',

@@ -8,9 +8,10 @@ import {
   signOutUser, loadProfile, saveProfile, track
 } from './firebase.js';
 import { store, PROGRESS_EVENT } from './store.js';
+import { GAMES } from './games-data.js';
 
-// Progress that follows the player between devices. Keep in sync with firestore.rules.
-export const SYNC_KEYS = ['bgs-c4-score', 'bgs-ck-score', 'bgs-rv-score', 'bgs-sol-stats', 'bgs-daily'];
+// Progress that follows the player between devices: every game's record (from games.py) plus the daily streak.
+export const SYNC_KEYS = [...new Set(GAMES.map((g) => g.key))].concat('bgs-daily');
 const AUTH_FLAG = 'bgs-auth'; // set while signed in, so pages only load the sign-in code when needed
 
 let user = null;
@@ -32,11 +33,15 @@ function mergeScore(a, b) {
   if (!b) return a;
   return { w: Math.max(n(a.w), n(b.w)), l: Math.max(n(a.l), n(b.l)), d: Math.max(n(a.d), n(b.d)) };
 }
-function mergeSolitaire(a, b) {
+// Single-player stats: games played and won, best (lowest) time in ms, top (highest) score.
+function mergeStats(a, b) {
   if (!a) return b || null;
   if (!b) return a;
+  const out = { played: Math.max(n(a.played), n(b.played)), won: Math.max(n(a.won), n(b.won)) };
   const bests = [a.best, b.best].filter((x) => typeof x === 'number' && x > 0);
-  return { played: Math.max(n(a.played), n(b.played)), won: Math.max(n(a.won), n(b.won)), best: bests.length ? Math.min(...bests) : null };
+  out.best = bests.length ? Math.min(...bests) : null;
+  if ('top' in a || 'top' in b) out.top = Math.max(n(a.top), n(b.top));
+  return out;
 }
 function mergeDaily(a, b) {
   if (!a) return b || null;
@@ -45,13 +50,8 @@ function mergeDaily(a, b) {
   if (!!a.solved !== !!b.solved) return a.solved ? a : b;
   return n(a.streak) >= n(b.streak) ? a : b;
 }
-const MERGE = {
-  'bgs-c4-score': mergeScore,
-  'bgs-ck-score': mergeScore,
-  'bgs-rv-score': mergeScore,
-  'bgs-sol-stats': mergeSolitaire,
-  'bgs-daily': mergeDaily
-};
+const MERGE = { 'bgs-daily': mergeDaily };
+GAMES.forEach((g) => { MERGE[g.key] = g.record === 'wld' ? mergeScore : mergeStats; });
 
 // ---------- Saving changes to the account ----------
 let pending = {};

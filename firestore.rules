@@ -32,12 +32,11 @@ service cloud.firestore {
       allow read, update, delete: if false;
     }
 
-    // A player's saved progress. Keys must match SYNC_KEYS in public/assets/js/accounts.js.
+    // A player's saved progress: one small record per game (see SYNC_KEYS in public/assets/js/accounts.js).
     function validProfile(d) {
       return d.keys().hasOnly(['name', 'progress', 'createdAt', 'updatedAt'])
         && (!('name' in d) || (d.name is string && d.name.size() <= 40))
-        && (!('progress' in d) || (d.progress is map
-          && d.progress.keys().hasOnly(['bgs-c4-score', 'bgs-ck-score', 'bgs-rv-score', 'bgs-sol-stats', 'bgs-daily'])))
+        && (!('progress' in d) || (d.progress is map && d.progress.size() <= 150))
         && d.updatedAt == request.time;
     }
 

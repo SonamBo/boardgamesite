@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout">
+  <div class="game-layout" data-max-root>
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Checkers</h1>
@@ -29,13 +29,19 @@
 
     <aside class="panel">
       <div class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b>You</b><small id="count-you">12 pieces</small></div>
-        <div id="row-cpu" class="player"><span class="dot" aria-hidden="true" style="background: #262A27; box-shadow: 0 0 0 2px #4C544E"></span><b>Computer</b><small id="count-cpu">12 pieces</small></div>
-        <p class="muted" style="font-size: 14px">Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b><small id="count-you">12 pieces</small></div>
+        <div id="row-cpu" class="player"><span class="dot" aria-hidden="true" style="background: #262A27; box-shadow: 0 0 0 2px #4C544E"></span><b data-name="p2">Computer</b><small id="count-cpu">12 pieces</small></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
       </div>
 
-      <p class="seg-label">Computer level</p>
-      <div class="seg" role="group" aria-label="Computer level">
+      <p class="seg-label">Opponent</p>
+      <div class="seg" role="group" aria-label="Opponent (starts a new game)">
+        <button type="button" data-opponent="cpu">Computer</button>
+        <button type="button" data-opponent="friend">2 players</button>
+      </div>
+
+      <p class="seg-label" data-cpu-only>Computer level</p>
+      <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
         <button type="button" data-level="easy">Easy</button>
         <button type="button" data-level="medium">Medium</button>
         <button type="button" data-level="hard">Hard</button>

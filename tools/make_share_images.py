@@ -1,19 +1,29 @@
 #!/usr/bin/env python3
-"""Draws the 1200×630 link-preview image for each game into public/assets/img/og/<game>.jpg.
+"""Draws each game's pictures:
+  public/assets/img/og/<game>.jpg      1200×630 link preview (WhatsApp, X, Facebook, Slack, Discord, Google Discover)
+  public/assets/img/thumb/<game>.webp  480×360 card picture on the home and category pages
 
-These are the pictures that appear when a game page is shared on WhatsApp, X, Facebook,
-Slack or Discord, and in Google Discover. Re-run after adding a game or changing the brand colours.
+
+Re-run after adding a game (add its art function and an entry in ART below) or changing the brand colours.
+Run with game names to redraw only those:  python3 tools/make_share_images.py chess mancala
 
 Needs Playwright with Chromium:  pip install playwright && playwright install chromium
 Run:  python3 tools/make_share_images.py
 """
+import io
 import pathlib
+import sys
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from games import GAMES  # noqa: E402
+
 PUB = ROOT / "public"
 OUT = PUB / "assets" / "img" / "og"
+THUMBS = PUB / "assets" / "img" / "thumb"
 
 GOLD, IVORY, MERLOT = "#CFAA62", "#EFE6D8", "#8A2443"
 
@@ -73,11 +83,12 @@ def solitaire():
     return f'<div class="fan">{"".join(out)}</div>'
 
 
-GAMES = {
-    "solitaire": ("Solitaire", "Classic Klondike.", solitaire),
-    "checkers": ("Checkers", "Jump. Crown. Win.", checkers),
-    "reversi": ("Reversi", "Flip the board.", reversi),
-    "four-in-a-row": ("Four in a Row", "Line up four.", four),
+# Each game's tagline (on the share image) and art.
+ART = {
+    "solitaire": ("Classic Klondike.", solitaire),
+    "checkers": ("Jump. Crown. Win.", checkers),
+    "reversi": ("Flip the board.", reversi),
+    "four-in-a-row": ("Line up four.", four),
 }
 
 CSS = f"""
@@ -137,20 +148,46 @@ def page(name, tag, art):
 </div></body></html>"""
 
 
+def thumb(art):
+    # The art panel on its own, 640×480, saved at 480×360.
+    return f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}
+body {{ width: 640px; height: 480px; }}
+.right {{ position: static; width: 640px; height: 480px; }}
+.right::before {{ display: none; }}
+.right > * {{ margin-left: 0 !important; transform: scale(.74); }}
+.right > .grid8 {{ transform: scale(.74) rotate(-4deg); }}
+</style></head><body><div class="right">{art()}</div></body></html>"""
+
+
 def main():
+    only = set(sys.argv[1:])
+    missing = [s for s in GAMES if s not in ART]
+    if missing:
+        sys.exit("No art for: " + ", ".join(missing))
     OUT.mkdir(parents=True, exist_ok=True)
+    THUMBS.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
         browser = p.chromium.launch()
         tab = browser.new_page(viewport={"width": 1200, "height": 630})
-        for slug, (name, tag, art) in GAMES.items():
+        small = browser.new_page(viewport={"width": 640, "height": 480})
+        for slug, (tag, art) in ART.items():
+            if only and slug not in only:
+                continue
+            name = GAMES[slug]["name"]
             html_file = OUT / f".{slug}.html"
             html_file.write_text(page(name, tag, art), encoding="utf-8")
             tab.goto(html_file.as_uri())
             tab.evaluate("document.fonts.ready")
             tab.wait_for_timeout(150)
             tab.screenshot(path=str(OUT / f"{slug}.jpg"), type="jpeg", quality=86)
+            html_file.write_text(thumb(art), encoding="utf-8")
+            small.goto(html_file.as_uri())
+            small.evaluate("document.fonts.ready")
+            small.wait_for_timeout(100)
+            img = Image.open(io.BytesIO(small.screenshot(type="png"))).convert("RGB").resize((480, 360), Image.LANCZOS)
+            img.save(THUMBS / f"{slug}.webp", "WEBP", quality=82, method=6)
             html_file.unlink()
-            print("drew", (OUT / f"{slug}.jpg").relative_to(ROOT))
+            print("drew", slug)
         browser.close()
 
 

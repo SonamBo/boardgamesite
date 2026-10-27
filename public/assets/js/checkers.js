@@ -1,6 +1,6 @@
 // Checkers page.
 import * as E from './checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -14,8 +14,14 @@ const DRAW_AFTER = 80;   // half-moves of kings shuffling with no capture
 
 const getLevel = levelSwitch('ck');
 const rec = record('ck');
+const getOpp = opponentSwitch('ck', () => newGame());
+const friend = () => getOpp() === 'friend';
 
-let board, over, busy, partial, lastPath, quiet, started;
+// turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top; in 2-player mode, Player 1 and Player 2)
+let board, over, busy, partial, lastPath, quiet, started, turn;
+let cpuTimer = 0;
+const nameOf = (side) => (side === E.YOU ? 'Player 1' : 'Player 2');
+const markTurn = () => setTurn(turn === E.YOU ? 'you' : 'cpu');
 
 // ---------- Board DOM ----------
 const cells = [];
@@ -35,8 +41,11 @@ boardEl.addEventListener('click', (e) => {
 
 const squareName = (i) => FILES[i & 7] + (8 - (i >> 3));
 
+// Moves the person at the screen can make right now.
 function playerMoves() {
-  return !over && !busy ? E.legalMoves(board, E.YOU) : [];
+  if (over || busy) return [];
+  if (!friend() && turn !== E.YOU) return [];
+  return E.legalMoves(board, turn);
 }
 
 function render() {
@@ -58,7 +67,7 @@ function render() {
     if (p) html = '<span class="piece ' + (p > 0 ? 'you' : 'cpu') + '">' + (Math.abs(p) === 2 ? CROWN : '') + '</span>';
     else if (targets.has(i)) html = '<span class="hint-dot"></span>';
     if (btn.innerHTML !== html) btn.innerHTML = html;
-    const who = p > 0 ? 'your ' : p < 0 ? 'computer ' : '';
+    const who = friend() ? (p > 0 ? 'gold ' : p < 0 ? 'black ' : '') : (p > 0 ? 'your ' : p < 0 ? 'computer ' : '');
     const what = p ? who + (Math.abs(p) === 2 ? 'king' : 'piece') : (targets.has(i) ? 'move here' : 'empty');
     btn.setAttribute('aria-label', squareName(i) + ', ' + what);
     btn.disabled = !(pickable.has(i) || targets.has(i));
@@ -66,7 +75,10 @@ function render() {
   const n = E.countPieces(board);
   document.getElementById('count-you').textContent = n.you + (n.you === 1 ? ' piece' : ' pieces');
   document.getElementById('count-cpu').textContent = n.cpu + (n.cpu === 1 ? ' piece' : ' pieces');
-  if (!over && !busy) setStatus(partial.length > 1 ? 'Keep jumping' : mustCapture ? 'Your turn: you must capture' : 'Your turn');
+  if (!over && !busy) {
+    const whose = friend() ? nameOf(turn) + '’s turn' : 'Your turn';
+    setStatus(partial.length > 1 ? 'Keep jumping' : mustCapture ? whose + ': you must capture' : whose, friend() && turn === E.CPU ? 'cpu' : '');
+  }
 }
 
 function onSquare(i) {
@@ -100,14 +112,27 @@ function moveSound(m) {
   if ((p === 1 && row === 0) || (p === -1 && row === 7)) play('king', 0.2);
 }
 
-const saveGame = (toMove) => store.set(SAVE, { board, quiet, toMove, lastPath });
+const saveGame = (toMove) => store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 
 function finish(result) {
   over = true;
   clearGame();
-  play(result, 0.25);
   setTurn(null);
+  if (friend()) {
+    // result is from Player 1's side
+    play(result === 'draw' ? 'draw' : 'win', 0.25);
+    if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'No captures for a long while.'); }
+    else {
+      const winner = result === 'win' ? 'Player 1' : 'Player 2';
+      setStatus(winner + ' wins!', result === 'win' ? '' : 'cpu');
+      showResult('win', winner + ' wins!', 'Nicely played. New game?');
+    }
+    track('game_end', { game: 'checkers', result, mode: 'friend' });
+    render();
+    return;
+  }
+  play(result, 0.25);
   if (result === 'win') { setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
   if (result === 'lose') { setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
   if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'No captures for a long while.'); }
@@ -117,24 +142,28 @@ function finish(result) {
 }
 
 function playerMove(m) {
-  if (!started) { started = true; track('game_start', { game: 'checkers', level: getLevel() }); }
+  if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); }
   noteQuiet(m);
   moveSound(m);
   board = E.applyMove(board, m);
   lastPath = m.path;
   partial = [];
-  if (!E.legalMoves(board, E.CPU).length) return finish('win');
+  const next = -turn;
+  if (!E.legalMoves(board, next).length) return finish(turn === E.YOU ? 'win' : 'lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
-  saveGame(E.CPU);
+  turn = next;
+  saveGame(turn);
+  if (friend()) { markTurn(); render(); return; }
   startComputerTurn();
 }
 
 function startComputerTurn() {
+  turn = E.CPU;
   busy = true;
   setTurn('cpu');
   setStatus('Computer is thinking…', 'cpu');
   render();
-  setTimeout(computerMove, 450);
+  cpuTimer = setTimeout(computerMove, 450);
 }
 
 function computerMove() {
@@ -147,6 +176,7 @@ function computerMove() {
   lastPath = m.path;
   if (!E.legalMoves(board, E.YOU).length) return finish('lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
+  turn = E.YOU;
   saveGame(E.YOU);
   setTurn('you');
   render();
@@ -154,7 +184,8 @@ function computerMove() {
 
 function newGame() {
   board = E.startBoard();
-  over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false;
+  over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false; turn = E.YOU;
+  clearTimeout(cpuTimer);
   clearGame();
   hideResult();
   setTurn('you');
@@ -165,16 +196,18 @@ function newGame() {
 function resume() {
   const g = store.get(SAVE, null);
   if (!g || !Array.isArray(g.board) || g.board.length !== 64) return false;
+  if ((g.mode || 'cpu') !== getOpp()) return false;
   if (!E.legalMoves(g.board, E.YOU).length || !E.legalMoves(g.board, E.CPU).length) return false;
   board = g.board;
   quiet = g.quiet | 0;
   lastPath = Array.isArray(g.lastPath) ? g.lastPath : null;
   over = false; busy = false; partial = []; started = true;
+  turn = g.toMove === E.CPU ? E.CPU : E.YOU;
   hideResult();
-  if (g.toMove === E.CPU) { startComputerTurn(); return true; }
-  setTurn('you');
+  if (turn === E.CPU && !friend()) { startComputerTurn(); return true; }
+  markTurn();
   render();
-  setStatus('Welcome back. Your turn');
+  if (!friend()) setStatus('Welcome back. Your turn');
   return true;
 }
 

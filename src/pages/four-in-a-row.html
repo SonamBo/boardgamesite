@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout">
+  <div class="game-layout" data-max-root>
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Four in a Row</h1>
@@ -27,19 +27,24 @@
 
     <aside class="panel">
       <nav class="mode-tabs" aria-label="Game mode">
-        <a href="/play/four-in-a-row" data-mode-link="classic">Vs computer</a>
+        <a href="/play/four-in-a-row" data-mode-link="classic">Play</a>
         <a href="/play/four-in-a-row?mode=daily" data-mode-link="daily">Daily challenge</a>
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b>You</b><small id="score-you">0 wins</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b>Computer</b><small id="score-cpu">0 wins</small></div>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b><small id="score-you">0 wins</small></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b><small id="score-cpu">0 wins</small></div>
         <p class="muted" style="font-size: 14px">Draws: <span id="score-draws">0</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
-        <p class="seg-label">Computer level</p>
-        <div class="seg" role="group" aria-label="Computer level">
+        <p class="seg-label">Opponent</p>
+        <div class="seg" role="group" aria-label="Opponent (starts a new game)">
+          <button type="button" data-opponent="cpu">Computer</button>
+          <button type="button" data-opponent="friend">2 players</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Computer level</p>
+        <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
           <button type="button" data-level="medium">Medium</button>
           <button type="button" data-level="hard">Hard</button>

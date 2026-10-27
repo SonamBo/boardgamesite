@@ -2,7 +2,7 @@
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
 import { onProgressLoaded } from './store.js';
-import { levelSwitch } from './game-ui.js';
+import { levelSwitch, opponentSwitch } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 
@@ -95,11 +95,17 @@ function drop(c, p) {
 
 // ---------- Classic: vs computer ----------
 const getLevel = mode === 'classic' ? levelSwitch('c4') : () => 'medium';
+const getOpp = mode === 'classic' ? opponentSwitch('c4', () => { renderScore(); newGame(); }) : () => 'cpu';
+const friend = () => getOpp() === 'friend';
+let turn = E.YOU;                       // whose disc drops next (2-player mode: Player 1 = gold, Player 2 = ivory)
+let cpuTimer = 0;
 const score = store.get('bgs-c4-score', { w: 0, l: 0, d: 0 });
+const tally = { w: 0, l: 0, d: 0 };     // 2-player games this visit (not saved)
 function renderScore() {
-  $('score-you').textContent = score.w + (score.w === 1 ? ' win' : ' wins');
-  $('score-cpu').textContent = score.l + (score.l === 1 ? ' win' : ' wins');
-  $('score-draws').textContent = String(score.d);
+  const s = friend() ? tally : score;
+  $('score-you').textContent = s.w + (s.w === 1 ? ' win' : ' wins');
+  $('score-cpu').textContent = s.l + (s.l === 1 ? ' win' : ' wins');
+  $('score-draws').textContent = String(s.d);
 }
 // An account's saved progress arrived after sign-in: show it.
 onProgressLoaded(() => {
@@ -114,13 +120,27 @@ function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
   $('row-cpu').classList.toggle('turn-cpu', who === 'cpu');
 }
-const saveGame = (toMove) => store.set(SAVE, { board, toMove });
+const saveGame = (toMove) => store.set(SAVE, { board, toMove, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 
 function finishClassic(result) {
   over = true;
   clearGame();
   setTurn(null);
+  if (friend()) {
+    // result is from Player 1's side
+    tally[result === 'win' ? 'w' : result === 'lose' ? 'l' : 'd']++;
+    if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
+    else {
+      const winner = result === 'win' ? 'Player 1' : 'Player 2';
+      setStatus(winner + ' wins!', result === 'win' ? '' : 'cpu');
+      showResult('win', winner + ' wins!', 'Nicely played. Swap who goes first?');
+    }
+    play(result === 'draw' ? 'draw' : 'win');
+    renderScore();
+    track('game_end', { game: 'four_in_a_row', result, mode: 'friend' });
+    return;
+  }
   if (result === 'win') { score.w++; setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
   if (result === 'lose') { score.l++; setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
   if (result === 'draw') { score.d++; setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
@@ -131,10 +151,11 @@ function finishClassic(result) {
 }
 function startComputerTurn() {
   busy = true;
+  turn = E.CPU;
   setTurn('cpu');
   setStatus('Computer is thinking…', 'cpu');
   render();
-  setTimeout(computerMove, 550);
+  cpuTimer = setTimeout(computerMove, 550);
 }
 function computerMove() {
   drop(E.pickComputerMove(board, getLevel()), E.CPU);
@@ -142,25 +163,36 @@ function computerMove() {
   const cpuLine = E.findLine(board, E.CPU);
   if (cpuLine) { highlight = cpuLine; finishClassic('lose'); }
   else if (E.isFull(board)) finishClassic('draw');
-  else { saveGame(E.YOU); setTurn('you'); setStatus('Your turn'); }
+  else { turn = E.YOU; saveGame(E.YOU); setTurn('you'); setStatus('Your turn'); }
   render();
 }
+const nameOf = (p) => (p === E.YOU ? 'Player 1' : 'Player 2');
 function classicMove(c) {
-  if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic', level: getLevel() }); }
-  drop(c, E.YOU);
-  const line = E.findLine(board, E.YOU);
-  if (line) { highlight = line; finishClassic('win'); render(); return; }
+  if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic', level: friend() ? 'friend' : getLevel() }); }
+  const me = friend() ? turn : E.YOU;
+  drop(c, me);
+  const line = E.findLine(board, me);
+  if (line) { highlight = line; finishClassic(me === E.YOU ? 'win' : 'lose'); render(); return; }
   if (E.isFull(board)) { finishClassic('draw'); render(); return; }
+  if (friend()) {
+    turn = -me;
+    saveGame(turn);
+    setTurn(turn === E.YOU ? 'you' : 'cpu');
+    setStatus(nameOf(turn) + '’s turn', turn === E.CPU ? 'cpu' : '');
+    render();
+    return;
+  }
   saveGame(E.CPU);
   startComputerTurn();
 }
 function newGame() {
+  clearTimeout(cpuTimer);
   board = E.emptyBoard();
-  over = false; busy = false; highlight = []; started = false;
+  over = false; busy = false; highlight = []; started = false; turn = E.YOU;
   clearGame();
   $('result').hidden = true;
   setTurn('you');
-  setStatus('Your turn');
+  setStatus(friend() ? 'Player 1’s turn' : 'Your turn');
   render();
 }
 // Pick up an unfinished game after a refresh or a return visit.
@@ -168,9 +200,17 @@ function resumeClassic() {
   const g = store.get(SAVE, null);
   if (!g || !Array.isArray(g.board) || g.board.length !== E.ROWS * E.COLS) return false;
   if (!g.board.some(Boolean) || E.findLine(g.board, E.YOU) || E.findLine(g.board, E.CPU) || E.isFull(g.board)) return false;
+  if ((g.mode || 'cpu') !== getOpp()) return false;
   board = g.board;
   over = false; highlight = []; started = true;
+  turn = g.toMove === E.CPU ? E.CPU : E.YOU;
   $('result').hidden = true;
+  if (friend()) {
+    setTurn(turn === E.YOU ? 'you' : 'cpu');
+    setStatus(nameOf(turn) + '’s turn', turn === E.CPU ? 'cpu' : '');
+    render();
+    return true;
+  }
   if (g.toMove === E.CPU) { startComputerTurn(); return true; }
   setTurn('you');
   setStatus('Welcome back. Your turn');
