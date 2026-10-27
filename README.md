@@ -44,7 +44,7 @@ Steps 1–3 are done (October 2026); they're kept here for reference.
    2. Its JSON key is stored as the GitHub secret `FIREBASE_SERVICE_ACCOUNT` (Settings → Secrets and variables → Actions). The key file itself should not be kept anywhere else.
    3. The organisation blocks key creation by default (`iam.disableServiceAccountKeyCreation`). To make a new key (for example to replace a leaked one), temporarily override that policy for this project, create the key, then set it back to *Inherit parent's policy*.
    4. To redeploy without a code change: GitHub → Actions → *Deploy to Firebase* → *Run workflow*.
-4. **Connect the domain.** Firebase console → Hosting → *Add custom domain* → `boardgamesite.com` (and `www.boardgamesite.com`, redirecting to it). Add the records Firebase shows in GoDaddy → My Products → boardgamesite.com → DNS. HTTPS is set up automatically once the records are live.
+4. **Connect the domain** (done October 2026). Firebase console → Hosting → custom domains: `boardgamesite.com` and `www.boardgamesite.com`, both set to *serve traffic* (no redirect; pages carry a canonical link to `boardgamesite.com`). GoDaddy DNS: `A @ 199.36.158.100`, `TXT @ hosting-site=boardgamesite-80e80`, `CNAME www boardgamesite-80e80.web.app`. Don't set either domain to redirect to the other: browsers that saw an early www redirect would loop.
 
 ## Reading signups and messages
 
