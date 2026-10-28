@@ -306,6 +306,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-crypto-stats",
     },
+    "letter-hive": {
+        "name": "Letter Hive",
+        "full": "Letter Hive",
+        "cat": "word",
+        "genre": ["Word game", "Puzzle"],
+        "blurb": "Make words from seven letters. A new hive every day.",
+        "card": "Make words from seven letters, always using the centre one. Find the pangram and climb to Hive mind.",
+        "chips": ["Word", "Single player", "10 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-hive-stats",
+    },
 }
 
 
