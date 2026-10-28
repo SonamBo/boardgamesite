@@ -1227,3 +1227,85 @@ body.maxed .wg-wrap { max-width: none; }
 .lt-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 .lt-actions .btn { min-height: 44px; padding: 0 14px; }
 .lt-actions #lt-play { min-width: 130px; }
+
+/* ---------- Five Dice ---------- */
+.dice-wrap { display: flex; flex-direction: column; gap: 14px; max-width: 600px; }
+.dice-tray {
+  display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 20px 14px 16px; border-radius: 18px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-dark) 80%); box-shadow: inset 0 0 0 1px var(--felt-dark), 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.4);
+}
+.dice-row { display: flex; gap: clamp(8px, 2.6vw, 16px); justify-content: center; width: 100%; }
+.die {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; padding: 0; background: transparent; cursor: pointer;
+  width: clamp(48px, 15vw, 76px); color: var(--band-text-2); font: inherit;
+}
+.die .face {
+  width: 100%; aspect-ratio: 1; border-radius: 22%; padding: 14%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  background: radial-gradient(circle at 35% 28%, var(--you-hi), var(--you) 60%, var(--you-lo)); box-shadow: inset 0 -5px 0 rgba(0,0,0,.18), 0 6px 12px rgba(0,0,0,.35);
+  transition: transform .15s;
+}
+.die.p2 .face { background: radial-gradient(circle at 35% 28%, #FFFFFF, var(--ck-light) 60%, #BFB3A2); }
+.die .face i { display: block; width: 70%; aspect-ratio: 1; margin: auto; border-radius: 50%; }
+.die .face i.on { background: #2A1D0A; box-shadow: inset 0 2px 2px rgba(0,0,0,.5); }
+.die.p2 .face i.on { background: var(--brand); }
+.die.blank .face { opacity: .35; }
+.die small { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; opacity: 0; }
+.die:not(:disabled) small { opacity: .75; }
+.die.held .face { transform: translateY(-6px); box-shadow: 0 0 0 3px var(--text), 0 10px 16px rgba(0,0,0,.4); }
+.die.held small { opacity: 1; background: var(--text); color: var(--bg); }
+.die:disabled { cursor: default; }
+.die:focus-visible .face { outline: 3px solid var(--accent-text); outline-offset: 3px; }
+.die.rolling .face { animation: tumble .12s linear infinite; }
+@keyframes tumble { 50% { transform: rotate(12deg) scale(.94); } }
+@media (prefers-reduced-motion: reduce) { .die.rolling .face { animation: none; } .die .face { transition: none; } }
+.dice-actions { display: flex; align-items: center; gap: 14px; }
+.dice-actions .btn { min-width: 160px; background: var(--you); color: var(--on-you); }
+.dice-actions .btn:hover { background: var(--you-hi); }
+.dice-actions .btn:disabled { opacity: .5; }
+.dice-actions p { font-size: 14px; color: var(--band-text-2); }
+.score-scroll { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); }
+.scorecard { width: 100%; border-collapse: collapse; font-size: 15px; }
+.scorecard th, .scorecard td { padding: 0; border-bottom: 1px solid var(--border); text-align: left; }
+.scorecard thead th { padding: 10px 12px; font-size: 13px; color: var(--muted); font-weight: 600; background: var(--side); }
+.scorecard thead th.pcol { text-align: center; width: 88px; }
+.scorecard thead th.now { color: var(--accent-text); box-shadow: inset 0 -3px 0 var(--accent-text); }
+.scorecard tbody th { padding: 7px 12px; font-weight: 600; color: var(--text); }
+.scorecard tbody th small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+.scorecard td { text-align: center; border-left: 1px solid var(--border); }
+.scorecard tr.gap th, .scorecard tr.gap td { border-top: 2px solid var(--border-strong); }
+.scorecard tr.bonus th, .scorecard tr.bonus td { background: var(--side); }
+.scorecard tr.total th, .scorecard tr.total td { border-bottom: 0; background: var(--side); }
+.scorecard tr.total td { font-family: var(--display); font-size: 26px; color: var(--text); padding: 6px; }
+.scorecard td.sum { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+.scorecard td.sum.got { color: var(--accent-text); font-weight: 700; }
+.box {
+  width: 100%; min-height: 44px; border: 0; background: transparent; color: var(--text); font: 700 17px/1 var(--body); font-variant-numeric: tabular-nums; cursor: default;
+}
+.box.maybe { color: var(--accent-text); cursor: pointer; background: color-mix(in srgb, var(--you) 8%, transparent); }
+.box.maybe.zero { color: var(--muted); font-weight: 500; }
+.box.maybe:hover { background: color-mix(in srgb, var(--you) 22%, transparent); }
+.box.fresh { background: var(--brand-lo); }
+.box:focus-visible { outline: 3px solid var(--accent-text); outline-offset: -3px; }
+body.maxed .dice-wrap { max-width: none; }
+@media (max-width: 600px) { .scorecard tbody th small { display: none; } .scorecard thead th.pcol { width: 76px; } .dice-tray { padding: 16px 8px 12px; } }
+
+
+/* ---------- Shared dice ---------- */
+.die.plain { cursor: default; }
+.die.dim .face { opacity: .4; }
+.dice-felt { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 20px 14px 16px; border-radius: 18px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-dark) 80%); box-shadow: inset 0 0 0 1px var(--felt-dark), 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.4); }
+.dice-felt .text-2, .dice-felt .note { color: var(--band-text-2); font-size: 14px; }
+.big-num { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 8vw, 54px); line-height: 1; color: var(--you-hi); }
+.dice-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.dice-btns .btn { min-width: 130px; min-height: 48px; }
+.dice-btns .btn-outline { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.25); color: var(--text); }
+.race { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.race p { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--band-text-2); }
+.race p b { width: 90px; flex-shrink: 0; color: var(--text); font-weight: 700; }
+.race p span { flex: 1; height: 12px; border-radius: 99px; background: rgba(0,0,0,.3); position: relative; overflow: hidden; }
+.race p span i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; background: var(--you); width: calc(var(--v) * 1%); transition: width .3s; }
+.race p span i.p2 { background: var(--ck-light); }
+.race p em { width: 48px; text-align: right; font-style: normal; font-weight: 700; color: var(--text); }
+.pig-die .die { width: clamp(80px, 22vw, 110px); }
+.die:disabled, .box:disabled { opacity: 1; }

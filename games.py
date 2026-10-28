@@ -354,6 +354,30 @@ GAMES = {
         "record": "wld",
         "key": "bgs-chain-score",
     },
+    "five-dice": {
+        "name": "Five Dice",
+        "full": "Five Dice",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Roll five dice three times a turn and fill your scorecard.",
+        "card": "Roll five dice up to three times a turn to score straights, full houses and five of a kind. Play solo, the computer or a friend.",
+        "chips": ["Dice", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "solo",
+        "key": "bgs-dice5-stats",
+    },
+    "pig": {
+        "name": "Pig",
+        "full": "Pig (Dice Game)",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Roll as long as you dare. A 1 wipes out your turn.",
+        "card": "Keep rolling to build your score, but a 1 wipes out the turn. Bank it in time and race to 100.",
+        "chips": ["Dice", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-pig-score",
+    },
 }
 
 
