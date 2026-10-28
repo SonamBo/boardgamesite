@@ -167,5 +167,75 @@ export const GAMES = [
   "cat": "word",
   "record": "wld",
   "key": "bgs-chain-score"
+ },
+ {
+  "slug": "five-dice",
+  "name": "Five Dice",
+  "cat": "dice",
+  "record": "solo",
+  "key": "bgs-dice5-stats"
+ },
+ {
+  "slug": "backgammon",
+  "name": "Backgammon",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-backgammon-score"
+ },
+ {
+  "slug": "ludo",
+  "name": "Ludo",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-ludo-score"
+ },
+ {
+  "slug": "hot-dice",
+  "name": "Hot Dice",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-hotdice-score"
+ },
+ {
+  "slug": "snakes-and-ladders",
+  "name": "Snakes and Ladders",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-snakes-score"
+ },
+ {
+  "slug": "liars-dice",
+  "name": "Liar’s Dice",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-liars-score"
+ },
+ {
+  "slug": "dice-poker",
+  "name": "Dice Poker",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-poker-score"
+ },
+ {
+  "slug": "shut-the-box",
+  "name": "Shut the Box",
+  "cat": "dice",
+  "record": "solo",
+  "key": "bgs-box9-stats"
+ },
+ {
+  "slug": "pig",
+  "name": "Pig",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-pig-score"
+ },
+ {
+  "slug": "ship-captain-crew",
+  "name": "Ship, Captain and Crew",
+  "cat": "dice",
+  "record": "wld",
+  "key": "bgs-scc-score"
  }
 ];

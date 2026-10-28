@@ -283,6 +283,63 @@ def word_chain():
     return '<div class="chn">' + "".join(f'<b class="{c}">{w[:-1]}<u>{w[-1]}</u></b>' for w, c in words) + "</div>"
 
 
+def _die(v, cls=""):
+    pips = {1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]}[v]
+    return f'<b class="dd {cls}">' + "".join(f'<i class="{"on" if k in pips else ""}"></i>' for k in range(9)) + "</b>"
+
+
+def five_dice():
+    return '<div class="dset">' + "".join(_die(v, "lift" if k in (0, 2, 4) else "") for k, v in enumerate([6, 6, 6, 6, 5])) + '</div>'
+
+
+def backgammon():
+    pts = "".join(f'<i class="tri {"a" if k % 2 else "b"} {"up" if k >= 6 else ""}" style="left:{(k % 6) * 56 + 14}px"></i>' for k in range(12))
+    ck = ""
+    for (x, n, top, cls) in [(14, 5, True, "g"), (182, 3, True, "w"), (14, 5, False, "w"), (294, 2, False, "g"), (238, 3, False, "g")]:
+        for k in range(n):
+            ck += f'<u class="{cls}" style="left:{x + 4}px;{"top" if top else "bottom"}:{10 + k * 46}px"></u>'
+    return f'<div class="bgb">{pts}{ck}<div class="dpair">{_die(6)}{_die(3)}</div></div>'
+
+
+def ludo():
+    return ('<div class="lud"><i class="q r"></i><i class="q g"></i><i class="q y"></i><i class="q b"></i>'
+            '<i class="ctr"></i><u class="t r" style="left:60px;top:60px"></u><u class="t g" style="left:300px;top:60px"></u>'
+            '<u class="t y" style="left:300px;top:300px"></u><u class="t b" style="left:60px;top:300px"></u></div>')
+
+
+def hot_dice():
+    return '<div class="dset six">' + "".join(_die(v, "lift" if v in (1, 5) else "") for v in [1, 5, 3, 1, 6, 2]) + '</div>'
+
+
+def snakes_and_ladders():
+    cells = "".join(f'<b class="{"d" if (r + c) % 2 else ""}"></b>' for r in range(6) for c in range(6))
+    return ('<div class="snl">' + cells + '<svg viewBox="0 0 360 360"><g stroke="#8B5E34" stroke-width="8" stroke-linecap="round"><line x1="70" y1="320" x2="160" y2="110"/><line x1="100" y1="330" x2="190" y2="120"/>'
+            + "".join(f'<line x1="{70 + 90 * t + 2}" y1="{320 - 210 * t}" x2="{100 + 90 * t - 2}" y2="{330 - 210 * t}" stroke-width="6"/>' for t in [0.15, 0.3, 0.45, 0.6, 0.75, 0.9])
+            + '</g><path d="M300 60 C 200 120, 330 200, 240 300" fill="none" stroke="#8A2443" stroke-width="22" stroke-linecap="round"/><path d="M300 60 C 200 120, 330 200, 240 300" fill="none" stroke="#CFAA62" stroke-width="5" stroke-dasharray="10 14" stroke-linecap="round"/>'
+            '<circle cx="300" cy="60" r="18" fill="#8A2443"/><circle cx="294" cy="55" r="3.5" fill="#fff"/><circle cx="307" cy="55" r="3.5" fill="#fff"/></svg></div>')
+
+
+def liars_dice():
+    return ('<div class="liar"><div class="cup"></div><div class="dset">' + "".join(_die(v) for v in [5, 5, 1, 3, 5]) + '</div><p class="bidtag">Five 5s?</p></div>')
+
+
+def dice_poker():
+    return '<div class="dset poker">' + "".join(_die(v, "lift") for v in [4, 4, 4, 2, 2]) + '<p class="bidtag">Full house</p></div>'
+
+
+def shut_the_box():
+    t = "".join(f'<b class="{"shut" if n in (1, 3, 7, 9) else ""}">{"" if n in (1, 3, 7, 9) else n}</b>' for n in range(1, 10))
+    return f'<div class="stb"><div class="tiles">{t}</div><div class="dpair">{_die(4)}{_die(2)}</div></div>'
+
+
+def pig():
+    return f'<div class="pigart">{_die(6, "big")}<p class="bidtag">+6 this turn</p></div>'
+
+
+def ship_captain_crew():
+    return ('<div class="dset scc">' + "".join(_die(v, "lift") for v in [6, 5, 4]) + "".join(_die(v) for v in [6, 5]) + '<p class="bidtag">Cargo 11</p></div>')
+
+
 # Each game's tagline (on the share image) and art.
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
@@ -309,6 +366,16 @@ ART = {
     "word-ladder": ("One letter at a time.", word_ladder),
     "unscramble": ("Sort the letters.", unscramble),
     "word-chain": ("Keep it going.", word_chain),
+    "five-dice": ("Fill the scorecard.", five_dice),
+    "backgammon": ("Race them home.", backgammon),
+    "ludo": ("Four counters home.", ludo),
+    "hot-dice": ("Push your luck.", hot_dice),
+    "snakes-and-ladders": ("Up and down.", snakes_and_ladders),
+    "liars-dice": ("Call the bluff.", liars_dice),
+    "dice-poker": ("Best hand wins.", dice_poker),
+    "shut-the-box": ("Shut all nine.", shut_the_box),
+    "pig": ("Know when to stop.", pig),
+    "ship-captain-crew": ("Six, five, four.", ship_captain_crew),
 }
 
 CSS = f"""
@@ -453,6 +520,43 @@ h1.long {{ font-size: 84px; }}
 .chn b.p1 {{ align-self: flex-start; background: {GOLD}; color: #2A1D0A; border-bottom-left-radius: 6px; }}
 .chn b.p2 {{ align-self: flex-end; background: {IVORY}; color: #3D0F1F; border-bottom-right-radius: 6px; }}
 .chn u {{ text-underline-offset: 6px; }}
+
+.dd {{ display: inline-grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); width: 96px; height: 96px; padding: 14px; border-radius: 22px;
+  background: radial-gradient(circle at 35% 28%, #E6C88A, {GOLD} 60%, #97793A); box-shadow: inset 0 -7px 0 rgba(0,0,0,.18), 0 12px 20px rgba(0,0,0,.45); }}
+.dd i {{ width: 72%; aspect-ratio: 1; margin: auto; border-radius: 50%; }} .dd i.on {{ background: #2A1D0A; }}
+.dd.lift {{ transform: translateY(-14px); box-shadow: 0 0 0 4px {IVORY}, 0 16px 24px rgba(0,0,0,.5); }}
+.dd.big {{ width: 200px; height: 200px; padding: 30px; border-radius: 44px; }}
+.dset {{ display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: center; width: 560px; margin-left: 30px; }}
+.dset.six {{ width: 400px; }}
+.bidtag {{ width: 100%; text-align: center; font: 400 54px 'Instrument Serif'; color: #E6C88A; margin-top: 14px; }}
+.bgb {{ position: relative; width: 352px; height: 300px; background: #3D0F1F; border: 14px solid #17110F; border-radius: 12px; margin-left: 40px; box-shadow: 0 30px 60px rgba(0,0,0,.55); }}
+.bgb .tri {{ position: absolute; top: 0; width: 0; height: 0; border-left: 24px solid transparent; border-right: 24px solid transparent; border-top: 130px solid #E4D4B8; }}
+.bgb .tri.b {{ border-top-color: #8E2C48; }}
+.bgb .tri.up {{ top: auto; bottom: 0; border-top: 0; border-bottom: 130px solid #8E2C48; }} .bgb .tri.up.b {{ border-bottom-color: #E4D4B8; }}
+.bgb u {{ position: absolute; width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 5px rgba(0,0,0,.2), 0 3px 4px rgba(0,0,0,.5); }}
+.bgb u.g {{ background: {GOLD}; }} .bgb u.w {{ background: #F4ECDE; }}
+.bgb .dpair {{ position: absolute; right: -60px; top: 100px; display: flex; flex-direction: column; gap: 10px; }}
+.bgb .dd {{ width: 70px; height: 70px; padding: 10px; border-radius: 16px; }}
+.lud {{ position: relative; width: 400px; height: 400px; background: #F7F0E4; border-radius: 16px; box-shadow: 0 0 0 8px #17110F, 0 30px 60px rgba(0,0,0,.55); overflow: hidden; margin-left: 30px; }}
+.lud .q {{ position: absolute; width: 160px; height: 160px; }}
+.lud .q.r {{ left: 0; top: 0; background: #B0405F; }} .lud .q.g {{ right: 0; top: 0; background: #4E9A8F; }}
+.lud .q.y {{ right: 0; bottom: 0; background: #CFAA62; }} .lud .q.b {{ left: 0; bottom: 0; background: #5B83B5; }}
+.lud .ctr {{ position: absolute; left: 160px; top: 160px; width: 80px; height: 80px; background: conic-gradient(#4E9A8F 0 25%, #CFAA62 0 50%, #5B83B5 0 75%, #B0405F 0); transform: rotate(45deg) scale(.72); }}
+.lud .t {{ position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 6px solid #F7F0E4; box-shadow: 0 4px 6px rgba(0,0,0,.4); }}
+.lud .t.r {{ background: #B0405F; }} .lud .t.g {{ background: #4E9A8F; }} .lud .t.y {{ background: #CFAA62; }} .lud .t.b {{ background: #5B83B5; }}
+.snl {{ position: relative; display: grid; grid-template-columns: repeat(6, 60px); width: 360px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 8px #17110F, 0 30px 60px rgba(0,0,0,.55); margin-left: 40px; }}
+.snl b {{ height: 60px; background: #EFE6D8; }} .snl b.d {{ background: #E2D2BA; }}
+.snl svg {{ position: absolute; inset: 0; width: 360px; height: 360px; }}
+.liar {{ display: flex; flex-direction: column; align-items: center; gap: 10px; margin-left: 30px; }}
+.liar .cup {{ width: 170px; height: 130px; background: linear-gradient(90deg, #5E3A22, #8B5E34 50%, #5E3A22); clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%); border-radius: 8px; }}
+.liar .dset {{ width: 560px; margin: 0; }}
+.liar .dd {{ width: 84px; height: 84px; padding: 12px; }}
+.stb {{ display: flex; flex-direction: column; align-items: center; gap: 30px; margin-left: 30px; }}
+.stb .tiles {{ display: flex; gap: 8px; padding: 16px; border-radius: 12px; background: linear-gradient(#6B4A2E, #4A3220); box-shadow: 0 20px 40px rgba(0,0,0,.5); }}
+.stb .tiles b {{ width: 46px; height: 86px; border-radius: 6px; background: linear-gradient(#FBF3E2, #E4D4B8); display: grid; place-items: center; font: 400 40px 'Instrument Serif'; color: {MERLOT}; box-shadow: inset 0 -5px 0 #C7B596; }}
+.stb .tiles b.shut {{ background: #3A2818; box-shadow: none; height: 86px; transform: scaleY(.25) translateY(130px); }}
+.stb .dpair {{ display: flex; gap: 18px; }}
+.pigart {{ display: flex; flex-direction: column; align-items: center; margin-left: 30px; }}
 """
 
 
