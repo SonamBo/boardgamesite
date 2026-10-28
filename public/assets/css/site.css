@@ -1405,3 +1405,23 @@ body.maxed .dice-wrap { max-width: none; }
 .lu-board .tok:focus-visible circle:first-child { stroke: var(--accent-text); stroke-width: 1.4; }
 @keyframes lu-pulse { 50% { stroke-width: .3; } }
 @media (prefers-reduced-motion: reduce) { .lu-board .tok.can circle:first-child { animation: none; } }
+
+/* ---------- Backgammon ---------- */
+.bg-wrap { max-width: 720px; display: flex; flex-direction: column; gap: 12px; }
+.bg-board { width: 100%; aspect-ratio: 300 / 220; display: block; filter: drop-shadow(0 18px 30px rgba(0,0,0,.45)); user-select: none; -webkit-user-select: none; }
+.bg-board .frame { fill: var(--wood); }
+.bg-board .felt { fill: var(--felt-dark); }
+.bg-board .bar { fill: #3A2818; }
+.bg-board .tray { fill: #2A1D14; }
+.bg-board .pt.p1 { fill: #E4D4B8; } .bg-board .pt.p2 { fill: #8E2C48; }
+.bg-board .lbl { font: 600 4.2px var(--body); fill: rgba(255,255,255,.55); text-anchor: middle; }
+.bg-board .ck circle:first-child { stroke: rgba(0,0,0,.45); stroke-width: .7; }
+.bg-board .ck.s0 circle:first-child { fill: var(--you); } .bg-board .ck.s0 .ring { fill: none; stroke: var(--you-lo); stroke-width: .8; }
+.bg-board .ck.s1 circle:first-child { fill: #F4ECDE; } .bg-board .ck.s1 .ring { fill: none; stroke: #C7B596; stroke-width: .8; }
+.bg-board .ck.sel circle:first-child { stroke: #fff; stroke-width: 1.6; }
+.bg-board .cnt { font: 700 7px var(--body); text-anchor: middle; fill: #2A1D20; }
+.bg-board .offck.s0 { fill: var(--you); } .bg-board .offck.s1 { fill: #F4ECDE; }
+.bg-board .can { fill: rgba(255,255,255,.08); stroke: rgba(255,255,255,.35); stroke-width: .6; rx: 3; pointer-events: none; }
+.bg-board .dest { fill: color-mix(in srgb, var(--you) 30%, transparent); stroke: var(--you); stroke-width: .9; rx: 3; pointer-events: none; }
+.bg-wrap .sl-controls .btn-outline { min-width: 100px; }
+.bg-wrap .die { width: 54px; }
