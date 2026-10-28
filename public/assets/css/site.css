@@ -1426,3 +1426,20 @@ body.maxed .dice-wrap { max-width: none; }
 .bg-board .dest { fill: color-mix(in srgb, var(--you) 30%, transparent); stroke: var(--you); stroke-width: .9; rx: 3; pointer-events: none; }
 .bg-wrap .sl-controls .btn-outline { min-width: 100px; }
 .bg-wrap .die { width: 54px; }
+
+/* ---------- Shared card tables ---------- */
+.card-table { position: relative; width: 100%; background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%);
+  border-radius: 16px; padding: 12px; box-shadow: inset 0 0 0 1px var(--felt-dark); user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.card-area { position: relative; }
+.card-area .pc { cursor: pointer; }
+.card-area .pc.back { cursor: default; }
+.card-area .pc.back > * { display: none; }
+.card-area .pc.sel { box-shadow: 0 0 0 3px var(--you), 0 8px 16px rgba(0,0,0,.45); translate: 0 -4px; }
+.card-area .pc.lit { box-shadow: 0 0 0 3px var(--text-hi), 0 4px 10px rgba(0,0,0,.4); }
+.card-area .pc.dim { filter: brightness(.62); cursor: default; }
+.card-area .slot.drop { border-color: var(--you); color: var(--you); background: color-mix(in srgb, var(--you) 12%, transparent); cursor: pointer; }
+.card-area .slot.click { cursor: pointer; }
+.card-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.card-bar .btn { min-height: 44px; padding: 0 16px; }
+.card-bar .sol-stats { margin-left: auto; }
+.table-note { position: absolute; color: rgba(233,239,230,.75); font-size: 13px; font-weight: 600; text-align: center; pointer-events: none; }

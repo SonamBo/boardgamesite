@@ -1,0 +1,100 @@
+<!-- title: FreeCell Solitaire – Play Free Online | BoardGameSite -->
+<!-- description: Play FreeCell solitaire free in your browser. Every card is face up: use four free cells to sort the deck. Classic numbered deals, unlimited undo and auto-play. -->
+<!-- path: /play/freecell -->
+<!-- out: play/freecell.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/freecell.js -->
+<!-- kind: game -->
+<!-- game: freecell -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 1.25">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">FreeCell</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Build each suit from Ace to King</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="card-bar">
+        <button id="undo" type="button" class="btn btn-outline" disabled>Undo</button>
+        <button id="pick-deal" type="button" class="btn btn-outline">Deal <span id="deal">#1</span></button>
+        <p class="sol-stats"><span>Moves <b id="moves">0</b></span><span>Time <b id="time">0:00</b></span></p>
+      </div>
+      <div class="card-table"><div id="area" class="card-area" role="application" aria-label="FreeCell table"></div></div>
+      <p class="board-hint">Tap a card to move it to the best place, or tap it and then where it should go. Your record: <span id="record">0 of 0 deals solved</span></p>
+    </section>
+
+    <aside class="panel">
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Move all 52 cards to the four foundations, building each suit up from Ace to King. In the columns, build down in alternating colours. The four free cells each hold one card.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play FreeCell</h2>
+  <p>FreeCell is a solitaire game where every card is dealt face up, so almost every deal can be solved with careful planning. It’s all skill and no luck.</p>
+  <ol>
+    <li><strong>The deal.</strong> All 52 cards are dealt face up into eight columns. At the top are four <strong>free cells</strong> and four <strong>foundations</strong>.</li>
+    <li><strong>Build down in the columns</strong> in alternating colours: a red 6 on a black 7, then a black 5 on the red 6.</li>
+    <li><strong>Use the free cells.</strong> Any card can go into an empty free cell, one card per cell.</li>
+    <li><strong>Fill empty columns</strong> with any card or run of cards.</li>
+    <li><strong>Build the foundations</strong> up by suit from Ace to King. Move all 52 cards there to win.</li>
+  </ol>
+  <p>You can move one card at a time, but the game lets you move an ordered run in one go when you have enough free cells and empty columns to do it one card at a time. Cards that are safe to send to the foundations go up automatically.</p>
+
+  <h2>Numbered deals</h2>
+  <p>Deals are numbered 1 to 32000, the same as the classic FreeCell game that came with Windows. Tap the deal number to replay a deal or try a famous one, like deal #11982, the only one of the original 32,000 that can’t be solved.</p>
+
+  <h2>Quick tips for solving</h2>
+  <ul>
+    <li><strong>Free the Aces and 2s early.</strong> Look at where they’re buried before your first move.</li>
+    <li><strong>Keep free cells empty.</strong> Every free cell you fill makes runs harder to move.</li>
+    <li><strong>An empty column is gold.</strong> It doubles how many cards you can move at once.</li>
+    <li><strong>Plan several moves ahead.</strong> With every card face up, you can see exactly what each move will free.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn the planning techniques that solve almost every deal.</p>
+    <a class="btn btn-outline" href="/learn/freecell">Read the FreeCell guide</a>
+  </div>
+
+  <h2>FreeCell FAQ</h2>
+  <section class="faq">
+    <h3>Is FreeCell free?</h3>
+    <p>Yes. Play as many deals as you like, free in your browser on any device. No download and no account needed.</p>
+    <h3>Can every FreeCell deal be solved?</h3>
+    <p>Almost. Of the original 32,000 numbered deals, only #11982 is impossible. Nearly every random deal can be won with careful play.</p>
+    <h3>Are these the same deals as Windows FreeCell?</h3>
+    <p>Yes. The numbered deals use the same dealing method, so deal #1 here is the same as deal #1 in the classic game.</p>
+    <h3>How many cards can I move at once?</h3>
+    <p>As many as you could move one by one using your free cells and empty columns. With one free cell and no empty columns, that’s two cards.</p>
+    <h3>Is there an undo?</h3>
+    <p>Yes. Undo takes back as many moves as you like.</p>
+  </section>
+</section>
+
+{{related:freecell}}

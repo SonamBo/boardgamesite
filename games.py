@@ -474,6 +474,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-scc-score",
     },
+    "freecell": {
+        "name": "FreeCell",
+        "full": "FreeCell Solitaire",
+        "cat": "cards",
+        "genre": ["Card game", "Solitaire"],
+        "blurb": "Every card face up. Use four free cells to sort the deck.",
+        "card": "Every card is dealt face up. Use the four free cells to sort all 52 cards. Classic numbered deals.",
+        "chips": ["Cards", "Single player", "8 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-fc-stats",
+    },
 }
 
 
