@@ -1443,3 +1443,4 @@ body.maxed .dice-wrap { max-width: none; }
 .card-bar .btn { min-height: 44px; padding: 0 16px; }
 .card-bar .sol-stats { margin-left: auto; }
 .table-note { position: absolute; color: rgba(233,239,230,.75); font-size: 13px; font-weight: 600; text-align: center; pointer-events: none; }
+.slot.stock { cursor: pointer; }

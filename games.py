@@ -486,6 +486,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-fc-stats",
     },
+    "spider": {
+        "name": "Spider Solitaire",
+        "full": "Spider Solitaire",
+        "cat": "cards",
+        "genre": ["Card game", "Solitaire"],
+        "blurb": "Build King-to-Ace runs in one suit. 1, 2 or 4 suits.",
+        "card": "Two decks, ten columns. Build runs from King to Ace in one suit to clear them. Play with 1, 2 or 4 suits.",
+        "chips": ["Cards", "Single player", "15 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-spider-stats",
+    },
 }
 
 
