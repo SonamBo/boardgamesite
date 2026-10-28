@@ -1094,3 +1094,22 @@ body.maxed .wg-wrap { max-width: none; }
   font: 700 22px var(--body); text-transform: uppercase; letter-spacing: .15em; }
 .ld-input.shake { animation: shake .3s; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Cryptogram ---------- */
+.cg-wrap { max-width: 620px; display: flex; flex-direction: column; gap: 12px; }
+.cg-board { padding: 20px 14px; border-radius: 16px; background: var(--ck-light); box-shadow: 0 0 0 6px var(--brand), 0 18px 40px rgba(0,0,0,.4); }
+.cg-text { display: flex; flex-wrap: wrap; gap: 14px 18px; justify-content: center; }
+.cg-word { display: inline-flex; gap: 3px; align-items: flex-end; }
+.cg-cell { width: clamp(24px, 6.6vw, 34px); border: 0; padding: 0; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font: inherit; border-radius: 6px; }
+.cg-cell b { width: 100%; height: clamp(28px, 7.4vw, 38px); display: flex; align-items: center; justify-content: center; border-bottom: 2px solid #8E7E6C;
+  font: 700 clamp(17px, 4.6vw, 24px)/1 var(--body); text-transform: uppercase; color: var(--brand); }
+.cg-cell small { font: 600 12px/1 var(--body); text-transform: uppercase; color: #6E6158; padding-bottom: 3px; }
+.cg-cell.same b { background: rgba(138, 36, 67, .12); }
+.cg-cell.sel b { background: var(--brand); color: var(--on-brand); border-color: var(--brand); border-radius: 4px 4px 0 0; }
+.cg-cell.given b { color: #2A1D20; }
+.cg-cell.clash b { color: #C0392B; background: rgba(192, 57, 43, .12); }
+.cg-cell:disabled { cursor: default; }
+.cg-punct { font: 700 22px/1 var(--body); color: #2A1D20; padding-bottom: 18px; }
+.cg-author { text-align: right; color: #6E6158; margin-top: 14px; font-family: var(--display); font-size: 20px; }
+.cg-wrap .un-tools { justify-content: center; }
+.cg-wrap .un-tools .tool-btn { color: var(--text-2); }

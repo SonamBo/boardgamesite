@@ -294,6 +294,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-ladder-stats",
     },
+    "cryptogram": {
+        "name": "Cryptogram",
+        "full": "Cryptogram",
+        "cat": "word",
+        "genre": ["Word game", "Puzzle"],
+        "blurb": "Every letter is in code. Crack it to reveal the saying.",
+        "card": "Each letter of a famous saying has been swapped for another. Crack the code to read it.",
+        "chips": ["Word", "Single player", "6 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-crypto-stats",
+    },
 }
 
 
