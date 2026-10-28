@@ -1392,3 +1392,16 @@ body.maxed .dice-wrap { max-width: none; }
 .sl-players i { width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(0,0,0,.4); }
 .sl-players b { flex: 1; }
 .sl-players span { color: var(--muted); font-size: 14px; }
+
+/* ---------- Ludo ---------- */
+.lu-board { width: 100%; aspect-ratio: 1; border-radius: 12px; background: #E4D4B8; box-shadow: 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.4); display: block; }
+.lu-board .trk { stroke: #C9B79A; stroke-width: .35; }
+.lu-board rect:not(.trk) { stroke: rgba(0,0,0,.12); stroke-width: .3; }
+.lu-board .star { font-size: 7px; text-anchor: middle; fill: rgba(60,40,30,.45); }
+.lu-board .tok circle:first-child { stroke: #1A1214; stroke-width: .6; }
+.lu-board .tok.can { cursor: pointer; }
+.lu-board .tok.can circle:first-child { stroke: #fff; stroke-width: 1; animation: lu-pulse 1s ease-in-out infinite; }
+.lu-board .tok:focus-visible { outline: none; }
+.lu-board .tok:focus-visible circle:first-child { stroke: var(--accent-text); stroke-width: 1.4; }
+@keyframes lu-pulse { 50% { stroke-width: .3; } }
+@media (prefers-reduced-motion: reduce) { .lu-board .tok.can circle:first-child { animation: none; } }

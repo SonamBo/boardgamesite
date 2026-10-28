@@ -450,6 +450,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-snakes-score",
     },
+    "ludo": {
+        "name": "Ludo",
+        "full": "Ludo",
+        "cat": "dice",
+        "genre": ["Dice game", "Board game"],
+        "blurb": "Race four counters home. Roll a 6 to start.",
+        "card": "Race your four counters round the board and home. Capture rivals and hide on the safe stars.",
+        "chips": ["Dice", "vs Computer", "2–4 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-ludo-score",
+    },
 }
 
 
