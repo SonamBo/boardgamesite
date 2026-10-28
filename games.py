@@ -378,6 +378,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-pig-score",
     },
+    "shut-the-box": {
+        "name": "Shut the Box",
+        "full": "Shut the Box",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Roll the dice and shut tiles that add up. Shut all nine.",
+        "card": "The classic pub game. Roll two dice and shut tiles that add up to the roll. Can you shut all nine?",
+        "chips": ["Dice", "Single player", "3 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-box9-stats",
+    },
 }
 
 

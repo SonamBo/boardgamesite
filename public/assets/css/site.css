@@ -1309,3 +1309,17 @@ body.maxed .dice-wrap { max-width: none; }
 .race p em { width: 48px; text-align: right; font-style: normal; font-weight: 700; color: var(--text); }
 .pig-die .die { width: clamp(80px, 22vw, 110px); }
 .die:disabled, .box:disabled { opacity: 1; }
+
+/* ---------- Shut the Box ---------- */
+.sb-wrap { max-width: 640px; }
+.sb-box { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; width: 100%; padding: 12px 10px 16px; border-radius: 12px; background: linear-gradient(#6B4A2E, #4A3220); box-shadow: inset 0 4px 10px rgba(0,0,0,.4); perspective: 400px; }
+.sb-tile { position: relative; aspect-ratio: .55; border: 0; padding: 0; background: transparent; cursor: pointer; }
+.sb-tile span {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 6px; transform-origin: bottom;
+  background: linear-gradient(180deg, #FBF3E2, #E4D4B8); color: var(--brand); font: 400 clamp(24px, 6vw, 40px)/1 var(--display); box-shadow: inset 0 -5px 0 #C7B596, 0 4px 6px rgba(0,0,0,.4); transition: transform .25s, background .2s;
+}
+.sb-tile.pick span { background: linear-gradient(180deg, var(--you-hi), var(--you)); color: var(--on-you); transform: translateY(-6px); }
+.sb-tile.shut span { transform: rotateX(78deg); background: #3A2818; color: transparent; box-shadow: none; }
+.sb-tile:disabled { cursor: default; opacity: 1; }
+.sb-tile.shake span { animation: shake .3s; }
+@media (prefers-reduced-motion: reduce) { .sb-tile span { transition: none; } }
