@@ -438,6 +438,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-liars-score",
     },
+    "snakes-and-ladders": {
+        "name": "Snakes and Ladders",
+        "full": "Snakes and Ladders",
+        "cat": "dice",
+        "genre": ["Dice game", "Board game"],
+        "blurb": "Climb the ladders, dodge the snakes, race to 100.",
+        "card": "The classic family race to square 100. Climb the ladders and dodge the snakes, with up to four players.",
+        "chips": ["Dice", "vs Computer", "2–4 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-snakes-score",
+    },
 }
 
 
