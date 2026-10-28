@@ -1,0 +1,124 @@
+<!-- title: Hangman – Play the Classic Word Game Free Online | BoardGameSite -->
+<!-- description: Guess the hidden word one letter at a time before the drawing is finished. Play themed words solo, or let a friend pick a secret word. Free in your browser. -->
+<!-- path: /play/hangman -->
+<!-- out: play/hangman.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/hangman.js -->
+<!-- kind: game -->
+<!-- game: hangman -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.9">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Hangman</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Guess the word, one letter at a time</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit hg-wrap">
+        <div class="hg-top">
+          <svg class="hg-draw" viewBox="0 0 200 220" role="img" aria-label="The drawing">
+            <path class="hg-frame" d="M20 210h120M50 210V20h90v24"/>
+            <circle class="hg-part" cx="140" cy="62" r="18"/>
+            <path class="hg-part" d="M140 80v58"/>
+            <path class="hg-part" d="M140 96l-26 22"/>
+            <path class="hg-part" d="M140 96l26 22"/>
+            <path class="hg-part" d="M140 138l-22 34"/>
+            <path class="hg-part" d="M140 138l22 34"/>
+          </svg>
+          <div class="hg-info">
+            <p><span>Clue</span><b id="theme"></b></p>
+            <p><span>Wrong guesses left</span><b id="lives">6</b></p>
+          </div>
+        </div>
+        <div id="hg-word" class="hg-word" aria-live="polite"></div>
+        <form id="setup" class="hg-setup card" hidden autocomplete="off">
+          <label for="secret">Player 1, type a secret word. Player 2, look away!</label>
+          <div class="hg-setup-row">
+            <input id="secret" type="password" inputmode="text" autocapitalize="off" spellcheck="false" maxlength="14" class="input">
+            <button type="submit" class="btn btn-gold raised">Start</button>
+          </div>
+          <p id="secret-msg" class="text-2" role="alert"></p>
+        </form>
+        <div id="hg-keys" class="wg-keys hg-keys" aria-label="Letters"></div>
+      </div>
+      <p class="board-hint">Tap a letter or type it on your keyboard. Your record: <span id="record">0 of 0 words guessed</span></p>
+    </section>
+
+    <aside class="panel">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Play</p>
+        <div class="seg" role="group" aria-label="Who picks the word (starts a new game)">
+          <button type="button" data-hmode="solo">Solo</button>
+          <button type="button" data-hmode="friend">2 players</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Guess letters to fill in the hidden word. Every wrong letter adds a piece to the drawing. Find the word before the drawing is finished: you can make six mistakes.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Hangman</h2>
+  <p>Hangman is the classic guessing game. A word is hidden as a row of blanks, and you guess it one letter at a time.</p>
+  <ol>
+    <li><strong>Guess a letter.</strong> Tap it on the keyboard below the word, or type it.</li>
+    <li><strong>Right letters appear</strong> in every place they occur in the word.</li>
+    <li><strong>Wrong letters add to the drawing.</strong> You can make six wrong guesses: head, body, two arms and two legs.</li>
+    <li><strong>Fill in the whole word</strong> before the drawing is complete to win.</li>
+  </ol>
+  <p>In <strong>Solo</strong>, the computer picks a word and gives you its theme as a clue, like Fruit or Space. In <strong>2 players</strong>, Player 1 types a secret word while Player 2 looks away, then Player 2 guesses.</p>
+
+  <h2>Quick tips for guessing right</h2>
+  <ul>
+    <li><strong>Start with vowels.</strong> Nearly every word has an A, E, I, O or U.</li>
+    <li><strong>Then common consonants.</strong> R, S, T, L and N appear in lots of words.</li>
+    <li><strong>Use the clue.</strong> Think of words in the theme that fit the number of letters.</li>
+    <li><strong>Look at the shape.</strong> Once a few letters are in, endings like -ING, -ER or -TION often jump out.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn which letters to guess first and how to read a half-finished word.</p>
+    <a class="btn btn-outline" href="/learn/hangman">Read the Hangman guide</a>
+  </div>
+
+  <h2>Hangman FAQ</h2>
+  <section class="faq">
+    <h3>Is Hangman free?</h3>
+    <p>Yes. Play as many words as you like, solo or with a friend, free in your browser. No download and no account needed.</p>
+    <h3>How many wrong guesses do I get?</h3>
+    <p>Six. Each wrong letter adds one part to the drawing: head, body, two arms and two legs.</p>
+    <h3>How do I play with a friend?</h3>
+    <p>Choose 2 players. Player 1 types a secret word while Player 2 looks away, then hands over the device for Player 2 to guess.</p>
+    <h3>Where do the words come from?</h3>
+    <p>In Solo, words come from themed lists like Animals, Space and Music, and the theme is shown as a clue.</p>
+    <h3>Can I use my keyboard?</h3>
+    <p>Yes. Type any letter to guess it.</p>
+  </section>
+</section>
+
+{{related:hangman}}
