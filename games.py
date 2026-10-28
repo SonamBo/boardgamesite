@@ -414,6 +414,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-scc-score",
     },
+    "hot-dice": {
+        "name": "Hot Dice",
+        "full": "Hot Dice (Farkle)",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Push your luck with six dice. Bank before you farkle.",
+        "card": "Farkle rules: set aside scoring dice and keep rolling, or bank your points before a roll comes up empty.",
+        "chips": ["Dice", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-hotdice-score",
+    },
 }
 
 

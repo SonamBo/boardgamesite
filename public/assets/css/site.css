@@ -1337,3 +1337,10 @@ body.maxed .dice-wrap { max-width: none; }
 .dp-label { display: flex; gap: 10px; align-items: baseline; }
 .dp-label b { color: var(--text); }
 .dp-label span { color: var(--you-hi); font-weight: 700; }
+
+/* ---------- Hot Dice ---------- */
+.hd-dice { flex-wrap: wrap; }
+.hd-dice .die { width: clamp(44px, 12vw, 70px); }
+.hd-table h2 { margin-bottom: 4px; }
+.hd-table p { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; border-bottom: 1px solid var(--border); padding: 3px 0; }
+.hd-table b { color: var(--accent-text); white-space: nowrap; }
