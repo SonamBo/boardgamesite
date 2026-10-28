@@ -83,12 +83,142 @@ def solitaire():
     return f'<div class="fan">{"".join(out)}</div>'
 
 
+def sudoku():
+    g = "53..7....6..195....98....6.8...6...34..8.3..17...2...6.6....28....419..5....8..79"
+    cells = []
+    for i, ch in enumerate(g):
+        r, c = divmod(i, 9)
+        cls = []
+        if c in (2, 5):
+            cls.append("er")
+        if r in (2, 5):
+            cls.append("eb")
+        if i in (2, 12, 30):
+            cls.append("mine")
+        val = ch if ch != "." else ("4" if i == 2 else "7" if i == 12 else "9" if i == 30 else "")
+        if i == 40:
+            cls.append("sel")
+        cells.append(f'<b class="{" ".join(cls)}">{val}</b>')
+    return f'<div class="sdk">{"".join(cells)}</div>'
+
+
+def mines():
+    rows = [
+        "11100....",
+        "1F21111..",
+        "12F22F1..",
+        "0123F21..",
+        "001F21...",
+        "00111....",
+    ]
+    cells = []
+    for row in rows:
+        for ch in row:
+            if ch == ".":
+                cells.append("<b></b>")
+            elif ch == "F":
+                cells.append('<b class="fl"><svg viewBox="0 0 24 24"><path d="M7 21V4"/><path d="M7 4h10l-2.5 4L17 12H7" fill="#CFAA62"/></svg></b>')
+            elif ch == "0":
+                cells.append('<b class="o"></b>')
+            else:
+                cells.append(f'<b class="o n{ch}">{ch}</b>')
+    return f'<div class="mn">{"".join(cells)}</div>'
+
+
+def slide_merge():
+    vals = [2, 0, 4, 2, 0, 8, 16, 4, 4, 32, 128, 8, 2, 256, 1024, 2048]
+    cells = "".join(f'<b class="v{v}">{v or ""}</b>' for v in vals)
+    return f'<div class="mg">{cells}</div>'
+
+
+def sliding_tiles():
+    order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 12, 13, 14, 11, 15]
+    return '<div class="st">' + "".join(f'<b class="{"gap" if v == 0 else ""}">{v or ""}</b>' for v in order) + "</div>"
+
+
+def picture_logic():
+    pic = [
+        "0011100",
+        "0111110",
+        "1111111",
+        "1101011",
+        "1111111",
+        "0101010",
+        "0100010",
+    ]
+    cells = "".join(f'<b class="{"on" if v == "1" else ""}"></b>' for row in pic for v in row)
+    return f'<div class="pl">{cells}</div>'
+
+
+def tile_match():
+    icons = ['<circle cx="12" cy="12" r="7"/>', '<path d="M12 2.5l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.8 6.2 20l1.4-6.4-4.9-4.4 6.5-.7z"/>',
+             '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/>', '<path d="M12 20.5s-7.6-4.6-9.2-9C1.6 8 3.6 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.4 0 5.4 3.5 4.2 7-1.6 4.4-9.2 9-9.2 9z"/>',
+             '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>', '<path d="M12 3c3.5 5 6.5 8.4 6.5 12A6.5 6.5 0 0 1 5.5 15C5.5 11.4 8.5 8 12 3z"/>']
+    inks = ["#8A2443", "#8C6A24", "#2E5F5A"]
+    tiles = []
+    spots = [(0, 0, 0), (1, 0, 0), (2, 0, 0), (3, 0, 0), (0, 1, 0), (1, 1, 0), (2, 1, 0), (3, 1, 0), (0, 2, 0), (1, 2, 0), (2, 2, 0), (3, 2, 0),
+             (0.5, 0.5, 1), (1.5, 0.5, 1), (2.5, 0.5, 1), (0.5, 1.5, 1), (1.5, 1.5, 1), (2.5, 1.5, 1), (1, 1, 2), (2, 1, 2)]
+    for k, (x, y, z) in enumerate(spots):
+        ic = icons[3] if k in (18, 19) else icons[k % len(icons)]  # the selected pair matches
+        ink = inks[0] if k in (18, 19) else inks[k % 3]
+        sel = " sel" if k in (18, 19) else ""
+        tiles.append(f'<i class="t{sel}" style="left:{x * 92 - z * 8}px;top:{y * 116 - z * 8}px;z-index:{z * 10 + k}"><svg viewBox="0 0 24 24" fill="{ink}">{ic}</svg></i>')
+    return f'<div class="tm">{"".join(tiles)}</div>'
+
+
+def peg_solitaire():
+    holes = []
+    left = {(3, 3), (2, 3), (4, 2), (3, 5)}
+    for r in range(7):
+        for c in range(7):
+            on = r in (2, 3, 4) or c in (2, 3, 4)
+            if not on:
+                holes.append("<b></b>")
+            elif (r, c) in left:
+                holes.append('<b class="h"><i class="p"></i></b>')
+            else:
+                holes.append('<b class="h"><i></i></b>')
+    return f'<div class="pg">{"".join(holes)}</div>'
+
+
+def light_switch():
+    on = {1, 5, 6, 7, 11, 13, 17, 18, 19, 23}
+    return '<div class="ls">' + "".join(f'<b class="{"on" if i in on else ""}"></b>' for i in range(25)) + "</div>"
+
+
+def box_pusher():
+    rows = ["#######", "#  .  #", "# $$  #", "#.@ $.#", "#  *  #", "#######"]
+    out = []
+    for row in rows:
+        for ch in row:
+            cls = {"#": "w", " ": "f", ".": "f g", "$": "f b", "*": "f g b h", "@": "f p"}[ch]
+            out.append(f'<b class="{cls}"></b>')
+    return f'<div class="bx">{"".join(out)}</div>'
+
+
+def tower_of_hanoi():
+    def peg(discs):
+        d = "".join(f'<i style="width:{40 + w * 14}%" class="{"m" if k % 2 else ""}"></i>' for k, w in enumerate(discs))
+        return f'<div class="peg"><div class="stk">{d}</div></div>'
+    return f'<div class="hn">{peg([4, 3])}{peg([1])}{peg([2])}</div>'
+
+
 # Each game's tagline (on the share image) and art.
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
     "checkers": ("Jump. Crown. Win.", checkers),
     "reversi": ("Flip the board.", reversi),
     "four-in-a-row": ("Line up four.", four),
+    "sudoku": ("One to nine.", sudoku),
+    "mines": ("Clear the field.", mines),
+    "slide-merge": ("Reach 2048.", slide_merge),
+    "sliding-tiles": ("Back in order.", sliding_tiles),
+    "picture-logic": ("Reveal the picture.", picture_logic),
+    "tile-match": ("Match the pairs.", tile_match),
+    "peg-solitaire": ("Leave just one.", peg_solitaire),
+    "light-switch": ("Lights out.", light_switch),
+    "box-pusher": ("Push, never pull.", box_pusher),
+    "tower-of-hanoi": ("Move the tower.", tower_of_hanoi),
 }
 
 CSS = f"""
@@ -130,6 +260,64 @@ h1.long {{ font-size: 84px; }}
 .card span {{ display: block; font-weight: 700; font-size: 30px; line-height: 1; text-align: center; width: 30px; }}
 .card em {{ position: absolute; inset: 0; display: grid; place-items: center; font-style: normal; font-size: 110px; }}
 .card.red {{ color: {MERLOT}; }}
+
+.sdk {{ display: grid; grid-template-columns: repeat(9, 50px); grid-template-rows: repeat(9, 50px); gap: 1px; padding: 4px; background: #45383C;
+  border-radius: 12px; box-shadow: 0 0 0 4px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.sdk b {{ background: #1F191B; display: grid; place-items: center; font: 700 26px 'DM Sans'; color: #F5EFE7; }}
+.sdk b.er {{ margin-right: 3px; }} .sdk b.eb {{ margin-bottom: 3px; }}
+.sdk b.mine {{ font: 400 34px 'Instrument Serif'; color: #E3C37F; }}
+.sdk b.sel {{ background: {MERLOT}; }}
+.mn {{ display: grid; grid-template-columns: repeat(9, 54px); grid-template-rows: repeat(6, 54px); gap: 3px; padding: 8px; border-radius: 14px;
+  background: #2C0A16; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.mn b {{ border-radius: 6px; background: linear-gradient(180deg, #5C1830, #4F1428); box-shadow: inset 0 -4px 0 #3D0F1F; display: grid; place-items: center; font: 700 28px 'DM Sans'; }}
+.mn b.o {{ background: #1F191B; box-shadow: none; }}
+.mn b svg {{ width: 70%; height: 70%; fill: none; stroke: {GOLD}; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }}
+.mn .n1 {{ color: #8FB8E8; }} .mn .n2 {{ color: #8FD19E; }} .mn .n3 {{ color: #FF9C8A; }}
+.mg {{ display: grid; grid-template-columns: repeat(4, 96px); grid-template-rows: repeat(4, 96px); gap: 12px; padding: 12px; border-radius: 18px;
+  background: #3D0F1F; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.mg b {{ border-radius: 10px; background: #2C0A16; display: grid; place-items: center; font: 700 38px 'DM Sans'; color: #3A2A2E; }}
+.mg .v2 {{ background: {IVORY}; }} .mg .v4 {{ background: #E6D3B3; }} .mg .v8 {{ background: #D9A273; color: #FFF8EE; }}
+.mg .v16 {{ background: #C97E5A; color: #FFF8EE; }} .mg .v32 {{ background: #B85C4F; color: #FFF8EE; }}
+.mg .v128 {{ background: {GOLD}; color: #2A1D0A; font-size: 32px; }} .mg .v256 {{ background: #E6C88A; color: #2A1D0A; font-size: 32px; }}
+.mg .v1024 {{ background: #9E2E50; color: #FFF4D6; font-size: 26px; }} .mg .v2048 {{ background: {MERLOT}; color: #E6C88A; font-size: 26px; box-shadow: 0 0 0 3px {GOLD}, 0 0 24px rgba(207,170,98,.5); }}
+.st {{ display: grid; grid-template-columns: repeat(4, 100px); grid-template-rows: repeat(4, 100px); gap: 6px; padding: 10px; border-radius: 18px;
+  background: #2C0A16; box-shadow: 0 0 0 8px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.st b {{ border-radius: 12px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8; display: grid; place-items: center;
+  font: 400 52px 'Instrument Serif'; color: {MERLOT}; }}
+.st b.gap {{ background: transparent; box-shadow: none; }}
+.pl {{ display: grid; grid-template-columns: repeat(7, 60px); grid-template-rows: repeat(7, 60px); gap: 2px; padding: 4px; background: #C9BBA6; border-radius: 10px;
+  box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.pl b {{ background: {IVORY}; }} .pl b.on {{ background: {GOLD}; }}
+.tm {{ position: relative; width: 470px; height: 380px; margin-left: 60px; margin-top: 40px; }}
+.tm .t {{ position: absolute; width: 86px; height: 110px; border-radius: 10px; background: linear-gradient(160deg, #FFFBF3, #EFE4D2);
+  box-shadow: 2px 2px 0 #D6C8B0, 4px 4px 0 #C4B496, 6px 6px 0 #A8977A, 8px 10px 14px rgba(0,0,0,.5); display: grid; place-items: center; }}
+.tm .t svg {{ width: 62%; height: 62%; }}
+.tm .t.sel {{ background: linear-gradient(160deg, #FFF3D3, #E6C88A); box-shadow: 2px 2px 0 #D6C8B0, 4px 4px 0 #C4B496, 6px 6px 0 #A8977A, 0 0 0 4px {GOLD}, 8px 10px 14px rgba(0,0,0,.5); }}
+.pg {{ display: grid; grid-template-columns: repeat(7, 56px); grid-template-rows: repeat(7, 56px); gap: 4px; padding: 40px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, #7A2B44, #5E1530 70%); box-shadow: 0 0 0 10px #17110F, 0 30px 60px rgba(0,0,0,.55); margin-left: 40px; }}
+.pg b {{ display: grid; place-items: center; }}
+.pg b.h i {{ width: 22px; height: 22px; border-radius: 50%; background: #2C0A16; box-shadow: inset 0 3px 5px rgba(0,0,0,.6); }}
+.pg b.h i.p {{ width: 40px; height: 40px; background: radial-gradient(circle at 35% 30%, #E6C88A, {GOLD} 55%, #97793A); box-shadow: 0 3px 0 #6E5626, 0 6px 8px rgba(0,0,0,.4); }}
+.ls {{ display: grid; grid-template-columns: repeat(5, 76px); grid-template-rows: repeat(5, 76px); gap: 12px; padding: 18px; border-radius: 20px;
+  background: #160F11; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.ls b {{ border-radius: 22%; background: radial-gradient(circle at 50% 40%, #3A2A2F, #241A1D 70%); box-shadow: inset 0 -4px 0 rgba(0,0,0,.4); }}
+.ls b.on {{ background: radial-gradient(circle at 50% 40%, #FFF3CC, #E6C88A 35%, {GOLD} 70%); box-shadow: inset 0 -4px 0 #97793A, 0 0 26px rgba(207,170,98,.55); }}
+.bx {{ display: grid; grid-template-columns: repeat(7, 62px); grid-template-rows: repeat(6, 62px); transform: rotate(-3deg); margin-left: 40px; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); }}
+.bx b {{ position: relative; }}
+.bx .w {{ background: linear-gradient(180deg, #4A3A30, #2E241E); border-radius: 4px; box-shadow: inset 0 -4px 0 rgba(0,0,0,.35); }}
+.bx .f {{ background: #3D0F1F; }}
+.bx .g::after {{ content: ""; position: absolute; inset: 32%; border-radius: 50%; border: 3px solid {GOLD}; }}
+.bx .b::before {{ content: ""; position: absolute; inset: 7%; border-radius: 12%; background: linear-gradient(160deg, #C79A6B, #95683F); box-shadow: inset 0 0 0 4px #7A5432, 0 4px 6px rgba(0,0,0,.4); z-index: 1; }}
+.bx .h::before {{ background: linear-gradient(160deg, #E6C88A, {GOLD}); box-shadow: inset 0 0 0 4px #97793A, 0 0 14px rgba(207,170,98,.6); }}
+.bx .p::before {{ content: ""; position: absolute; inset: 14%; border-radius: 50%; background: {IVORY}; box-shadow: 0 0 0 4px {MERLOT}; }}
+.hn {{ display: grid; grid-template-columns: repeat(3, 160px); gap: 10px; height: 300px; padding: 24px 16px 0; border-radius: 20px; margin-left: 50px;
+  background: radial-gradient(ellipse at 50% 20%, #5C1830, #3D0F1F 85%); box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); }}
+.hn .peg {{ position: relative; display: flex; align-items: flex-end; justify-content: center; }}
+.hn .peg::before {{ content: ""; position: absolute; bottom: 0; left: 50%; width: 12px; height: 88%; transform: translateX(-50%); border-radius: 6px 6px 0 0; background: linear-gradient(90deg, #6B4A2E, #A57B4F, #6B4A2E); }}
+.hn .peg::after {{ content: ""; position: absolute; bottom: 0; left: 4%; right: 4%; height: 14px; border-radius: 6px 6px 0 0; background: linear-gradient(#A57B4F, #6B4A2E); }}
+.hn .stk {{ position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column-reverse; align-items: center; gap: 3px; padding-bottom: 14px; }}
+.hn .stk i {{ display: block; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #E6C88A, {GOLD} 60%, #97793A); }}
+.hn .stk i.m {{ background: linear-gradient(180deg, #B0405F, {MERLOT} 60%, #5E1530); }}
 """
 
 
@@ -161,7 +349,7 @@ body {{ width: 640px; height: 480px; }}
 
 def main():
     only = set(sys.argv[1:])
-    missing = [s for s in GAMES if s not in ART]
+    missing = [s for s in GAMES if s not in ART and (not only or s in only)]
     if missing:
         sys.exit("No art for: " + ", ".join(missing))
     OUT.mkdir(parents=True, exist_ok=True)

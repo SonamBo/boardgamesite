@@ -1,0 +1,45 @@
+<!-- title: Tower of Hanoi Solution in the Fewest Moves | BoardGameSite -->
+<!-- description: Learn how to solve the Tower of Hanoi in the fewest moves: the simple repeating pattern, why it works, and the formula for the minimum number of moves. -->
+<!-- path: /learn/tower-of-hanoi -->
+<!-- out: learn/tower-of-hanoi.html -->
+<!-- nav: learn -->
+<!-- kind: guide -->
+<!-- game: tower-of-hanoi -->
+<!-- published: 2026-10-28 -->
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Tower of Hanoi</span></nav>
+  <h1>How to solve the Tower of Hanoi</h1>
+  <p class="lede">The Tower of Hanoi has a beautiful secret: one simple pattern solves it perfectly, with any number of discs. Once you see it, you can solve 8 discs without a mistake.</p>
+
+  <div class="callout card">
+    <p>Start with 3 discs, then add more.</p>
+    <a class="btn btn-gold" href="/play/tower-of-hanoi">Play Tower of Hanoi free</a>
+  </div>
+
+<h2>The rules</h2>
+  <p>There are three pegs and a tower of discs on the left peg, largest at the bottom. Move the whole tower to the right-hand peg. Only one disc moves at a time, only the top disc of a peg can move, and a disc can never go on top of a smaller one.</p>
+
+  <h2>The fewest moves</h2>
+  <p>With <strong>n</strong> discs, the fewest moves possible is <strong>2ⁿ − 1</strong>. That’s 7 moves for 3 discs, 15 for 4, 31 for 5, 63 for 6, 127 for 7 and 255 for 8. Each extra disc doubles the work, plus one.</p>
+
+  <h2>The idea behind it</h2>
+  <p>To move a tower of 4 discs, you have to move the biggest disc at some point. It can only move when the other 3 are all stacked on the third peg. So: move the top 3 out of the way, move the big disc, then move the 3 back on top of it. Moving 3 discs works the same way with 2, and so on down. That’s why the count doubles with every disc.</p>
+
+  <h2>The pattern you can actually use</h2>
+  <ol>
+    <li><strong>The smallest disc moves every other turn,</strong> always going around the pegs in the same direction.</li>
+    <li><strong>Which direction?</strong> With an even number of discs, the smallest disc goes left peg → middle → right → left, and so on. With an odd number, it goes left → right → middle → left.</li>
+    <li><strong>On the turns in between,</strong> make the only legal move that doesn’t touch the smallest disc. There’s always exactly one.</li>
+  </ol>
+  <p>Follow these two alternating steps and the tower moves itself, in the fewest moves possible.</p>
+
+  <h2>The legend</h2>
+  <p>The puzzle was invented by the French mathematician Édouard Lucas in 1883. He sold it with a story about a temple where priests move 64 golden discs, and when they finish, the world will end. At one move per second, 64 discs would take about 585 billion years, so there’s no rush.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/tower-of-hanoi">Play Tower of Hanoi now</a>
+  </div>
+</article>
+
+{{related:tower-of-hanoi}}

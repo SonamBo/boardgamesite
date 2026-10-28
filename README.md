@@ -13,11 +13,13 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `src/pages/learn/*.html` | The rules and strategy guides (`/learn/checkers` and so on) |
 | `build.py` | Combines layout + pages into `public/` (`python3 build.py`), writes the sitemap and structured data, and checks every page for SEO basics |
 | `tools/make_share_images.py` | Draws each game's link-preview picture into `public/assets/img/og/` |
+| `tools/make_box_levels.py` | Makes Box Pusher levels (boxes pulled back from their targets, then checked with a solver); the levels live in `public/assets/js/box-levels.js` |
 | `tools/indexnow.py` | Run after each deploy: tells Bing and other IndexNow search engines which pages changed |
 | `public/assets/fonts/` | The site's two fonts, hosted here instead of Google Fonts (Latin characters only) |
 | `public/` | The website that gets deployed. Images, CSS and JS live in `public/assets/` |
 | `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Reversi, Solitaire), no page code |
 | `public/assets/js/four-in-a-row.js`, `checkers.js`, `reversi.js`, `solitaire.js` | Each game's page |
+| `public/assets/js/solo.js` | Shared pieces for single-player games: clock, games played and won, best times, seeded daily puzzles |
 | `public/assets/js/game-ui.js` | Shared game page pieces: status line, result panel, difficulty switch, win/loss record |
 | `public/assets/js/site.js` | Menu, cookie banner, newsletter and contact forms |
 | `public/assets/js/accounts.js` | Sign-up / log-in dialog (Google or email), the signed-in menu, and copying each player's record to their account |

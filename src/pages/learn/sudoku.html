@@ -1,0 +1,52 @@
+<!-- title: Sudoku Rules and Solving Techniques | BoardGameSite -->
+<!-- description: Learn how to play Sudoku and the techniques that crack harder puzzles: scanning, single candidates, pencil marks, pairs and pointing numbers. -->
+<!-- path: /learn/sudoku -->
+<!-- out: learn/sudoku.html -->
+<!-- nav: learn -->
+<!-- kind: guide -->
+<!-- game: sudoku -->
+<!-- published: 2026-10-28 -->
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Sudoku</span></nav>
+  <h1>How to play Sudoku: rules and solving techniques</h1>
+  <p class="lede">Sudoku has one rule and no maths, yet it can keep you thinking for an hour. This guide covers the rule, then the techniques that take you from easy puzzles to hard ones.</p>
+
+  <div class="callout card">
+    <p>Practise each technique on a fresh puzzle.</p>
+    <a class="btn btn-gold" href="/play/sudoku">Play Sudoku free</a>
+  </div>
+
+<h2>The rule</h2>
+  <p>A Sudoku grid has 81 squares in 9 rows, 9 columns and 9 boxes of 3×3. Fill every empty square with a number from 1 to 9 so that <strong>each row, each column and each box contains every number exactly once</strong>. That’s the whole game. A good puzzle has exactly one solution, and every puzzle on BoardGameSite is checked to make sure it does.</p>
+
+  <h2>Technique 1: scanning</h2>
+  <p>Pick a number, say 5, and a box that doesn’t have one yet. Look along the rows and columns that pass through that box. Every 5 you find rules out a whole row or column inside the box. Often only one square is left, and the 5 must go there. Sweep through the numbers 1 to 9 like this and you’ll solve most easy puzzles.</p>
+
+  <h2>Technique 2: the only number left</h2>
+  <p>Now turn it around. Pick one empty square and list the numbers already in its row, column and box. If eight different numbers appear, the ninth is the answer. This works best in busy parts of the grid.</p>
+
+  <h2>Technique 3: pencil marks</h2>
+  <p>Medium and hard puzzles need notes. Turn on <strong>Notes</strong> and write the possible numbers into each empty square. When you place a number, the game clears it from the notes in the same row, column and box, so new singles appear on their own.</p>
+
+  <h2>Technique 4: pairs</h2>
+  <p>If two squares in the same row (or column, or box) both have exactly the notes <strong>3 and 8</strong>, then 3 and 8 must go in those two squares, in some order. That means no other square in that row can be 3 or 8, and you can cross them off. The same idea works with three squares that share three numbers.</p>
+
+  <h2>Technique 5: pointing numbers</h2>
+  <p>Suppose that inside one box, the only places a 4 can go are all in the same row. The 4 for that box must be in that row, so no other square in the row, outside the box, can be a 4. This one trick unlocks many hard puzzles.</p>
+
+  <h2>A good order to work in</h2>
+  <ol>
+    <li>Scan every number across every box.</li>
+    <li>Fill in any square with only one possible number.</li>
+    <li>Add notes, then look for pairs and pointing numbers.</li>
+    <li>Go back to scanning after each breakthrough.</li>
+  </ol>
+  <p>If you get truly stuck, a <strong>Hint</strong> fills in the easiest square left. It’s a good way to learn where you should have looked.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/sudoku">Play Sudoku now</a>
+  </div>
+</article>
+
+{{related:sudoku}}

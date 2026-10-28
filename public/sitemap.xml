@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-10-28</lastmod></url>
   <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/contact</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/games/cards</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/multiplayer</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/games/puzzles</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/strategy</loc><lastmod>2026-10-27</lastmod></url>
-  <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-10-28</lastmod></url>
+  <url><loc>https://boardgamesite.com/learn/box-pusher</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/box-pusher.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/checkers</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/four-in-a-row</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/light-switch</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/light-switch.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/mines</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/peg-solitaire</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/peg-solitaire.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/picture-logic</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/picture-logic.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/reversi</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/slide-merge</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/slide-merge.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/sliding-tiles</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sliding-tiles.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/solitaire</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/sudoku</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/tile-match</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tile-match.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/tower-of-hanoi</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tower-of-hanoi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/box-pusher</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/box-pusher.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/checkers</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/four-in-a-row</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/light-switch</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/light-switch.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/mines</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/peg-solitaire</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/peg-solitaire.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/picture-logic</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/picture-logic.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/reversi</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/slide-merge</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/slide-merge.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/sliding-tiles</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sliding-tiles.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/solitaire</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/sudoku</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/tile-match</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tile-match.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/tower-of-hanoi</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tower-of-hanoi.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/privacy</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/terms</loc><lastmod>2026-10-27</lastmod></url>
 </urlset>

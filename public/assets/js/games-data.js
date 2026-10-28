@@ -27,5 +27,75 @@ export const GAMES = [
   "cat": "strategy",
   "record": "wld",
   "key": "bgs-c4-score"
+ },
+ {
+  "slug": "sudoku",
+  "name": "Sudoku",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-sdk-stats"
+ },
+ {
+  "slug": "mines",
+  "name": "Mines",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-mines-stats"
+ },
+ {
+  "slug": "slide-merge",
+  "name": "Slide & Merge",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-merge-stats"
+ },
+ {
+  "slug": "sliding-tiles",
+  "name": "Sliding Tiles",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-slide-stats"
+ },
+ {
+  "slug": "picture-logic",
+  "name": "Picture Logic",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-pic-stats"
+ },
+ {
+  "slug": "tile-match",
+  "name": "Tile Match",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-tiles-stats"
+ },
+ {
+  "slug": "peg-solitaire",
+  "name": "Peg Solitaire",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-peg-stats"
+ },
+ {
+  "slug": "light-switch",
+  "name": "Light Switch",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-lights-stats"
+ },
+ {
+  "slug": "tower-of-hanoi",
+  "name": "Tower of Hanoi",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-hanoi-stats"
+ },
+ {
+  "slug": "box-pusher",
+  "name": "Box Pusher",
+  "cat": "puzzles",
+  "record": "solo",
+  "key": "bgs-box-stats"
  }
 ];

@@ -1,0 +1,46 @@
+<!-- title: How to Solve Nonograms (Picture Logic) | BoardGameSite -->
+<!-- description: Learn how to solve Picture Logic nonogram puzzles: reading the clues, the overlap trick, using edges, crossing out empty squares and working back and forth. -->
+<!-- path: /learn/picture-logic -->
+<!-- out: learn/picture-logic.html -->
+<!-- nav: learn -->
+<!-- kind: guide -->
+<!-- game: picture-logic -->
+<!-- published: 2026-10-28 -->
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Picture Logic</span></nav>
+  <h1>How to play Picture Logic: solving nonograms</h1>
+  <p class="lede">Picture Logic puzzles, also called nonograms, hide a picture behind a grid of number clues. Every one can be solved by logic alone. Here’s how.</p>
+
+  <div class="callout card">
+    <p>Start with a 5×5 grid while you learn.</p>
+    <a class="btn btn-gold" href="/play/picture-logic">Play Picture Logic free</a>
+  </div>
+
+<h2>The rules</h2>
+  <p>Each row and column has a clue: a list of numbers. Each number is a run of filled squares in that line, in order, with at least one empty square between runs. A row with the clue <strong>2 3</strong> has a run of two, a gap, then a run of three. A clue of <strong>0</strong> means the whole line is empty. Fill squares so every clue is matched, and the picture appears.</p>
+
+  <h2>Technique 1: the overlap</h2>
+  <p>This is the most useful trick. Take a row of 10 with a clue of <strong>7</strong>. Push the run as far left as it can go: it covers squares 1 to 7. Push it right: squares 4 to 10. Squares 4 to 7 are filled either way, so fill them now. The same works for several numbers: imagine every run pushed left, then every run pushed right, and fill the squares where the same run overlaps itself.</p>
+
+  <h2>Technique 2: lines that add up</h2>
+  <p>Add the numbers in a clue, plus one gap between each. If the total equals the length of the line, the whole line is fixed. In a 10-square row, <strong>3 2 3</strong> adds up to 3 + 2 + 3 + 2 gaps = 10, so there’s only one way to fill it.</p>
+
+  <h2>Technique 3: edges</h2>
+  <p>A filled square touching the edge of the grid must be the start of the first (or last) run. If the clue starts with 4, the first four squares are filled and the fifth is empty.</p>
+
+  <h2>Technique 4: cross out</h2>
+  <p>When a line’s clue is complete, every other square in it is empty. Cross them out. Crosses are just notes, but they make the next deduction much easier to see.</p>
+
+  <h2>Technique 5: back and forth</h2>
+  <p>Every square you decide in a row is new information for its column, and the other way round. Work through the rows, then the columns, then the rows again. Each pass reveals a little more until the picture is complete.</p>
+
+  <h2>A tip for big grids</h2>
+  <p>On 15×15 puzzles, start with the biggest numbers. They give the most overlap. The thicker lines every five squares help you count without losing your place.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/picture-logic">Play Picture Logic now</a>
+  </div>
+</article>
+
+{{related:picture-logic}}
