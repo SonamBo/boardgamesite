@@ -1444,3 +1444,10 @@ body.maxed .dice-wrap { max-width: none; }
 .card-bar .sol-stats { margin-left: auto; }
 .table-note { position: absolute; color: rgba(233,239,230,.75); font-size: 13px; font-weight: 600; text-align: center; pointer-events: none; }
 .slot.stock { cursor: pointer; }
+.table-note.seat { font-size: 13px; line-height: 1.3; z-index: 90; }
+.table-note.seat.now { color: var(--you-hi); }
+.trick-panel .score-scroll { margin: 0; }
+.trick-panel table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.trick-panel th, .trick-panel td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--border); }
+.trick-panel th:first-child, .trick-panel td:first-child { text-align: left; }
+.trick-panel tfoot td { font-weight: 700; color: var(--text); }

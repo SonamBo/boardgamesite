@@ -534,6 +534,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-golf-stats",
     },
+    "hearts": {
+        "name": "Hearts",
+        "full": "Hearts",
+        "cat": "cards",
+        "genre": ["Card game", "Trick-taking"],
+        "blurb": "Dodge the hearts and the Queen of spades.",
+        "card": "The classic trick-taking game. Pass three cards, dodge the hearts and the Queen of spades, or shoot the moon.",
+        "chips": ["Cards", "vs Computer", "15 min"],
+        "friend": False,
+        "record": "wld",
+        "key": "bgs-hearts-score",
+    },
 }
 
 
