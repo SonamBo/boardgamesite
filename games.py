@@ -342,6 +342,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-chain-score",
     },
+    "letter-tiles": {
+        "name": "Letter Tiles",
+        "full": "Letter Tiles",
+        "cat": "word",
+        "genre": ["Word game", "Board game"],
+        "blurb": "Build crossing words from seven tiles and beat the computer.",
+        "card": "A crossword tile game. Build words from your rack, hit the bonus squares and outscore the computer or a friend.",
+        "chips": ["Word", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-lettertiles-score",
+    },
 }
 
 
