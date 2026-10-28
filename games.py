@@ -318,6 +318,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-hive-stats",
     },
+    "word-grid": {
+        "name": "Word Grid",
+        "full": "Word Grid",
+        "cat": "word",
+        "genre": ["Word game"],
+        "blurb": "Link touching letters to find words in three minutes.",
+        "card": "Sixteen letters, three minutes. Link touching letters to find as many words as you can.",
+        "chips": ["Word", "Single player", "3 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-grid-stats",
+    },
 }
 
 
