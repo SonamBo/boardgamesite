@@ -1,0 +1,120 @@
+<!-- title: Word Chain – Play the Last-Letter Word Game Free | BoardGameSite -->
+<!-- description: Take turns saying a word that starts with the last letter of the word before. No repeats, 20 seconds a turn. Play the computer at three levels or a friend. -->
+<!-- path: /play/word-chain -->
+<!-- out: play/word-chain.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/word-chain.js -->
+<!-- kind: game -->
+<!-- game: word-chain -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.85">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Word Chain</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Type any word to start</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit wc-wrap">
+        <ol id="wc-chain" class="wc-chain" aria-label="The chain so far" aria-live="polite"></ol>
+        <p class="wc-need">Next word starts with <b id="wc-need">any letter</b></p>
+        <div id="wc-timer" class="wc-timer" aria-hidden="true"><i></i><span id="wc-secs">20</span></div>
+        <form id="wc-form" class="ld-form" autocomplete="off">
+          <label for="wc-input" class="sr-only">Your word</label>
+          <input id="wc-input" class="ld-input" type="text" inputmode="text" autocapitalize="off" spellcheck="false" maxlength="20">
+          <button type="submit" class="btn btn-gold raised">Play</button>
+        </form>
+        <div class="un-tools"><button id="wc-give" type="button" class="tool-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4h12l-2 4 2 4H5"/></svg>Give up</button></div>
+      </div>
+      <p class="board-hint">Type a word and press Enter before the timer runs out. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b></div>
+        <p class="muted" style="font-size: 14px">Chain length: <span id="wc-len">0</span></p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Opponent</p>
+        <div class="seg" role="group" aria-label="Opponent (starts a new game)">
+          <button type="button" data-opponent="cpu">Computer</button>
+          <button type="button" data-opponent="friend">2 players</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Computer level</p>
+        <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
+          <button type="button" data-level="easy">Easy</button>
+          <button type="button" data-level="medium">Medium</button>
+          <button type="button" data-level="hard">Hard</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Take turns adding a word that starts with the last letter of the previous word. Words need 3 or more letters and can’t be repeated. Run out of time or words and you lose.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Word Chain</h2>
+  <p>Word Chain is a quick back-and-forth word game, great for car journeys and classrooms, now against the computer or a friend on one device.</p>
+  <ol>
+    <li><strong>The first player types any word.</strong></li>
+    <li><strong>Each next word starts with the last letter</strong> of the word before. After APPLE comes a word starting with E, like EAGLE, then a word starting with E again.</li>
+    <li><strong>Words need 3 or more letters,</strong> must be everyday English words, and can’t be used twice in the same game.</li>
+    <li><strong>You have 20 seconds a turn.</strong> Run out of time, or give up, and the other player wins.</li>
+  </ol>
+  <p>The computer has three levels. <strong>Easy</strong> knows the most common words and sometimes gets stuck. <strong>Medium</strong> knows many more. <strong>Hard</strong> knows thousands of words and loves to leave you with awkward letters like X, Y and K.</p>
+
+  <h2>Quick tips for winning</h2>
+  <ul>
+    <li><strong>End on awkward letters.</strong> Words ending in X, Z, J, K or Y are harder to follow.</li>
+    <li><strong>Avoid ending on E and S.</strong> Thousands of words start with E and S, so they make life easy for your opponent.</li>
+    <li><strong>Keep a few backups.</strong> Think of two or three words for common letters before you need them.</li>
+    <li><strong>Watch for repeats.</strong> Late in a long game, your favourite words may already be used.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn which letters to aim for and how to trap your opponent.</p>
+    <a class="btn btn-outline" href="/learn/word-chain">Read the Word Chain guide</a>
+  </div>
+
+  <h2>Word Chain FAQ</h2>
+  <section class="faq">
+    <h3>Is Word Chain free?</h3>
+    <p>Yes. Play the computer or a friend as often as you like, free in your browser. No download and no account needed.</p>
+    <h3>How long do I have for each turn?</h3>
+    <p>20 seconds. The bar shows how much time is left. The first word of a game has no time limit.</p>
+    <h3>Can I use names or places?</h3>
+    <p>No. Words must be everyday English words in our word list, so names of people and places don’t count.</p>
+    <h3>Can I play with a friend?</h3>
+    <p>Yes. Choose 2 players and take turns typing on the same device.</p>
+    <h3>How good is the computer?</h3>
+    <p>Easy knows a few thousand common words and sometimes gets stuck. Hard knows about 30,000 words and tries to leave you a difficult letter.</p>
+  </section>
+</section>
+
+{{related:word-chain}}

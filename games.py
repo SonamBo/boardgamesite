@@ -330,6 +330,18 @@ GAMES = {
         "record": "solo",
         "key": "bgs-grid-stats",
     },
+    "word-chain": {
+        "name": "Word Chain",
+        "full": "Word Chain",
+        "cat": "word",
+        "genre": ["Word game"],
+        "blurb": "Each word starts with the last letter of the one before.",
+        "card": "Take turns adding a word that starts with the last letter of the one before. 20 seconds a turn, no repeats.",
+        "chips": ["Word", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-chain-score",
+    },
 }
 
 

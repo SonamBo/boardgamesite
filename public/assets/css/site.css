@@ -1171,3 +1171,19 @@ body.maxed .wg-wrap { max-width: none; }
 .wgd-cell:disabled { cursor: default; opacity: .8; }
 .wgd-found li::after { content: attr(data-p); float: right; color: var(--accent-text); font-size: 13px; }
 #time.low { color: #FFB4A8; }
+
+/* ---------- Word Chain ---------- */
+.wc-wrap { max-width: 520px; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 14px; border-radius: 18px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-dark) 85%); box-shadow: 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.4); }
+.wc-chain { list-style: none; margin: 0; padding: 4px; width: 100%; height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.wc-chain li { max-width: 80%; padding: 8px 14px; border-radius: 14px; font: 700 20px/1.2 var(--body); text-transform: uppercase; letter-spacing: .04em; }
+.wc-chain li.p1 { align-self: flex-start; background: var(--you); color: var(--on-you); border-bottom-left-radius: 4px; }
+.wc-chain li.p2 { align-self: flex-end; background: var(--ck-light); color: var(--brand-lo); border-bottom-right-radius: 4px; }
+.wc-chain li b { text-decoration: underline; text-underline-offset: 4px; }
+.wc-chain li:first-child { margin-top: auto; }
+.wc-need { color: var(--band-text-2); }
+.wc-need b { font: 400 34px/1 var(--display); color: var(--you-hi); text-transform: uppercase; margin-left: 4px; }
+.wc-timer { --t: 1; position: relative; width: min(100%, 360px); height: 8px; border-radius: 99px; background: rgba(0,0,0,.3); }
+.wc-timer i { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--t) * 100%); border-radius: 99px; background: var(--you); }
+.wc-timer span { position: absolute; right: -34px; top: -8px; font-weight: 700; font-size: 14px; color: var(--band-text-2); }
+.wc-wrap .tool-btn { color: var(--band-text-2); }
