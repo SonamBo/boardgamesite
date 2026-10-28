@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sudoku – Play Free Online + Daily Puzzle | BoardGameSite</title>
+<meta name="description" content="Play Sudoku free in your browser: easy, medium and hard puzzles with one solution each, pencil notes, hints, unlimited undo and a new daily puzzle.">
+<link rel="canonical" href="https://boardgamesite.com/play/sudoku">
+<meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Sudoku – Play Free Online + Daily Puzzle | BoardGameSite">
+<meta property="og:description" content="Play Sudoku free in your browser: easy, medium and hard puzzles with one solution each, pencil notes, hints, unlimited undo and a new daily puzzle.">
+<meta property="og:url" content="https://boardgamesite.com/play/sudoku">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/sudoku.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sudoku on BoardGameSite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sudoku – Play Free Online + Daily Puzzle | BoardGameSite">
+<meta name="twitter:description" content="Play Sudoku free in your browser: easy, medium and hard puzzles with one solution each, pencil notes, hints, unlimited undo and a new daily puzzle.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/sudoku.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="module" src="/assets/js/site.js"></script>
+<script type="module" src="/assets/js/sudoku.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": [
+    "VideoGame",
+    "WebApplication"
+   ],
+   "@id": "https://boardgamesite.com/play/sudoku#game",
+   "name": "Sudoku",
+   "url": "https://boardgamesite.com/play/sudoku",
+   "description": "Play Sudoku free in your browser: easy, medium and hard puzzles with one solution each, pencil notes, hints, unlimited undo and a new daily puzzle.",
+   "image": "https://boardgamesite.com/assets/img/og/sudoku.jpg",
+   "genre": [
+    "Puzzle",
+    "Logic puzzle"
+   ],
+   "gamePlatform": "Web browser",
+   "applicationCategory": "GameApplication",
+   "operatingSystem": "Any",
+   "playMode": "SinglePlayer",
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": 0,
+    "priceCurrency": "USD"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   }
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Puzzles games",
+     "item": "https://boardgamesite.com/games/puzzles"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Sudoku",
+     "item": "https://boardgamesite.com/play/sudoku"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Is this Sudoku free?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Play as many puzzles as you like, plus a new daily puzzle, free in your browser on a phone, tablet or computer. No download and no account needed."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does every puzzle have one solution?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Each puzzle is checked when it’s made, so there is exactly one correct way to fill the grid, and you never need to guess."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What’s the difference between Easy, Medium and Hard?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Easy puzzles start with about 40 numbers filled in, Medium with about 32 and Hard with about 26. Fewer starting numbers means fewer clues and more thinking."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Will I lose my puzzle if I close the page?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Your puzzle, notes and time are saved in your browser, so you can pick up where you left off."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Do I need to know maths to play Sudoku?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Sudoku uses numbers, but there’s no adding up. You could play it just as well with nine letters or colours. It’s a logic puzzle."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<header class="sidebar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <span>BoardGameSite</span>
+  </a>
+  <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="/" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Play
+    </a>
+    <a href="/play/four-in-a-row?mode=daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Daily challenge
+    </a>
+    <a href="/learn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
+    </a>
+    <a href="/#leaderboards">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
+      Leaderboards
+    </a>
+    <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg>
+      Watch
+    </a>
+    <a href="/about">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      About
+    </a>
+    <div class="nav-divider"></div>
+    <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
+    <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
+  </nav>
+</header>
+
+<main class="content" id="main">
+<div class="container">
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: .78">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Sudoku</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Fill every row, column and box with 1 to 9</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit sdk-wrap">
+        <div id="grid" class="sdk" role="group" aria-label="Sudoku grid. Use the arrow keys to move and 1 to 9 to fill a square."></div>
+        <div class="sdk-tools">
+          <button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button>
+          <button id="erase" type="button" class="tool-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20H9l-5-5 10-10 7 7-6 6"/><path d="M7 12l6 6"/></svg>Erase</button>
+          <button id="notes-btn" type="button" class="tool-btn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg>Notes <small>Off</small></button>
+          <button id="hint" type="button" class="tool-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Hint</button>
+        </div>
+        <div id="pad" class="sdk-pad" role="group" aria-label="Numbers"></div>
+      </div>
+      <p class="board-hint">Tap a square, then a number. Turn on Notes to pencil in possibilities. Your record: <span id="record">0 puzzles solved</span></p>
+    </section>
+
+    <aside class="panel">
+      <nav class="mode-tabs" aria-label="Game mode">
+        <a href="/play/sudoku" data-mode-link="classic">Play</a>
+        <a href="/play/sudoku?mode=daily" data-mode-link="daily">Daily puzzle</a>
+      </nav>
+
+      <div class="players card solo-stats">
+        <p><span>Time</span><b id="time">0:00</b></p>
+        <p><span>Hints used</span><b id="hints-used">0</b></p>
+      </div>
+
+      <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Difficulty</p>
+        <div class="seg" role="group" aria-label="Difficulty (starts a new puzzle)">
+          <button type="button" data-level="easy">Easy</button>
+          <button type="button" data-level="medium">Medium</button>
+          <button type="button" data-level="hard">Hard</button>
+        </div>
+      </div>
+
+      <div id="daily-panel" class="panel-box card" hidden>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <img src="/assets/img/flame.svg" alt="" width="96" height="96" style="width: 40px">
+          <div>
+            <p class="muted" style="font-size: 14px">Your streak</p>
+            <p id="daily-streak" style="font-family: var(--display); font-size: 34px; line-height: 1.1; color: var(--text)">0 days</p>
+          </div>
+        </div>
+        <p><b id="daily-title" style="color: var(--text)">Daily puzzle</b>. The same medium puzzle for everyone today. A new one arrives at midnight.</p>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">New puzzle</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New puzzle</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Fill the grid so every row, every column and every 3×3 box contains the numbers 1 to 9 exactly once. Clashing numbers turn red.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Sudoku</h2>
+  <p>Sudoku is played on a 9×9 grid split into nine 3×3 boxes. Some squares start with numbers in them. Your job is to fill in the rest.</p>
+  <ol>
+    <li><strong>One of each number in every row.</strong> Each row must contain the numbers 1 to 9, with none repeated.</li>
+    <li><strong>One of each in every column.</strong> The same goes for the nine columns.</li>
+    <li><strong>One of each in every box.</strong> And for each of the nine 3×3 boxes, marked with thicker lines.</li>
+    <li><strong>No guessing needed.</strong> Every puzzle here has exactly one solution, and you can always reach it by logic.</li>
+  </ol>
+  <p>Tap a square, then tap a number to fill it in. With a keyboard, use the arrow keys to move, 1 to 9 to fill a square, and Backspace to clear it. If a number clashes with another in the same row, column or box, both turn red.</p>
+
+  <h2>Notes, hints and undo</h2>
+  <p>Turn on <strong>Notes</strong> (or press N) to pencil small numbers into a square while you work out what could go there. When you place a number, it’s cleared from the notes in the same row, column and box automatically. <strong>Hint</strong> fills in one square for you: the one you’ve selected, or the easiest one left. <strong>Undo</strong> takes back as many moves as you like.</p>
+
+  <h2>The daily puzzle</h2>
+  <p>Every day there’s a new <a href="/play/sudoku?mode=daily">daily Sudoku</a>, the same medium puzzle for everyone. Solve it to grow your streak, then come back tomorrow for the next one.</p>
+
+  <h2>Quick tips for solving faster</h2>
+  <ul>
+    <li><strong>Start with the busiest rows, columns and boxes.</strong> The more numbers already placed, the fewer options are left.</li>
+    <li><strong>Look for the only place a number can go.</strong> Pick a number and a box, and rule out every square where it would clash. Often only one is left.</li>
+    <li><strong>Look for the only number a square can take.</strong> Check which of 1 to 9 already appear in its row, column and box.</li>
+    <li><strong>Use notes on hard puzzles.</strong> Writing in possibilities shows patterns that are hard to hold in your head.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn the solving techniques that crack medium and hard puzzles.</p>
+    <a class="btn btn-outline" href="/learn/sudoku">Read the Sudoku guide</a>
+  </div>
+
+  <h2>Sudoku FAQ</h2>
+  <section class="faq">
+    <h3>Is this Sudoku free?</h3>
+    <p>Yes. Play as many puzzles as you like, plus a new daily puzzle, free in your browser on a phone, tablet or computer. No download and no account needed.</p>
+    <h3>Does every puzzle have one solution?</h3>
+    <p>Yes. Each puzzle is checked when it’s made, so there is exactly one correct way to fill the grid, and you never need to guess.</p>
+    <h3>What’s the difference between Easy, Medium and Hard?</h3>
+    <p>Easy puzzles start with about 40 numbers filled in, Medium with about 32 and Hard with about 26. Fewer starting numbers means fewer clues and more thinking.</p>
+    <h3>Will I lose my puzzle if I close the page?</h3>
+    <p>No. Your puzzle, notes and time are saved in your browser, so you can pick up where you left off.</p>
+    <h3>Do I need to know maths to play Sudoku?</h3>
+    <p>No. Sudoku uses numbers, but there’s no adding up. You could play it just as well with nine letters or colours. It’s a logic puzzle.</p>
+  </section>
+</section>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/mines">
+      <b>Mines</b>
+      <span>Clear the field using the number clues. Don’t touch a mine.</span>
+    </a>
+    <a class="related-card card" href="/play/slide-merge">
+      <b>Slide & Merge</b>
+      <span>Slide tiles, merge matching numbers and reach 2048.</span>
+    </a>
+    <a class="related-card card" href="/play/sliding-tiles">
+      <b>Sliding Tiles</b>
+      <span>Slide the numbered tiles back into order. 3×3 to 5×5.</span>
+    </a>
+    <a class="related-card card" href="/play/picture-logic">
+      <b>Picture Logic</b>
+      <span>Use the number clues to fill in a hidden picture.</span>
+    </a>
+    <a class="related-card card" href="/play/tile-match">
+      <b>Tile Match</b>
+      <span>Clear a stack of 72 tiles by matching free pairs.</span>
+    </a>
+    <a class="related-card card" href="/play/peg-solitaire">
+      <b>Peg Solitaire</b>
+      <span>Jump pegs over each other until only one is left.</span>
+    </a>
+  </div>
+  <a class="link-green" href="/games/puzzles">All puzzles games</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <div><b>BoardGameSite</b><span>© <span data-year>2026</span> Pixel Art Games</span></div>
+  </div>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="/about">About</a>
+    <a href="/learn">How to play</a>
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+</footer>
+</div>
+</main>
+</div>
+</body>
+</html>

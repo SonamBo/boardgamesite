@@ -1,0 +1,107 @@
+<!-- title: Slide & Merge – Play the 2048 Number Puzzle Free | BoardGameSite -->
+<!-- description: Slide the tiles and merge matching numbers to reach 2048. Free in your browser with swipe and arrow-key controls, undo and your best score saved. -->
+<!-- path: /play/slide-merge -->
+<!-- out: play/slide-merge.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/slide-merge.js -->
+<!-- kind: game -->
+<!-- game: slide-merge -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.8">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Slide & Merge</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Join the numbers to reach 2048</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit mg-wrap">
+        <div id="merge-board" class="mg-board" role="img" aria-label="Board">
+          <div id="merge-tiles" class="mg-tiles"></div>
+        </div>
+        <div class="mg-pad" aria-label="Move tiles">
+          <button type="button" class="tool-btn" data-dir="left" aria-label="Slide left"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button type="button" class="tool-btn" data-dir="up" aria-label="Slide up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+          <button type="button" class="tool-btn" data-dir="down" aria-label="Slide down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+          <button type="button" class="tool-btn" data-dir="right" aria-label="Slide right"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button>
+        </div>
+      </div>
+      <p class="board-hint">Swipe on the board, or use the arrow keys. Your record: <span id="record">0 times reached 2048</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card solo-stats">
+        <p><span>Score</span><b id="score">0</b></p>
+        <p><span>Best</span><b id="best">0</b></p>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Slide all the tiles one way. Two tiles with the same number merge into one with their total. Make a 2048 tile to win.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Slide & Merge</h2>
+  <p>Slide & Merge is a number puzzle on a 4×4 board. Every move slides all the tiles as far as they’ll go in one direction, and matching tiles join together.</p>
+  <ol>
+    <li><strong>Slide the tiles.</strong> Swipe on the board, use the arrow keys, or tap the arrows under it. Every tile moves as far as it can that way.</li>
+    <li><strong>Merge matching numbers.</strong> When two tiles with the same number touch as they slide, they merge into one tile worth both: two 8s make a 16.</li>
+    <li><strong>A new tile appears</strong> after every move, a 2 or occasionally a 4, in a random empty square.</li>
+    <li><strong>Reach 2048 to win.</strong> Then keep going for a bigger tile and a higher score if you like.</li>
+    <li><strong>The game ends</strong> when the board is full and no tiles can merge.</li>
+  </ol>
+  <p>Every merge adds the new tile’s value to your score. Made a slip? <strong>Undo</strong> takes back your last move.</p>
+
+  <h2>Quick tips for a higher score</h2>
+  <ul>
+    <li><strong>Pick a corner and keep your biggest tile in it.</strong> Most strong players use a bottom corner.</li>
+    <li><strong>Use mostly two or three directions.</strong> If your big tile is bottom-left, slide down and left as much as you can, and avoid up.</li>
+    <li><strong>Build a chain along one edge.</strong> Line tiles up in order, like 256, 128, 64, 32, so each merge flows into the next.</li>
+    <li><strong>Don’t chase small merges.</strong> A tidy board matters more than a few points now.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn the corner strategy that gets most players to 2048.</p>
+    <a class="btn btn-outline" href="/learn/slide-merge">Read the Slide & Merge guide</a>
+  </div>
+
+  <h2>Slide & Merge FAQ</h2>
+  <section class="faq">
+    <h3>Is Slide & Merge the same as 2048?</h3>
+    <p>Yes. It plays by the same rules as the popular 2048 puzzle: slide the tiles, merge matching numbers, and aim for a 2048 tile.</p>
+    <h3>Can I keep playing after 2048?</h3>
+    <p>Yes. When you make 2048 you can choose Keep going and play on for 4096 and beyond, as long as you have moves left.</p>
+    <h3>Is there an undo?</h3>
+    <p>Yes. You can undo your last move once before making another.</p>
+    <h3>Will my game be saved?</h3>
+    <p>Yes. Your board and score are saved in your browser, so you can close the page and carry on later.</p>
+    <h3>Is Slide & Merge free?</h3>
+    <p>Yes. Play as often as you like in your browser on a phone, tablet or computer. No download and no account needed.</p>
+  </section>
+</section>
+
+{{related:slide-merge}}

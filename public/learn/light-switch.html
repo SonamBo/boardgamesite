@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Light Switch (Lights Out) Solution Method | BoardGameSite</title>
+<meta name="description" content="Learn how to play Light Switch and the chase-the-lights method that solves any board: why order doesn’t matter, and how to finish the last row.">
+<link rel="canonical" href="https://boardgamesite.com/learn/light-switch">
+<meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Light Switch (Lights Out) Solution Method | BoardGameSite">
+<meta property="og:description" content="Learn how to play Light Switch and the chase-the-lights method that solves any board: why order doesn’t matter, and how to finish the last row.">
+<meta property="og:url" content="https://boardgamesite.com/learn/light-switch">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/light-switch.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How to play Light Switch: the chase-the-lights method on BoardGameSite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Light Switch (Lights Out) Solution Method | BoardGameSite">
+<meta name="twitter:description" content="Learn how to play Light Switch and the chase-the-lights method that solves any board: why order doesn’t matter, and how to finish the last row.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/light-switch.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="module" src="/assets/js/site.js"></script>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://boardgamesite.com/learn/light-switch#article",
+   "headline": "How to play Light Switch: the chase-the-lights method",
+   "description": "Learn how to play Light Switch and the chase-the-lights method that solves any board: why order doesn’t matter, and how to finish the last row.",
+   "image": "https://boardgamesite.com/assets/img/og/light-switch.jpg",
+   "datePublished": "2026-10-28",
+   "dateModified": "2026-10-28",
+   "inLanguage": "en",
+   "author": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "mainEntityOfPage": "https://boardgamesite.com/learn/light-switch"
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Learn",
+     "item": "https://boardgamesite.com/learn"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How to play Light Switch",
+     "item": "https://boardgamesite.com/learn/light-switch"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<header class="sidebar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <span>BoardGameSite</span>
+  </a>
+  <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Play
+    </a>
+    <a href="/play/four-in-a-row?mode=daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Daily challenge
+    </a>
+    <a href="/learn" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
+    </a>
+    <a href="/#leaderboards">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
+      Leaderboards
+    </a>
+    <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg>
+      Watch
+    </a>
+    <a href="/about">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      About
+    </a>
+    <div class="nav-divider"></div>
+    <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
+    <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
+  </nav>
+</header>
+
+<main class="content" id="main">
+<div class="container">
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Light Switch</span></nav>
+  <h1>How to play Light Switch: the chase-the-lights method</h1>
+  <p class="lede">Light Switch looks like it needs trial and error, but there’s a reliable method that solves every board. It’s called chasing the lights.</p>
+
+  <div class="callout card">
+    <p>Try the method on a 5×5 board.</p>
+    <a class="btn btn-gold" href="/play/light-switch">Play Light Switch free</a>
+  </div>
+
+<h2>The rules</h2>
+  <p>Some lights are on. Tapping a light switches it and the lights directly above, below, left and right of it. Diagonals don’t change. Turn every light off to win.</p>
+
+  <h2>Two facts that make it easier</h2>
+  <ul>
+    <li><strong>Order doesn’t matter.</strong> Tapping A then B gives exactly the same board as tapping B then A.</li>
+    <li><strong>Two taps cancel out.</strong> Tapping the same light twice changes nothing, so a solution never needs any light tapped more than once.</li>
+  </ul>
+  <p>Together, these mean a solution is just a set of lights to tap once each.</p>
+
+  <h2>The method: chase the lights down</h2>
+  <ol>
+    <li>Look at the top row. For every light that’s on, tap the light <strong>directly below it</strong>. That turns the top one off without touching the rest of the top row.</li>
+    <li>Now do the same for the second row: for each light still on, tap the one below it.</li>
+    <li>Keep going down. When you reach the bottom, every row is dark except possibly the last one.</li>
+  </ol>
+
+  <h2>Fixing the last row</h2>
+  <p>If the bottom row is dark, you’re done. If not, the pattern left in the bottom row tells you which lights to tap in the <strong>top</strong> row. Tap those, then chase the lights down again. This time the board clears.</p>
+  <p>On a 5×5 board, these are the patterns to remember. Read the bottom row from left to right, where X is a light that’s on:</p>
+  <ul>
+    <li>Bottom row <strong>X X X . .</strong>: tap the 2nd light in the top row.</li>
+    <li><strong>X X . X X</strong>: tap the 3rd.</li>
+    <li><strong>X . X X .</strong>: tap the 5th.</li>
+    <li><strong>. X X . X</strong>: tap the 1st.</li>
+    <li><strong>. X . X .</strong>: tap the 1st and 4th.</li>
+    <li><strong>. . X X X</strong>: tap the 4th.</li>
+    <li><strong>X . . . X</strong>: tap the 1st and 2nd.</li>
+  </ul>
+  <p>Then chase the lights down once more and the board goes dark. These seven patterns are the only ones that can be left on a 5×5 board.</p>
+  <p>Other board sizes have their own tables. If you’d rather not learn them, the <strong>Hint</strong> button always shows a light that’s part of a solution.</p>
+
+  <h2>Going for fewest moves</h2>
+  <p>Chasing always works, but it isn’t always shortest. The <strong>Fewest</strong> number on the board is the shortest solution. To match it, look for groups of lights that a single tap would switch off together.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/light-switch">Play Light Switch now</a>
+  </div>
+</article>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/sudoku">
+      <b>Sudoku</b>
+      <span>Fill the grid with 1 to 9. Three levels and a daily puzzle.</span>
+    </a>
+    <a class="related-card card" href="/play/mines">
+      <b>Mines</b>
+      <span>Clear the field using the number clues. Don’t touch a mine.</span>
+    </a>
+    <a class="related-card card" href="/play/slide-merge">
+      <b>Slide & Merge</b>
+      <span>Slide tiles, merge matching numbers and reach 2048.</span>
+    </a>
+    <a class="related-card card" href="/play/sliding-tiles">
+      <b>Sliding Tiles</b>
+      <span>Slide the numbered tiles back into order. 3×3 to 5×5.</span>
+    </a>
+    <a class="related-card card" href="/play/picture-logic">
+      <b>Picture Logic</b>
+      <span>Use the number clues to fill in a hidden picture.</span>
+    </a>
+    <a class="related-card card" href="/play/tile-match">
+      <b>Tile Match</b>
+      <span>Clear a stack of 72 tiles by matching free pairs.</span>
+    </a>
+  </div>
+  <a class="link-green" href="/games/puzzles">All puzzles games</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <div><b>BoardGameSite</b><span>© <span data-year>2026</span> Pixel Art Games</span></div>
+  </div>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="/about">About</a>
+    <a href="/learn">How to play</a>
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+</footer>
+</div>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!-- title: Light Switch (Lights Out) Solution Method | BoardGameSite -->
+<!-- description: Learn how to play Light Switch and the chase-the-lights method that solves any board: why order doesn’t matter, and how to finish the last row. -->
+<!-- path: /learn/light-switch -->
+<!-- out: learn/light-switch.html -->
+<!-- nav: learn -->
+<!-- kind: guide -->
+<!-- game: light-switch -->
+<!-- published: 2026-10-28 -->
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Light Switch</span></nav>
+  <h1>How to play Light Switch: the chase-the-lights method</h1>
+  <p class="lede">Light Switch looks like it needs trial and error, but there’s a reliable method that solves every board. It’s called chasing the lights.</p>
+
+  <div class="callout card">
+    <p>Try the method on a 5×5 board.</p>
+    <a class="btn btn-gold" href="/play/light-switch">Play Light Switch free</a>
+  </div>
+
+<h2>The rules</h2>
+  <p>Some lights are on. Tapping a light switches it and the lights directly above, below, left and right of it. Diagonals don’t change. Turn every light off to win.</p>
+
+  <h2>Two facts that make it easier</h2>
+  <ul>
+    <li><strong>Order doesn’t matter.</strong> Tapping A then B gives exactly the same board as tapping B then A.</li>
+    <li><strong>Two taps cancel out.</strong> Tapping the same light twice changes nothing, so a solution never needs any light tapped more than once.</li>
+  </ul>
+  <p>Together, these mean a solution is just a set of lights to tap once each.</p>
+
+  <h2>The method: chase the lights down</h2>
+  <ol>
+    <li>Look at the top row. For every light that’s on, tap the light <strong>directly below it</strong>. That turns the top one off without touching the rest of the top row.</li>
+    <li>Now do the same for the second row: for each light still on, tap the one below it.</li>
+    <li>Keep going down. When you reach the bottom, every row is dark except possibly the last one.</li>
+  </ol>
+
+  <h2>Fixing the last row</h2>
+  <p>If the bottom row is dark, you’re done. If not, the pattern left in the bottom row tells you which lights to tap in the <strong>top</strong> row. Tap those, then chase the lights down again. This time the board clears.</p>
+  <p>On a 5×5 board, these are the patterns to remember. Read the bottom row from left to right, where X is a light that’s on:</p>
+  <ul>
+    <li>Bottom row <strong>X X X . .</strong>: tap the 2nd light in the top row.</li>
+    <li><strong>X X . X X</strong>: tap the 3rd.</li>
+    <li><strong>X . X X .</strong>: tap the 5th.</li>
+    <li><strong>. X X . X</strong>: tap the 1st.</li>
+    <li><strong>. X . X .</strong>: tap the 1st and 4th.</li>
+    <li><strong>. . X X X</strong>: tap the 4th.</li>
+    <li><strong>X . . . X</strong>: tap the 1st and 2nd.</li>
+  </ul>
+  <p>Then chase the lights down once more and the board goes dark. These seven patterns are the only ones that can be left on a 5×5 board.</p>
+  <p>Other board sizes have their own tables. If you’d rather not learn them, the <strong>Hint</strong> button always shows a light that’s part of a solution.</p>
+
+  <h2>Going for fewest moves</h2>
+  <p>Chasing always works, but it isn’t always shortest. The <strong>Fewest</strong> number on the board is the shortest solution. To match it, look for groups of lights that a single tap would switch off together.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/light-switch">Play Light Switch now</a>
+  </div>
+</article>
+
+{{related:light-switch}}
