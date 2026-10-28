@@ -234,6 +234,30 @@ GAMES = {
         "record": "solo",
         "key": "bgs-box-stats",
     },
+    "word-guess": {
+        "name": "Five-Letter Guess",
+        "full": "Five-Letter Guess",
+        "cat": "word",
+        "genre": ["Word game", "Puzzle"],
+        "blurb": "Find the hidden word in six guesses. A new one every day.",
+        "card": "Guess the hidden five-letter word in six tries. Coloured tiles show which letters are right. A new word every day.",
+        "chips": ["Word", "Single player", "3 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-wg-stats",
+    },
+    "word-search": {
+        "name": "Word Search",
+        "full": "Word Search",
+        "cat": "word",
+        "genre": ["Word game", "Puzzle"],
+        "blurb": "Find the hidden words in a themed grid of letters.",
+        "card": "Themed puzzles with words hidden across, down, diagonally and backwards. Three grid sizes.",
+        "chips": ["Word", "Single player", "5 min"],
+        "friend": False,
+        "record": "solo",
+        "key": "bgs-ws-stats",
+    },
 }
 
 
