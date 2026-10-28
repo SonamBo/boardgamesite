@@ -1344,3 +1344,29 @@ body.maxed .dice-wrap { max-width: none; }
 .hd-table h2 { margin-bottom: 4px; }
 .hd-table p { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; border-bottom: 1px solid var(--border); padding: 3px 0; }
 .hd-table b { color: var(--accent-text); white-space: nowrap; }
+
+/* ---------- Liar's Dice ---------- */
+.ld-wrap { max-width: 620px; gap: 16px; }
+.ld-seats { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+.ld-seat { flex: 1 1 140px; max-width: 190px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px; border-radius: 14px; background: rgba(0,0,0,.22); border: 2px solid transparent; }
+.ld-seat.now { border-color: var(--ck-light); }
+.ld-seat.out { opacity: .4; }
+.ld-seat b { color: var(--text); font-size: 15px; }
+.ld-seat .cup { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; min-height: 26px; color: var(--band-text-2); font-size: 13px; }
+.ld-seat .cup i { width: 22px; height: 22px; border-radius: 5px; background: #2A1D20; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); font: 700 13px/22px var(--body); font-style: normal; text-align: center; color: var(--ck-light); }
+.ld-seat .cup i:empty { background: linear-gradient(#4A3220, #2E1F14); }
+.ld-seat .cup i.hit { background: var(--you); color: var(--on-you); }
+.ld-mid { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ld-bid { display: flex; align-items: baseline; gap: 8px; min-height: 52px; font: 400 44px/1 var(--display); color: var(--you-hi); }
+.ld-bid small { font: 500 14px var(--body); color: var(--band-text-2); }
+.pip { display: inline-flex; width: 1.1em; height: 1.1em; align-items: center; justify-content: center; border-radius: .2em; background: var(--ck-light); color: var(--brand); font: 700 .7em/1 var(--body); vertical-align: middle; }
+.ld-mine .die { width: clamp(44px, 12vw, 62px); }
+.ld-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.ld-qty { display: flex; align-items: center; gap: 8px; }
+.ld-qty b { min-width: 2ch; text-align: center; font: 400 34px/1 var(--display); color: var(--text); }
+.ld-x { color: var(--band-text-2); font-size: 22px; }
+.ld-faces { display: flex; gap: 6px; }
+.ld-faces button { width: 44px; height: 44px; border-radius: 10px; border: 2px solid transparent; background: rgba(0,0,0,.25); cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 34px; }
+.ld-faces button[aria-pressed="true"] { border-color: var(--you); background: color-mix(in srgb, var(--you) 25%, transparent); }
+.ld-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--text-2); }
+.ld-controls.shake { animation: shake .3s; }

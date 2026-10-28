@@ -426,6 +426,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-hotdice-score",
     },
+    "liars-dice": {
+        "name": "Liar’s Dice",
+        "full": "Liar’s Dice",
+        "cat": "dice",
+        "genre": ["Dice game", "Bluffing game"],
+        "blurb": "Bid on hidden dice and call out the liars.",
+        "card": "Roll in secret, bid on the whole table and call “Liar!” when you don’t believe a bid. Bluff past the computers.",
+        "chips": ["Dice", "vs Computer", "10 min"],
+        "friend": False,
+        "record": "wld",
+        "key": "bgs-liars-score",
+    },
 }
 
 
