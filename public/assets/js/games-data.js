@@ -97,5 +97,75 @@ export const GAMES = [
   "cat": "puzzles",
   "record": "solo",
   "key": "bgs-box-stats"
+ },
+ {
+  "slug": "word-guess",
+  "name": "Five-Letter Guess",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-wg-stats"
+ },
+ {
+  "slug": "letter-hive",
+  "name": "Letter Hive",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-hive-stats"
+ },
+ {
+  "slug": "word-grid",
+  "name": "Word Grid",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-grid-stats"
+ },
+ {
+  "slug": "word-search",
+  "name": "Word Search",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-ws-stats"
+ },
+ {
+  "slug": "letter-tiles",
+  "name": "Letter Tiles",
+  "cat": "word",
+  "record": "wld",
+  "key": "bgs-lettertiles-score"
+ },
+ {
+  "slug": "hangman",
+  "name": "Hangman",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-hang-stats"
+ },
+ {
+  "slug": "cryptogram",
+  "name": "Cryptogram",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-crypto-stats"
+ },
+ {
+  "slug": "word-ladder",
+  "name": "Word Ladder",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-ladder-stats"
+ },
+ {
+  "slug": "unscramble",
+  "name": "Unscramble",
+  "cat": "word",
+  "record": "solo",
+  "key": "bgs-unscr-stats"
+ },
+ {
+  "slug": "word-chain",
+  "name": "Word Chain",
+  "cat": "word",
+  "record": "wld",
+  "key": "bgs-chain-score"
  }
 ];

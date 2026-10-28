@@ -7,10 +7,15 @@
   <url><loc>https://boardgamesite.com/games/multiplayer</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/puzzles</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/strategy</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/games/word</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-10-28</lastmod></url>
   <url><loc>https://boardgamesite.com/learn/box-pusher</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/box-pusher.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/checkers</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/cryptogram</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/cryptogram.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/four-in-a-row</loc><lastmod>2026-10-26</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/hangman</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hangman.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/letter-hive</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/letter-hive.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/letter-tiles</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/letter-tiles.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/light-switch</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/light-switch.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/mines</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/peg-solitaire</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/peg-solitaire.jpg</image:loc></image:image></url>
@@ -22,9 +27,19 @@
   <url><loc>https://boardgamesite.com/learn/sudoku</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/tile-match</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tile-match.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/tower-of-hanoi</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tower-of-hanoi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/unscramble</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/unscramble.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/word-chain</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-chain.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/word-grid</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-grid.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/word-guess</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-guess.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/word-ladder</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-ladder.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/learn/word-search</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-search.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/box-pusher</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/box-pusher.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/checkers</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/cryptogram</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/cryptogram.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/four-in-a-row</loc><lastmod>2026-10-27</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/hangman</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hangman.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/letter-hive</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/letter-hive.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/letter-tiles</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/letter-tiles.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/light-switch</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/light-switch.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/mines</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/peg-solitaire</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/peg-solitaire.jpg</image:loc></image:image></url>
@@ -36,6 +51,12 @@
   <url><loc>https://boardgamesite.com/play/sudoku</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/tile-match</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tile-match.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/tower-of-hanoi</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tower-of-hanoi.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/unscramble</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/unscramble.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/word-chain</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-chain.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/word-grid</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-grid.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/word-guess</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-guess.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/word-ladder</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-ladder.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/word-search</loc><lastmod>2026-10-28</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-search.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/privacy</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/terms</loc><lastmod>2026-10-27</lastmod></url>
 </urlset>

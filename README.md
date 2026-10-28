@@ -13,6 +13,7 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `src/pages/learn/*.html` | The rules and strategy guides (`/learn/checkers` and so on) |
 | `build.py` | Combines layout + pages into `public/` (`python3 build.py`), writes the sitemap and structured data, and checks every page for SEO basics |
 | `tools/make_share_images.py` | Draws each game's link-preview picture into `public/assets/img/og/` |
+| `tools/make_word_list.py` | Builds the word lists for the word games (`words.js`, `words-5.js`) from the public-domain ENABLE list, ranked by everyday use |
 | `tools/make_box_levels.py` | Makes Box Pusher levels (boxes pulled back from their targets, then checked with a solver); the levels live in `public/assets/js/box-levels.js` |
 | `tools/indexnow.py` | Run after each deploy: tells Bing and other IndexNow search engines which pages changed |
 | `public/assets/fonts/` | The site's two fonts, hosted here instead of Google Fonts (Latin characters only) |

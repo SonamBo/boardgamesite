@@ -203,6 +203,86 @@ def tower_of_hanoi():
     return f'<div class="hn">{peg([4, 3])}{peg([1])}{peg([2])}</div>'
 
 
+def _tiles(word, cls="", hi=()):
+    return "".join(f'<b class="{cls}{" h" if i in hi else ""}">{ch}</b>' for i, ch in enumerate(word))
+
+
+def word_guess():
+    rows = [("crane", "00022"), ("stone", "20222"), ("shone", "22222")]
+    out = []
+    for w, m in rows:
+        out.append('<div class="wgr">' + "".join(f'<b class="m{k}">{ch}</b>' for ch, k in zip(w, m)) + "</div>")
+    out.append('<div class="wgr">' + "<b></b>" * 5 + "</div>")
+    return f'<div class="wgb">{"".join(out)}</div>'
+
+
+def letter_hive():
+    letters = ["t", "r", "i", "b", "y", "l", "e"]
+    pos = [(0, 0), (0, -1.04), (0.9, -0.52), (0.9, 0.52), (0, 1.04), (-0.9, 0.52), (-0.9, -0.52)]
+    hexes = "".join(f'<b class="{"c" if k == 0 else ""}" style="transform:translate({x * 120}px,{y * 120}px)">{ch}</b>' for k, (ch, (x, y)) in enumerate(zip(letters, pos)))
+    return f'<div class="hive">{hexes}</div>'
+
+
+def word_grid():
+    g = "stal" "redo" "ning" "quep"
+    cells = "".join(f'<b class="{"h" if i in (4, 5, 6, 7) else ""}">{("qu" if ch == "q" else ch)}</b>' for i, ch in enumerate(g))
+    return f'<div class="wgd">{cells}</div>'
+
+
+def word_search():
+    rows = ["zebratk", "oaplion", "mkoalae", "otterxg", "hpandaw", "sharkpi"]
+    cells = "".join(f"<b>{ch}</b>" for r in rows for ch in r)
+    return f'<div class="wsa"><div class="wsg">{cells}</div><i style="left:16px;top:16px;width:252px"></i><i style="left:172px;top:68px;width:200px"></i><i style="left:16px;top:172px;width:252px;background:rgba(95,163,154,.55)"></i></div>'
+
+
+def letter_tiles():
+    board = [
+        "......",
+        ".play.",
+        "..u...",
+        ".quiz.",
+        "..c...",
+        "..k...",
+    ]
+    vals = {"p": 3, "l": 1, "a": 1, "y": 4, "u": 2, "q": 10, "i": 1, "z": 10, "c": 3, "k": 5}
+    cells = []
+    for r, row in enumerate(board):
+        for c, ch in enumerate(row):
+            if ch == ".":
+                bon = {(0, 0): "tw", (0, 5): "dl", (2, 4): "dw", (5, 0): "dl", (5, 5): "tw", (4, 4): "tl"}.get((r, c), "")
+                cells.append(f'<b class="e {bon}"></b>')
+            else:
+                cells.append(f'<b class="t">{ch}<small>{vals[ch]}</small></b>')
+    return f'<div class="ltb">{"".join(cells)}</div>'
+
+
+def hangman():
+    return ('<div class="hgm"><svg viewBox="0 0 200 220" width="300" height="330"><path d="M20 210h120M50 210V20h90v24" fill="none" stroke="#A57B4F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
+            '<g fill="none" stroke="#EFE6D8" stroke-width="6" stroke-linecap="round"><circle cx="140" cy="62" r="18"/><path d="M140 80v58M140 96l-26 22M140 96l26 22"/></g></svg>'
+            '<div class="slots">' + "".join(f"<b>{ch}</b>" for ch in "ga_d_n") + "</div></div>")
+
+
+def cryptogram():
+    pairs = [("t", "x"), ("h", "q"), ("e", "m"), (" ", " "), ("p", "b"), ("e", "m"), ("n", "z")]
+    cells = "".join('<i class="sp"></i>' if p == " " else f'<b><span>{p if k < 3 else ""}</span><small>{c}</small></b>' for k, (p, c) in enumerate(pairs))
+    return f'<div class="cgm">{cells}</div>'
+
+
+def word_ladder():
+    rows = [("cold", -1), ("cord", 2), ("card", 1), ("ward", 0), ("warm", 3)]
+    out = "".join('<div class="lr">' + "".join(f'<b class="{"h" if i == k else ""}">{ch}</b>' for i, ch in enumerate(w)) + "</div>" for w, k in rows)
+    return f'<div class="lad">{out}</div>'
+
+
+def unscramble():
+    return ('<div class="uns"><div class="row">' + _tiles("rbiad") + '</div><div class="arrow">↓</div><div class="row ans">' + _tiles("braid") + "</div></div>")
+
+
+def word_chain():
+    words = [("apple", "p1"), ("eagle", "p2"), ("elephant", "p1"), ("tiger", "p2")]
+    return '<div class="chn">' + "".join(f'<b class="{c}">{w[:-1]}<u>{w[-1]}</u></b>' for w, c in words) + "</div>"
+
+
 # Each game's tagline (on the share image) and art.
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
@@ -219,6 +299,16 @@ ART = {
     "light-switch": ("Lights out.", light_switch),
     "box-pusher": ("Push, never pull.", box_pusher),
     "tower-of-hanoi": ("Move the tower.", tower_of_hanoi),
+    "word-guess": ("Six guesses.", word_guess),
+    "letter-hive": ("Seven letters.", letter_hive),
+    "word-grid": ("Link the letters.", word_grid),
+    "word-search": ("Find them all.", word_search),
+    "letter-tiles": ("Build the board.", letter_tiles),
+    "hangman": ("Guess the word.", hangman),
+    "cryptogram": ("Crack the code.", cryptogram),
+    "word-ladder": ("One letter at a time.", word_ladder),
+    "unscramble": ("Sort the letters.", unscramble),
+    "word-chain": ("Keep it going.", word_chain),
 }
 
 CSS = f"""
@@ -318,6 +408,51 @@ h1.long {{ font-size: 84px; }}
 .hn .stk {{ position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column-reverse; align-items: center; gap: 3px; padding-bottom: 14px; }}
 .hn .stk i {{ display: block; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #E6C88A, {GOLD} 60%, #97793A); }}
 .hn .stk i.m {{ background: linear-gradient(180deg, #B0405F, {MERLOT} 60%, #5E1530); }}
+
+.wgb {{ display: flex; flex-direction: column; gap: 10px; margin-left: 40px; transform: rotate(-3deg); }}
+.wgr {{ display: flex; gap: 10px; }}
+.wgr b {{ width: 76px; height: 76px; border-radius: 10px; border: 3px solid #45383C; display: grid; place-items: center; font: 700 40px 'DM Sans'; text-transform: uppercase; color: #F5EFE7; }}
+.wgr b.m0 {{ background: #292124; border-color: #292124; color: #C6BBB3; }} .wgr b.m1 {{ background: {MERLOT}; border-color: {MERLOT}; }} .wgr b.m2 {{ background: {GOLD}; border-color: {GOLD}; color: #2A1D0A; }}
+.hive {{ position: relative; width: 420px; height: 400px; margin-left: 40px; }}
+.hive b {{ position: absolute; left: calc(50% - 69px); top: calc(50% - 60px); width: 138px; height: 120px; clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  background: linear-gradient(180deg, #F7F0E4, {IVORY}); color: {MERLOT}; display: grid; place-items: center; font: 700 50px 'DM Sans'; text-transform: uppercase; }}
+.hive b.c {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; }}
+.wgd {{ display: grid; grid-template-columns: repeat(4, 96px); gap: 12px; transform: rotate(-3deg); margin-left: 40px; }}
+.wgd b {{ height: 96px; border-radius: 16px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8, 0 8px 14px rgba(0,0,0,.4);
+  display: grid; place-items: center; font: 700 48px 'DM Sans'; color: {MERLOT}; text-transform: capitalize; }}
+.wgd b.h {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -6px 0 #97793A, 0 8px 14px rgba(0,0,0,.4); }}
+.wsa {{ position: relative; margin-left: 40px; transform: rotate(-3deg); }}
+.wsg {{ display: grid; grid-template-columns: repeat(7, 52px); grid-auto-rows: 52px; padding: 12px; border-radius: 14px; background: {IVORY}; box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); }}
+.wsg b {{ display: grid; place-items: center; font: 700 30px 'DM Sans'; text-transform: uppercase; color: #2A1D20; }}
+.wsa i {{ position: absolute; height: 44px; border-radius: 22px; background: rgba(207,170,98,.55); }}
+.ltb {{ display: grid; grid-template-columns: repeat(6, 70px); grid-auto-rows: 70px; gap: 4px; padding: 10px; border-radius: 14px; background: #2C0A16; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.ltb b {{ border-radius: 6px; position: relative; }}
+.ltb .e {{ background: #4F1428; }} .ltb .dl {{ background: #4B6C8A; }} .ltb .tl {{ background: #2F4E73; }} .ltb .dw {{ background: #B0405F; }} .ltb .tw {{ background: #C8742F; }}
+.ltb .t {{ background: linear-gradient(180deg, #FBF3E2, #EBDDC2); box-shadow: inset 0 -4px 0 #CDBFA8; display: grid; place-items: center; font: 700 38px 'DM Sans'; text-transform: uppercase; color: #2A1D20; }}
+.ltb .t small {{ position: absolute; right: 6px; bottom: 4px; font-size: 14px; }}
+.hgm {{ display: flex; flex-direction: column; align-items: center; gap: 10px; margin-left: 40px; }}
+.hgm .slots {{ display: flex; gap: 10px; }}
+.hgm .slots b {{ width: 52px; height: 60px; border-bottom: 5px solid {GOLD}; display: grid; place-items: center; font: 700 40px 'DM Sans'; text-transform: uppercase; color: #F5EFE7; }}
+.cgm {{ display: flex; gap: 8px; padding: 34px 30px; border-radius: 16px; background: {IVORY}; box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.cgm b {{ width: 56px; display: flex; flex-direction: column; align-items: center; gap: 6px; }}
+.cgm b span {{ width: 100%; height: 66px; border-bottom: 4px solid #8E7E6C; display: grid; place-items: center; font: 700 44px 'DM Sans'; text-transform: uppercase; color: {MERLOT}; }}
+.cgm b small {{ font: 700 22px 'DM Sans'; text-transform: uppercase; color: #6E6158; }}
+.cgm i.sp {{ width: 26px; }}
+.lad {{ display: flex; flex-direction: column; gap: 10px; align-items: center; margin-left: 40px; }}
+.lad .lr {{ display: flex; gap: 10px; }}
+.lad b {{ width: 66px; height: 66px; border-radius: 10px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -5px 0 #CDBFA8; display: grid; place-items: center; font: 700 36px 'DM Sans'; text-transform: uppercase; color: #3D0F1F; }}
+.lad b.h {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -5px 0 #97793A; }}
+.uns {{ display: flex; flex-direction: column; align-items: center; gap: 18px; margin-left: 40px; }}
+.uns .row {{ display: flex; gap: 12px; }}
+.uns .row b {{ width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8, 0 8px 14px rgba(0,0,0,.4); display: grid; place-items: center; font: 700 44px 'DM Sans'; text-transform: uppercase; color: {MERLOT}; }}
+.uns .row:first-child b:nth-child(odd) {{ transform: rotate(-7deg) translateY(6px); }} .uns .row:first-child b:nth-child(even) {{ transform: rotate(6deg); }}
+.uns .ans b {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -6px 0 #97793A, 0 8px 14px rgba(0,0,0,.4); }}
+.uns .arrow {{ font-size: 46px; color: {GOLD}; }}
+.chn {{ display: flex; flex-direction: column; gap: 14px; width: 440px; margin-left: 40px; }}
+.chn b {{ padding: 14px 24px; border-radius: 22px; font: 700 36px 'DM Sans'; text-transform: uppercase; letter-spacing: .04em; }}
+.chn b.p1 {{ align-self: flex-start; background: {GOLD}; color: #2A1D0A; border-bottom-left-radius: 6px; }}
+.chn b.p2 {{ align-self: flex-end; background: {IVORY}; color: #3D0F1F; border-bottom-right-radius: 6px; }}
+.chn u {{ text-underline-offset: 6px; }}
 """
 
 
