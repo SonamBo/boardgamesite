@@ -390,6 +390,30 @@ GAMES = {
         "record": "solo",
         "key": "bgs-box9-stats",
     },
+    "dice-poker": {
+        "name": "Dice Poker",
+        "full": "Dice Poker",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Make the best poker hand with five dice. First to three.",
+        "card": "Roll five dice, keep the best and roll again to make a poker hand. Beat the computer or a friend to three rounds.",
+        "chips": ["Dice", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-poker-score",
+    },
+    "ship-captain-crew": {
+        "name": "Ship, Captain and Crew",
+        "full": "Ship, Captain and Crew",
+        "cat": "dice",
+        "genre": ["Dice game"],
+        "blurb": "Roll a 6, 5 and 4 in order, then load the most cargo.",
+        "card": "Find your ship (6), captain (5) and crew (4) in three rolls, then load the biggest cargo you can.",
+        "chips": ["Dice", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-scc-score",
+    },
 }
 
 

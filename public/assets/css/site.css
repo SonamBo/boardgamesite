@@ -1323,3 +1323,17 @@ body.maxed .dice-wrap { max-width: none; }
 .sb-tile:disabled { cursor: default; opacity: 1; }
 .sb-tile.shake span { animation: shake .3s; }
 @media (prefers-reduced-motion: reduce) { .sb-tile span { transition: none; } }
+
+/* ---------- Ship, Captain and Crew / Dice Poker ---------- */
+.scc-slots { display: flex; gap: 10px; }
+.scc-slots span { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 14px; border-radius: 12px; border: 2px dashed rgba(255,255,255,.25); color: var(--band-text-2); font-size: 13px; font-weight: 600; min-width: 74px; }
+.scc-slots b { font: 400 28px/1 var(--display); color: var(--text); }
+.scc-slots span.got { border-style: solid; border-color: var(--you); background: color-mix(in srgb, var(--you) 18%, transparent); color: var(--you-hi); }
+.scc-dice .die { position: relative; }
+.scc-dice .die[data-role]:not([data-role=""])::after { content: attr(data-role); position: absolute; left: 50%; bottom: -20px; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: var(--you-hi); white-space: nowrap; }
+.scc-dice { padding-bottom: 18px; }
+.dp-wrap { max-width: 560px; gap: 18px; }
+.dp-row { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.dp-label { display: flex; gap: 10px; align-items: baseline; }
+.dp-label b { color: var(--text); }
+.dp-label span { color: var(--you-hi); font-weight: 700; }
