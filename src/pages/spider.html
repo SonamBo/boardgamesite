@@ -1,0 +1,106 @@
+<!-- title: Spider Solitaire – Play Free, 1, 2 or 4 Suits | BoardGameSite -->
+<!-- description: Play Spider Solitaire free in your browser with 1, 2 or 4 suits. Build King-to-Ace runs in one suit to clear them, with unlimited undo and saved games. -->
+<!-- path: /play/spider -->
+<!-- out: play/spider.html -->
+<!-- nav: play -->
+<!-- script: /assets/js/spider.js -->
+<!-- kind: game -->
+<!-- game: spider -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 1.25">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Spider Solitaire</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Build King to Ace in one suit</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="card-bar">
+        <button id="undo" type="button" class="btn btn-outline" disabled>Undo</button>
+        <p class="sol-stats"><span>Runs <b id="runs">0 / 8</b></span><span>Moves <b id="moves">0</b></span><span>Time <b id="time">0:00</b></span></p>
+      </div>
+      <div class="card-table"><div id="area" class="card-area" role="application" aria-label="Spider Solitaire table"></div></div>
+      <p class="board-hint">Tap a card to move its run to the best place, or tap it and then where it should go. Tap the deck to deal a new row. Your record: <span id="record">0 of 0 games won</span></p>
+    </section>
+
+    <aside class="panel">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Suits</p>
+        <div class="seg" role="group" aria-label="Suits (starts a new game)">
+          <button type="button" data-level="easy">1 suit</button>
+          <button type="button" data-level="medium">2 suits</button>
+          <button type="button" data-level="hard">4 suits</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Build down in the columns, any suit, but only runs of one suit move together. Complete a run from King to Ace in one suit and it’s cleared. Clear all eight runs to win.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Spider Solitaire</h2>
+  <p>Spider is a two-deck solitaire game and one of the most popular in the world. The goal is to build eight complete runs, King down to Ace, each in a single suit.</p>
+  <ol>
+    <li><strong>The deal.</strong> 54 cards are dealt into ten columns, with only the top card of each face up. The other 50 cards wait in the deck.</li>
+    <li><strong>Build down.</strong> Put a card on one that’s one rank higher, in any suit: a 7 on an 8.</li>
+    <li><strong>Move runs of one suit.</strong> A run of cards in order and all the same suit can be moved together. Mixed-suit runs can’t.</li>
+    <li><strong>Turn over cards</strong> by moving the cards on top of them away.</li>
+    <li><strong>Fill empty columns</strong> with any card or run.</li>
+    <li><strong>Deal a new row</strong> from the deck when you’re stuck. It puts one card on every column, so every column must have at least one card first.</li>
+    <li><strong>Complete a run</strong> from King to Ace in one suit and it’s cleared away. Clear all eight to win.</li>
+  </ol>
+  <p>Choose <strong>1 suit</strong> to learn (all spades), <strong>2 suits</strong> for a real challenge, or <strong>4 suits</strong> for experts.</p>
+
+  <h2>Quick tips for winning</h2>
+  <ul>
+    <li><strong>Build in suit whenever you can.</strong> A same-suit run can move as one; a mixed run is stuck.</li>
+    <li><strong>Empty a column.</strong> It’s the most powerful thing you can have for reorganising runs.</li>
+    <li><strong>Uncover face-down cards first.</strong> Every new card turned over gives you more options.</li>
+    <li><strong>Make all your moves before dealing.</strong> A new row covers everything, so do what you can first.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn how to build in suit, empty columns and win at two suits.</p>
+    <a class="btn btn-outline" href="/learn/spider">Read the Spider Solitaire guide</a>
+  </div>
+
+  <h2>Spider Solitaire FAQ</h2>
+  <section class="faq">
+    <h3>Is Spider Solitaire free?</h3>
+    <p>Yes. Play as many games as you like with 1, 2 or 4 suits, free in your browser. No download and no account needed.</p>
+    <h3>How many suits should I play?</h3>
+    <p>Start with 1 suit to learn the game. 2 suits is where most regular players settle, and 4 suits is very hard.</p>
+    <h3>Why can’t I deal more cards?</h3>
+    <p>A new row puts a card on every column, so all ten columns need at least one card first. Fill any empty column, then deal.</p>
+    <h3>Can I move a run of mixed suits?</h3>
+    <p>No. Only runs of the same suit in order can move together. You can still place any card on one rank higher.</p>
+    <h3>Is every game winnable?</h3>
+    <p>Most 1-suit games can be won. With 2 and 4 suits, some deals are much harder or impossible, which is part of the challenge.</p>
+  </section>
+</section>
+
+{{related:spider}}
