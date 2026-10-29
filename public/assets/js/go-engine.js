@@ -72,6 +72,8 @@ export function score(b, dead = null) {
   return { diff: black - white - KOMI, black, white: white + KOMI, owner };
 }
 
+// Random numbers for playouts; deadStones can swap in a seeded generator so two devices agree.
+let R = Math.random;
 // One random game to the end; returns the final board.
 function playout(b0, col, prev0) {
   let b = b0, c = col, passes = 0, prev = prev0;
@@ -81,7 +83,7 @@ function playout(b0, col, prev0) {
     let moved = false;
     // try a few random points
     for (let t = empties.length; t > 0; t--) {
-      const k = Math.floor(Math.random() * t);
+      const k = Math.floor(R() * t);
       const i = empties[k];
       empties[k] = empties[t - 1];
       const r = play(b, i, c, prev);
@@ -94,7 +96,11 @@ function playout(b0, col, prev0) {
 }
 
 // Guess which stones are dead at the end of the game: stones that random playouts usually lose.
-export function deadStones(b, toMove = 1, samples = 120) {
+export function deadStones(b, toMove = 1, samples = 120, rand = null) {
+  if (rand) R = rand;
+  try { return deadInner(b, toMove, samples); } finally { R = Math.random; }
+}
+function deadInner(b, toMove, samples) {
   const own = new Float32Array(N * N);
   for (let s = 0; s < samples; s++) {
     const end = playout(b, toMove, null);

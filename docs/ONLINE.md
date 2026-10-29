@@ -28,7 +28,7 @@ Read this file first when resuming. It is the whole plan and the current state; 
 ## Status
 - [x] online.js, rooms rules, firebase.js helpers
 - [x] Chess (live; tested between two tabs with &fake=1)
-- [ ] Five in a Row, Hex, Go
+- [x] Five in a Row, Hex (board size stored in the room as `hex:9`), Go (end-of-game scoring is seeded so both boards agree)
 - [ ] Checkers, Reversi, Four in a Row (older pages: read checkers.js / reversi.js / four-in-a-row.js first)
 - [ ] After each batch: build, PR, merge, check the deploy log (`gh`-style API calls with the token in
       /home/claude/.ghtoken), ask the owner to try one game on two devices.

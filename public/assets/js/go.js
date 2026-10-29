@@ -4,7 +4,8 @@ import { store } from './site.js';
 import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
-import { shake } from './solo.js';
+import { shake, rng, seedFrom } from './solo.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const N = G.N, SAVE = 'bgs-go-game';
@@ -14,7 +15,7 @@ const getOpp = opponentSwitch('go', () => newGame(), { you: 'You', cpu: 'Compute
 const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('go-board');
 
-let B, prev, turn, caps, passes, over, busy, started, last, history, final;
+let B, prev, turn, caps, passes, over, busy, started, last, history, final, onlineOn = roomInLink, ol = null;
 const pts = [];
 for (let i = 0; i < N * N; i++) {
   const b = document.createElement('button');
@@ -43,38 +44,41 @@ function render() {
   $('caps-w').textContent = 'Captures ' + caps[2] + ' · komi 6.5';
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
-  $('pass').disabled = over || busy || (vsCpu() && turn === 2);
+  $('pass').disabled = over || busy || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2);
   $('resign').disabled = over || busy;
   $('undo').disabled = over || busy || !history.length;
 }
 
 function tap(i) {
-  if (over || busy || (vsCpu() && turn === 2)) return;
+  if (over || busy || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2)) return;
   const r = G.play(B, i, turn, prev);
   if (!r) { shake(pts[i], play); setStatus(B[i] ? 'That point is taken' : 'Not allowed there: it would be suicide or repeat the position (ko)', 'neutral'); return; }
   move(i, r);
 }
-function move(i, r) {
+function move(i, r, remote = false) {
   if (!started) { started = true; track('game_start', { game: 'go', opponent: getOpp() }); }
   history.push({ B, prev, turn, caps: caps.slice(), last, passes });
   prev = B; B = r.b; caps[turn] += r.captured; last = i; passes = 0;
   play(r.captured ? 'capture' : 'place');
   turn = 3 - turn;
+  if (onlineOn && !remote) ol.send(String(i), turn - 1, false);
   render(); save();
+  if (onlineOn) { setStatus(r.captured ? name(3 - turn) + ' captured ' + r.captured : ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   if (r.captured) setStatus(name(3 - turn) + ' captured ' + r.captured + (r.captured === 1 ? ' stone' : ' stones'), '');
   else setStatus(turnText(), turn === 2 ? 'cpu' : '');
   if (vsCpu() && turn === 2) cpuTurn();
 }
-function pass() {
+function pass(remote = false) {
   history.push({ B, prev, turn, caps: caps.slice(), last, passes });
   passes++;
   setStatus(name(turn) + (turn === 1 && vsCpu() ? ' pass' : ' passes'), 'neutral');
   play('flip');
   prev = B; last = -1;
   turn = 3 - turn;
+  if (onlineOn && !remote) ol.send('p', turn - 1, passes >= 2);
   if (passes >= 2) return finish();
   render(); save();
-  if (vsCpu() && turn === 2) cpuTurn();
+  if (!onlineOn && vsCpu() && turn === 2) cpuTurn();
 }
 const turnText = () => (vsCpu() ? (turn === 1 ? 'Your turn (Black)' : 'Computer’s turn') : name(turn) + '’s turn');
 
@@ -96,7 +100,8 @@ function finish() {
   setStatus('Counting the score…', 'neutral');
   render();
   setTimeout(() => {
-    const dead = G.deadStones(B, turn);
+    // online, both boards must agree on dead stones, so they use the same random numbers
+    const dead = onlineOn ? G.deadStones(B, turn, 120, rng(seedFrom(B.join('')))) : G.deadStones(B, turn);
     const sc = G.score(B, dead);
     final = { dead, owner: sc.owner };
     render();
@@ -104,7 +109,11 @@ function finish() {
     const margin = Math.abs(sc.diff);
     const sub = 'Black ' + sc.black + ', White ' + sc.white + ' (with komi). Faded stones were counted as captured.';
     store.set(SAVE, null);
-    if (vsCpu()) {
+    if (onlineOn) {
+      const won = (blackWins ? 0 : 1) === ol.mySeat();
+      showResult(won ? 'win' : 'lose', won ? 'You won by ' + margin : 'Your friend won by ' + margin, sub);
+      play(won ? 'win' : 'lose', 0.1);
+    } else if (vsCpu()) {
       score.add(blackWins ? 'win' : 'lose');
       showResult(blackWins ? 'win' : 'lose', blackWins ? 'You won by ' + margin : 'The computer won by ' + margin, sub);
       play(blackWins ? 'win' : 'lose', 0.1);
@@ -114,7 +123,7 @@ function finish() {
   }, 50);
 }
 
-function save() { if (started && !over) store.set(SAVE, { opp: getOpp(), B, prev, turn, caps, last, passes }); }
+function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), B, prev, turn, caps, last, passes }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== N * N) return false;
@@ -130,7 +139,7 @@ function newGame() {
   render();
   setStatus(turnText() + ': place a stone on any point', '');
 }
-$('pass').addEventListener('click', () => { if (!over && !busy && !(vsCpu() && turn === 2)) pass(); });
+$('pass').addEventListener('click', () => { if (!over && !busy && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2))) pass(); });
 $('undo').addEventListener('click', () => {
   if (!history.length || busy || over) return;
   let h = history.pop();
@@ -145,7 +154,19 @@ $('resign').addEventListener('click', () => {
   else showResult('win', (turn === 1 ? 'White' : 'Black') + ' wins', name(turn) + ' resigned.');
   setStatus(name(turn) + (turn === 1 && vsCpu() ? ' resigned' : ' resigns'), 'neutral');
 });
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+['new-game', 'undo', 'resign'].forEach((id) => $(id).classList.add('online-hide'));
+ol = online('go', {
+  reset: () => newGame(),
+  apply: (t) => {
+    if (t === 'p') return pass(true);
+    const i = Number(t), r = G.play(B, i, turn, prev);
+    if (r) move(i, r, true);
+  },
+  seatName: (s) => (s === 0 ? 'Black (first)' : 'White'),
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+});
 $('again').addEventListener('click', newGame);
 window.addEventListener('pagehide', save);
-if (!resume()) newGame();
+if (roomInLink || !resume()) newGame();

@@ -4,6 +4,7 @@ import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './ga
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const SIZE_KEY = 'bgs-hex-size';
@@ -13,7 +14,7 @@ const getOpp = opponentSwitch('hex', () => newGame(), { you: 'You', cpu: 'Comput
 const vsCpu = () => getOpp() === 'cpu';
 const svg = $('hx-board');
 let n = [7, 9, 11].includes(store.get(SIZE_KEY, 9)) ? store.get(SIZE_KEY, 9) : 9;
-let B, turn, over, busy, started, last, winPath;
+let B, turn, over, busy, started, last, winPath, onlineOn = roomInLink, ol = null;
 
 const NB = [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0]];
 const nbs = (i) => { const r = Math.floor(i / n), c = i % n; return NB.map(([dr, dc]) => [r + dr, c + dc]).filter(([a, b]) => a >= 0 && b >= 0 && a < n && b < n).map(([a, b]) => a * n + b); };
@@ -92,19 +93,28 @@ function render() {
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
 }
 
-async function put(i) {
+async function put(i, remote = false) {
   if (!started) { started = true; track('game_start', { game: 'hex', opponent: getOpp(), size: n }); }
   B[i] = turn; last = i;
   play('place');
   const path = connected(B, turn);
+  if (onlineOn && !remote) ol.send(String(i), 2 - turn, !!path);
   if (path) { winPath = path; return finish(turn); }
   turn = 3 - turn;
   render();
+  if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn: join ' + (ol.mySeat() === 0 ? 'top to bottom' : 'left to right') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   setStatus(vsCpu() ? (turn === 1 ? 'Your turn: join top to bottom' : 'Computer’s turn') : (turn === 1 ? 'Gold: join top to bottom' : 'Ivory: join left to right'), turn === 2 ? 'cpu' : '');
   if (vsCpu() && turn === 2) { busy = true; render(); await wait(400); busy = false; put(cpuPick(B, 2)); }
 }
 function finish(w) {
   over = true; render();
+  if (onlineOn) {
+    const won = w - 1 === ol.mySeat();
+    showResult(won ? 'win' : 'lose', won ? 'You connected!' : 'Your friend connected', w === 1 ? 'Top joined to bottom.' : 'Left joined to right.');
+    setStatus(won ? 'You won!' : 'You lost', won ? '' : 'cpu');
+    play(won ? 'win' : 'lose', 0.1);
+    return;
+  }
   if (vsCpu()) {
     const won = w === 1;
     score.add(won ? 'win' : 'lose');
@@ -120,12 +130,23 @@ function newGame() {
   render();
   setStatus(vsCpu() ? 'Your turn: join top to bottom' : 'Gold: join top to bottom', '');
 }
-svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || busy || over || (vsCpu() && turn === 2)) return; const i = Number(h.dataset.i); if (!B[i]) put(i); });
+svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || busy || over || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2)) return; const i = Number(h.dataset.i); if (!B[i]) put(i); });
 svg.addEventListener('keydown', (e) => { const h = e.target.closest('.hx'); if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); h.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
+document.querySelector('[data-hsize]').parentElement.classList.add('online-hide');
+document.querySelector('[data-hsize]').parentElement.previousElementSibling.classList.add('online-hide');
 document.querySelectorAll('[data-hsize]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.hsize) === n));
   b.addEventListener('click', () => { if (busy) return; n = Number(b.dataset.hsize); store.set(SIZE_KEY, n); document.querySelectorAll('[data-hsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.hsize) === n))); newGame(); });
 });
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+$('new-game').classList.add('online-hide');
+ol = online('hex', {
+  reset: () => newGame(),
+  apply: (t) => { const i = Number(t); if (B[i] === 0) put(i, true); },
+  seatName: (s) => (s === 0 ? 'Gold (top to bottom)' : 'Ivory (left to right)'),
+  variant: (v) => { if (v) { const k = Number(v); if ([7, 9, 11].includes(k)) n = k; } return String(n); },
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+});
 $('again').addEventListener('click', newGame);
 newGame();
