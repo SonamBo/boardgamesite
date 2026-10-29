@@ -1528,3 +1528,16 @@ body.maxed .dice-wrap { max-width: none; }
 .gm.win { box-shadow: 0 0 0 3px var(--brand); border-radius: 50%; }
 .gm:disabled { cursor: default; opacity: 1; }
 .gm:not(:disabled):hover { background: radial-gradient(circle, rgba(42,29,32,.18) 35%, transparent 38%); }
+
+/* ---------- Dots and Boxes ---------- */
+.db-wrap { max-width: 560px; }
+.db-board { width: 100%; aspect-ratio: 1; display: block; background: var(--ck-light); border-radius: 14px; box-shadow: 0 0 0 6px var(--brand), 0 18px 40px rgba(0,0,0,.4); }
+.db-board .dot { fill: #2A1D20; }
+.db-board .ln { stroke: rgba(42,29,32,.1); stroke-width: 1; stroke-linecap: round; stroke-dasharray: .6 1.6; }
+.db-board .ln.on { stroke: #2A1D20; stroke-width: 1.4; stroke-dasharray: none; }
+.db-board .ln.last { stroke: var(--brand); }
+.db-board .hit { stroke: transparent; stroke-width: 7; cursor: pointer; stroke-linecap: round; }
+.db-board .hit:hover, .db-board .hit:focus-visible { stroke: rgba(207,170,98,.45); outline: none; }
+.db-board.wait .hit { pointer-events: none; }
+.db-board .bx.p1 { fill: color-mix(in srgb, var(--you) 75%, #fff); } .db-board .bx.p2 { fill: #D9C9B4; }
+.db-board .bxl { font: 700 4px var(--body); text-anchor: middle; fill: rgba(42,29,32,.6); }

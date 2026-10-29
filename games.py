@@ -621,6 +621,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-gomoku-score",
     },
+    "dots-and-boxes": {
+        "name": "Dots and Boxes",
+        "full": "Dots and Boxes",
+        "cat": "strategy",
+        "genre": ["Pencil and paper game", "Strategy"],
+        "blurb": "Join the dots and close boxes to claim them.",
+        "card": "Take turns joining dots. Close the fourth side of a box to claim it and go again. Most boxes wins.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-dots-score",
+    },
 }
 
 
