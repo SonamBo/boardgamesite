@@ -558,6 +558,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-spades-score",
     },
+    "crazy-eights": {
+        "name": "Crazy Eights",
+        "full": "Crazy Eights",
+        "cat": "cards",
+        "genre": ["Card game", "Shedding game"],
+        "blurb": "Match suit or number. Eights are wild. Empty your hand.",
+        "card": "Match the top card by suit or number and play eights to change the suit. First to empty their hand wins.",
+        "chips": ["Cards", "vs Computer", "5 min"],
+        "friend": False,
+        "record": "wld",
+        "key": "bgs-eights-score",
+    },
 }
 
 
