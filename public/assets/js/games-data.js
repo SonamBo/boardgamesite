@@ -8,11 +8,25 @@ export const GAMES = [
   "key": "bgs-sol-stats"
  },
  {
+  "slug": "chess",
+  "name": "Chess",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-chess-score"
+ },
+ {
   "slug": "checkers",
   "name": "Checkers",
   "cat": "strategy",
   "record": "wld",
   "key": "bgs-ck-score"
+ },
+ {
+  "slug": "go",
+  "name": "Go",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-go-score"
  },
  {
   "slug": "reversi",
@@ -27,6 +41,41 @@ export const GAMES = [
   "cat": "strategy",
   "record": "wld",
   "key": "bgs-c4-score"
+ },
+ {
+  "slug": "mancala",
+  "name": "Mancala",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-mancala-score"
+ },
+ {
+  "slug": "five-in-a-row",
+  "name": "Five in a Row",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-gomoku-score"
+ },
+ {
+  "slug": "nine-mens-morris",
+  "name": "Nine Men’s Morris",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-morris-score"
+ },
+ {
+  "slug": "dots-and-boxes",
+  "name": "Dots and Boxes",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-dots-score"
+ },
+ {
+  "slug": "hex",
+  "name": "Hex",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-hex-score"
  },
  {
   "slug": "sudoku",

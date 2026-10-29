@@ -123,7 +123,7 @@ def related_html(skip):
             f'    </a>'
         )
     cat = g0["cat"]
-    more = f'  <a class="link-green" href="/games/{cat}">All {CATS[cat]["name"].lower()} games</a>\n'
+    more = f'  <a class="link-green" href="/games/{cat}">All {CATS[cat].get("noun", CATS[cat]["name"].lower() + " games")}</a>\n'
     return (
         '<section class="related" aria-labelledby="related-h">\n'
         '  <h2 id="related-h">More games to play</h2>\n'

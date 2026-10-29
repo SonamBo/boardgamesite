@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five in a Row (Gomoku) – Play Free Online | BoardGameSite</title>
+<meta name="description" content="Get five stones in a row before your opponent. Play Five in a Row, also called Gomoku, free on a 15×15 board against the computer or a friend.">
+<link rel="canonical" href="https://boardgamesite.com/play/five-in-a-row">
+<meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Five in a Row (Gomoku) – Play Free Online | BoardGameSite">
+<meta property="og:description" content="Get five stones in a row before your opponent. Play Five in a Row, also called Gomoku, free on a 15×15 board against the computer or a friend.">
+<meta property="og:url" content="https://boardgamesite.com/play/five-in-a-row">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/five-in-a-row.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Five in a Row on BoardGameSite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Five in a Row (Gomoku) – Play Free Online | BoardGameSite">
+<meta name="twitter:description" content="Get five stones in a row before your opponent. Play Five in a Row, also called Gomoku, free on a 15×15 board against the computer or a friend.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/five-in-a-row.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="module" src="/assets/js/site.js"></script>
+<script type="module" src="/assets/js/five-in-a-row.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": [
+    "VideoGame",
+    "WebApplication"
+   ],
+   "@id": "https://boardgamesite.com/play/five-in-a-row#game",
+   "name": "Five in a Row (Gomoku)",
+   "url": "https://boardgamesite.com/play/five-in-a-row",
+   "description": "Get five stones in a row before your opponent. Play Five in a Row, also called Gomoku, free on a 15×15 board against the computer or a friend.",
+   "image": "https://boardgamesite.com/assets/img/og/five-in-a-row.jpg",
+   "genre": [
+    "Board game",
+    "Strategy"
+   ],
+   "gamePlatform": "Web browser",
+   "applicationCategory": "GameApplication",
+   "operatingSystem": "Any",
+   "playMode": [
+    "SinglePlayer",
+    "MultiPlayer"
+   ],
+   "inLanguage": "en",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": 0,
+    "priceCurrency": "USD"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   }
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Strategy games",
+     "item": "https://boardgamesite.com/games/strategy"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Five in a Row",
+     "item": "https://boardgamesite.com/play/five-in-a-row"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Is Five in a Row free?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Play the computer or a friend as often as you like, free in your browser."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is this the same as Gomoku?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Five in a Row is the English name for Gomoku. We use the freestyle rules, where five or more in a row wins."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does six in a row count?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Under freestyle rules, any line of five or more wins."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who goes first?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Gold always goes first. Against the computer, that’s you."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How good is the computer?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Easy misses threats. Medium blocks most of them. Hard plays sharp attacking and defensive moves."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<header class="sidebar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <span>BoardGameSite</span>
+  </a>
+  <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="/" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Play
+    </a>
+    <a href="/play/four-in-a-row?mode=daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Daily challenge
+    </a>
+    <a href="/learn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
+    </a>
+    <a href="/#leaderboards">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
+      Leaderboards
+    </a>
+    <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg>
+      Watch
+    </a>
+    <a href="/about">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      About
+    </a>
+    <div class="nav-divider"></div>
+    <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
+    <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
+  </nav>
+</header>
+
+<main class="content" id="main">
+<div class="container">
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    All games
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.95">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Five in a Row</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Your turn: place a stone anywhere</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sound" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit gm-wrap">
+        <div id="gm-board" class="gm-board" role="grid" aria-label="15 by 15 board. Tap a point to place a stone."></div>
+        <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
+      </div>
+      <p class="board-hint">Tap any empty point to place a stone. Gold goes first. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b><small id="score-you">0</small></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b><small id="score-cpu">0</small></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Opponent</p>
+        <div class="seg" role="group" aria-label="Opponent (starts a new game)">
+          <button type="button" data-opponent="cpu">Computer</button>
+          <button type="button" data-opponent="friend">2 players</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Computer level</p>
+        <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
+          <button type="button" data-level="easy">Easy</button>
+          <button type="button" data-level="medium">Medium</button>
+          <button type="button" data-level="hard">Hard</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Play again</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">New game</button>
+
+      <div class="panel-box card-dark">
+        <h2>How to play</h2>
+        <p>Take turns placing a stone on any empty point. The first player to get five in an unbroken line, across, down or diagonally, wins.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Create a free account to keep your record on any device.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Sign up free</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How to play Five in a Row</h2>
+  <p>Five in a Row, also known as Gomoku, is a simple and fast strategy game played on a grid. It’s easy to learn and surprisingly deep.</p>
+  <ol>
+    <li><strong>Gold goes first.</strong> Take turns placing one stone on any empty point.</li>
+    <li><strong>Stones never move</strong> and are never captured.</li>
+    <li><strong>Make five in a row</strong> across, down or diagonally to win. Lines of more than five count too.</li>
+    <li>If the board fills up with no five in a row, it’s a draw.</li>
+  </ol>
+
+  <h2>Quick tips for winning</h2>
+  <ul>
+    <li><strong>Block open threes.</strong> Three in a row with both ends open becomes an unstoppable four next turn.</li>
+    <li><strong>Make two threats at once.</strong> A move that creates two lines of three or four can’t be blocked in one turn.</li>
+    <li><strong>Play near the centre.</strong> Stones there are part of more possible lines.</li>
+    <li><strong>Think in shapes, not lines.</strong> Stones that work in two directions are the strongest.</li>
+  </ul>
+
+  <div class="callout card">
+    <p>Learn about open threes, double threats and how to win as the first player.</p>
+    <a class="btn btn-outline" href="/learn/five-in-a-row">Read the Five in a Row guide</a>
+  </div>
+
+  <h2>Five in a Row FAQ</h2>
+  <section class="faq">
+    <h3>Is Five in a Row free?</h3>
+    <p>Yes. Play the computer or a friend as often as you like, free in your browser.</p>
+    <h3>Is this the same as Gomoku?</h3>
+    <p>Yes. Five in a Row is the English name for Gomoku. We use the freestyle rules, where five or more in a row wins.</p>
+    <h3>Does six in a row count?</h3>
+    <p>Yes. Under freestyle rules, any line of five or more wins.</p>
+    <h3>Who goes first?</h3>
+    <p>Gold always goes first. Against the computer, that’s you.</p>
+    <h3>How good is the computer?</h3>
+    <p>Easy misses threats. Medium blocks most of them. Hard plays sharp attacking and defensive moves.</p>
+  </section>
+</section>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/chess">
+      <b>Chess</b>
+      <span>The classic. Checkmate the king to win.</span>
+    </a>
+    <a class="related-card card" href="/play/checkers">
+      <b>Checkers</b>
+      <span>Jump pieces, crown kings and clear the board.</span>
+    </a>
+    <a class="related-card card" href="/play/go">
+      <b>Go</b>
+      <span>Surround territory and capture stones. 9×9 board.</span>
+    </a>
+    <a class="related-card card" href="/play/reversi">
+      <b>Reversi</b>
+      <span>Trap discs between yours to flip them to your colour.</span>
+    </a>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    </a>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
+    </a>
+  </div>
+  <a class="link-green" href="/games/strategy">All strategy games</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <div><b>BoardGameSite</b><span>© <span data-year>2026</span> Pixel Art Games</span></div>
+  </div>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="/about">About</a>
+    <a href="/learn">How to play</a>
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+</footer>
+</div>
+</main>
+</div>
+</body>
+</html>
