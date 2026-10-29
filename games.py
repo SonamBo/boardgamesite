@@ -633,6 +633,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-dots-score",
     },
+    "nine-mens-morris": {
+        "name": "Nine Men’s Morris",
+        "full": "Nine Men’s Morris",
+        "cat": "strategy",
+        "genre": ["Board game", "Strategy"],
+        "blurb": "Form mills of three to remove your rival’s pieces.",
+        "card": "The ancient game of mills. Place and move nine pieces, make lines of three and take your opponent’s pieces.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-morris-score",
+    },
 }
 
 

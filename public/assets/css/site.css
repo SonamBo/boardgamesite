@@ -1541,3 +1541,18 @@ body.maxed .dice-wrap { max-width: none; }
 .db-board.wait .hit { pointer-events: none; }
 .db-board .bx.p1 { fill: color-mix(in srgb, var(--you) 75%, #fff); } .db-board .bx.p2 { fill: #D9C9B4; }
 .db-board .bxl { font: 700 4px var(--body); text-anchor: middle; fill: rgba(42,29,32,.6); }
+
+/* ---------- Nine Men's Morris ---------- */
+.nm-wrap { max-width: 560px; }
+.nm-board { width: 100%; aspect-ratio: 1; display: block; background: linear-gradient(135deg, #D8B47E, #C9A06A); border-radius: 14px; box-shadow: 0 0 0 8px var(--wood), 0 18px 40px rgba(0,0,0,.45); }
+.nm-board .sq { fill: none; stroke: #5A3C24; stroke-width: .07; }
+.nm-board .spot { fill: #5A3C24; }
+.nm-board .hitc { fill: transparent; }
+.nm-board .pt { cursor: pointer; outline: none; }
+.nm-board .pc1 { fill: var(--you); stroke: var(--you-lo); stroke-width: .05; }
+.nm-board .pc2 { fill: #F4ECDE; stroke: #A8977A; stroke-width: .05; }
+.nm-board .tgt .hitc { fill: rgba(138,36,67,.18); }
+.nm-board .sel .pc1, .nm-board .sel .pc2 { stroke: var(--brand); stroke-width: .1; }
+.nm-board .take .pc1, .nm-board .take .pc2 { stroke: #C0392B; stroke-width: .1; stroke-dasharray: .12 .08; }
+.nm-board .last .spot { fill: var(--brand); }
+.nm-board .pt:focus-visible .hitc { fill: rgba(207,170,98,.4); }
