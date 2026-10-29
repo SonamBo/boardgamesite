@@ -1510,3 +1510,21 @@ body.maxed .dice-wrap { max-width: none; }
 .mc-pit.last { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--text-hi); }
 .mc-pit:disabled { opacity: 1; }
 .mc-pit.shake { animation: shake .3s; }
+
+/* ---------- Five in a Row ---------- */
+.gm-wrap { max-width: 600px; display: flex; flex-direction: column; gap: 10px; }
+.gm-board { display: grid; grid-template-columns: repeat(15, 1fr); aspect-ratio: 1; padding: 3.3%; border-radius: 8px;
+  background: linear-gradient(135deg, #D8B47E, #C9A06A); box-shadow: 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.45); }
+.gm { position: relative; border: 0; padding: 0; margin: 0; aspect-ratio: 1; background: transparent; cursor: pointer; }
+.gm::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(60,40,20,.55); }
+.gm::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: rgba(60,40,20,.55); }
+.gm:nth-child(15n+1)::before { left: 50%; } .gm:nth-child(15n)::before { right: 50%; }
+.gm:nth-child(-n+15)::after { top: 50%; } .gm:nth-last-child(-n+15)::after { bottom: 50%; }
+.gm.p1, .gm.p2 { z-index: 1; }
+.gm.p1 { background: radial-gradient(circle closest-side, var(--you-hi) 0%, var(--you) 55%, var(--you-lo) 88%, transparent 92%); }
+.gm.p2 { background: radial-gradient(circle closest-side, #FFFFFF 0%, #EFE6D8 55%, #BFB3A2 88%, transparent 92%); }
+.gm.p1::before, .gm.p1::after, .gm.p2::before, .gm.p2::after { display: none; }
+.gm.last { box-shadow: inset 0 0 0 2px var(--brand); border-radius: 50%; }
+.gm.win { box-shadow: 0 0 0 3px var(--brand); border-radius: 50%; }
+.gm:disabled { cursor: default; opacity: 1; }
+.gm:not(:disabled):hover { background: radial-gradient(circle, rgba(42,29,32,.18) 35%, transparent 38%); }

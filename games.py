@@ -609,6 +609,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-mancala-score",
     },
+    "five-in-a-row": {
+        "name": "Five in a Row",
+        "full": "Five in a Row (Gomoku)",
+        "cat": "strategy",
+        "genre": ["Board game", "Strategy"],
+        "blurb": "Get five stones in a line before your opponent.",
+        "card": "Gomoku on a 15×15 board. Place stones and get five in a row before your opponent does.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-gomoku-score",
+    },
 }
 
 
