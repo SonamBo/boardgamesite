@@ -28,9 +28,11 @@ Read this file first when resuming. It is the whole plan and the current state; 
 ## Status
 - [x] online.js, rooms rules, firebase.js helpers
 - [x] Chess (live; tested between two tabs with &fake=1)
-- [ ] Five in a Row, Hex, Go
-- [ ] Checkers, Reversi, Four in a Row (older pages: read checkers.js / reversi.js / four-in-a-row.js first)
-- [ ] After each batch: build, PR, merge, check the deploy log (`gh`-style API calls with the token in
+- [x] Five in a Row, Hex (board size stored in the room as `hex:9`), Go (end-of-game scoring is seeded so both boards agree)
+- [x] Checkers (moves sent as one character per square; board turned round for seat 1), Reversi (passes handled by the page), Four in a Row (classic mode only, not the daily puzzle)
+- [ ] Owner to test on two real devices (needs Anonymous sign-in ON)
+- [ ] Later, needs Blaze: card and dice games with hidden hands (server-side dealing)
+- After each batch: build, PR, merge, check the deploy log (`gh`-style API calls with the token in
       /home/claude/.ghtoken), ask the owner to try one game on two devices.
 
 ## How a game is wired (copy Chess: public/assets/js/chess.js, search for `onlineOn`)

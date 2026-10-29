@@ -63,6 +63,8 @@ function box() {
 */
 export const roomInLink = !!ROOM;
 export function online(slug, adapter) {
+  // slug can carry a variant, like 'hex:9'; adapter.variant(v) sets it on the joining board
+  const gameOf = () => (adapter.variant ? slug + ':' + adapter.variant() : slug);
   let api = null, room = null, data = null, seat = -1, applied = 0, stop = null, sending = false;
   const el = box();
 
@@ -102,7 +104,7 @@ export function online(slug, adapter) {
       el.innerHTML = '<p class="text-2">Creating a game…</p>';
       const b = await backend();
       const id = newId();
-      await b.create(id, { g: slug, p: [b.uid, ''], n: [b.name, ''], m: [], t: 0, s: 'wait' });
+      await b.create(id, { g: gameOf(), p: [b.uid, ''], n: [b.name, ''], m: [], t: 0, s: 'wait' });
       history.replaceState(null, '', location.pathname + '?room=' + id + (FAKE ? '&fake=1' : ''));
       join(id);
     } catch (e) { failed(e); }
@@ -112,11 +114,12 @@ export function online(slug, adapter) {
       room = id; paint();
       const b = await backend();
       let d = await b.get(id);
-      if (!d || d.g !== slug) { setStatus('That game link isn’t valid any more', 'neutral'); room = null; return paint(); }
+      if (!d || d.g.split(':')[0] !== slug) { setStatus('That game link isn’t valid any more', 'neutral'); room = null; return paint(); }
       if (d.s === 'wait' && d.p[0] !== b.uid && !d.p[1]) {
         await b.update(id, { p: [d.p[0], b.uid], n: [d.n[0], b.name], s: 'play' });
       } else if (!d.p.includes(b.uid)) { setStatus('This game already has two players', 'neutral'); room = null; return paint(); }
       seat = -1; applied = 0;
+      if (adapter.variant && d.g.includes(':')) adapter.variant(d.g.split(':')[1]);
       if (adapter.onlineChanged) adapter.onlineChanged(true);
       adapter.reset();
       stop = b.watch(id, onData);
@@ -130,6 +133,7 @@ export function online(slug, adapter) {
     if (seat < 0) { seat = d.p.indexOf(api.uid); if (adapter.onlineChanged) adapter.onlineChanged(true); }
     // play any moves we haven't shown yet
     while (applied < d.m.length) { adapter.apply(d.m[applied]); applied++; }
+    if (was && was.s !== d.s && adapter.onlineChanged) adapter.onlineChanged(true);
     if (was && was.s === 'wait' && d.s === 'play') { play('found'); setStatus('Your friend joined. ' + (seat === 0 ? 'Your move' : 'Their move'), ''); }
     if (d.s === 'done' && typeof d.x === 'number' && !(was && was.s === 'done')) setStatus((d.x === seat ? 'You resigned' : (d.n[d.x] || 'Your friend') + ' resigned'), d.x === seat ? 'cpu' : '');
     if (d.r && (!was || was.r !== d.r) && d.r !== room) { location.href = location.pathname + '?room=' + d.r + (FAKE ? '&fake=1' : ''); return; }
@@ -148,7 +152,7 @@ export function online(slug, adapter) {
   }
   async function rematch() {
     const id = newId();
-    await api.create(id, { g: slug, p: [api.uid, ''], n: [api.name, ''], m: [], t: 0, s: 'wait' });
+    await api.create(id, { g: gameOf(), p: [api.uid, ''], n: [api.name, ''], m: [], t: 0, s: 'wait' });
     await api.update(room, { s: 'done', r: id });
   }
   function leave() {

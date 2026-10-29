@@ -1604,3 +1604,6 @@ body.maxed .dice-wrap { max-width: none; }
 .ol-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .ol-row .btn { flex: 1; min-height: 44px; }
 body.online [data-cpu-only], body.online .online-hide { display: none !important; }
+/* online: the second player sees the board from their side */
+.board.flipped, #board.flipped { transform: rotate(180deg); }
+.board.flipped > *, #board.flipped > * { transform: rotate(180deg); }

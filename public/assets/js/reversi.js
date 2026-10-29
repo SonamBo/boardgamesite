@@ -1,12 +1,13 @@
 // Reversi page: against the computer, or two players taking turns on one device.
 import * as E from './reversi-engine.js';
+import { online, roomInLink } from './online.js';
 import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
 
 const SAVE = 'bgs-rv-game';
-const saveGame = () => store.set(SAVE, { board, last, toMove: turn, mode: getOpp() });
+const saveGame = () => onlineOn || store.set(SAVE, { board, last, toMove: turn, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 function placeSound(flips) {
   play('place');
@@ -23,8 +24,10 @@ const friend = () => getOpp() === 'friend';
 // turn: E.YOU (gold, moves first) or E.CPU (black). In 2-player mode these are Player 1 and Player 2.
 let board, over, busy, last, started, turn;
 let cpuTimer = 0;
+let onlineOn = roomInLink, ol = null;
+const friendish = () => friend() || onlineOn; // no computer turns
 const nameOf = (side) => (side === E.YOU ? 'Player 1' : 'Player 2');
-const humanToMove = () => !over && !busy && (friend() || turn === E.YOU);
+const humanToMove = () => !over && !busy && (onlineOn ? ol.myTurn() : friend() || turn === E.YOU);
 
 const cells = [];
 for (let i = 0; i < 64; i++) {
@@ -69,6 +72,14 @@ function finish() {
   const c = E.count(board);
   const result = c.you > c.cpu ? 'win' : c.you < c.cpu ? 'lose' : 'draw';
   const line = c.you + ' – ' + c.cpu;
+  if (onlineOn) {
+    const mine = result === 'draw' ? 'draw' : (result === 'win') === (ol.mySeat() === 0) ? 'win' : 'lose';
+    play(mine === 'lose' ? 'lose' : 'win', 0.4);
+    setStatus(mine === 'win' ? 'You win ' + line : mine === 'lose' ? 'Your friend wins ' + line : 'It’s a draw', mine === 'lose' ? 'cpu' : '');
+    showResult(mine, mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', 'Final score ' + line + ' (Gold – Black).');
+    render();
+    return;
+  }
   if (friend()) {
     play(result === 'draw' ? 'draw' : 'win', 0.4);
     if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', '32 discs each.'); }
@@ -90,14 +101,16 @@ function finish() {
   render();
 }
 
-function onSquare(i) {
-  if (!humanToMove() || !E.flipsFor(board, i, turn).length) return;
+function onSquare(i, remote = false) {
+  if ((!remote && !humanToMove()) || !E.flipsFor(board, i, turn).length) return;
   if (!started) { started = true; track('game_start', { game: 'reversi', level: friend() ? 'friend' : getLevel() }); }
   const r = E.play(board, i, turn);
   placeSound(r.flips);
   board = r.board;
   last = i;
   afterMove(-turn);
+  if (onlineOn && !remote) ol.send(String(i), turn === E.YOU ? 0 : 1, E.isOver(board));
+  if (onlineOn && !over) setStatus(ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
 }
 
 // Hand the turn to `next`, handling passes and the end of the game.
@@ -109,7 +122,7 @@ function afterMove(next) {
     turn = mover;
     saveGame();
     const passer = friend() ? nameOf(next) + ' has no move.' : next === E.CPU ? 'Computer has no move.' : 'You have no move.';
-    if (!friend() && mover === E.CPU) {
+    if (!friendish() && mover === E.CPU) {
       setStatus(passer + ' Computer plays again', 'cpu');
       busy = true;
       setTurn('cpu');
@@ -125,7 +138,7 @@ function afterMove(next) {
   }
   turn = next;
   saveGame();
-  if (!friend() && turn === E.CPU) {
+  if (!friendish() && turn === E.CPU) {
     busy = true;
     setTurn('cpu');
     setStatus('Computer is thinking…', 'cpu');
@@ -177,5 +190,13 @@ function resume() {
   return true;
 }
 
-document.getElementById('new-game').addEventListener('click', newGame);
-if (!resume()) newGame();
+document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+document.getElementById('new-game').classList.add('online-hide');
+ol = online('reversi', {
+  reset: () => newGame(),
+  apply: (t) => onSquare(Number(t), true),
+  seatName: (s) => (s === 0 ? 'Gold (first)' : 'Black'),
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+});
+if (roomInLink || !resume()) newGame();
