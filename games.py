@@ -570,6 +570,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-eights-score",
     },
+    "gin-rummy": {
+        "name": "Gin Rummy",
+        "full": "Gin Rummy",
+        "cat": "cards",
+        "genre": ["Card game", "Rummy"],
+        "blurb": "Build sets and runs, then knock or go gin.",
+        "card": "Draw and discard to build sets and runs. Knock with 10 or less deadwood, or go gin. First to 100 wins.",
+        "chips": ["Cards", "vs Computer", "15 min"],
+        "friend": False,
+        "record": "wld",
+        "key": "bgs-gin-score",
+    },
 }
 
 

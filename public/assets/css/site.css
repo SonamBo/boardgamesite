@@ -1461,3 +1461,5 @@ body.maxed .dice-wrap { max-width: none; }
 .ce-pick span { color: var(--muted); font-size: 14px; }
 .ce-pick .btn { min-width: 52px; padding: 0 10px; }
 .ce-pick .btn svg { width: 24px; height: 24px; }
+.card-area .pc.meld { box-shadow: inset 0 -4px 0 color-mix(in srgb, var(--you) 70%, transparent), 0 1px 2px rgba(0,0,0,.25); }
+.hand-note { color: var(--text-2); font-size: 15px; flex-basis: 100%; }
