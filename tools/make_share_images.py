@@ -340,6 +340,78 @@ def ship_captain_crew():
     return ('<div class="dset scc">' + "".join(_die(v, "lift") for v in [6, 5, 4]) + "".join(_die(v) for v in [6, 5]) + '<p class="bidtag">Cargo 11</p></div>')
 
 
+def _card(r, s, cls="", style=""):
+    red = s in (1, 2)
+    sym = '<svg viewBox="0 0 24 24"><use href="#s%d"/></svg>' % s
+    return f'<b class="cd {"red" if red else ""} {cls}" style="{style}"><i>{r}</i>{sym}</b>'
+
+
+_SUITS = ('<svg width="0" height="0" style="position:absolute"><symbol id="s0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>'
+          '<symbol id="s1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>'
+          '<symbol id="s2" viewBox="0 0 24 24"><path d="M12 1.5l8.5 10.5L12 22.5 3.5 12z"/></symbol>'
+          '<symbol id="s3" viewBox="0 0 24 24"><path d="M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z"/></symbol></svg>')
+
+
+def _cols(cols, dy=36, w=92):
+    out = ""
+    for i, col in enumerate(cols):
+        for k, (r, s) in enumerate(col):
+            out += _card(r, s, "back" if r == "" else "", f"left:{i * (w + 10)}px;top:{k * dy}px")
+    return out
+
+
+def freecell():
+    cols = [[("K", 0), ("Q", 1), ("J", 3)], [("9", 2), ("8", 0), ("7", 1)], [("5", 3), ("4", 2)], [("A", 1)]]
+    return f'<div class="cdt">{_SUITS}{_cols(cols)}</div>'
+
+
+def spider():
+    cols = [[("", 0), ("", 0), ("10", 0), ("9", 0)], [("", 0), ("K", 1), ("Q", 1)], [("", 0), ("", 0), ("", 0), ("6", 0)], [("", 0), ("8", 1), ("7", 1)]]
+    return f'<div class="cdt">{_SUITS}{_cols(cols, dy=30)}</div>'
+
+
+def hearts():
+    fan = [("Q", 0), ("A", 1), ("K", 1), ("10", 1), ("5", 1)]
+    return '<div class="cdt fan">' + _SUITS + "".join(_card(r, s, "", f"left:{k * 62}px;transform:rotate({(k - 2) * 8}deg)") for k, (r, s) in enumerate(fan)) + "</div>"
+
+
+def spades():
+    fan = [("A", 0), ("K", 0), ("Q", 0), ("J", 0), ("10", 0)]
+    return '<div class="cdt fan">' + _SUITS + "".join(_card(r, s, "", f"left:{k * 62}px;transform:rotate({(k - 2) * 8}deg)") for k, (r, s) in enumerate(fan)) + "</div>"
+
+
+def gin_rummy():
+    row = [("7", 0), ("7", 1), ("7", 3), ("4", 2), ("5", 2), ("6", 2)]
+    return '<div class="cdt row">' + _SUITS + "".join(_card(r, s, "meld", f"left:{k * 70 + (24 if k > 2 else 0)}px") for k, (r, s) in enumerate(row)) + "</div>"
+
+
+def crazy_eights():
+    return '<div class="cdt c8">' + _SUITS + _card("8", 0, "", "left:120px;top:10px;transform:rotate(-8deg)") + _card("8", 1, "", "left:190px;top:4px;transform:rotate(6deg)") + _card("", 0, "back", "left:0;top:20px") + "</div>"
+
+
+def tripeaks():
+    out = ""
+    for p, x in enumerate([60, 220, 380]):
+        out += _card("", 0, "back", f"left:{x}px;top:0")
+    for k, (r, s) in enumerate([("6", 1), ("7", 0), ("8", 2), ("9", 3), ("10", 1), ("J", 0)]):
+        out += _card(r, s, "", f"left:{k * 80}px;top:64px")
+    return '<div class="cdt peaks">' + _SUITS + out + "</div>"
+
+
+def pyramid():
+    out = ""
+    cards = [[("K", 0)], [("6", 1), ("7", 3)], [("4", 2), ("9", 0), ("Q", 1)]]
+    for r, row in enumerate(cards):
+        for i, (rk, s) in enumerate(row):
+            out += _card(rk, s, "lift" if (rk, s) in (("6", 1), ("7", 3)) else "", f"left:{(1 - r / 2 + i) * 96 + 40}px;top:{r * 64}px")
+    return '<div class="cdt pyr">' + _SUITS + out + "</div>"
+
+
+def golf():
+    cols = [[("4", 0), ("J", 1), ("5", 3)], [("Q", 2), ("2", 0), ("6", 1)], [("9", 3), ("K", 0), ("7", 2)], [("3", 1), ("8", 0), ("8", 2)]]
+    return f'<div class="cdt">{_SUITS}{_cols(cols, dy=40)}</div>'
+
+
 # Each game's tagline (on the share image) and art.
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
@@ -376,6 +448,15 @@ ART = {
     "shut-the-box": ("Shut all nine.", shut_the_box),
     "pig": ("Know when to stop.", pig),
     "ship-captain-crew": ("Six, five, four.", ship_captain_crew),
+    "freecell": ("Every card face up.", freecell),
+    "spider": ("King down to Ace.", spider),
+    "hearts": ("Dodge the Queen.", hearts),
+    "spades": ("Spades are trumps.", spades),
+    "gin-rummy": ("Knock or go gin.", gin_rummy),
+    "crazy-eights": ("Eights are wild.", crazy_eights),
+    "tripeaks": ("Clear the peaks.", tripeaks),
+    "pyramid": ("Make thirteen.", pyramid),
+    "golf": ("Low score wins.", golf),
 }
 
 CSS = f"""
@@ -557,6 +638,21 @@ h1.long {{ font-size: 84px; }}
 .stb .tiles b.shut {{ background: #3A2818; box-shadow: none; height: 86px; transform: scaleY(.25) translateY(130px); }}
 .stb .dpair {{ display: flex; gap: 18px; }}
 .pigart {{ display: flex; flex-direction: column; align-items: center; margin-left: 30px; }}
+
+.cdt {{ position: relative; width: 420px; height: 300px; margin-left: 50px; zoom: 1.35; }}
+.cd {{ position: absolute; width: 92px; height: 128px; border-radius: 10px; background: #FBF8EF; border: 1px solid #CFC6AE; box-shadow: 0 6px 12px rgba(0,0,0,.4); color: #1C1F1D; }}
+.cd.red {{ color: #C23B22; }}
+.cd i {{ position: absolute; left: 8px; top: 4px; font: 700 26px 'DM Sans'; font-style: normal; }}
+.cd svg {{ position: absolute; left: 50%; top: 56%; width: 46px; height: 46px; transform: translate(-50%, -50%); fill: currentColor; }}
+.cd.back {{ background: repeating-linear-gradient(45deg, {MERLOT} 0 8px, #5E1530 8px 16px); border: 4px solid #F3EBD6; }}
+.cd.back i, .cd.back svg {{ display: none; }}
+.cd.meld {{ box-shadow: inset 0 -6px 0 {GOLD}, 0 6px 12px rgba(0,0,0,.4); }}
+.cd.lift {{ box-shadow: 0 0 0 4px {GOLD}, 0 10px 16px rgba(0,0,0,.45); }}
+.cdt.fan {{ height: 220px; margin-top: 60px; }}
+.cdt.row {{ height: 160px; margin-top: 80px; }}
+.cdt.c8 {{ height: 170px; margin-top: 60px; }}
+.cdt.peaks {{ height: 200px; margin-top: 60px; }}
+.cdt.pyr {{ height: 260px; margin-top: 30px; }}
 """
 
 

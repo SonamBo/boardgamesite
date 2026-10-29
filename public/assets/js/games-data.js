@@ -237,5 +237,68 @@ export const GAMES = [
   "cat": "dice",
   "record": "wld",
   "key": "bgs-scc-score"
+ },
+ {
+  "slug": "freecell",
+  "name": "FreeCell",
+  "cat": "cards",
+  "record": "solo",
+  "key": "bgs-fc-stats"
+ },
+ {
+  "slug": "spider",
+  "name": "Spider Solitaire",
+  "cat": "cards",
+  "record": "solo",
+  "key": "bgs-spider-stats"
+ },
+ {
+  "slug": "hearts",
+  "name": "Hearts",
+  "cat": "cards",
+  "record": "wld",
+  "key": "bgs-hearts-score"
+ },
+ {
+  "slug": "spades",
+  "name": "Spades",
+  "cat": "cards",
+  "record": "wld",
+  "key": "bgs-spades-score"
+ },
+ {
+  "slug": "gin-rummy",
+  "name": "Gin Rummy",
+  "cat": "cards",
+  "record": "wld",
+  "key": "bgs-gin-score"
+ },
+ {
+  "slug": "crazy-eights",
+  "name": "Crazy Eights",
+  "cat": "cards",
+  "record": "wld",
+  "key": "bgs-eights-score"
+ },
+ {
+  "slug": "tripeaks",
+  "name": "TriPeaks",
+  "cat": "cards",
+  "record": "solo",
+  "key": "bgs-tri-stats"
+ },
+ {
+  "slug": "pyramid",
+  "name": "Pyramid",
+  "cat": "cards",
+  "record": "solo",
+  "key": "bgs-pyr-stats"
+ },
+ {
+  "slug": "golf",
+  "name": "Golf",
+  "cat": "cards",
+  "record": "solo",
+  "key": "bgs-golf-stats"
  }
 ];
