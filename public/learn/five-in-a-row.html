@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five in a Row (Gomoku) Strategy | BoardGameSite</title>
+<meta name="description" content="Learn how to play Five in a Row, also called Gomoku, and the strategy that wins: open threes, fours, double threats and blocking early.">
+<link rel="canonical" href="https://boardgamesite.com/learn/five-in-a-row">
+<meta name="theme-color" content="#110D0E">
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Five in a Row (Gomoku) Strategy | BoardGameSite">
+<meta property="og:description" content="Learn how to play Five in a Row, also called Gomoku, and the strategy that wins: open threes, fours, double threats and blocking early.">
+<meta property="og:url" content="https://boardgamesite.com/learn/five-in-a-row">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/five-in-a-row.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How to play Five in a Row: strategy on BoardGameSite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Five in a Row (Gomoku) Strategy | BoardGameSite">
+<meta name="twitter:description" content="Learn how to play Five in a Row, also called Gomoku, and the strategy that wins: open threes, fours, double threats and blocking early.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/five-in-a-row.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
+<link rel="preload" href="/assets/fonts/dm-sans-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="module" src="/assets/js/site.js"></script>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://boardgamesite.com/learn/five-in-a-row#article",
+   "headline": "How to play Five in a Row: strategy",
+   "description": "Learn how to play Five in a Row, also called Gomoku, and the strategy that wins: open threes, fours, double threats and blocking early.",
+   "image": "https://boardgamesite.com/assets/img/og/five-in-a-row.jpg",
+   "datePublished": "2026-10-28",
+   "dateModified": "2026-10-29",
+   "inLanguage": "en",
+   "author": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "mainEntityOfPage": "https://boardgamesite.com/learn/five-in-a-row"
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Learn",
+     "item": "https://boardgamesite.com/learn"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How to play Five in a Row",
+     "item": "https://boardgamesite.com/learn/five-in-a-row"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<header class="sidebar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <span>BoardGameSite</span>
+  </a>
+  <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Play
+    </a>
+    <a href="/play/four-in-a-row?mode=daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Daily challenge
+    </a>
+    <a href="/learn" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
+    </a>
+    <a href="/#leaderboards">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12M10 20V6M16 20v-9M22 20H2"/></svg>
+      Leaderboards
+    </a>
+    <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg>
+      Watch
+    </a>
+    <a href="/about">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      About
+    </a>
+    <div class="nav-divider"></div>
+    <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
+    <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
+  </nav>
+</header>
+
+<main class="content" id="main">
+<div class="container">
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Five in a Row</span></nav>
+  <h1>How to play Five in a Row: strategy</h1>
+  <p class="lede">Five in a Row is quick to learn and quick to lose. The key ideas are all about threats: making them, spotting them and stopping them.</p>
+
+  <div class="callout card">
+    <p>Try them against the computer.</p>
+    <a class="btn btn-gold" href="/play/five-in-a-row">Play Five in a Row free</a>
+  </div>
+
+<h2>The rules</h2>
+  <p>Players take turns placing a stone on an empty point of a 15×15 board. Gold goes first. The first to get five or more stones in an unbroken line, across, down or diagonally, wins.</p>
+
+  <h2>Threes and fours</h2>
+  <ul>
+    <li><strong>Open four:</strong> four in a row with both ends empty. It can’t be blocked: you win next turn.</li>
+    <li><strong>Four:</strong> four in a row with one end open. Your opponent must block it now.</li>
+    <li><strong>Open three:</strong> three in a row with both ends open. If it’s not blocked, it becomes an open four.</li>
+  </ul>
+
+  <h2>Block open threes immediately</h2>
+  <p>Most beginner losses come from missing an open three. Each turn, scan for your opponent’s lines of three with space on both sides, and block one end.</p>
+
+  <h2>Double threats win</h2>
+  <p>A move that makes two threats at once, such as two open threes or a four and an open three, can’t be stopped with one stone. Look for spots where two of your lines cross.</p>
+
+  <h2>Play compactly</h2>
+  <p>Stones close together create many possible lines. Spread-out stones are easy to block one at a time.</p>
+
+  <h2>The first-player advantage</h2>
+  <p>On an open board, the first player has a strong advantage. That’s why you move first against the computer, and why expert tournaments use extra opening rules.</p>
+
+  <div class="callout card">
+    <p>Ready to try it?</p>
+    <a class="btn btn-gold" href="/play/five-in-a-row">Play Five in a Row now</a>
+  </div>
+</article>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/chess">
+      <b>Chess</b>
+      <span>The classic. Checkmate the king to win.</span>
+    </a>
+    <a class="related-card card" href="/play/checkers">
+      <b>Checkers</b>
+      <span>Jump pieces, crown kings and clear the board.</span>
+    </a>
+    <a class="related-card card" href="/play/go">
+      <b>Go</b>
+      <span>Surround territory and capture stones. 9×9 board.</span>
+    </a>
+    <a class="related-card card" href="/play/reversi">
+      <b>Reversi</b>
+      <span>Trap discs between yours to flip them to your colour.</span>
+    </a>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    </a>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
+    </a>
+  </div>
+  <a class="link-green" href="/games/strategy">All strategy games</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <div><b>BoardGameSite</b><span>© <span data-year>2026</span> Pixel Art Games</span></div>
+  </div>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="/about">About</a>
+    <a href="/learn">How to play</a>
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+</footer>
+</div>
+</main>
+</div>
+</body>
+</html>

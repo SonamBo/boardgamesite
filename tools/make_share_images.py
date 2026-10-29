@@ -412,6 +412,87 @@ def golf():
     return f'<div class="cdt">{_SUITS}{_cols(cols, dy=40)}</div>'
 
 
+_PZ = {
+    "k": '<path d="M18.5 3h3v4h4v3h-4v4h-3v-4h-4V7h4z"/><path d="M12 16c3-2 13-2 16 0l-2 15H14z"/><path d="M9 34h22v3H9z"/>',
+    "q": '<path d="M9 13l4 11 3-12 4 11 4-11 3 12 4-11-2 18H11z"/><circle cx="9" cy="12" r="2"/><circle cx="16" cy="10.5" r="2"/><circle cx="24" cy="10.5" r="2"/><circle cx="31" cy="12" r="2"/><circle cx="20" cy="9" r="2"/><path d="M9 34h22v3H9z"/>',
+    "n": '<path d="M13 31c0-6 3-9 6-12-2 0-5 1-7 3l-2-3c3-5 6-9 6-12l2 2c5 0 11 4 12 13l1 9z"/><path d="M9 34h22v3H9z"/>',
+    "p": '<circle cx="20" cy="12" r="5"/><path d="M15.5 17h9l2.5 13h-14z"/><path d="M9 34h22v3H9z"/>',
+}
+
+
+def chess():
+    cells = ""
+    pieces = {(2, 3): ("q", "b"), (3, 4): ("k", "w"), (1, 1): ("n", "b"), (4, 2): ("p", "w"), (2, 5): ("p", "b"), (4, 4): ("n", "w")}
+    for r in range(6):
+        for c in range(6):
+            pc = pieces.get((r, c))
+            inner = ""
+            if pc:
+                t, col = pc
+                fill, stroke = ("#FBF6EA", "#2A1D20") if col == "w" else ("#2A1D20", "#FBF6EA")
+                inner = f'<svg viewBox="0 0 40 40" fill="{fill}" stroke="{stroke}" stroke-width="1.3">{_PZ[t]}</svg>'
+            cells += f'<b class="{"d" if (r + c) % 2 else ""}">{inner}</b>'
+    return f'<div class="chb">{cells}</div>'
+
+
+def go():
+    stones = {(1, 2): "b", (2, 2): "w", (2, 3): "b", (3, 2): "b", (2, 1): "b", (3, 3): "w", (4, 3): "w", (3, 4): "w", (1, 3): "w", (4, 2): "b"}
+    cells = "".join(f'<b class="{stones.get((r, c), "")}"></b>' for r in range(6) for c in range(6))
+    return f'<div class="gob">{cells}</div>'
+
+
+def mancala():
+    pit = lambda n: '<b>' + "".join("<i></i>" for _ in range(n)) + "</b>"
+    top = "".join(pit(n) for n in [4, 5, 0, 6, 4, 3])
+    bot = "".join(pit(n) for n in [2, 4, 7, 1, 5, 4])
+    return f'<div class="mcb"><u class="st">{"<i></i>" * 9}</u><div class="rows"><div>{top}</div><div>{bot}</div></div><u class="st">{"<i></i>" * 13}</u></div>'
+
+
+def five_in_a_row():
+    stones = {(1, 1): "g", (2, 2): "g", (3, 3): "g", (4, 4): "g", (5, 5): "g", (1, 2): "w", (2, 1): "w", (3, 2): "w", (4, 3): "w", (2, 4): "w"}
+    cells = "".join(f'<b class="{stones.get((r, c), "")}"></b>' for r in range(7) for c in range(7))
+    return f'<div class="gmb">{cells}</div>'
+
+
+def nine_mens_morris():
+    xy = [[0,0],[3,0],[6,0],[1,1],[3,1],[5,1],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,5],[3,5],[5,5],[0,6],[3,6],[6,6]]
+    gold = {0, 1, 2, 10, 17}
+    ivory = {4, 13, 19, 21}
+    dots = "".join(f'<circle cx="{x}" cy="{y}" r="{0.34 if i in gold or i in ivory else 0.12}" fill="{"#CFAA62" if i in gold else "#F4ECDE" if i in ivory else "#5A3C24"}" stroke="{"#6E5626" if i in gold else "#A8977A" if i in ivory else "none"}" stroke-width=".07"/>' for i, (x, y) in enumerate(xy))
+    return ('<svg class="nmb" viewBox="-0.6 -0.6 7.2 7.2"><rect x="-0.6" y="-0.6" width="7.2" height="7.2" rx=".4" fill="#E2C597"/>'
+            '<g fill="none" stroke="#5A3C24" stroke-width=".08"><rect x="0" y="0" width="6" height="6"/><rect x="1" y="1" width="4" height="4"/><rect x="2" y="2" width="2" height="2"/><path d="M3 0V2M3 4V6M0 3H2M4 3H6"/></g>'
+            '<path d="M0 0H6" stroke="#8A2443" stroke-width=".16" stroke-linecap="round"/>' + dots + '</svg>')
+
+
+def dots_and_boxes():
+    g = 70
+    lines = ""
+    on = {("h", 0, 0), ("h", 0, 1), ("v", 0, 0), ("v", 0, 1), ("h", 1, 0), ("v", 0, 2), ("h", 1, 1), ("h", 2, 2), ("v", 1, 3), ("v", 2, 1), ("h", 3, 0)}
+    for (t, r, c) in on:
+        x1, y1 = c * g + 20, r * g + 20
+        x2, y2 = (x1 + g, y1) if t == "h" else (x1, y1 + g)
+        lines += f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#2A1D20" stroke-width="6" stroke-linecap="round"/>'
+    boxes = f'<rect x="{20 + 3}" y="{20 + 3}" width="{g - 6}" height="{g - 6}" rx="4" fill="#E6C88A"/><rect x="{20 + g + 3}" y="{20 + 3}" width="{g - 6}" height="{g - 6}" rx="4" fill="#E6C88A"/>'
+    dots = "".join(f'<circle cx="{c * g + 20}" cy="{r * g + 20}" r="7" fill="#2A1D20"/>' for r in range(4) for c in range(4))
+    return f'<svg class="dbb" viewBox="0 0 250 250"><rect width="250" height="250" rx="16" fill="#EFE6D8"/>{boxes}{lines}{dots}</svg>'
+
+
+def hex():
+    import math
+    n = 5
+    out = ""
+    gold = {(0, 2), (1, 2), (2, 1), (3, 1), (4, 0)}
+    ivory = {(2, 0), (1, 3), (2, 3), (3, 2), (2, 4)}
+    for r in range(n):
+        for c in range(n):
+            x = 40 + (c + r / 2) * 52
+            y = 40 + r * 45
+            pts = " ".join(f"{x + 29 * math.cos(math.pi / 6 + k * math.pi / 3):.1f},{y + 29 * math.sin(math.pi / 6 + k * math.pi / 3):.1f}" for k in range(6))
+            fill = "#CFAA62" if (r, c) in gold else "#FFFFFF" if (r, c) in ivory else "#E8DCC8"
+            out += f'<polygon points="{pts}" fill="{fill}" stroke="#8E7E6C" stroke-width="2"/>'
+    return f'<svg class="hxb" viewBox="0 0 420 260">{out}</svg>'
+
+
 # Each game's tagline (on the share image) and art.
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
@@ -457,6 +538,13 @@ ART = {
     "tripeaks": ("Clear the peaks.", tripeaks),
     "pyramid": ("Make thirteen.", pyramid),
     "golf": ("Low score wins.", golf),
+    "chess": ("Checkmate the king.", chess),
+    "go": ("Surround and capture.", go),
+    "mancala": ("Sow and capture.", mancala),
+    "five-in-a-row": ("Five in a line.", five_in_a_row),
+    "nine-mens-morris": ("Make a mill.", nine_mens_morris),
+    "dots-and-boxes": ("Close the box.", dots_and_boxes),
+    "hex": ("Join your sides.", hex),
 }
 
 CSS = f"""
@@ -653,6 +741,30 @@ h1.long {{ font-size: 84px; }}
 .cdt.c8 {{ height: 170px; margin-top: 60px; }}
 .cdt.peaks {{ height: 200px; margin-top: 60px; }}
 .cdt.pyr {{ height: 260px; margin-top: 30px; }}
+
+.chb {{ zoom: 1.2; display: grid; grid-template-columns: repeat(6, 64px); border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 10px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
+.chb b {{ height: 64px; background: {IVORY}; display: grid; place-items: center; }} .chb b.d {{ background: #B78A5E; }}
+.chb svg {{ width: 58px; height: 58px; stroke-linejoin: round; }}
+.gob {{ display: grid; grid-template-columns: repeat(6, 56px); padding: 28px; background: linear-gradient(135deg, #E2BE84, #CFA567); border-radius: 8px; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px;
+  background-image: linear-gradient(rgba(50,30,15,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(50,30,15,.7) 1px, transparent 1px), linear-gradient(135deg, #E2BE84, #CFA567); background-size: 56px 56px, 56px 56px, auto; background-position: 56px 56px, 56px 56px, 0 0; }}
+.gob b {{ height: 56px; border-radius: 50%; transform: scale(.92); }}
+.gob b.b {{ background: radial-gradient(circle at 40% 35%, #4A4246, #0E0B0C 75%); box-shadow: 0 3px 4px rgba(0,0,0,.4); }}
+.gob b.w {{ background: radial-gradient(circle at 40% 35%, #FFFFFF, #CFC6B6 85%); box-shadow: 0 3px 4px rgba(0,0,0,.3); }}
+.mcb {{ display: flex; gap: 10px; padding: 16px; border-radius: 80px; background: linear-gradient(#8B5E34, #5A3C24); box-shadow: 0 0 0 5px #3A2818, 0 30px 60px rgba(0,0,0,.55); margin-left: 20px; transform: scale(.95); }}
+.mcb .rows {{ display: flex; flex-direction: column; gap: 10px; }}
+.mcb .rows div {{ display: flex; gap: 10px; }}
+.mcb b, .mcb u {{ width: 62px; height: 62px; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 2px; padding: 8px; box-sizing: border-box; }}
+.mcb u {{ width: 66px; height: 134px; border-radius: 40px; }}
+.mcb i {{ width: 13px; height: 13px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F0DEB4, #B5926A); }}
+.mcb b:nth-child(2n) i {{ background: radial-gradient(circle at 35% 30%, #D8E8E0, #7FA598); }}
+.gmb {{ display: grid; grid-template-columns: repeat(7, 48px); padding: 24px; border-radius: 8px; transform: rotate(-3deg); margin-left: 40px; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55);
+  background-image: linear-gradient(rgba(60,40,20,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(60,40,20,.55) 1px, transparent 1px), linear-gradient(135deg, #D8B47E, #C9A06A); background-size: 48px 48px, 48px 48px, auto; background-position: 48px 48px, 48px 48px, 0 0; }}
+.gmb b {{ height: 48px; border-radius: 50%; transform: scale(.88); }}
+.gmb b.g {{ background: radial-gradient(circle at 40% 35%, #E6C88A, {GOLD} 60%, #97793A); box-shadow: 0 0 0 4px {MERLOT}; }}
+.gmb b.w {{ background: radial-gradient(circle at 40% 35%, #FFFFFF, #CFC6B6 85%); }}
+.nmb {{ width: 360px; height: 360px; margin-left: 40px; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); }}
+.dbb {{ width: 330px; height: 330px; margin-left: 40px; transform: rotate(-3deg); filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); }}
+.hxb {{ width: 480px; height: 300px; margin-left: 20px; filter: drop-shadow(0 20px 30px rgba(0,0,0,.5)); }}
 """
 
 
