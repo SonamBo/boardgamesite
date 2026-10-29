@@ -63,7 +63,8 @@ function getAuth() {
 // Calls back with the signed-in user (or null) now and whenever it changes.
 export function onUser(callback) {
   if (!configured) { callback(null); return; }
-  getAuth().then(({ m, auth }) => m.onAuthStateChanged(auth, callback)).catch(() => callback(null));
+  // Guests signed in only for online play (anonymous) don't count as having an account.
+  getAuth().then(({ m, auth }) => m.onAuthStateChanged(auth, (u) => callback(u && !u.isAnonymous ? u : null))).catch(() => callback(null));
 }
 
 export async function signInWithGoogle() {
