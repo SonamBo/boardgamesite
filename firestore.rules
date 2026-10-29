@@ -50,6 +50,55 @@ service cloud.firestore {
         && request.resource.data.get('createdAt', null) == resource.data.get('createdAt', null);
     }
 
+    // Online games with a friend (see docs/ONLINE.md). The room id is the invite.
+    function roomKeys(d) {
+      return d.keys().hasOnly(['g', 'p', 'n', 'm', 't', 's', 'x', 'r', 'c', 'u']);
+    }
+    function sameExcept(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields);
+    }
+    function seat() {
+      return resource.data.p[0] == request.auth.uid ? 0 : (resource.data.p[1] == request.auth.uid ? 1 : -1);
+    }
+    match /rooms/{id} {
+      allow get: if request.auth != null;
+      allow list: if false;
+      allow create: if request.auth != null && id.matches('^[a-z0-9]{8}$')
+        && roomKeys(request.resource.data)
+        && request.resource.data.g is string && request.resource.data.g.size() <= 24
+        && request.resource.data.p == [request.auth.uid, '']
+        && request.resource.data.n is list && request.resource.data.n.size() == 2
+        && request.resource.data.n[0] is string && request.resource.data.n[0].size() <= 30
+        && request.resource.data.m == [] && request.resource.data.t == 0 && request.resource.data.s == 'wait'
+        && request.resource.data.c == request.time && request.resource.data.u == request.time;
+      // join: take the empty second seat
+      allow update: if request.auth != null && resource.data.s == 'wait' && resource.data.p[1] == ''
+        && resource.data.p[0] != request.auth.uid
+        && sameExcept(['p', 'n', 's', 'u'])
+        && request.resource.data.p == [resource.data.p[0], request.auth.uid]
+        && request.resource.data.n[0] == resource.data.n[0]
+        && request.resource.data.n[1] is string && request.resource.data.n[1].size() <= 30
+        && request.resource.data.s == 'play' && request.resource.data.u == request.time;
+      // move: the player to move adds exactly one move (and may finish the game)
+      allow update: if request.auth != null && resource.data.s == 'play' && seat() == resource.data.t
+        && sameExcept(['m', 't', 's', 'u'])
+        && request.resource.data.m.size() == resource.data.m.size() + 1
+        && request.resource.data.m[0:resource.data.m.size()] == resource.data.m
+        && request.resource.data.m[resource.data.m.size()] is string
+        && request.resource.data.m[resource.data.m.size()].size() <= 12
+        && request.resource.data.m.size() <= 600
+        && request.resource.data.t in [0, 1] && request.resource.data.s in ['play', 'done']
+        && request.resource.data.u == request.time;
+      // resign, or point to a rematch room
+      allow update: if request.auth != null && seat() >= 0 && resource.data.s != 'wait'
+        && sameExcept(['s', 'x', 'r', 'u'])
+        && request.resource.data.s == 'done'
+        && (!('x' in request.resource.data) || request.resource.data.x in [0, 1])
+        && (!('r' in request.resource.data) || request.resource.data.r.matches('^[a-z0-9]{8}$'))
+        && request.resource.data.u == request.time;
+      allow delete: if request.auth != null && seat() >= 0 && (resource.data.s == 'done' || resource.data.p[1] == '');
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

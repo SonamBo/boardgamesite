@@ -126,6 +126,17 @@ export async function deleteAccount() {
   await m.deleteUser(user);
 }
 
+// ---- Online play (rooms/{id}) ----
+// The Firestore module and database, for online.js. Loaded only when online play is used.
+export const firestore = () => getDb();
+// The signed-in user, signing in as an anonymous guest if nobody is (needs Anonymous sign-in enabled).
+export async function ensureUser() {
+  const { m, auth } = await getAuth();
+  await auth.authStateReady();
+  if (auth.currentUser) return auth.currentUser;
+  return (await m.signInAnonymously(auth)).user;
+}
+
 // ---- The signed-in player's saved progress (users/{uid}) ----
 export async function loadProfile(uid) {
   const { m, db } = await getDb();

@@ -6,6 +6,7 @@ import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './ga
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const SAVE = 'bgs-chess-game';
@@ -17,7 +18,7 @@ const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('chess-board');
 
 let mySide = store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
-let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo;
+let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo, onlineOn = roomInLink, ol = null;
 
 const sqEls = [];
 for (let i = 0; i < 64; i++) {
@@ -28,10 +29,10 @@ for (let i = 0; i < 64; i++) {
   boardEl.appendChild(b);
   sqEls.push(b);
 }
-const flipped = () => vsCpu() && mySide === 'b';
+const flipped = () => (onlineOn ? ol.mySeat() === 1 : vsCpu() && mySide === 'b');
 const viewToSq = (v) => (flipped() ? 63 - v : v);
 const sqToView = (s) => (flipped() ? 63 - s : s);
-const myTurn = () => !over && !busy && (!vsCpu() || S.turn === mySide);
+const myTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : (!vsCpu() || S.turn === mySide));
 
 function render() {
   const dests = sel != null ? legalNow.filter((m) => m.from === sel).map((m) => m.to) : [];
@@ -53,8 +54,8 @@ function render() {
   for (let k = 0; k < sans.length; k += 2) h += '<li><span>' + (k / 2 + 1) + '.</span> ' + sans[k] + (sans[k + 1] ? ' ' + sans[k + 1] : '') + '</li>';
   ml.innerHTML = h;
   ml.scrollTop = ml.scrollHeight;
-  $('undo').disabled = !history.length || busy || over;
-  const names = vsCpu() ? (mySide === 'w' ? ['You', 'Computer'] : ['Computer', 'You']) : ['White', 'Black'];
+  $('undo').disabled = !history.length || busy || over || onlineOn;
+  const names = onlineOn ? (ol.mySeat() === 1 ? ['Friend', 'You'] : ['You', 'Friend']) : vsCpu() ? (mySide === 'w' ? ['You', 'Computer'] : ['Computer', 'You']) : ['White', 'Black'];
   $('name-w').textContent = names[0] + ' (White)';
   $('name-b').textContent = names[1] + ' (Black)';
   $('row-w').classList.toggle('turn-you', S.turn === 'w' && !over);
@@ -92,8 +93,8 @@ function tap(i) {
   render();
 }
 
-function doMove(m) {
-  if (!started) { started = true; track('game_start', { game: 'chess', opponent: getOpp(), level: getLevel() }); }
+function doMove(m, remote = false) {
+  if (!started) { started = true; track('game_start', { game: 'chess', opponent: onlineOn ? 'online' : getOpp(), level: getLevel() }); }
   history.push({ S, last, sans: sans.slice(), keys: keys.slice() });
   sans.push(C.san(S, m));
   S = C.make(S, m);
@@ -102,8 +103,10 @@ function doMove(m) {
   legalNow = C.legal(S);
   play(m.captured ? 'capture' : m.castle ? 'king' : 'move');
   const st = C.status(S, keys);
+  if (onlineOn && !remote) ol.send(C.sqName(m.from) + C.sqName(m.to) + (m.promo ? m.promo.toLowerCase() : ''), S.turn === 'w' ? 0 : 1, st.over);
   render();
   if (st.over) return finish(st);
+  if (onlineOn) { if (C.inCheck(S)) { setStatus('Check!', 'neutral'); play('error'); } return; }
   if (C.inCheck(S)) { setStatus('Check!', 'neutral'); play('error'); }
   else setStatus(turnText(), S.turn === mySide || !vsCpu() ? '' : 'cpu');
   save();
@@ -126,6 +129,14 @@ function finish(st) {
   over = true;
   render();
   store.set(SAVE, null);
+  if (onlineOn) {
+    const mine = ol.mySeat() === 0 ? 'w' : 'b';
+    const kind = st.result === 'draw' ? 'draw' : st.result === mine ? 'win' : 'lose';
+    showResult(kind, kind === 'draw' ? 'Draw' : kind === 'win' ? 'Checkmate! You won' : 'Checkmate. You lost', kind === 'draw' ? 'By ' + st.reason + '.' : sans.length + ' moves played.');
+    setStatus(kind === 'draw' ? 'Draw by ' + st.reason : kind === 'win' ? 'You won!' : 'Checkmate', kind === 'lose' ? 'cpu' : '');
+    play(kind === 'win' ? 'win' : 'lose', 0.1);
+    return;
+  }
   if (st.result === 'draw') {
     if (vsCpu()) score.add('draw');
     showResult('draw', 'Draw', 'By ' + st.reason + '.');
@@ -145,7 +156,7 @@ function finish(st) {
   track('game_end', { game: 'chess', result: st.result, reason: st.reason });
 }
 
-function save() { if (started && !over) store.set(SAVE, { opp: getOpp(), side: mySide, fen: C.toFen(S), sans, keys, last }); }
+function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), side: mySide, fen: C.toFen(S), sans, keys, last }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || (vsCpu() && g.side !== mySide) || typeof g.fen !== 'string') return false;
@@ -163,7 +174,7 @@ function newGame() {
   store.set(SAVE, null);
   render();
   setStatus(turnText(), '');
-  if (vsCpu() && mySide === 'b') cpuMove();
+  if (vsCpu() && mySide === 'b' && !onlineOn) cpuMove();
 }
 
 document.querySelectorAll('[data-promo]').forEach((b) => b.addEventListener('click', () => {
@@ -192,7 +203,18 @@ document.querySelectorAll('[data-side]').forEach((b) => {
     newGame();
   });
 });
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+$('new-game').classList.add('online-hide');
+ol = online('chess', {
+  reset: () => { newGame(); },
+  apply: (t) => {
+    const m = legalNow.find((x) => C.sqName(x.from) + C.sqName(x.to) + (x.promo ? x.promo.toLowerCase() : '') === t);
+    if (m) doMove(m, true);
+  },
+  seatName: (s) => (s === 0 ? 'White' : 'Black'),
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+});
 $('again').addEventListener('click', newGame);
 window.addEventListener('pagehide', save);
-if (!resume()) newGame();
+if (roomInLink || !resume()) newGame();

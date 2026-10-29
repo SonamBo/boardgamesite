@@ -1596,3 +1596,11 @@ body.maxed .dice-wrap { max-width: none; }
 .gp:not(:disabled):hover { background: radial-gradient(circle closest-side, rgba(26,20,22,.25) 0 60%, transparent 65%); }
 .go-dot.bk { background: #1A1416; box-shadow: 0 0 0 2px #E8DCC8; } .go-dot.wh { background: #FFFFFF; }
 .go-wrap .dice-btns .btn-outline { background: transparent; }
+
+/* ---------- Online play box ---------- */
+.online-box { gap: 10px; }
+.online-box h2 { font-size: 22px; }
+.ol-link { width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--input-bg); color: var(--input-text); padding: 0 12px; font: 600 14px var(--body); }
+.ol-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.ol-row .btn { flex: 1; min-height: 44px; }
+body.online [data-cpu-only], body.online .online-hide { display: none !important; }
