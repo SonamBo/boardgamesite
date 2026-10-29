@@ -5,6 +5,7 @@ import { onProgressLoaded } from './store.js';
 import { levelSwitch, opponentSwitch } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const boardEl = $('board');
@@ -99,6 +100,7 @@ const getOpp = mode === 'classic' ? opponentSwitch('c4', () => { renderScore(); 
 const friend = () => getOpp() === 'friend';
 let turn = E.YOU;                       // whose disc drops next (2-player mode: Player 1 = gold, Player 2 = ivory)
 let cpuTimer = 0;
+let onlineOn = roomInLink && mode === 'classic', ol = null;
 const score = store.get('bgs-c4-score', { w: 0, l: 0, d: 0 });
 const tally = { w: 0, l: 0, d: 0 };     // 2-player games this visit (not saved)
 function renderScore() {
@@ -120,13 +122,21 @@ function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
   $('row-cpu').classList.toggle('turn-cpu', who === 'cpu');
 }
-const saveGame = (toMove) => store.set(SAVE, { board, toMove, mode: getOpp() });
+const saveGame = (toMove) => onlineOn || store.set(SAVE, { board, toMove, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 
 function finishClassic(result) {
   over = true;
   clearGame();
   setTurn(null);
+  if (onlineOn) {
+    // result is from Gold's side; Gold is seat 0
+    const mine = result === 'draw' ? 'draw' : (result === 'win') === (ol.mySeat() === 0) ? 'win' : 'lose';
+    setStatus(mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'lose' ? 'cpu' : 'neutral');
+    showResult(mine, mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'draw' ? 'The board is full.' : 'Good game.');
+    play(mine === 'lose' ? 'lose' : 'win');
+    return;
+  }
   if (friend()) {
     // result is from Player 1's side
     tally[result === 'win' ? 'w' : result === 'lose' ? 'l' : 'd']++;
@@ -167,13 +177,21 @@ function computerMove() {
   render();
 }
 const nameOf = (p) => (p === E.YOU ? 'Player 1' : 'Player 2');
-function classicMove(c) {
+function classicMove(c, remote = false) {
   if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic', level: friend() ? 'friend' : getLevel() }); }
-  const me = friend() ? turn : E.YOU;
+  const me = friend() || onlineOn ? turn : E.YOU;
   drop(c, me);
   const line = E.findLine(board, me);
+  if (onlineOn && !remote) ol.send(String(c), me === E.YOU ? 1 : 0, !!line || E.isFull(board));
   if (line) { highlight = line; finishClassic(me === E.YOU ? 'win' : 'lose'); render(); return; }
   if (E.isFull(board)) { finishClassic('draw'); render(); return; }
+  if (onlineOn) {
+    turn = -me;
+    setTurn(turn === E.YOU ? 'you' : 'cpu');
+    setStatus(ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
+    render();
+    return;
+  }
   if (friend()) {
     turn = -me;
     saveGame(turn);
@@ -255,6 +273,7 @@ function dailyMove(c, restoring) {
 // ---------- Input ----------
 function onColumn(c) {
   if (over || busy || E.lowestRow(board, c) < 0) return;
+  if (onlineOn && !ol.myTurn()) return;
   if (mode === 'daily') dailyMove(c, false);
   else classicMove(c);
 }
@@ -282,6 +301,14 @@ if (mode === 'daily') {
   else { setStatus('Find the winning move'); render(); }
 } else {
   renderScore();
-  $('new-game').addEventListener('click', newGame);
-  if (!resumeClassic()) newGame();
+  $('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+  $('new-game').classList.add('online-hide');
+  ol = online('four-in-a-row', {
+    reset: () => newGame(),
+    apply: (t) => { const c = Number(t); if (E.lowestRow(board, c) >= 0) classicMove(c, true); },
+    seatName: (s) => (s === 0 ? 'Gold (first)' : 'Ivory'),
+    over: () => over,
+    onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+  });
+  if (roomInLink || !resumeClassic()) newGame();
 }

@@ -133,6 +133,7 @@ export function online(slug, adapter) {
     if (seat < 0) { seat = d.p.indexOf(api.uid); if (adapter.onlineChanged) adapter.onlineChanged(true); }
     // play any moves we haven't shown yet
     while (applied < d.m.length) { adapter.apply(d.m[applied]); applied++; }
+    if (was && was.s !== d.s && adapter.onlineChanged) adapter.onlineChanged(true);
     if (was && was.s === 'wait' && d.s === 'play') { play('found'); setStatus('Your friend joined. ' + (seat === 0 ? 'Your move' : 'Their move'), ''); }
     if (d.s === 'done' && typeof d.x === 'number' && !(was && was.s === 'done')) setStatus((d.x === seat ? 'You resigned' : (d.n[d.x] || 'Your friend') + ' resigned'), d.x === seat ? 'cpu' : '');
     if (d.r && (!was || was.r !== d.r) && d.r !== room) { location.href = location.pathname + '?room=' + d.r + (FAKE ? '&fake=1' : ''); return; }

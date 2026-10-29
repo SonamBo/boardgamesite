@@ -4,6 +4,7 @@ import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, oppone
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
+import { online, roomInLink } from './online.js';
 
 const SAVE = 'bgs-ck-game';
 
@@ -20,6 +21,10 @@ const friend = () => getOpp() === 'friend';
 // turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top; in 2-player mode, Player 1 and Player 2)
 let board, over, busy, partial, lastPath, quiet, started, turn;
 let cpuTimer = 0;
+let onlineOn = roomInLink, ol = null;
+// a move as one character per square (keeps online moves short)
+const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+const token = (m) => m.path.map((i) => ALPH[i]).join('');
 const nameOf = (side) => (side === E.YOU ? 'Player 1' : 'Player 2');
 const markTurn = () => setTurn(turn === E.YOU ? 'you' : 'cpu');
 
@@ -44,6 +49,7 @@ const squareName = (i) => FILES[i & 7] + (8 - (i >> 3));
 // Moves the person at the screen can make right now.
 function playerMoves() {
   if (over || busy) return [];
+  if (onlineOn) return ol.myTurn() ? E.legalMoves(board, turn) : [];
   if (!friend() && turn !== E.YOU) return [];
   return E.legalMoves(board, turn);
 }
@@ -112,13 +118,22 @@ function moveSound(m) {
   if ((p === 1 && row === 0) || (p === -1 && row === 7)) play('king', 0.2);
 }
 
-const saveGame = (toMove) => store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
+const saveGame = (toMove) => onlineOn || store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 
 function finish(result) {
   over = true;
   clearGame();
   setTurn(null);
+  if (onlineOn) {
+    // result is from Gold's side; Gold is seat 0
+    const mine = result === 'draw' ? 'draw' : (result === 'win') === (ol.mySeat() === 0) ? 'win' : 'lose';
+    play(mine === 'lose' ? 'lose' : 'win', 0.25);
+    setStatus(mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'lose' ? 'cpu' : 'neutral');
+    showResult(mine, mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'draw' ? 'No captures for a long while.' : 'Good game.');
+    render();
+    return;
+  }
   if (friend()) {
     // result is from Player 1's side
     play(result === 'draw' ? 'draw' : 'win', 0.25);
@@ -141,7 +156,7 @@ function finish(result) {
   render();
 }
 
-function playerMove(m) {
+function playerMove(m, remote = false) {
   if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); }
   noteQuiet(m);
   moveSound(m);
@@ -149,10 +164,13 @@ function playerMove(m) {
   lastPath = m.path;
   partial = [];
   const next = -turn;
+  const ends = !E.legalMoves(board, next).length || quiet >= DRAW_AFTER;
+  if (onlineOn && !remote) ol.send(token(m), next === E.YOU ? 0 : 1, ends);
   if (!E.legalMoves(board, next).length) return finish(turn === E.YOU ? 'win' : 'lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
   turn = next;
   saveGame(turn);
+  if (onlineOn) { markTurn(); render(); setStatus(ol.myTurn() ? 'Your move' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   if (friend()) { markTurn(); render(); return; }
   startComputerTurn();
 }
@@ -211,5 +229,13 @@ function resume() {
   return true;
 }
 
-document.getElementById('new-game').addEventListener('click', newGame);
-if (!resume()) newGame();
+document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+document.getElementById('new-game').classList.add('online-hide');
+ol = online('checkers', {
+  reset: () => newGame(),
+  apply: (t) => { const m = E.legalMoves(board, turn).find((x) => token(x) === t); if (m) playerMove(m, true); },
+  seatName: (s) => (s === 0 ? 'Gold (bottom, first)' : 'Black'),
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); boardEl.classList.toggle('flipped', on && ol && ol.mySeat() === 1); render(); }
+});
+if (roomInLink || !resume()) newGame();
