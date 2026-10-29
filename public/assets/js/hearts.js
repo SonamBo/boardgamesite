@@ -79,13 +79,14 @@ function doPass() {
   const got = gives[(4 - off) % 4];
   picked = new Set(got);
   play('shuffle');
-  phase = 'play';
+  phase = 'passed';
   setStatus('You received ' + got.map(short).join(', '), 'neutral');
   draw();
   setTimeout(() => { picked = new Set(); startPlay(); }, 1600);
 }
 
 function startPlay() {
+  phase = 'play';
   leader = hands.findIndex((h) => h.includes(TWO_C));
   turn = leader;
   draw();

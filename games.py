@@ -546,6 +546,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-hearts-score",
     },
+    "spades": {
+        "name": "Spades",
+        "full": "Spades",
+        "cat": "cards",
+        "genre": ["Card game", "Trick-taking"],
+        "blurb": "Bid your tricks with a partner. Spades are trumps.",
+        "card": "Team up with a computer partner, bid your tricks and use spades as trumps. Mind the bags. First to 250.",
+        "chips": ["Cards", "vs Computer", "20 min"],
+        "friend": False,
+        "record": "wld",
+        "key": "bgs-spades-score",
+    },
 }
 
 
