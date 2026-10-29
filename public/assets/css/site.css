@@ -1556,3 +1556,16 @@ body.maxed .dice-wrap { max-width: none; }
 .nm-board .take .pc1, .nm-board .take .pc2 { stroke: #C0392B; stroke-width: .1; stroke-dasharray: .12 .08; }
 .nm-board .last .spot { fill: var(--brand); }
 .nm-board .pt:focus-visible .hitc { fill: rgba(207,170,98,.4); }
+
+/* ---------- Hex ---------- */
+.hxw { max-width: 760px; padding: 10px; border-radius: 16px; background: radial-gradient(ellipse at 50% 30%, var(--felt-light), var(--felt-dark) 85%); box-shadow: 0 0 0 6px var(--wood), 0 18px 40px rgba(0,0,0,.4); }
+.hx-board { width: 100%; display: block; }
+.hx-board .hx { fill: #E8DCC8; stroke: #8E7E6C; stroke-width: .06; cursor: pointer; outline: none; }
+.hx-board .hx:hover, .hx-board .hx:focus-visible { fill: #F4ECDE; }
+.hx-board .hx.p1 { fill: var(--you); stroke: var(--you-lo); }
+.hx-board .hx.p2 { fill: #FFFFFF; stroke: #BFB3A2; }
+.hx-board .hx.last { stroke: var(--brand); stroke-width: .16; }
+.hx-board .hx.win { stroke: #2A1D20; stroke-width: .14; }
+.hx-board.wait .hx { pointer-events: none; }
+.hx-board .edge { stroke-width: .5; stroke-linecap: round; }
+.hx-board .edge.e1 { stroke: var(--you); } .hx-board .edge.e2 { stroke: #FFFFFF; }

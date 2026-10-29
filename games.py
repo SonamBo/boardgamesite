@@ -645,6 +645,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-morris-score",
     },
+    "hex": {
+        "name": "Hex",
+        "full": "Hex",
+        "cat": "strategy",
+        "genre": ["Board game", "Connection game"],
+        "blurb": "Join your two sides of the board. No draws.",
+        "card": "The connection game invented by Piet Hein and John Nash. Join your two edges before your opponent joins theirs.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-hex-score",
+    },
 }
 
 
