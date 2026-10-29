@@ -597,6 +597,18 @@ GAMES = {
         "record": "wld",
         "key": "bgs-chess-score",
     },
+    "mancala": {
+        "name": "Mancala",
+        "full": "Mancala (Kalah)",
+        "cat": "strategy",
+        "genre": ["Board game", "Strategy"],
+        "blurb": "Sow seeds, earn extra turns and capture to win.",
+        "card": "The ancient counting game with Kalah rules. Sow seeds, chain extra turns and capture your opponent’s seeds.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-mancala-score",
+    },
 }
 
 

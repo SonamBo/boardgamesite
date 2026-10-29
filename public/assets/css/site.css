@@ -1490,3 +1490,23 @@ body.maxed .dice-wrap { max-width: none; }
 .cs-dot.w { background: #FBF6EA; } .cs-dot.b { background: #2A1D20; box-shadow: 0 0 0 2px #FBF6EA; }
 .cs-moves { list-style: none; margin: 0; padding: 0; max-height: 200px; overflow-y: auto; columns: 2; font-size: 14px; font-variant-numeric: tabular-nums; }
 .cs-moves li { padding: 2px 0; break-inside: avoid; } .cs-moves span { color: var(--muted); display: inline-block; min-width: 28px; }
+
+/* ---------- Mancala ---------- */
+.mc-wrap { max-width: 760px; }
+.mc-board { display: grid; grid-template-columns: 1.1fr repeat(6, 1fr) 1.1fr; grid-template-rows: 1fr 1fr; gap: clamp(4px, 1.4vw, 10px); padding: clamp(8px, 2vw, 16px); border-radius: 999px / 40%;
+  background: linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24); box-shadow: inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 4px #3A2818, 0 18px 40px rgba(0,0,0,.45); }
+.mc-row { display: contents; }
+.mc-pit { position: relative; aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.12); cursor: default; }
+.mc-pit.store { grid-row: 1 / span 2; aspect-ratio: auto; border-radius: 999px; }
+.mc-pit.store[data-i="13"] { grid-column: 1; } .mc-pit.store[data-i="6"] { grid-column: 8; }
+.mc-row.top .mc-pit { grid-row: 1; } .mc-row.bot .mc-pit { grid-row: 2; }
+.mc-pit .seeds { position: absolute; inset: 14%; }
+.mc-pit .seeds i { position: absolute; width: 30%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 30%, hsl(calc(var(--h) * 1deg) 35% 85%), hsl(calc(var(--h) * 1deg) 30% 55%)); box-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.mc-pit.store .seeds i { width: 24%; }
+.mc-pit b { position: absolute; left: 50%; bottom: -2px; transform: translate(-50%, 50%); font: 700 13px/1 var(--body); color: var(--text); background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 99px; z-index: 1; }
+.mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: 16px; }
+.mc-pit.can { cursor: pointer; box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--you); }
+.mc-pit.last { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--text-hi); }
+.mc-pit:disabled { opacity: 1; }
+.mc-pit.shake { animation: shake .3s; }
