@@ -65,7 +65,8 @@
        "answer": 1,
        "explain": "12 each, on the dark squares of the first three rows."
       }
-     ]
+     ],
+     "icon": "★"
     },
     {
      "slug": "how-checkers-pieces-move",
@@ -114,7 +115,8 @@
        "prompt": "Move your piece forward.",
        "done": "That’s a move. Then it’s your opponent’s turn."
       }
-     ]
+     ],
+     "icon": "ck"
     },
     {
      "slug": "how-to-jump-in-checkers",
@@ -167,7 +169,8 @@
        "prompt": "Make the move the rules require.",
        "done": "Right: the jump."
       }
-     ]
+     ],
+     "icon": "⤴"
     },
     {
      "slug": "double-jumps-in-checkers",
@@ -206,7 +209,8 @@
        "wrong": "Keep jumping, zig-zagging up the board: three pieces are there for the taking.",
        "done": "Triple jump!"
       }
-     ]
+     ],
+     "icon": "×2"
     },
     {
      "slug": "kings-in-checkers",
@@ -254,7 +258,8 @@
        "prompt": "Jump the piece behind your king.",
        "done": "Only a king could make that jump."
       }
-     ]
+     ],
+     "icon": "ck-king"
     },
     {
      "slug": "how-to-win-checkers",
@@ -296,7 +301,8 @@
        "answer": 1,
        "explain": "A draw. Players agree to it, or it’s declared after a long stretch with no captures."
       }
-     ]
+     ],
+     "icon": "🏁"
     }
    ]
   },
@@ -368,7 +374,8 @@
        "prompt": "Win the game in one move.",
        "done": "Your king jumps the last piece."
       }
-     ]
+     ],
+     "icon": "🏆"
     }
    ]
   },
@@ -404,7 +411,8 @@
        "next": "Now take two.",
        "done": "Gave one, took two."
       }
-     ]
+     ],
+     "icon": "2:1"
     },
     {
      "slug": "dont-hang-pieces-in-checkers",
@@ -428,7 +436,8 @@
        "wrong": "That piece could be jumped next turn: there’s an empty square behind it. Try again.",
        "done": "Safe. Nothing can jump a piece on the edge."
       }
-     ]
+     ],
+     "icon": "🛡"
     },
     {
      "slug": "back-row-defence",
@@ -457,7 +466,8 @@
        "answer": 0,
        "explain": "A king can come back and attack pieces from behind, and they have no way to escape."
       }
-     ]
+     ],
+     "icon": "🧱"
     }
    ]
   },
@@ -501,7 +511,8 @@
        "wrong": "That square can be jumped, or slows you down. Go around the black piece.",
        "done": "Safe, and on the way to the crown."
       }
-     ]
+     ],
+     "icon": "ck-king"
     },
     {
      "slug": "trapping-pieces",
@@ -523,7 +534,8 @@
        "wrong": "That frees the black piece. Keep b4 and c3 where they are and move your spare piece.",
        "done": "Trapped: Black has no move, so you win."
       }
-     ]
+     ],
+     "icon": "🪤"
     }
    ]
   }
