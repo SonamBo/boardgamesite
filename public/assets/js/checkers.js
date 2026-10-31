@@ -5,6 +5,7 @@ import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
+import { ladder } from './ladder.js';
 
 const SAVE = 'bgs-ck-game';
 
@@ -13,15 +14,18 @@ const FILES = 'abcdefgh';
 const CROWN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg>';
 const DRAW_AFTER = 80;   // half-moves of kings shuffling with no capture
 
-const getLevel = levelSwitch('ck');
+// Rated practice-ladder game (?bot=…): fixed level, no level changes. Null for an ordinary game.
+const L = ladder('checkers', { resign: () => { if (!over && started) { clearTimeout(cpuTimer); busy = false; finish('lose', true); } }, again: () => newGame() });
+const cpuName = L ? L.bot.name : 'Computer';
+const getLevel = L ? () => L.level : levelSwitch('ck');
 const rec = record('ck');
-const getOpp = opponentSwitch('ck', () => newGame());
+const getOpp = L ? () => 'cpu' : opponentSwitch('ck', () => newGame());
 const friend = () => getOpp() === 'friend';
 
 // turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top; in 2-player mode, Player 1 and Player 2)
 let board, over, busy, partial, lastPath, quiet, started, turn;
 let cpuTimer = 0;
-let onlineOn = roomInLink, ol = null;
+let onlineOn = roomInLink && !L, ol = null;
 // a move as one character per square (keeps online moves short)
 const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const token = (m) => m.path.map((i) => ALPH[i]).join('');
@@ -118,10 +122,10 @@ function moveSound(m) {
   if ((p === 1 && row === 0) || (p === -1 && row === 7)) play('king', 0.2);
 }
 
-const saveGame = (toMove) => onlineOn || store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
+const saveGame = (toMove) => onlineOn || L || store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
 const clearGame = () => store.set(SAVE, null);
 
-function finish(result) {
+function finish(result, resigned = false) {
   over = true;
   clearGame();
   setTurn(null);
@@ -148,8 +152,9 @@ function finish(result) {
     return;
   }
   play(result, 0.25);
+  L?.finish(result);
   if (result === 'win') { setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
-  if (result === 'lose') { setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
+  if (result === 'lose') { setStatus(resigned ? 'You resigned' : cpuName + ' wins', 'cpu'); showResult('lose', resigned ? 'You resigned' : cpuName + ' wins', 'Have another go?'); }
   if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'No captures for a long while.'); }
   rec.add(result);
   track('game_end', { game: 'checkers', result, level: getLevel() });
@@ -157,7 +162,7 @@ function finish(result) {
 }
 
 function playerMove(m, remote = false) {
-  if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); }
+  if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); L?.start(); }
   noteQuiet(m);
   moveSound(m);
   board = E.applyMove(board, m);
@@ -179,7 +184,7 @@ function startComputerTurn() {
   turn = E.CPU;
   busy = true;
   setTurn('cpu');
-  setStatus('Computer is thinking…', 'cpu');
+  setStatus(cpuName + ' is thinking…', 'cpu');
   render();
   cpuTimer = setTimeout(computerMove, 450);
 }
@@ -201,6 +206,7 @@ function computerMove() {
 }
 
 function newGame() {
+  L?.newGame();
   board = E.startBoard();
   over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false; turn = E.YOU;
   clearTimeout(cpuTimer);
@@ -213,7 +219,7 @@ function newGame() {
 // Pick up an unfinished game after a refresh or a return visit.
 function resume() {
   const g = store.get(SAVE, null);
-  if (!g || !Array.isArray(g.board) || g.board.length !== 64) return false;
+  if (L || !g || !Array.isArray(g.board) || g.board.length !== 64) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
   if (!E.legalMoves(g.board, E.YOU).length || !E.legalMoves(g.board, E.CPU).length) return false;
   board = g.board;

@@ -7,18 +7,22 @@ import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
 import { online, roomInLink } from './online.js';
+import { ladder } from './ladder.js';
 
 const $ = (id) => document.getElementById(id);
 const SAVE = 'bgs-chess-game';
 const SIDE_KEY = 'bgs-chess-side';
 const score = record('chess');
-const getLevel = levelSwitch('chess', () => {});
-const getOpp = opponentSwitch('chess', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'White', p2: 'Black' });
+// Rated practice-ladder game (?bot=…): fixed level, no take-backs. Null for an ordinary game.
+const L = ladder('chess', { resign: () => resign(), again: () => newGame() });
+const getLevel = L ? () => L.level : levelSwitch('chess', () => {});
+const getOpp = L ? () => 'cpu' : opponentSwitch('chess', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'White', p2: 'Black' });
+const cpuName = L ? L.bot.name : 'Computer';
 const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('chess-board');
 
-let mySide = store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
-let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo, onlineOn = roomInLink, ol = null;
+let mySide = L ? L.side : store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
+let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo, onlineOn = roomInLink && !L, ol = null;
 
 const sqEls = [];
 for (let i = 0; i < 64; i++) {
@@ -55,7 +59,7 @@ function render() {
   ml.innerHTML = h;
   ml.scrollTop = ml.scrollHeight;
   $('undo').disabled = !history.length || busy || over || onlineOn;
-  const names = onlineOn ? (ol.mySeat() === 1 ? ['Friend', 'You'] : ['You', 'Friend']) : vsCpu() ? (mySide === 'w' ? ['You', 'Computer'] : ['Computer', 'You']) : ['White', 'Black'];
+  const names = onlineOn ? (ol.mySeat() === 1 ? ['Friend', 'You'] : ['You', 'Friend']) : vsCpu() ? (mySide === 'w' ? ['You', cpuName] : [cpuName, 'You']) : ['White', 'Black'];
   $('name-w').textContent = names[0] + ' (White)';
   $('name-b').textContent = names[1] + ' (Black)';
   $('row-w').classList.toggle('turn-you', S.turn === 'w' && !over);
@@ -94,7 +98,7 @@ function tap(i) {
 }
 
 function doMove(m, remote = false) {
-  if (!started) { started = true; track('game_start', { game: 'chess', opponent: onlineOn ? 'online' : getOpp(), level: getLevel() }); }
+  if (!started) { started = true; track('game_start', { game: 'chess', opponent: onlineOn ? 'online' : getOpp(), level: getLevel() }); L?.start(); }
   history.push({ S, last, sans: sans.slice(), keys: keys.slice() });
   sans.push(C.san(S, m));
   S = C.make(S, m);
@@ -112,12 +116,12 @@ function doMove(m, remote = false) {
   save();
   if (vsCpu() && S.turn !== mySide) cpuMove();
 }
-const turnText = () => (vsCpu() ? (S.turn === mySide ? 'Your move' : 'Computer is thinking') : (S.turn === 'w' ? 'White' : 'Black') + ' to move');
+const turnText = () => (vsCpu() ? (S.turn === mySide ? 'Your move' : cpuName + ' is thinking') : (S.turn === 'w' ? 'White' : 'Black') + ' to move');
 
 function cpuMove() {
   busy = true;
   render();
-  setStatus('Computer is thinking', 'cpu');
+  setStatus(cpuName + ' is thinking', 'cpu');
   setTimeout(() => {
     const m = C.bestMove(S, getLevel());
     busy = false;
@@ -139,14 +143,17 @@ function finish(st) {
   }
   if (st.result === 'draw') {
     if (vsCpu()) score.add('draw');
+    L?.finish('draw');
     showResult('draw', 'Draw', 'By ' + st.reason + '.');
     setStatus('Draw by ' + st.reason, 'neutral');
     play('lose', 0.1);
   } else if (vsCpu()) {
     const won = st.result === mySide;
     score.add(won ? 'win' : 'lose');
-    showResult(won ? 'win' : 'lose', won ? 'Checkmate! You won' : 'Checkmate. The computer won', sans.length + ' moves played.');
-    setStatus(won ? 'Checkmate! You won' : 'Checkmate', won ? '' : 'cpu');
+    L?.finish(won ? 'win' : 'lose');
+    const resigned = st.reason === 'resignation';
+    showResult(won ? 'win' : 'lose', resigned ? 'You resigned' : won ? 'Checkmate! You won' : 'Checkmate. ' + (L ? cpuName : 'The computer') + ' won', sans.length + ' moves played.');
+    setStatus(resigned ? 'You resigned' : won ? 'Checkmate! You won' : 'Checkmate', won ? '' : 'cpu');
     play(won ? 'win' : 'lose', 0.1);
   } else {
     showResult('win', (st.result === 'w' ? 'White' : 'Black') + ' wins by checkmate!', sans.length + ' moves played.');
@@ -156,10 +163,11 @@ function finish(st) {
   track('game_end', { game: 'chess', result: st.result, reason: st.reason });
 }
 
-function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), side: mySide, fen: C.toFen(S), sans, keys, last }); }
+function resign() { if (!over && started) finish({ over: true, result: mySide === 'w' ? 'b' : 'w', reason: 'resignation' }); }
+function save() { if (started && !over && !onlineOn && !L) store.set(SAVE, { opp: getOpp(), side: mySide, fen: C.toFen(S), sans, keys, last }); }
 function resume() {
   const g = store.get(SAVE, null);
-  if (!g || g.opp !== getOpp() || (vsCpu() && g.side !== mySide) || typeof g.fen !== 'string') return false;
+  if (L || !g || g.opp !== getOpp() || (vsCpu() && g.side !== mySide) || typeof g.fen !== 'string') return false;
   S = C.fromFen(g.fen); sans = g.sans || []; keys = g.keys || []; last = g.last || null; history = []; sel = null; over = false; busy = false; started = true; promo = null;
   legalNow = C.legal(S);
   render();
@@ -168,6 +176,7 @@ function resume() {
   return true;
 }
 function newGame() {
+  if (L) { L.newGame(); mySide = L.side; }
   S = C.fromFen(C.START); sel = null; last = null; sans = []; keys = [C.key(S)]; history = []; over = false; busy = false; started = false; promo = null;
   legalNow = C.legal(S);
   $('result').hidden = true;
@@ -183,7 +192,7 @@ document.querySelectorAll('[data-promo]').forEach((b) => b.addEventListener('cli
   if (m) doMove(m);
 }));
 $('undo').addEventListener('click', () => {
-  if (!history.length || busy || over) return;
+  if (!history.length || busy || over || L) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   if (vsCpu() && h.S.turn !== mySide && history.length) h = history.pop();

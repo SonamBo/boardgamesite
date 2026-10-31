@@ -1682,3 +1682,21 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 .path-meter { flex-wrap: wrap; }
 .path-meter .btn, .lesson-nav .btn-gold, .lp-done .btn-gold { color: var(--on-brand); text-decoration: none; }
 .lesson-nav .btn-outline { color: var(--text); text-decoration: none; }
+
+/* ---------- Practice ladder (rated games) ---------- */
+body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .peg-tools { display: none !important; }
+.ladder-box { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; border-color: color-mix(in srgb, var(--accent-text) 45%, var(--border)); }
+.ladder-kicker { margin: 0; font: 600 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); }
+.ladder-vs { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ladder-vs span { display: flex; flex-direction: column; gap: 2px; }
+.ladder-vs span:last-child { text-align: right; }
+.ladder-vs b { font-size: 15px; }
+.ladder-vs em { font: 400 28px/1 var(--display); font-style: normal; color: var(--text); }
+.ladder-vs i { font-style: normal; color: var(--muted); font-size: 13px; }
+.ladder-note { margin: 0; font-size: 13px; }
+.ladder-result { margin: 0; font-size: 15px; }
+.ladder-result.up b { color: #8FD19A; } .ladder-result.down b { color: #F0948B; }
+.ladder-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ladder-actions .btn { min-height: 42px; padding: 0 16px; font-size: 15px; }
+.ladder-actions a.btn-gold { color: var(--on-brand); text-decoration: none; }
+.ladder-notice { margin: 0; padding: 12px 14px; font-size: 14px; color: var(--text-2); }
