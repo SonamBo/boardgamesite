@@ -233,7 +233,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     card.classList.add('lp-done', 'lp-celebrate');
     const unitDone = lesson.unit.lessons.every((l) => isDone(course.game, l.slug));
     const toPath = '/learn/' + course.game + '/path';
-    card.innerHTML = '<img class="lp-cheer" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="280">' +
+    card.innerHTML = '<img class="lp-cheer" src="/assets/img/fox-wink.webp" alt="" width="280" height="280">' +
       '<p class="lp-done-title">' + (unitDone ? 'Unit complete!' : 'Lesson complete!') + '</p>' +
       '<div class="lp-tally"><span><b class="lp-xp-n">' + (first ? '+0' : '0') + '</b><small>XP</small></span><span><b>' + firstTry + '/' + lesson.steps.filter((x) => x.type !== 'info').length + '</b><small>first try</small></span></div>' +
       '<p class="text-2">' + (lesson.wrap || 'Nicely done.') + (unitDone && next ? ' A gift chest is waiting on your path.' : '') + '</p>' +
