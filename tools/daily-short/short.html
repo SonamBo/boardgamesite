@@ -1,0 +1,411 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Draws one frame of a daily-challenge Short (1080×1920). render.mjs sets window.SCRIPT (from shorts.mjs),
+     then calls render(t) for every frame and screenshots it. Nothing here moves on its own. -->
+<style>
+@font-face { font-family: 'DM Sans'; src: url('../../public/assets/fonts/dm-sans-latin.woff'); font-weight: 400 700; }
+@font-face { font-family: 'Serif'; src: url('../../public/assets/fonts/instrument-serif-latin.woff'); }
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #110D0E; }
+body { position: relative; font-family: 'DM Sans', sans-serif; color: #F5EFE7; }
+#bg { position: absolute; inset: 0; background: radial-gradient(90% 55% at 50% 52%, #4A1226 0%, #2A0A15 45%, #110D0E 85%); }
+.layer { position: absolute; left: 0; right: 0; text-align: center; }
+#eyebrow { top: 186px; font-size: 30px; letter-spacing: .14em; color: #CFAA62; font-weight: 600; text-transform: uppercase; }
+#title { top: 244px; font-family: 'Serif', serif; font-size: 108px; line-height: 1.03; padding: 0 64px; }
+#title em, #sub em { font-style: normal; color: #CFAA62; }
+#sub { top: 498px; font-size: 40px; color: #DCD2CA; padding: 0 96px; line-height: 1.22; }
+#below { font-size: 36px; color: #C6BBB3; padding: 0 90px; }
+#stage { position: absolute; inset: 0; }
+#timer { position: absolute; left: 490px; top: 548px; width: 100px; height: 100px; }
+#timer svg { width: 100px; height: 100px; transform: rotate(-90deg); }
+#timer b { position: absolute; inset: 0; display: grid; place-items: center; font-family: 'Serif', serif; font-size: 58px; font-weight: 400; }
+#flash { position: absolute; inset: 0; background: #110D0E; pointer-events: none; }
+#end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding-bottom: 260px;
+  background: radial-gradient(90% 55% at 50% 45%, #4A1226 0%, #2A0A15 45%, #110D0E 85%); opacity: 0; }
+#end img { width: 190px; height: 190px; border-radius: 40px; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+#end .h { font-family: 'Serif', serif; font-size: 92px; line-height: 1.04; text-align: center; padding: 0 60px; }
+#end .h em { font-style: normal; color: #CFAA62; }
+#end .s { font-size: 38px; color: #DCD2CA; text-align: center; padding: 0 60px; }
+#end .url { margin-top: 26px; font-size: 52px; font-weight: 700; padding: 22px 50px; border-radius: 999px; background: #8A2443; color: #F7EFE6; box-shadow: inset 0 -6px 0 #5E1530; }
+
+/* shared board bits */
+.abs { position: absolute; }
+.ring { position: absolute; border-radius: 50%; border: 7px solid; pointer-events: none; }
+.sq-ring { position: absolute; pointer-events: none; border: 7px solid; border-radius: 6px; }
+.ghost { position: absolute; border-radius: 50%; border: 5px dashed #CFAA62; }
+.disc { position: absolute; border-radius: 50%; }
+.disc.g { background: radial-gradient(circle at 36% 30%, #F0D59A, #CFAA62 55%, #97793A); box-shadow: inset 0 -6px 0 rgba(0,0,0,.22), 0 4px 8px rgba(0,0,0,.35); }
+.disc.o { background: radial-gradient(circle at 36% 30%, #FFFFFF, #EFE6D8 55%, #BFB3A2); box-shadow: inset 0 -6px 0 rgba(0,0,0,.18), 0 4px 8px rgba(0,0,0,.35); }
+.disc.k { background: radial-gradient(circle at 50% 42%, #3A403C 0 46%, #262A27 47% 100%); box-shadow: inset 0 -6px 0 #141714, 0 0 0 3px #4C544E, 0 4px 8px rgba(0,0,0,.4); }
+.disc svg { position: absolute; left: 24%; top: 24%; width: 52%; height: 52%; }
+.disc.g svg { fill: #2A1D0A; opacity: .6; } .disc.k svg { fill: #CFAA62; }
+.pz { position: absolute; }
+.pz.w { fill: #FBF6EA; stroke: #2A1D20; stroke-width: 1.4; stroke-linejoin: round; }
+.pz.b { fill: #2A1D20; stroke: #FBF6EA; stroke-width: .9; stroke-linejoin: round; }
+.pz .eye { stroke: none; } .pz.w .eye { fill: #2A1D20; } .pz.b .eye { fill: #FBF6EA; }
+.pz .cut { fill: none; stroke-width: 1.6; } .pz.w .cut { stroke: #2A1D20; } .pz.b .cut { stroke: #FBF6EA; }
+.coord { position: absolute; font: 700 22px/1 'DM Sans'; color: rgba(60,40,30,.6); }
+.pit { position: absolute; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); box-shadow: inset 0 5px 10px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.12); }
+.pit.store { border-radius: 999px; }
+.seed { position: absolute; width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.count { position: absolute; transform: translate(-50%, -50%); font: 700 34px/1 'DM Sans'; color: #F5EFE7; background: rgba(0,0,0,.6); padding: 5px 12px; border-radius: 99px; }
+.lbl { position: absolute; font: 700 26px/1 'DM Sans'; letter-spacing: .12em; color: #C6BBB3; text-transform: uppercase; }
+.cell { position: absolute; display: grid; place-items: center; font: 700 50px/1 'DM Sans'; }
+.tile { position: absolute; display: grid; place-items: center; font: 700 64px/1 'DM Sans'; text-transform: uppercase; border-radius: 12px; }
+.hex { position: absolute; display: grid; place-items: center; font: 700 84px/1 'DM Sans'; text-transform: uppercase;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.chips { position: absolute; left: 70px; right: 70px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+.chip { font: 600 42px/1 'DM Sans'; padding: 16px 26px; border-radius: 999px; background: #292124; color: #F5EFE7; text-transform: lowercase; }
+.chip.pg { background: #CFAA62; color: #2A1D0A; font-size: 56px; font-weight: 700; padding: 20px 36px; }
+</style></head>
+<body>
+<div id="bg"></div>
+<p id="eyebrow" class="layer"></p>
+<h1 id="title" class="layer"></h1>
+<p id="sub" class="layer"></p>
+<div id="stage"></div>
+<p id="below" class="layer"></p>
+<div id="timer"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#3D0F1F" stroke-width="10"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#CFAA62" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><b id="tnum">5</b></div>
+<div id="end">
+  <img src="../../public/assets/img/logo.webp" alt="">
+  <p class="h"></p>
+  <p class="s"></p>
+  <p class="url"></p>
+</div>
+<div id="flash"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const ease = (x) => 1 - Math.pow(1 - x, 3);
+const inout = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const fade = (t, a, b) => clamp((t - a) / (b - a));
+const stage = $('stage');
+let S;
+
+function el(tag, cls, css, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (css) Object.assign(e.style, css);
+  if (html != null) e.innerHTML = html;
+  stage.appendChild(e);
+  return e;
+}
+const px = (n) => n + 'px';
+
+// ---------- captions ----------
+const titleFit = {};
+function setText(id, html, op, dy) {
+  const e = $(id);
+  if (e.dataset.h !== html) {
+    e.innerHTML = html; e.dataset.h = html;
+    if (id === 'title') {
+      if (!(html in titleFit)) { let f = 108; e.style.fontSize = f + 'px'; while (e.offsetHeight > 236 && f > 64) { f -= 8; e.style.fontSize = f + 'px'; } titleFit[html] = f; }
+      e.style.fontSize = titleFit[html] + 'px';
+    }
+  }
+  e.style.opacity = op; e.style.transform = `translateY(${dy}px)`;
+  if (id === 'title' && html) $('sub').style.top = px(244 + e.offsetHeight + 16);
+}
+function captions(t) {
+  for (const slot of ['title', 'sub', 'below']) {
+    let hit = null;
+    for (const c of S.caps) if (c.slot === slot && t >= c.a && t < c.b) hit = c;
+    if (!hit) { setText(slot, '', 0, 0); continue; }
+    const k = fade(t, hit.a, hit.a + 0.25), o = 1 - fade(t, hit.b - 0.2, hit.b);
+    setText(slot, hit.html, Math.min(k, o), (1 - ease(k)) * 22);
+  }
+}
+
+// ---------- board timeline ----------
+function stateAt(t) {
+  let pos = S.keys[0].pos;
+  for (const k of S.keys) if (k.t <= t) pos = k.pos;
+  const anim = S.anims.find((a) => t >= a.a && t < a.b);
+  return { pos, anim };
+}
+function marksAt(t) {
+  return S.marks.filter((m) => t >= m.a && t < m.b).map((m) => {
+    const op = Math.min(fade(t, m.a, m.a + 0.25), 1 - fade(t, m.b - 0.2, m.b));
+    return { ...m, op: op * (m.pulse ? 0.65 + 0.35 * Math.sin((t - m.a) * 7) : 1) };
+  });
+}
+const RING = { gold: '#CFAA62', ivory: '#EFE6D8', red: '#FF8FA8', white: '#FFFFFF' };
+function roundMarks(marks, rect) {
+  for (const m of marks) {
+    if (m.style === 'none') continue;
+    for (const i of m.cells) {
+      const r = rect(i);
+      if (m.style === 'ghost') { el('div', 'ghost', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), opacity: m.op }); continue; }
+      const c = RING[m.style]; if (!c) continue;
+      el('div', 'ring', { left: px(r.x - 10), top: px(r.y - 10), width: px(r.w + 20), height: px(r.h + 20), borderColor: c, opacity: m.op });
+    }
+  }
+}
+
+// ---------- Four in a Row ----------
+const C4 = { x: 142, y: 660, cell: 108, pad: 20, d: 92 };
+function drawC4(t) {
+  const { pos, anim } = stateAt(t);
+  const B = C4;
+  el('div', 'abs', { left: px(B.x), top: px(B.y), width: '796px', height: '688px', borderRadius: '34px', background: '#8A2443', boxShadow: '0 40px 80px rgba(0,0,0,.6), inset 0 -10px 0 #5E1530, inset 0 4px 0 #A8395B' });
+  const rect = (i) => ({ x: B.x + B.pad + (i % 7) * B.cell + 8, y: B.y + B.pad + Math.floor(i / 7) * B.cell + 8, w: B.d, h: B.d });
+  for (let i = 0; i < 42; i++) { const r = rect(i); el('div', 'abs', { left: px(r.x), top: px(r.y), width: px(B.d), height: px(B.d), borderRadius: '50%', background: '#1A0D11', boxShadow: 'inset 0 6px 10px rgba(0,0,0,.65)' }); }
+  const src = anim ? anim.before : pos;
+  for (let i = 0; i < 42; i++) if (src[i]) { const r = rect(i); el('div', 'disc ' + (src[i] === 1 ? 'g' : 'o'), { left: px(r.x), top: px(r.y), width: px(B.d), height: px(B.d) }); }
+  if (anim && anim.type === 'drop') {
+    const k = clamp((t - anim.a) / (anim.b - anim.a));
+    const r = rect(anim.row * 7 + anim.col);
+    const startY = -(anim.row + 1.3) * B.cell;
+    el('div', 'disc ' + (anim.who === 1 ? 'g' : 'o'), { left: px(r.x), top: px(r.y + startY * (1 - k * k)), width: px(B.d), height: px(B.d) });
+  }
+  roundMarks(marksAt(t), rect);
+  return B.y + 688;
+}
+
+// ---------- Chess and Checkers ----------
+const SQ = { x: 140, y: 660, cell: 100 };
+const sqRect = (i) => ({ x: SQ.x + (i % 8) * SQ.cell, y: SQ.y + Math.floor(i / 8) * SQ.cell, w: SQ.cell, h: SQ.cell });
+function squareMarks(marks) {
+  for (const m of marks) {
+    if (m.style === 'none') continue;
+    for (const i of m.cells) {
+      const r = sqRect(i);
+      if (m.style === 'check') { el('div', 'abs', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), opacity: m.op, background: 'radial-gradient(circle, rgba(232,93,93,.95) 0%, rgba(192,57,43,.8) 45%, transparent 75%)' }); continue; }
+      const c = RING[m.style]; if (!c) continue;
+      el('div', 'sq-ring', { left: px(r.x + 3), top: px(r.y + 3), width: px(r.w - 6), height: px(r.h - 6), borderColor: c, opacity: m.op });
+    }
+  }
+}
+function boardFrame(light, dark, coords) {
+  el('div', 'abs', { left: px(SQ.x - 14), top: px(SQ.y - 14), width: px(828), height: px(828), borderRadius: '14px', background: '#17110F', boxShadow: '0 40px 80px rgba(0,0,0,.6)' });
+  for (let i = 0; i < 64; i++) { const r = sqRect(i); el('div', 'abs', { left: px(r.x), top: px(r.y), width: px(100), height: px(100), background: ((Math.floor(i / 8) + i) % 2) ? dark : light }); }
+  if (coords) for (let k = 0; k < 8; k++) {
+    el('div', 'coord', { left: px(SQ.x + 5), top: px(SQ.y + k * 100 + 5) }, String(8 - k));
+    el('div', 'coord', { left: px(SQ.x + k * 100 + 80), top: px(SQ.y + 773) }, 'abcdefgh'[k]);
+  }
+}
+function drawChess(t) {
+  const { pos, anim } = stateAt(t);
+  boardFrame('#EFE6D8', '#B78A5E', true);
+  const back = marksAt(t).filter((m) => m.style === 'check');
+  squareMarks(back);
+  const piece = (p, x, y, op = 1) => { const e = el('div', 'abs', { left: px(x + 7), top: px(y + 7), width: '86px', height: '86px', opacity: op }, S.extra.pieces[p]); e.firstChild.style.width = '86px'; e.firstChild.style.height = '86px'; };
+  const src = anim ? anim.before : pos;
+  for (let i = 0; i < 64; i++) {
+    if (!src[i]) continue;
+    if (anim && (i === anim.from || (anim.rook && i === anim.rook[0]))) continue;
+    const r = sqRect(i);
+    const k = anim ? clamp((t - anim.a) / (anim.b - anim.a)) : 0;
+    piece(src[i], r.x, r.y, anim && i === anim.to ? 1 - fade(k, 0.7, 1) : 1);
+  }
+  if (anim) {
+    const k = inout(clamp((t - anim.a) / (anim.b - anim.a)));
+    const f = sqRect(anim.from), to = sqRect(anim.to);
+    piece(anim.piece, f.x + (to.x - f.x) * k, f.y + (to.y - f.y) * k);
+    if (anim.rook) { const rf = sqRect(anim.rook[0]), rt = sqRect(anim.rook[1]); piece(src[anim.rook[0]], rf.x + (rt.x - rf.x) * k, rf.y + (rt.y - rf.y) * k); }
+  }
+  squareMarks(marksAt(t).filter((m) => m.style !== 'check'));
+  return SQ.y + 800;
+}
+const CROWN = '<svg viewBox="0 0 24 24"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg>';
+function drawCheckers(t) {
+  const { pos, anim } = stateAt(t);
+  boardFrame('#EFE6D8', '#5E1A31', false);
+  const man = (p, x, y, s = 1) => {
+    const d = 78 * s;
+    el('div', 'disc ' + (p > 0 ? 'g' : 'k'), { left: px(x + 50 - d / 2), top: px(y + 50 - d / 2), width: px(d), height: px(d) }, Math.abs(p) === 2 ? CROWN : '');
+  };
+  let src = anim ? anim.before : pos;
+  let gone = [];
+  if (anim) {
+    const seg = (t - anim.a) / 0.4;
+    gone = anim.caps.filter((_, i) => seg >= i + 0.5);
+  }
+  for (let i = 0; i < 64; i++) {
+    if (!src[i] || (anim && i === anim.path[0]) || gone.includes(i)) continue;
+    const r = sqRect(i); man(src[i], r.x, r.y);
+  }
+  if (anim) {
+    const n = anim.path.length - 1;
+    const seg = clamp((t - anim.a) / 0.4, 0, n);
+    const s = Math.min(Math.floor(seg), n - 1), k = inout(seg - s);
+    const f = sqRect(anim.path[s]), to = sqRect(anim.path[s + 1]);
+    man(anim.piece, f.x + (to.x - f.x) * k, f.y + (to.y - f.y) * k, 1 + Math.sin(k * Math.PI) * (anim.caps.length ? 0.18 : 0.06));
+  }
+  squareMarks(marksAt(t));
+  return SQ.y + 800;
+}
+
+// ---------- Mancala ----------
+const MB = { x: 90, y: 760, w: 900, h: 400, store: 120, pit: 88 };
+function pitRect(i) {
+  const left = MB.x + 20 + MB.store + 16, span = MB.w - 2 * (20 + MB.store + 16), gap = (span - 6 * MB.pit) / 5;
+  if (i === 6) return { x: MB.x + MB.w - 20 - MB.store, y: MB.y + 30, w: MB.store, h: MB.h - 60 };
+  if (i === 13) return { x: MB.x + 20, y: MB.y + 30, w: MB.store, h: MB.h - 60 };
+  const col = i < 6 ? i : 12 - i;
+  return { x: left + col * (MB.pit + gap), y: i < 6 ? MB.y + MB.h - 60 - MB.pit - 20 : MB.y + 60, w: MB.pit, h: MB.pit };
+}
+function seedXY(r, k, n) {
+  // spread seeds over the pit, the same way every frame
+  const a = k * 2.399963, rr = Math.sqrt((k + 0.5) / Math.max(n, 1)) * 0.36;
+  const sx = r.w > r.h ? 1 : 1, sy = r.h > r.w ? r.h / r.w : 1;
+  return { x: r.x + r.w / 2 + Math.cos(a) * rr * r.w * sx - 11, y: r.y + r.h / 2 + Math.sin(a) * rr * r.w * sy * (r.h > r.w ? 0.9 : 1) - 11 };
+}
+function drawMancala(t) {
+  const { pos, anim } = stateAt(t);
+  el('div', 'abs', { left: px(MB.x), top: px(MB.y), width: px(MB.w), height: px(MB.h), borderRadius: '999px / 40%', background: 'linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24)', boxShadow: 'inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 5px #3A2818, 0 40px 80px rgba(0,0,0,.55)' });
+  el('div', 'lbl', { left: px(MB.x), width: px(MB.w), textAlign: 'center', top: px(MB.y - 52) }, 'Computer');
+  el('div', 'lbl', { left: px(MB.x), width: px(MB.w), textAlign: 'center', top: px(MB.y + MB.h + 26), color: '#CFAA62' }, 'You');
+  let b = (anim ? anim.before : pos).slice();
+  let hand = -1;
+  if (anim && anim.type === 'sow') {
+    const n = Math.min(anim.seq.length, Math.floor((t - anim.a) / anim.per));
+    b[anim.from] = 0;
+    for (let k = 0; k < n; k++) b[anim.seq[k]]++;
+    hand = n ? anim.seq[n - 1] : anim.from;
+  }
+  if (anim && anim.type === 'capture' && t - anim.a > (anim.b - anim.a) * 0.5) b = anim.before.map((v, i) => (i === anim.pit || i === anim.opp ? 0 : i === 6 ? v + anim.amount : v));
+  for (let i = 0; i < 14; i++) {
+    const r = pitRect(i);
+    el('div', 'pit' + (i === 6 || i === 13 ? ' store' : ''), { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h) });
+    const n = b[i];
+    for (let k = 0; k < Math.min(n, 14); k++) {
+      const p = seedXY(r, k, Math.min(n, 14)), h = (k * 47 + i * 13) % 360;
+      el('div', 'seed', { left: px(p.x), top: px(p.y), background: `radial-gradient(circle at 35% 30%, hsl(${h} 35% 85%), hsl(${h} 30% 55%))` });
+    }
+    el('div', 'count', { left: px(r.x + r.w / 2), top: px(i < 6 ? r.y + r.h + 4 : i > 6 && i < 13 ? r.y - 4 : r.y + r.h - 34) }, String(n));
+    if (i < 6) el('div', 'lbl', { left: px(r.x), width: px(r.w), textAlign: 'center', top: px(r.y + r.h + 40), fontSize: '22px', color: '#E6CFA8' }, 'pit ' + (i + 1));
+  }
+  if (hand >= 0) { const r = pitRect(hand); el('div', 'ring', { left: px(r.x - 8), top: px(r.y - 8), width: px(r.w + 16), height: px(r.h + 16), borderColor: '#FFFFFF', borderRadius: hand === 6 || hand === 13 ? '999px' : '50%', opacity: 0.85 }); }
+  if (anim && anim.type === 'capture' && t - anim.a <= (anim.b - anim.a) * 0.5) for (const i of [anim.pit, anim.opp]) { const r = pitRect(i); el('div', 'ring', { left: px(r.x - 8), top: px(r.y - 8), width: px(r.w + 16), height: px(r.h + 16), borderColor: '#FF8FA8' }); }
+  for (const m of marksAt(t)) for (const i of m.cells) {
+    const r = pitRect(i), c = RING[m.style]; if (!c) continue;
+    el('div', 'ring', { left: px(r.x - 10), top: px(r.y - 10), width: px(r.w + 20), height: px(r.h + 20), borderColor: c, opacity: m.op, borderRadius: i === 6 || i === 13 ? '999px' : '50%' });
+  }
+  return MB.y + MB.h + 70;
+}
+
+// ---------- Sudoku ----------
+const SD = { x: 144, y: 660, cell: 88 };
+const sdRect = (i) => ({ x: SD.x + (i % 9) * SD.cell, y: SD.y + Math.floor(i / 9) * SD.cell, w: SD.cell, h: SD.cell });
+function drawSudoku(t) {
+  const { pos, anim } = stateAt(t);
+  const given = S.keys[0].pos;
+  el('div', 'abs', { left: px(SD.x - 12), top: px(SD.y - 12), width: px(816), height: px(816), borderRadius: '16px', background: '#45383C', boxShadow: '0 40px 80px rgba(0,0,0,.6)' });
+  const marks = marksAt(t);
+  const tint = {};
+  for (const m of marks) for (const i of m.cells) if (m.style === 'zone') tint[i] = Math.max(tint[i] || 0, m.op);
+  const g = anim ? anim.before : pos;
+  for (let i = 0; i < 81; i++) {
+    const r = sdRect(i);
+    const bg = tint[i] ? `color-mix(in srgb, #5E1530 ${Math.round(tint[i] * 100)}%, #1F191B)` : '#1F191B';
+    el('div', 'abs', { left: px(r.x + 1), top: px(r.y + 1), width: px(r.w - 2), height: px(r.h - 2), background: bg });
+    if (g[i]) el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: given[i] ? '#F5EFE7' : '#E3C37F', fontWeight: given[i] ? 700 : 600 }, String(g[i]));
+  }
+  for (let k = 1; k < 3; k++) {
+    el('div', 'abs', { left: px(SD.x + k * 3 * SD.cell - 3), top: px(SD.y), width: '6px', height: px(9 * SD.cell), background: '#8A2443' });
+    el('div', 'abs', { left: px(SD.x), top: px(SD.y + k * 3 * SD.cell - 3), width: px(9 * SD.cell), height: '6px', background: '#8A2443' });
+  }
+  for (const m of marks) for (const i of m.cells) {
+    const r = sdRect(i);
+    if (m.style === 'target') el('div', 'sq-ring', { left: px(r.x + 2), top: px(r.y + 2), width: px(r.w - 4), height: px(r.h - 4), borderColor: '#CFAA62', opacity: m.op });
+    if (m.style === 'white') el('div', 'sq-ring', { left: px(r.x + 2), top: px(r.y + 2), width: px(r.w - 4), height: px(r.h - 4), borderColor: '#FFFFFF', opacity: m.op });
+    if (m.style === 'red') el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: '#FF8FA8', opacity: m.op, fontSize: '54px', fontWeight: 400 }, '×');
+  }
+  if (anim && anim.type === 'fill') {
+    const k = clamp((t - anim.a) / (anim.b - anim.a)), r = sdRect(anim.cell);
+    el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: '#E3C37F', opacity: k, transform: `scale(${1.5 - 0.5 * ease(k)})` }, String(anim.v));
+  }
+  return SD.y + 9 * SD.cell + 20;
+}
+
+// ---------- Word Guess ----------
+const WG = { x: 221, y: 660, tile: 118, gap: 12 };
+const TILE = { s: ['#292124', '#8A2443', '#CFAA62'], c: ['#C6BBB3', '#F7EFE6', '#2A1D0A'] };
+function drawWordGuess(t) {
+  const { pos, anim } = stateAt(t);
+  const rows = (anim ? anim.before : pos).rows;
+  for (let r = 0; r < 6; r++) for (let c = 0; c < 5; c++) {
+    const x = WG.x + c * (WG.tile + WG.gap), y = WG.y + r * (WG.tile + WG.gap);
+    let ch = '', sc = null, sy = 1, border = '#45383C';
+    if (rows[r]) { ch = rows[r].word[c]; sc = rows[r].score ? rows[r].score[c] : null; border = '#ADA29A'; }
+    if (anim && r === anim.row) {
+      const k = (t - anim.a) / (anim.b - anim.a);
+      if (anim.type === 'type') { ch = c < Math.floor(k * 5) + 1 ? anim.word[c] : ''; border = ch ? '#ADA29A' : '#45383C'; }
+      if (anim.type === 'flip') {
+        ch = anim.word[c]; border = '#ADA29A';
+        const local = clamp((t - anim.a - c * 0.2) / 0.35);
+        sy = Math.abs(Math.cos(local * Math.PI));
+        if (local >= 0.5) sc = anim.score[c];
+      }
+    }
+    const filled = sc !== null && sc !== undefined;
+    el('div', 'tile', { left: px(x), top: px(y), width: px(WG.tile), height: px(WG.tile), transform: `scaleY(${sy})`,
+      background: filled ? TILE.s[sc] : 'transparent', color: filled ? TILE.c[sc] : '#F5EFE7', border: filled ? 'none' : `4px solid ${border}` }, ch);
+  }
+  return WG.y + 6 * (WG.tile + WG.gap);
+}
+
+// ---------- Letter Hive ----------
+const HV = { cx: 540, cy: 960, r: 104 };
+function drawHive(t) {
+  const { pos, anim } = stateAt(t);
+  const { centre, outer } = S.extra;
+  const w = Math.sqrt(3) * HV.r, h = 2 * HV.r, dist = w + 14;
+  const spots = [{ ch: centre, x: HV.cx, y: HV.cy, c: true }].concat(outer.map((ch, k) => {
+    const a = (Math.PI / 3) * k + Math.PI / 6; return { ch, x: HV.cx + Math.cos(a) * dist, y: HV.cy + Math.sin(a) * dist };
+  }));
+  let lit = -1;
+  if (anim && anim.type === 'word') { const k = clamp((t - anim.a) / (anim.b - anim.a)); lit = anim.word[Math.min(anim.word.length - 1, Math.floor(k * anim.word.length))]; }
+  for (const s of spots) {
+    const on = s.ch === lit;
+    el('div', 'hex', { left: px(s.x - w / 2), top: px(s.y - h / 2), width: px(w), height: px(h), transform: on ? 'scale(1.08)' : 'none',
+      background: s.c ? (on ? '#F0D59A' : '#CFAA62') : (on ? '#B03A5B' : '#8A2443'), color: s.c ? '#2A1D0A' : '#F7EFE6' }, s.ch);
+  }
+  const found = (anim ? anim.before : pos).found;
+  const chips = el('div', 'chips', { top: px(HV.cy + dist + h / 2 + 30) });
+  const show = found.slice();
+  let pop = null;
+  if (anim && anim.type === 'word') { show.push(anim.word); pop = anim; }
+  show.forEach((wd, k) => {
+    const c = document.createElement('div');
+    const pg = new Set(wd).size === 7;
+    c.className = 'chip' + (pg ? ' pg' : '');
+    c.textContent = wd;
+    if (pop && k === show.length - 1) { const kk = clamp((t - pop.a) / (pop.b - pop.a)); c.style.opacity = kk; c.style.transform = `scale(${1.25 - 0.25 * ease(kk)})`; }
+    chips.appendChild(c);
+  });
+  return 1500;
+}
+
+const DRAW = { c4: drawC4, chess: drawChess, checkers: drawCheckers, mancala: drawMancala, sudoku: drawSudoku, wordguess: drawWordGuess, hive: drawHive };
+
+window.setup = function (script) {
+  S = script;
+  $('eyebrow').textContent = S.eyebrow;
+  document.querySelector('#end .h').innerHTML = S.end.head;
+  document.querySelector('#end .s').textContent = S.end.sub;
+  document.querySelector('#end .url').textContent = S.end.url;
+};
+window.render = function (t) {
+  stage.innerHTML = '';
+  const bottom = DRAW[S.kind](t);
+  $('below').style.top = px(bottom + 28);
+  captions(t);
+  const tm = S.timer;
+  const on = tm ? Math.min(fade(t, tm.a, tm.a + 0.25), 1 - fade(t, tm.b - 0.15, tm.b)) : 0;
+  $('timer').style.opacity = on;
+  if (on > 0) {
+    const left = clamp(tm.b - t, 0, tm.b - tm.a);
+    $('arc').setAttribute('stroke-dashoffset', String(326.7 * (1 - left / (tm.b - tm.a))));
+    $('tnum').textContent = String(Math.max(1, Math.ceil(left)));
+  }
+  let dip = 0;
+  for (const d of S.dips) dip = Math.max(dip, Math.min(fade(t, d - 0.25, d), 1 - fade(t, d, d + 0.3)));
+  $('flash').style.opacity = dip;
+  const e = ease(fade(t, S.end.t, S.end.t + 0.5));
+  $('end').style.opacity = e;
+  $('end').style.transform = `scale(${1.03 - 0.03 * e})`;
+};
+</script>
+</body></html>

@@ -1,0 +1,78 @@
+# Three YouTube Shorts a day, one per daily challenge from the day before (so nothing live is spoiled).
+# Times are after midnight has passed everywhere in the Americas, so nobody can still be playing that
+# puzzle: 10:34, 13:34 and 16:04 UTC = 4:04 pm, 7:04 pm and 9:34 pm India time. GitHub can start a
+# scheduled run late. Without the YouTube secrets it still renders, and the videos are in the run's
+# artifacts. Setup: tools/daily-short/README.md.
+name: Daily Shorts
+
+on:
+  schedule:
+    - cron: '34 10 * * *'
+    - cron: '34 13 * * *'
+    - cron: '4 16 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Posting date, YYYY-MM-DD (empty: today in India). It shows the day before''s challenges.'
+        required: false
+      slot:
+        description: 'Which Short: 1, 2, 3 or all'
+        required: false
+        default: 'all'
+      upload:
+        description: 'Upload to YouTube'
+        type: boolean
+        default: false
+
+concurrency:
+  group: daily-shorts
+  cancel-in-progress: false
+
+jobs:
+  short:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Playwright and ffmpeg
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.0
+          npx playwright install --with-deps chromium
+          command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+
+      - name: Which Short
+        id: pick
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          SLOT: ${{ inputs.slot }}
+        run: |
+          case "$SCHEDULE" in
+            '34 10 * * *') echo "slot=0" >> "$GITHUB_OUTPUT" ;;
+            '34 13 * * *') echo "slot=1" >> "$GITHUB_OUTPUT" ;;
+            '4 16 * * *')  echo "slot=2" >> "$GITHUB_OUTPUT" ;;
+            *) if [ -z "$SLOT" ] || [ "$SLOT" = all ]; then echo "slot=all" >> "$GITHUB_OUTPUT"; else echo "slot=$((SLOT - 1))" >> "$GITHUB_OUTPUT"; fi ;;
+          esac
+
+      - name: Render
+        run: node tools/daily-short/render.mjs --slot ${{ steps.pick.outputs.slot }} ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-shorts
+          path: dist/short/
+          retention-days: 14
+
+      - name: Upload to YouTube
+        if: github.event_name == 'schedule' || inputs.upload
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_PRIVACY: ${{ vars.YT_PRIVACY }}
+        run: |
+          for meta in dist/short/*.json; do node tools/daily-short/upload.mjs "$meta"; done

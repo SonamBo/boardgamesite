@@ -4,3 +4,4 @@ node_modules/
 *-debug.log
 *.local
 service-account*.json
+dist/
