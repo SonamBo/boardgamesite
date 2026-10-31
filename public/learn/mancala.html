@@ -33,7 +33,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
-
+<script type="module" src="/assets/js/learn-path.js"></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -45,7 +45,7 @@
    "description": "Learn how to play Mancala with Kalah rules and the strategy that wins: extra-turn moves, chaining turns, captures and hoarding seeds near your store.",
    "image": "https://boardgamesite.com/assets/img/og/mancala.jpg",
    "datePublished": "2026-10-28",
-   "dateModified": "2026-10-29",
+   "dateModified": "2026-10-31",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -154,6 +154,39 @@
     <p>Try these ideas against the computer.</p>
     <a class="btn btn-gold" href="/play/mancala">Play Mancala free</a>
   </div>
+
+<section class="path" id="path" data-path="mancala" aria-labelledby="path-h">
+  <h2 id="path-h">Learn Mancala step by step</h2>
+  <p class="text-2">Learn Mancala (Kalah) in minutes: sowing seeds, free turns, captures and the end of the game, then the planning that wins: chaining free turns and protecting your seeds.</p>
+  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">8 lessons</span></div>
+  <div class="path-unit"><h3>Rules: How Mancala works</h3><p>The board, sowing, free turns, captures and the end of the game.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mancala/mancala-board-setup" data-lesson="mancala-board-setup"><span class="n">1</span><span class="t">The Mancala board and how to set it up</span></a></li>
+      <li><a href="/learn/mancala/how-to-sow-in-mancala" data-lesson="how-to-sow-in-mancala"><span class="n">2</span><span class="t">How to move in Mancala: sowing seeds</span></a></li>
+      <li><a href="/learn/mancala/mancala-free-turn" data-lesson="mancala-free-turn"><span class="n">3</span><span class="t">Mancala free turns: landing in your store</span></a></li>
+      <li><a href="/learn/mancala/mancala-captures" data-lesson="mancala-captures"><span class="n">4</span><span class="t">Captures in Mancala</span></a></li>
+      <li><a href="/learn/mancala/how-mancala-ends" data-lesson="how-mancala-ends"><span class="n">5</span><span class="t">How a game of Mancala ends</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Rules check</h3><p>Prove you know the rules, then move on to strategy.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mancala/mancala-rules-quiz" data-lesson="mancala-rules-quiz"><span class="n">6</span><span class="t">Mancala rules quiz</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Strategy: Planning ahead</h3><p>Chain free turns together and keep your seeds safe.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mancala/chain-free-turns" data-lesson="chain-free-turns"><span class="n">7</span><span class="t">Chaining free turns in Mancala</span></a></li>
+      <li><a href="/learn/mancala/protect-your-seeds" data-lesson="protect-your-seeds"><span class="n">8</span><span class="t">Protecting your seeds in Mancala</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Practice ladder</h3><p>Beat each bot to climb. Every ladder game counts towards your BGS Rating, which starts at 800.</p>
+    <ol class="path-list">
+      <li><a href="/play/mancala?bot=penny" data-bot="penny"><span class="n">9</span><span class="t">Penny · 600<small>Sows wherever. Misses free turns.</small></span></a></li>
+      <li><a href="/play/mancala?bot=mira" data-bot="mira"><span class="n">10</span><span class="t">Mira · 900<small>Takes every free turn and capture she sees.</small></span></a></li>
+      <li><a href="/play/mancala?bot=monocle" data-bot="monocle"><span class="n">11</span><span class="t">The Monocle · 1200<small>Plans long chains. Guards every pit.</small></span></a></li>
+    </ol>
+  </div>
+</section>
 
 <h2>The rules</h2>
   <p>Each player has six pits with four seeds each and a store on their right. On your turn, pick up all the seeds from one of your pits and sow them anticlockwise, one per pit, including your own store but skipping your opponent’s. If the last seed lands in your store, take another turn. If it lands in an empty pit on your side and the pit opposite has seeds, capture them all, plus your last seed. When one side is empty, the other player stores their remaining seeds. Most seeds wins.</p>

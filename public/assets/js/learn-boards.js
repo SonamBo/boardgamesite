@@ -150,6 +150,7 @@ function checkersBoard(el) {
     const f = { capture: m.caps.length > 0, captured: m.caps.length, king: Math.abs(before) === 1 && Math.abs(after) === 2 };
     last = m.path; partial = [];
     side = -side;
+    f.win = K.legalMoves(B, side).length === 0;
     sound(m.caps.length ? 'capture' : 'move');
     if (f.king) sound('king', 0.2);
     render();

@@ -33,7 +33,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
-
+<script type="module" src="/assets/js/learn-path.js"></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -45,7 +45,7 @@
    "description": "Learn the rules of Checkers, from moving and jumping to crowning kings, plus the strategy that wins games: the back row, the centre and forcing shots.",
    "image": "https://boardgamesite.com/assets/img/og/checkers.jpg",
    "datePublished": "2026-10-26",
-   "dateModified": "2026-10-26",
+   "dateModified": "2026-10-31",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -154,6 +154,47 @@
     <p>Learn faster by playing along. Easy mode is a good place to try each idea.</p>
     <a class="btn btn-gold" href="/play/checkers">Play Checkers free</a>
   </div>
+
+<section class="path" id="path" data-path="checkers" aria-labelledby="path-h">
+  <h2 id="path-h">Learn Checkers step by step</h2>
+  <p class="text-2">Learn checkers from scratch: how pieces move and jump, why captures are compulsory, crowning kings and how to win, then the shots and endgame ideas that beat stronger players.</p>
+  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">12 lessons</span></div>
+  <div class="path-unit"><h3>Rules: How checkers works</h3><p>The board, moving, jumping, kings and how you win.</p>
+    <ol class="path-list">
+      <li><a href="/learn/checkers/checkers-board-setup" data-lesson="checkers-board-setup"><span class="n">1</span><span class="t">The checkers board and how to set it up</span></a></li>
+      <li><a href="/learn/checkers/how-checkers-pieces-move" data-lesson="how-checkers-pieces-move"><span class="n">2</span><span class="t">How checkers pieces move</span></a></li>
+      <li><a href="/learn/checkers/how-to-jump-in-checkers" data-lesson="how-to-jump-in-checkers"><span class="n">3</span><span class="t">How to jump and capture in checkers</span></a></li>
+      <li><a href="/learn/checkers/double-jumps-in-checkers" data-lesson="double-jumps-in-checkers"><span class="n">4</span><span class="t">Double and triple jumps in checkers</span></a></li>
+      <li><a href="/learn/checkers/kings-in-checkers" data-lesson="kings-in-checkers"><span class="n">5</span><span class="t">Kings in checkers: crowning and how they move</span></a></li>
+      <li><a href="/learn/checkers/how-to-win-checkers" data-lesson="how-to-win-checkers"><span class="n">6</span><span class="t">How to win at checkers</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Rules check</h3><p>Prove you know the rules, then move on to strategy.</p>
+    <ol class="path-list">
+      <li><a href="/learn/checkers/checkers-rules-quiz" data-lesson="checkers-rules-quiz"><span class="n">7</span><span class="t">Checkers rules quiz</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Strategy: Shots and tactics</h3><p>Use compulsory jumps to win material, and keep your own pieces safe.</p>
+    <ol class="path-list">
+      <li><a href="/learn/checkers/two-for-one-shot" data-lesson="two-for-one-shot"><span class="n">8</span><span class="t">The two-for-one shot in checkers</span></a></li>
+      <li><a href="/learn/checkers/dont-hang-pieces-in-checkers" data-lesson="dont-hang-pieces-in-checkers"><span class="n">9</span><span class="t">Safe moves: don’t give pieces away</span></a></li>
+      <li><a href="/learn/checkers/back-row-defence" data-lesson="back-row-defence"><span class="n">10</span><span class="t">Back row defence in checkers</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Strategy: Endgames</h3><p>Racing for kings and finishing a game you’re winning.</p>
+    <ol class="path-list">
+      <li><a href="/learn/checkers/race-to-crown" data-lesson="race-to-crown"><span class="n">11</span><span class="t">Racing to crown a king</span></a></li>
+      <li><a href="/learn/checkers/trapping-pieces" data-lesson="trapping-pieces"><span class="n">12</span><span class="t">Trapping pieces in checkers</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Practice ladder</h3><p>Beat each bot to climb. Every ladder game counts towards your BGS Rating, which starts at 800.</p>
+    <ol class="path-list">
+      <li><a href="/play/checkers?bot=penny" data-bot="penny"><span class="n">13</span><span class="t">Penny · 600<small>Just learned the moves. Walks into jumps.</small></span></a></li>
+      <li><a href="/play/checkers?bot=mira" data-bot="mira"><span class="n">14</span><span class="t">Mira · 900<small>Steady player. Spots the simple shots.</small></span></a></li>
+      <li><a href="/play/checkers?bot=monocle" data-bot="monocle"><span class="n">15</span><span class="t">The Monocle · 1200<small>Reads several jumps ahead. No free pieces here.</small></span></a></li>
+    </ol>
+  </div>
+</section>
 
   <h2>The board and the pieces</h2>
   <p>Checkers is played on an 8×8 board, but only the 32 dark squares are used. Each player starts with 12 pieces, called <strong>men</strong>, on the dark squares of the three rows nearest them. The two middle rows start empty. The row nearest each player is their <strong>back row</strong>, and it’s the row the other player is trying to reach.</p>
