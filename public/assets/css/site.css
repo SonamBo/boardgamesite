@@ -1607,3 +1607,78 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 /* online: the second player sees the board from their side */
 .board.flipped, #board.flipped { transform: rotate(180deg); }
 .board.flipped > *, #board.flipped > * { transform: rotate(180deg); }
+
+/* ---------- Learn: lesson player ---------- */
+.lp { display: flex; flex-direction: column; gap: 16px; }
+.lp-top { display: flex; align-items: center; gap: 12px; }
+.lp-bar { flex: 1; height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.lp-bar span { display: block; height: 100%; width: 0; background: var(--accent-text); border-radius: inherit; transition: width .35s; }
+.lp-count { font: 600 13px/1 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+.lp-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, 1fr); gap: 28px; align-items: start; }
+.lp-board-wrap { padding: 10px; }
+.lp-board-wrap[hidden] { display: none; }
+.lp-board.cs-board, .lp-board.grid8 { width: 100%; max-width: 560px; margin: 0 auto; }
+.lp-board.mc-board { width: 100%; max-width: 640px; margin: 0 auto; }
+.lp-card { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.lp-kicker { margin: 0; font: 600 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); }
+.lp-text { font-size: 17px; line-height: 1.55; color: var(--text); }
+.lp-text p { margin: 0 0 10px; } .lp-text p:last-child { margin-bottom: 0; }
+.lp-text strong { color: var(--accent-text-hi); }
+.lp-choices { display: flex; flex-direction: column; gap: 8px; }
+.lp-choices:empty { display: none; }
+.lp-choice { text-align: left; min-height: 48px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font: 500 16px/1.35 var(--body); cursor: pointer; }
+.lp-choice:hover:not(:disabled) { border-color: var(--accent-text); }
+.lp-choice.right { border-color: #5FA36B; background: color-mix(in srgb, #5FA36B 22%, var(--surface-2)); }
+.lp-choice.wrong { border-color: #C0574F; opacity: .7; text-decoration: line-through; cursor: default; }
+.lp-pips { display: flex; align-items: center; gap: 6px; }
+.lp-pips:empty { display: none; }
+.lp-pips i { width: 12px; height: 12px; border-radius: 50%; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--border-strong); }
+.lp-pips i.on { background: var(--accent-text); box-shadow: none; }
+.lp-pips span { margin-left: 6px; font-size: 13px; color: var(--muted); }
+.lp-feedback { margin: 0; min-height: 1.4em; font-size: 15px; color: var(--text-2); }
+.lp-feedback.good { color: #8FD19A; }
+.lp-feedback.bad { color: #F0948B; }
+.lp-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.lp-next:disabled { opacity: .45; cursor: default; }
+.lp-done-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lp-done-title { margin: 0; font: 400 32px/1.1 var(--display); }
+.lp-xp { padding: 4px 10px; border-radius: 99px; background: var(--accent-text); color: var(--on-you); font: 700 14px/1.2 var(--body); }
+.lp-done .text-2 { margin: 0; }
+.lp-path-link { text-align: center; font-size: 15px; }
+.lp-done .link-btn { align-self: center; font-size: 14px; }
+[data-mark="good"] { box-shadow: inset 0 0 0 4px #5FA36B !important; }
+[data-mark="bad"] { box-shadow: inset 0 0 0 4px #D2564B !important; }
+[data-mark="hint"]::before, .ck [data-mark="hint"]::after { content: ""; position: absolute; inset: 30%; border-radius: 50%; background: color-mix(in srgb, var(--accent-text) 70%, transparent); pointer-events: none; z-index: 1; }
+[data-mark="target"] { box-shadow: inset 0 0 0 4px var(--accent-text) !important; }
+.mc-pit[data-mark="good"], .mc-pit[data-mark="bad"], .mc-pit[data-mark="target"] { border-radius: 50%; }
+.mc-pit.store[data-mark] { border-radius: 999px; }
+.mc-pit[data-mark="hint"]::before { inset: 38%; }
+@media (max-width: 900px) {
+  .lp-main { grid-template-columns: 1fr; gap: 16px; }
+  .lp-card { padding: 18px; }
+}
+
+/* ---------- Learn: lesson pages and the course path ---------- */
+.lesson-page { max-width: 1120px; display: flex; flex-direction: column; gap: 20px; }
+.lesson-page h1 { margin: 0; }
+.lesson-crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; color: var(--muted); }
+.lesson-crumbs a { color: var(--text-2); }
+.lesson-read { max-width: 760px; }
+.lesson-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.path { display: flex; flex-direction: column; gap: 22px; }
+.path-unit h3 { margin: 0 0 4px; font: 400 26px/1.2 var(--display); }
+.path-unit > p { margin: 0 0 12px; color: var(--text-2); }
+.path-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.path-list a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); text-decoration: none; min-height: 60px; }
+.path-list a:hover { border-color: var(--accent-text); }
+.path-list .n { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font: 700 13px/1 var(--body); color: var(--text-2); }
+.path-list .t { font-weight: 600; font-size: 15px; line-height: 1.3; }
+.path-list .t small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+.path-list a.done .n { background: #5FA36B; color: #0E1A10; }
+.path-list a.next { border-color: var(--accent-text); box-shadow: 0 0 0 1px var(--accent-text); }
+.path-list a.next .n { background: var(--accent-text); color: var(--on-you); }
+.path-meter { display: flex; align-items: center; gap: 12px; }
+.path-meter .lp-bar { max-width: 320px; }
+.path-meter { flex-wrap: wrap; }
+.path-meter .btn, .lesson-nav .btn-gold, .lp-done .btn-gold { color: var(--on-brand); text-decoration: none; }
+.lesson-nav .btn-outline { color: var(--text); text-decoration: none; }
