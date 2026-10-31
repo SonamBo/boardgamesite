@@ -1,0 +1,35 @@
+# One-off: download the Fredoka and Nunito fonts (SIL Open Font License) so the site can host them itself.
+name: Fetch fonts
+on:
+  push:
+    branches: [fetch-fonts]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    if: "!contains(github.event.head_commit.message, '[fonts fetched]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          mkdir -p public/assets/fonts
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+          get() { # $1 family query, $2 output file: the latin subset woff2
+            css=$(curl -sSL -A "$UA" "https://fonts.googleapis.com/css2?family=$1&display=swap")
+            url=$(printf '%s' "$css" | awk '/\/\* latin \*\//{f=1} f && /src: url/{match($0,/https:[^)]+/); print substr($0,RSTART,RLENGTH); exit}')
+            echo "$1 -> $url"; curl -sSL -o "public/assets/fonts/$2" "$url"; ls -l "public/assets/fonts/$2"
+          }
+          get "Fredoka:wght@400..700" fredoka-latin.woff2
+          get "Nunito:wght@400..800" nunito-latin.woff2
+          get "Nunito:ital,wght@1,400..800" nunito-italic-latin.woff2
+          curl -sSL -o public/assets/fonts/OFL-Fredoka.txt https://raw.githubusercontent.com/google/fonts/main/ofl/fredoka/OFL.txt
+          curl -sSL -o public/assets/fonts/OFL-Nunito.txt https://raw.githubusercontent.com/google/fonts/main/ofl/nunito/OFL.txt
+          file public/assets/fonts/*.woff2
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/fonts
+          git commit -m "Fredoka and Nunito font files [fonts fetched]"
+          git push
