@@ -114,6 +114,7 @@ function mount(el) {
     const pick = todaysPick(puzzlePool(course));
     const lesson = { slug: 'daily', title: 'Daily puzzle', xp: 0, steps: [pick.step], unit: { name: 'Daily puzzle', lessons: [] } };
     runLesson(stage, course, lesson, null, 0, {
+      autoFinish: true,
       kicker: 'Daily ' + g.name + ' puzzle · from “' + pick.lesson.title + '”',
       finish(card, mistakes) {
         const first = record(current, mistakes);

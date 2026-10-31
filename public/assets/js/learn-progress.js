@@ -1,5 +1,6 @@
 // Learning progress, kept in this browser (and synced to the player's account by accounts.js).
-//   bgs-learn-<game>   { done: { <lesson slug>: <time finished> }, xp }
+//   bgs-learn-<game>   { done: { <lesson slug>: <time finished> }, xp, chests: { <unit id>: time }, jump: <unit index> }
+//                      (jump: the furthest unit unlocked by passing a "Jump here?" test)
 //   bgs-activity       { 'YYYY-MM-DD': { <game>: steps done that day } } (last 60 days)
 import { store } from './store.js';
 
@@ -13,7 +14,7 @@ export function dayKey(d = new Date()) {
 
 export function progress(game) {
   const v = store.get(LEARN(game), null);
-  return { done: (v && v.done) || {}, xp: (v && v.xp) || 0 };
+  return { ...(v || {}), done: (v && v.done) || {}, xp: (v && v.xp) || 0, chests: (v && v.chests) || {}, jump: (v && v.jump) || 0 };
 }
 
 export const isDone = (game, slug) => !!progress(game).done[slug];
@@ -25,6 +26,24 @@ export function complete(game, slug, xp = 20) {
   store.set(LEARN(game), p);
   logActivity(game, 3);
   return first;
+}
+
+// A unit's gift chest: bonus XP, once.
+export function openChest(game, unitId, xp = 30) {
+  const p = progress(game);
+  if (p.chests[unitId]) return false;
+  p.chests[unitId] = Date.now();
+  p.xp += xp;
+  store.set(LEARN(game), p);
+  return true;
+}
+// Passing a "Jump here?" test unlocks everything up to that unit.
+export function jumpTo(game, unitIndex) {
+  const p = progress(game);
+  if (unitIndex <= p.jump) return;
+  p.jump = unitIndex;
+  store.set(LEARN(game), p);
+  logActivity(game, 3);
 }
 
 // Count something the player did today (lessons, puzzles, rated games), for streaks and the dashboard chart.

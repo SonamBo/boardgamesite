@@ -339,7 +339,10 @@ def course_html(game):
     out = [f'<section class="path" id="path" data-path="{game}" aria-labelledby="path-h">',
            f'  <h2 id="path-h">Learn {c["name"]} step by step</h2>',
            f'  <p class="text-2">{c["intro"]}</p>',
-           f'  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">{total} lessons</span></div>']
+           f'  <div class="path-cta card"><div><b>Learn {c["name"]} step by step</b><span class="text-2">{total} hands-on lessons, unlock as you go, then rated games.</span></div>'
+           f'<a class="btn btn-gold btn-lg" href="/learn/{game}/path" data-path-cta>Start the {c["name"]} path</a></div>',
+           f'  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">{total} lessons</span></div>',
+           f'  <details class="path-all"><summary>See all {total} lessons</summary>']
     n = 0
     for u in c["units"]:
         items = []
@@ -357,7 +360,7 @@ def course_html(game):
                         f'<span class="t">{b["name"]} · {b["rating"]}<small>{b["blurb"]}</small></span></a></li>')
         out.append('  <div class="path-unit"><h3>Practice ladder</h3><p>Beat each bot to climb. Every ladder game counts towards your BGS Rating, which starts at 800.</p>\n'
                    '    <ol class="path-list">\n' + "\n".join(bots) + "\n    </ol>\n  </div>")
-    out.append("</section>")
+    out.append("</details></section>")
     return "\n".join(out)
 
 
@@ -405,6 +408,18 @@ def lesson_pages():
                     "script": "/assets/js/lesson.js", "kind": "lesson", "game": game, "lesson": l["slug"],
                     "h1": htmllib.escape(l["title"])}
             made.append((c["_path"], meta, body))
+        # the app-style learning path for the game
+        rows = "".join(f'<li><a href="/learn/{game}/{l["slug"]}">{htmllib.escape(l["title"])}</a></li>' for u, l in flat)
+        body = f"""<div class="lpath" id="lpath" data-game="{game}">
+  <h1 class="sr-only">{c["name"]} learning path</h1>
+  <div class="lpath-bar"></div>
+  <div class="lpath-body"><noscript><ol>{rows}</ol></noscript></div>
+</div>"""
+        meta = {"_file": f"src/courses/{game}.json (path)", "title": f"Learn {c['name']}: Your Learning Path | BoardGameSite",
+                "description": f"Your step-by-step {c['name']} learning path: rules, strategy and rated games.", "path": f"/learn/{game}/path",
+                "out": f"learn/{game}/path.html", "nav": "learn", "script": "/assets/js/path.js", "robots": "noindex", "sitemap": "no",
+                "game": game, "h1": f"{c['name']} learning path"}
+        made.append((c["_path"], meta, body))
     return made
 
 

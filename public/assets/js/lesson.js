@@ -12,6 +12,7 @@ import { makeBoard } from './learn-boards.js';
 import { complete, isDone } from './learn-progress.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
+import { confetti, countUp } from './confetti.js';
 
 const root = document.getElementById('lesson');
 if (root) start(root);
@@ -31,11 +32,13 @@ async function start(el) {
   runLesson(el, course, flat[at], flat[at + 1] || null, at);
 }
 
-// opts.finish(card, mistakes): replaces the normal end-of-lesson card (daily puzzles use it).
+// opts.finish(card, mistakes): replaces the normal end-of-lesson card (daily puzzles, jump tests).
+// opts.autoFinish: finish straight after the last step is solved, with no Continue button (daily puzzles).
 export function runLesson(el, course, lesson, next, index, opts = {}) {
   el.innerHTML = `
   <div class="lp">
     <div class="lp-top">
+      ${opts.finish ? '' : '<a class="lp-x" href="/learn/' + course.game + '/path" aria-label="Back to the ' + course.name + ' path">✕</a>'}
       <div class="lp-bar" aria-hidden="true"><span></span></div>
       <span class="lp-count"></span>
     </div>
@@ -55,11 +58,11 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     </div>
   </div>`;
   const $ = (s) => el.querySelector(s);
-  if (opts.finish) $('.lp').classList.add('lp-puzzle');   // a puzzle finishes by itself: no Continue button
+  if (opts.autoFinish) $('.lp').classList.add('lp-puzzle');   // a puzzle finishes by itself: no Continue button
   const boardWrap = $('.lp-board-wrap');
   const board = makeBoard(course.board, $('.lp-board-el'));
   const steps = lesson.steps;
-  let k = 0, tries = 0, mistakes = 0, started = false;
+  let k = 0, tries = 0, mistakes = 0, firstTry = 0, started = false;
   let timers = [];
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 
@@ -76,6 +79,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     f.className = 'lp-feedback' + (kind ? ' ' + kind : '');
   }
   function ready(text) {
+    if (!tries) firstTry++;   // an interactive step solved without a mistake
     feedback(text || 'Well done.', 'good');
     board.interactive(false);
     board.onTap(null);
@@ -84,7 +88,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     n.textContent = k === steps.length - 1 ? 'Finish lesson' : 'Continue';
     n.focus({ preventScroll: true });
     // a daily puzzle goes straight to its result card
-    if (opts.finish && k === steps.length - 1) { n.disabled = true; later(finish, 900); }
+    if (opts.autoFinish && k === steps.length - 1) { n.disabled = true; later(finish, 900); }
     if (!started && !opts.finish) { started = true; track('lesson_start', { game: course.game, lesson: lesson.slug }); }
   }
 
@@ -222,17 +226,22 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     const first = complete(course.game, lesson.slug, lesson.xp || 20);
     track('lesson_complete', { game: course.game, lesson: lesson.slug, first });
     play('win', 0.05);
+    confetti();
     $('.lp-bar span').style.width = '100%';
     $('.lp-count').textContent = 'Done';
     const card = $('.lp-card');
-    card.classList.add('lp-done');
-    const nextLink = next
-      ? '<a class="btn btn-gold btn-block" href="/learn/' + course.game + '/' + next.slug + '">Next: ' + next.title + '</a>'
-      : '<a class="btn btn-gold btn-block" href="/learn/' + course.game + '#path">See your ' + course.name + ' path</a>';
-    card.innerHTML = '<div class="lp-done-head"><p class="lp-done-title">Lesson complete</p>' + (first ? '<span class="lp-xp">+' + (lesson.xp || 20) + ' XP</span>' : '') + '</div>' +
-      '<p class="text-2">' + (lesson.wrap || 'Nicely done.') + '</p>' + nextLink +
-      '<a class="lp-path-link" href="/learn/' + course.game + '#path">Back to the ' + course.name + ' path</a>' +
+    card.classList.add('lp-done', 'lp-celebrate');
+    const unitDone = lesson.unit.lessons.every((l) => isDone(course.game, l.slug));
+    const toPath = '/learn/' + course.game + '/path';
+    card.innerHTML = '<img class="lp-cheer" src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">' +
+      '<p class="lp-done-title">' + (unitDone ? 'Unit complete!' : 'Lesson complete!') + '</p>' +
+      '<div class="lp-tally"><span><b class="lp-xp-n">' + (first ? '+0' : '0') + '</b><small>XP</small></span><span><b>' + firstTry + '/' + lesson.steps.filter((x) => x.type !== 'info').length + '</b><small>first try</small></span></div>' +
+      '<p class="text-2">' + (lesson.wrap || 'Nicely done.') + (unitDone && next ? ' A gift chest is waiting on your path.' : '') + '</p>' +
+      '<a class="btn btn-gold btn-lg btn-block lp-continue" href="' + toPath + '">Continue</a>' +
+      (next ? '<a class="lp-path-link" href="/learn/' + course.game + '/' + next.slug + '?from=path">Or go straight to: ' + next.title + '</a>' : '') +
       '<button type="button" class="link-btn lp-again">Do this lesson again</button>';
+    if (first) countUp(card.querySelector('.lp-xp-n'), lesson.xp || 20, '+');
+    card.querySelector('.lp-continue').addEventListener('click', () => { try { sessionStorage.setItem('bgs-path-just', lesson.slug); } catch (e) { /* private mode */ } });
     card.querySelector('.lp-again').addEventListener('click', () => runLesson(el, course, lesson, next, index, opts));
   }
 

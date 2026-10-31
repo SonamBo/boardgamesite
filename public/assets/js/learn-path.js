@@ -13,11 +13,6 @@ for (const el of document.querySelectorAll('[data-path]')) {
   if (next && finished) next.classList.add('next');
   el.querySelector('.lp-bar span').style.width = Math.round((finished / links.length) * 100) + '%';
   el.querySelector('.path-count').textContent = finished ? finished + ' of ' + links.length + ' lessons done' : links.length + ' lessons';
-  if (next && finished) {
-    const cta = document.createElement('a');
-    cta.className = 'btn btn-gold';
-    cta.href = next.href;
-    cta.textContent = 'Continue: ' + next.querySelector('.t').textContent;
-    el.querySelector('.path-meter').appendChild(cta);
-  }
+  const cta = el.querySelector('[data-path-cta]');
+  if (cta && finished) cta.textContent = finished === links.length ? 'Open your path' : 'Continue: lesson ' + (finished + 1) + ' of ' + links.length;
 }

@@ -59,7 +59,7 @@ function mergeLearn(a, b) {
   if (!b) return a;
   const done = { ...(b.done || {}) };
   for (const [k, t] of Object.entries(a.done || {})) done[k] = done[k] ? Math.min(done[k], t) : t;
-  return { done, xp: Math.max(n(a.xp), n(b.xp)) };
+  return { done, xp: Math.max(n(a.xp), n(b.xp)), chests: { ...(b.chests || {}), ...(a.chests || {}) }, jump: Math.max(n(a.jump), n(b.jump)) };
 }
 // A rating: the copy with more rated games behind it (then the most recent).
 function mergeRating(a, b) {

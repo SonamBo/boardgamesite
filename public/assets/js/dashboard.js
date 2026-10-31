@@ -128,7 +128,7 @@ function paint() {
   $('dash-games').innerHTML = COURSES.map((g) => {
     const s = st[g], p = ratingOf(g);
     const pct = s.all.length ? Math.round((s.finished.length / s.all.length) * 100) : 0;
-    const href = s.complete ? '/play/' + g + '?bot=' + nextBot(g).id : s.next ? '/learn/' + g + '/' + s.next.slug : '/learn/' + g;
+    const href = '/learn/' + g + '/path';
     const line = s.complete ? 'Path complete · next: ' + nextBot(g).name + ' on the ladder' : s.started ? 'Next: ' + s.next.title : 'Not started · ' + s.all.length + ' lessons';
     return '<a class="dash-game" href="' + href + '"><span class="dash-badge">' + NAME[g][0] + '</span><span class="dash-game-body"><span class="dash-game-name">' + NAME[g] +
       ' <span class="muted">· ' + (p.n ? 'BGS ' + show(p) : 'unrated') + '</span></span><span class="dash-game-line">' + esc(line) +
