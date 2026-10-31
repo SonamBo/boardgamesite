@@ -11,7 +11,10 @@ import { store, PROGRESS_EVENT } from './store.js';
 import { GAMES } from './games-data.js';
 
 // Progress that follows the player between devices: every game's record (from games.py) plus the daily streak.
-export const SYNC_KEYS = [...new Set(GAMES.map((g) => g.key))].concat('bgs-daily');
+// Learning paths, BGS Ratings, the practice ladder, daily puzzles and the activity log sync too.
+const LEARN_GAMES = ['chess', 'checkers', 'mancala'];
+const LEARN_KEYS = LEARN_GAMES.flatMap((g) => ['bgs-learn-' + g, 'bgs-rating-' + g, 'bgs-ladder-' + g]).concat('bgs-activity', 'bgs-puzzles');
+export const SYNC_KEYS = [...new Set(GAMES.map((g) => g.key))].concat('bgs-daily', LEARN_KEYS);
 const AUTH_FLAG = 'bgs-auth'; // set while signed in, so pages only load the sign-in code when needed
 
 let user = null;
@@ -50,7 +53,41 @@ function mergeDaily(a, b) {
   if (!!a.solved !== !!b.solved) return a.solved ? a : b;
   return n(a.streak) >= n(b.streak) ? a : b;
 }
-const MERGE = { 'bgs-daily': mergeDaily };
+// Lessons finished: everything finished on either device (earliest time), the higher XP.
+function mergeLearn(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  const done = { ...(b.done || {}) };
+  for (const [k, t] of Object.entries(a.done || {})) done[k] = done[k] ? Math.min(done[k], t) : t;
+  return { done, xp: Math.max(n(a.xp), n(b.xp)) };
+}
+// A rating: the copy with more rated games behind it (then the most recent).
+function mergeRating(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  if (n(a.n) !== n(b.n)) return n(a.n) > n(b.n) ? a : b;
+  return n(a.last) >= n(b.last) ? a : b;
+}
+// { key: value } maps where either side counts (ladder bots beaten).
+function mergeUnion(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  return { ...b, ...a };
+}
+// { day: { game: number } }: the higher count per day and game, last 60 days.
+function mergeDays(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  const out = {};
+  for (const src of [a, b]) for (const [day, games] of Object.entries(src)) {
+    out[day] = out[day] || {};
+    for (const [g, v] of Object.entries(games || {})) out[day][g] = Math.max(n(out[day][g]), n(v));
+  }
+  const keep = Object.keys(out).sort().slice(-60);
+  return Object.fromEntries(keep.map((d) => [d, out[d]]));
+}
+const MERGE = { 'bgs-daily': mergeDaily, 'bgs-activity': mergeDays, 'bgs-puzzles': mergeDays };
+LEARN_GAMES.forEach((g) => { MERGE['bgs-learn-' + g] = mergeLearn; MERGE['bgs-rating-' + g] = mergeRating; MERGE['bgs-ladder-' + g] = mergeUnion; });
 GAMES.forEach((g) => { MERGE[g.key] = g.record === 'wld' ? mergeScore : mergeStats; });
 
 // ---------- Saving changes to the account ----------

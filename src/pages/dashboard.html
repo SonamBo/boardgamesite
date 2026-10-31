@@ -1,0 +1,56 @@
+<!-- title: Your Dashboard | BoardGameSite -->
+<!-- description: Your learning progress, BGS Ratings, daily puzzles and what to learn next on BoardGameSite. -->
+<!-- path: /dashboard -->
+<!-- out: dashboard.html -->
+<!-- nav: dashboard -->
+<!-- script: /assets/js/dashboard.js -->
+<!-- robots: noindex -->
+<!-- sitemap: no -->
+<div class="dash" id="dash">
+  <h1 class="dash-title">Dashboard</h1>
+
+  <section class="dash-hero card">
+    <div>
+      <p class="dash-hi" id="dash-hi">Welcome</p>
+      <p class="dash-next text-2" id="dash-next">Pick a game to learn. Every path starts with the rules and takes a few minutes a day.</p>
+      <a class="btn btn-gold btn-lg" id="dash-cta" href="/learn/chess/chess-board-setup">Start learning Chess</a>
+    </div>
+    <img src="/assets/img/mascot-trophy.webp" alt="" width="280" height="272">
+  </section>
+
+  <section class="dash-stats" aria-label="Your numbers">
+    <div class="dash-stat card"><span class="dash-stat-l">Lessons done</span><b id="st-lessons">0</b><span class="dash-stat-s" id="st-lessons-s">of 43</span></div>
+    <div class="dash-stat card"><span class="dash-stat-l">Puzzles solved</span><b id="st-puzzles">0</b><span class="dash-stat-s" id="st-puzzles-s">&nbsp;</span></div>
+    <div class="dash-stat card"><span class="dash-stat-l">Best BGS Rating</span><b id="st-rating">–</b><span class="dash-stat-s" id="st-rating-s">Play a rated game</span></div>
+    <div class="dash-stat card"><span class="dash-stat-l">Day streak</span><b id="st-streak">0</b><span class="dash-stat-s" id="st-streak-s">&nbsp;</span></div>
+  </section>
+
+  <div class="dash-row">
+    <section class="dash-card card" aria-labelledby="week-h">
+      <div class="dash-card-head"><h2 id="week-h">Practice this week</h2><span class="muted">Lessons, puzzles and rated games</span></div>
+      <div class="dash-bars" id="dash-bars" role="img"></div>
+    </section>
+    <section class="dash-card card" aria-labelledby="share-h">
+      <div class="dash-card-head"><h2 id="share-h">Time by game</h2><span class="muted">Last 30 days</span></div>
+      <div class="dash-donut-wrap"><div class="dash-donut" id="dash-donut" role="img"></div><ul class="dash-legend" id="dash-legend"></ul></div>
+    </section>
+  </div>
+
+  <div class="dash-row">
+    <section class="dash-card card" aria-labelledby="cont-h">
+      <div class="dash-card-head"><h2 id="cont-h">Continue learning</h2><a href="/learn">See all</a></div>
+      <div class="dash-games" id="dash-games"></div>
+    </section>
+    <section class="dash-card card" aria-labelledby="rec-h">
+      <div class="dash-card-head"><h2 id="rec-h">Learn next</h2><button type="button" class="link-btn" id="rec-another">Suggest another</button></div>
+      <div class="dash-rec" id="dash-rec"></div>
+    </section>
+  </div>
+
+  <section class="dash-puzzles card">
+    <div><p class="dash-puzzles-t" id="pz-t">Today’s puzzles</p><p class="text-2" id="pz-s">A chess, checkers and mancala puzzle, new every day.</p></div>
+    <a class="btn btn-gold" href="/puzzles">Solve now</a>
+  </section>
+
+  <p class="muted dash-foot" id="dash-foot">Your progress is saved in this browser. <button type="button" class="link-btn" data-open-accounts="dashboard">Create a free account</button> to keep it on every device.</p>
+</div>

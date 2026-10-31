@@ -22,7 +22,13 @@ Inside a page's content:
     {{cats}}               the category tiles with live game counts
     {{shelves}}            the home page's game shelves, one per category
     {{gamegrid:strategy}}  every game in a category as cards (category pages)
+    {{course:chess}}       the learning path for a game: every lesson by unit, then the practice ladder
     <section class="faq"> with <h3>question</h3><p>answer</p> pairs also becomes FAQ structured data.
+
+Courses: each src/courses/<game>.json (format in src/courses/README.md) becomes
+    /learn/<game>/<lesson>   one page per lesson, with the interactive lesson and its text for search engines
+    /assets/learn/<game>.json  the course data the lesson player loads
+tools/check-courses.mjs checks every course against the game engines first.
 
 The build also checks every page for SEO basics and stops with an error if something is wrong
 (missing or duplicate titles, more than one <h1>, links to pages that don't exist, images without alt text).
@@ -42,7 +48,7 @@ SRC = ROOT / "src"
 OUT = ROOT / "public"
 SITE = "https://boardgamesite.com"
 SITE_NAME = "BoardGameSite"
-NAV_ITEMS = ["play", "daily", "learn", "about"]
+NAV_ITEMS = ["play", "daily", "puzzles", "learn", "dashboard", "about"]
 DEFAULT_IMAGE = "/assets/img/og.png"
 YOUTUBE = "https://www.youtube.com/@Pixel-Art-Games-000"
 
@@ -101,6 +107,9 @@ def crumbs_for(meta):
     name = GAMES[meta["game"]]["name"] if meta.get("game") else plain(meta["h1"])
     if path.startswith("/learn/") and meta.get("game"):
         name = "How to play " + name
+    if meta.get("lesson"):
+        items.append((name, "/learn/" + meta["game"]))
+        name = plain(meta["h1"])
     items.append((name, path))
     return items
 
@@ -257,7 +266,24 @@ def structured_data(meta, body, image, modified):
             "publisher": {"@id": SITE + "/#org"},
             "mainEntityOfPage": page_url,
         })
-    if kind in ("game", "guide"):
+    elif kind == "lesson":
+        graph.append({
+            "@type": ["Article", "LearningResource"],
+            "@id": page_url + "#lesson",
+            "headline": plain(meta["h1"]),
+            "description": meta["description"],
+            "image": SITE + image,
+            "learningResourceType": "Interactive lesson",
+            "educationalLevel": "Beginner",
+            "teaches": "How to play " + GAMES[meta["game"]]["name"],
+            "isAccessibleForFree": True,
+            "dateModified": modified,
+            "inLanguage": "en",
+            "author": {"@id": SITE + "/#org"},
+            "publisher": {"@id": SITE + "/#org"},
+            "mainEntityOfPage": page_url,
+        })
+    if kind in ("game", "guide", "lesson"):
         graph.append(ORG)   # the publisher the game/article points at
 
     crumbs = crumbs_for(meta)
@@ -291,6 +317,97 @@ def structured_data(meta, body, image, modified):
     return f'<script type="application/ld+json">\n{text}\n</script>'
 
 
+# ---------- Courses ----------
+COURSES = {}
+for f in sorted((SRC / "courses").glob("*.json")):
+    c = json.loads(f.read_text(encoding="utf-8"))
+    c["_path"] = f
+    COURSES[c["game"]] = c
+
+
+def course_lessons(game):
+    return [(u, l) for u in COURSES[game]["units"] for l in u["lessons"]]
+
+
+def course_html(game):
+    """The learning path on a game's guide page. learn-path.js marks finished and recommended lessons."""
+    if game not in COURSES:
+        sys.exit(f"{{{{course:{game}}}}}: no src/courses/{game}.json")
+    c = COURSES[game]
+    stages = {"rules": "Rules", "check": "Rules check", "strategy": "Strategy"}
+    total = len(course_lessons(game))
+    out = [f'<section class="path" id="path" data-path="{game}" aria-labelledby="path-h">',
+           f'  <h2 id="path-h">Learn {c["name"]} step by step</h2>',
+           f'  <p class="text-2">{c["intro"]}</p>',
+           f'  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">{total} lessons</span></div>']
+    n = 0
+    for u in c["units"]:
+        items = []
+        for l in u["lessons"]:
+            n += 1
+            items.append(f'      <li><a href="/learn/{game}/{l["slug"]}" data-lesson="{l["slug"]}"><span class="n">{n}</span>'
+                         f'<span class="t">{htmllib.escape(l["title"])}</span></a></li>')
+        out.append(f'  <div class="path-unit"><h3>{u["name"] if u["name"] == stages[u["stage"]] else stages[u["stage"]] + ": " + u["name"]}</h3><p>{u["blurb"]}</p>\n'
+                   f'    <ol class="path-list">\n' + "\n".join(items) + "\n    </ol>\n  </div>")
+    if c.get("ladder"):
+        bots = []
+        for b in c["ladder"]:
+            n += 1
+            bots.append(f'      <li><a href="{c["play"]}?bot={b["id"]}" data-bot="{b["id"]}"><span class="n">{n}</span>'
+                        f'<span class="t">{b["name"]} · {b["rating"]}<small>{b["blurb"]}</small></span></a></li>')
+        out.append('  <div class="path-unit"><h3>Practice ladder</h3><p>Beat each bot to climb. Every ladder game counts towards your BGS Rating, which starts at 800.</p>\n'
+                   '    <ol class="path-list">\n' + "\n".join(bots) + "\n    </ol>\n  </div>")
+    out.append("</section>")
+    return "\n".join(out)
+
+
+def lesson_pages():
+    """One page per lesson: the interactive player, plus the lesson as text for readers and search engines."""
+    made = []
+    for game, c in COURSES.items():
+        flat = course_lessons(game)
+        for i, (u, l) in enumerate(flat):
+            prev = flat[i - 1][1] if i else None
+            nxt = flat[i + 1][1] if i + 1 < len(flat) else None
+            num = u["lessons"].index(l) + 1
+            read, faq = [], []
+            for s in l["steps"]:
+                if s["type"] == "choice":
+                    faq.append(f'    <h3>{htmllib.escape(s["prompt"])}</h3>\n    <p>{htmllib.escape(s.get("explain") or s["options"][s["answer"]])}</p>')
+                else:
+                    read.append("    " + s["text"] + (f'\n    <p><em>Try it:</em> {htmllib.escape(s["prompt"])}</p>' if s.get("prompt") else ""))
+            nav = []
+            if prev:
+                nav.append(f'<a class="btn btn-outline" href="/learn/{game}/{prev["slug"]}">← {htmllib.escape(prev["title"])}</a>')
+            nav.append(f'<a class="btn btn-gold" href="/learn/{game}/{nxt["slug"]}">Next: {htmllib.escape(nxt["title"])} →</a>' if nxt
+                       else f'<a class="btn btn-gold" href="{c["play"]}?bot={c["ladder"][0]["id"]}">Start the practice ladder →</a>' if c.get("ladder")
+                       else f'<a class="btn btn-gold" href="{c["play"]}">Play {c["name"]} →</a>')
+            body = f"""<article class="lesson-page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><a href="/learn/{game}">{c["name"]}</a><span aria-hidden="true">/</span><span aria-current="page">{htmllib.escape(u["name"])}</span></nav>
+  <h1>{htmllib.escape(l["title"])}</h1>
+  <p class="lede text-2">{htmllib.escape(l["summary"])} <span class="muted">{u["name"]} · lesson {num} of {len(u["lessons"])}.</span></p>
+  <div id="lesson" data-course="{game}" data-lesson="{l["slug"]}"><noscript><p class="muted">The interactive board needs JavaScript. The lesson is written out below.</p></noscript></div>
+  <section class="lesson-read page" aria-labelledby="read-h">
+    <h2 id="read-h">The lesson in words</h2>
+{chr(10).join(read)}
+    <p>{l["wrap"]}</p>
+  </section>
+""" + (f"""  <section class="lesson-read page faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions</h2>
+{chr(10).join(faq)}
+  </section>
+""" if faq else "") + f"""  <nav class="lesson-nav" aria-label="Lessons">{"".join(nav)}</nav>
+  <p class="muted"><a href="/learn/{game}#path">See the whole {c["name"]} path</a> · <a href="{c["play"]}">Play {c["name"]} free</a></p>
+</article>"""
+            title = l["title"] + " | BoardGameSite"
+            meta = {"_file": f"src/courses/{game}.json ({l['slug']})", "title": title, "description": l["summary"],
+                    "path": f"/learn/{game}/{l['slug']}", "out": f"learn/{game}/{l['slug']}.html", "nav": "learn",
+                    "script": "/assets/js/lesson.js", "kind": "lesson", "game": game, "lesson": l["slug"],
+                    "h1": htmllib.escape(l["title"])}
+            made.append((c["_path"], meta, body))
+    return made
+
+
 pages = []
 for page in sorted((SRC / "pages").rglob("*.html")):
     lines = page.read_text(encoding="utf-8").splitlines()
@@ -308,11 +425,25 @@ for page in sorted((SRC / "pages").rglob("*.html")):
     body = re.sub(r"\{\{related:([a-z0-9-]+)\}\}", lambda m: related_html(m.group(1)), body)
     body = re.sub(r"\{\{gamegrid:([a-z0-9-]+)\}\}", lambda m: gamegrid_html(m.group(1)), body)
     body = body.replace("{{cats}}", cats_html()).replace("{{shelves}}", shelves_html())
+    body = re.sub(r"\{\{course:([a-z0-9-]+)\}\}", lambda m: course_html(m.group(1)), body)
     h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", body, re.S)
     meta["h1"] = h1s[0] if h1s else meta["title"]
     if len(h1s) != 1:
         errors.append(f"{meta['_file']}: has {len(h1s)} <h1> headings (should be exactly 1)")
     pages.append((page, meta, body))
+pages.extend(lesson_pages())
+
+try:
+    check = subprocess.run(["node", str(ROOT / "tools" / "check-courses.mjs")], cwd=ROOT, capture_output=True, text=True)
+    print(check.stdout.strip())
+    if check.returncode:
+        sys.exit("Course check failed:\n" + check.stderr)
+except FileNotFoundError:
+    warnings.append("node not found: courses were not checked against the game engines")
+(OUT / "assets" / "learn").mkdir(parents=True, exist_ok=True)
+for game, c in COURSES.items():
+    data = {k: v for k, v in c.items() if not k.startswith("_")}
+    (OUT / "assets" / "learn" / f"{game}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 titles, descriptions, sitemap, built_paths = {}, {}, [], set()
 for page, meta, body in pages:
@@ -330,7 +461,7 @@ for page, meta, body in pages:
     if meta.get("kind") == "category" and not in_cat(meta["cat"]):
         robots = "noindex"   # nothing to list yet
     html = html.replace("{{robots}}", robots)
-    html = html.replace("{{ogtype}}", "article" if meta.get("kind") == "guide" else "website")
+    html = html.replace("{{ogtype}}", "article" if meta.get("kind") in ("guide", "lesson") else "website")
     html = html.replace("{{image}}", SITE + image)
     html = html.replace("{{imagealt}}", htmllib.escape(plain(meta["h1"]) + " on " + SITE_NAME, quote=True))
     html = html.replace("{{jsonld}}", structured_data(meta, body, image, modified))
