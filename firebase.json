@@ -62,6 +62,13 @@
           }
         ]
       }
+    ],
+    "redirects": [
+      {
+        "source": "/puzzles",
+        "destination": "/daily",
+        "type": 301
+      }
     ]
   },
   "firestore": {

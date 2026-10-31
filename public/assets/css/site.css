@@ -1773,3 +1773,14 @@ body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .
 .pz-tick { color: #8FD19A; font-weight: 700; }
 .pz-count { font-size: 14px; }
 .pz-share-text { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--side); border: 1px solid var(--border); font: 500 15px/1.5 var(--body); white-space: pre-wrap; color: var(--text); }
+.pz-miss { color: #F0948B; font-weight: 700; }
+.pz-all { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.pz-all[hidden] { display: none; }
+.pz-all .btn { color: var(--on-brand); }
+.pz-link { display: flex; gap: 20px; align-items: flex-start; padding: 24px; max-width: 720px; }
+.pz-icon { font-size: 44px; line-height: 1; flex: none; }
+.pz-link > div { display: flex; flex-direction: column; gap: 10px; }
+.pz-task { margin: 0; font-size: 18px; color: var(--text); }
+.pz-ok { margin: 0; color: #8FD19A; } .pz-no { margin: 0; color: var(--text-2); }
+.pz-link a.btn-gold { color: var(--on-brand); text-decoration: none; }
+.lp-puzzle .lp-next { display: none; }

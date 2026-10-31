@@ -13,7 +13,7 @@ import { GAMES } from './games-data.js';
 // Progress that follows the player between devices: every game's record (from games.py) plus the daily streak.
 // Learning paths, BGS Ratings, the practice ladder, daily puzzles and the activity log sync too.
 const LEARN_GAMES = ['chess', 'checkers', 'mancala'];
-const LEARN_KEYS = LEARN_GAMES.flatMap((g) => ['bgs-learn-' + g, 'bgs-rating-' + g, 'bgs-ladder-' + g]).concat('bgs-activity', 'bgs-puzzles');
+const LEARN_KEYS = LEARN_GAMES.flatMap((g) => ['bgs-learn-' + g, 'bgs-rating-' + g, 'bgs-ladder-' + g]).concat('bgs-activity', 'bgs-puzzles', 'bgs-daily-log');
 export const SYNC_KEYS = [...new Set(GAMES.map((g) => g.key))].concat('bgs-daily', LEARN_KEYS);
 const AUTH_FLAG = 'bgs-auth'; // set while signed in, so pages only load the sign-in code when needed
 
@@ -86,7 +86,7 @@ function mergeDays(a, b) {
   const keep = Object.keys(out).sort().slice(-60);
   return Object.fromEntries(keep.map((d) => [d, out[d]]));
 }
-const MERGE = { 'bgs-daily': mergeDaily, 'bgs-activity': mergeDays, 'bgs-puzzles': mergeDays };
+const MERGE = { 'bgs-daily': mergeDaily, 'bgs-activity': mergeDays, 'bgs-puzzles': mergeDays, 'bgs-daily-log': mergeDays };
 LEARN_GAMES.forEach((g) => { MERGE['bgs-learn-' + g] = mergeLearn; MERGE['bgs-rating-' + g] = mergeRating; MERGE['bgs-ladder-' + g] = mergeUnion; });
 GAMES.forEach((g) => { MERGE[g.key] = g.record === 'wld' ? mergeScore : mergeStats; });
 

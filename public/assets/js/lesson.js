@@ -55,6 +55,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     </div>
   </div>`;
   const $ = (s) => el.querySelector(s);
+  if (opts.finish) $('.lp').classList.add('lp-puzzle');   // a puzzle finishes by itself: no Continue button
   const boardWrap = $('.lp-board-wrap');
   const board = makeBoard(course.board, $('.lp-board-el'));
   const steps = lesson.steps;

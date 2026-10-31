@@ -1,6 +1,7 @@
 // Shared behaviour for every page: menu, cookie consent, accounts, forms, daily streak.
 import { configured, startAnalytics, track, addEntry } from './firebase.js';
 import { store } from './store.js';
+import { noteToday, todayProgress, dailyStreak } from './daily.js';
 import { startAccounts, openAccounts, currentUser } from './accounts.js';
 
 export { store };
@@ -152,15 +153,18 @@ if (contact) {
   });
 }
 
-// ---------- Daily challenge streak (home page) ----------
+// ---------- Daily challenge (3 games a day, see daily.js) ----------
+noteToday();
+window.addEventListener('pagehide', noteToday);   // a daily game finished on this page still counts for the streak
 const streakEl = document.querySelector('[data-streak]');
 if (streakEl) {
-  const d = store.get('bgs-daily', null);
-  if (d && d.date === dateKey() && d.solved) {
-    streakEl.textContent = 'Solved today · ' + d.streak + '-day streak';
-  } else if (d && d.date === dateKey()) {
-    streakEl.textContent = 'Played today · new one at midnight';
-  } else if (d && d.streak > 0 && d.lastSolved === yesterdayKey()) {
-    streakEl.textContent = d.streak + '-day streak · keep it going';
-  }
+  const p = todayProgress(), s = dailyStreak();
+  streakEl.textContent = p.done
+    ? p.done + ' of ' + p.total + ' done today' + (s > 1 ? ' · ' + s + '-day streak' : '')
+    : (s ? s + '-day streak · keep it going' : 'Today: ' + p.games.map((g) => g.name).join(', '));
+}
+// A game opened in its daily mode leads back to today's challenges.
+if (new URLSearchParams(location.search).get('mode') === 'daily') {
+  const back = document.querySelector('a.back');
+  if (back) { back.href = '/daily'; back.lastChild.textContent = ' Today’s challenges'; }
 }
