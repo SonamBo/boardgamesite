@@ -7,7 +7,7 @@ const $ = (id) => document.getElementById(id);
 export const MASCOT = {
   win: '/assets/img/mascot-trophy.webp',
   lose: '/assets/img/mascot-confused.webp',
-  draw: '/assets/img/mascot-wave.webp'
+  draw: '/assets/img/mascot-three.webp'
 };
 
 export function setStatus(text, kind) {
