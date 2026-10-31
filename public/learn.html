@@ -33,7 +33,7 @@
 <link rel="preload" href="/assets/fonts/instrument-serif-latin.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
-
+<script type="module" src="/assets/js/learn-path.js"></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -111,308 +111,333 @@
 
 <main class="content" id="main">
 <div class="container">
-<article class="page">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Learn</span></nav>
-  <h1>Learn to play</h1>
-  <p class="lede">New to a game, or want to start winning? Each guide explains the complete rules in plain language, then the strategy that makes the biggest difference. Every game is free to play right here when you’re ready.</p>
-
-  <div class="page-head-fox"><h2>Step-by-step learning paths</h2><img src="/assets/img/fox-study.webp" alt="" width="280" height="280" loading="lazy"></div>
-  <p class="text-2">Hands-on lessons on a real board: the rules first, then a quick rules check, then the tactics that win games. Finish a path and play rated games on the practice ladder to earn your BGS Rating.</p>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/chess/path">
-      <b>Chess</b>
-      <span>23 lessons: every piece, check and checkmate, special moves, forks, pins and mating patterns.</span>
-      <small>Open the path</small>
-    </a>
-    <a class="guide-card card" href="/learn/checkers/path">
-      <b>Checkers</b>
-      <span>12 lessons: moving, compulsory jumps, kings, the two-for-one shot and endgames.</span>
-      <small>Open the path</small>
-    </a>
-    <a class="guide-card card" href="/learn/mancala/path">
-      <b>Mancala</b>
-      <span>8 lessons: sowing, free turns, captures, chaining turns and protecting your seeds.</span>
-      <small>Open the path</small>
-    </a>
+<div class="theme-learn">
+<section class="hero learn-hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Free · Step by step · Learn in minutes</p>
+    <h1>Learn to play</h1>
+    <p class="hero-lede">Pick a game and learn it in minutes: the rules, then the moves that win. Every guide comes with the game, free to play right here.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold btn-lg" href="/learn/chess/path">Start learning Chess</a>
+      <a class="btn btn-outline btn-lg" href="/daily">Today’s challenges</a>
+    </div>
   </div>
-  <div class="callout card">
-    <p>Three new challenges every day, from a different mix of games.</p>
-    <a class="btn btn-outline" href="/daily">Play today’s challenges</a>
-  </div>
+  <div class="learn-hero-art"><img src="/assets/img/fox-study.webp" alt="" width="280" height="280" fetchpriority="high"></div>
+</section>
 
-  <h2>Strategy games</h2>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/checkers">
-      <b>Checkers</b>
-      <span>Moving, jumping and kings, plus the back row, the centre and forcing shots.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/reversi">
-      <b>Reversi</b>
-      <span>Flipping discs, corners, the squares to avoid, and why fewer discs early wins.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/four-in-a-row">
-      <b>Four in a Row</b>
-      <span>The rules, the centre column, double threats and the odd and even row trick.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/chess">
-      <b>Chess</b>
-      <span>How every piece moves, special moves, opening principles and tactics.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/go">
-      <b>Go</b>
-      <span>Liberties, captures, two eyes and how area scoring works.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/mancala">
-      <b>Mancala</b>
-      <span>Counting to your store, chaining turns and setting up captures.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/five-in-a-row">
-      <b>Five in a Row</b>
-      <span>Open threes, fours and double threats.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/nine-mens-morris">
-      <b>Nine Men’s Morris</b>
-      <span>Flexible placement, running mills and the flying endgame.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/dots-and-boxes">
-      <b>Dots and Boxes</b>
-      <span>Safe moves, chains and the double-cross.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/hex">
-      <b>Hex</b>
-      <span>Bridges, blocking from a distance and edge templates.</span>
-      <small>Read the guide</small>
-    </a>
-  </div>
+<section aria-labelledby="paths-h" class="learn-sec">
+  <div class="shelf-head"><h2 id="paths-h">Learning paths</h2><span class="muted">Hands-on lessons, then rated games</span></div>
+  <div class="lpcs">
+  <a class="lpc card" href="/learn/chess/path" data-path-card="chess" data-total="23">
+    <img src="/assets/img/thumb/chess.webp" alt="" width="480" height="360" loading="lazy">
+    <span class="lpc-body"><b>Chess</b><small>23 lessons · rules to rated games</small>
+    <span class="lpc-bar" aria-hidden="true"><span></span></span><span class="btn btn-gold lpc-btn">Start learning</span></span>
+  </a>
+  <a class="lpc card" href="/learn/checkers/path" data-path-card="checkers" data-total="12">
+    <img src="/assets/img/thumb/checkers.webp" alt="" width="480" height="360" loading="lazy">
+    <span class="lpc-body"><b>Checkers</b><small>12 lessons · rules to rated games</small>
+    <span class="lpc-bar" aria-hidden="true"><span></span></span><span class="btn btn-gold lpc-btn">Start learning</span></span>
+  </a>
+  <a class="lpc card" href="/learn/mancala/path" data-path-card="mancala" data-total="8">
+    <img src="/assets/img/thumb/mancala.webp" alt="" width="480" height="360" loading="lazy">
+    <span class="lpc-body"><b>Mancala</b><small>8 lessons · rules to rated games</small>
+    <span class="lpc-bar" aria-hidden="true"><span></span></span><span class="btn btn-gold lpc-btn">Start learning</span></span>
+  </a>
+</div>
+</section>
 
-  <h2>Card games</h2>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/solitaire">
-      <b>Solitaire</b>
-      <span>Klondike rules, Draw 1 vs Draw 3, and which moves to make first.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/freecell">
-      <b>FreeCell</b>
-      <span>Freeing Aces, keeping cells empty and using empty columns.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/spider">
-      <b>Spider Solitaire</b>
-      <span>Building in suit, emptying columns and when to deal.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/hearts">
-      <b>Hearts</b>
-      <span>Which cards to pass, how to duck and shooting the moon.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/spades">
-      <b>Spades</b>
-      <span>Counting tricks for your bid and helping your partner.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/gin-rummy">
-      <b>Gin Rummy</b>
-      <span>What to discard, reading your opponent and when to knock.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/crazy-eights">
-      <b>Crazy Eights</b>
-      <span>Saving eights and steering the suit.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/tripeaks">
-      <b>TriPeaks</b>
-      <span>Planning long chains to clear all three peaks.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/pyramid">
-      <b>Pyramid Solitaire</b>
-      <span>The pairs that make 13 and which to take first.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/golf">
-      <b>Golf Solitaire</b>
-      <span>Planning runs and dealing with Kings for a low score.</span>
-      <small>Read the guide</small>
-    </a>
+<section aria-labelledby="ltypes-h" class="learn-sec">
+  <h2 id="ltypes-h">Browse guides by type</h2>
+  <div class="cats">
+    <a class="cat card" href="#learn-strategy"><img src="/assets/img/cat-strategy.svg" alt="" width="96" height="96"><span><b>Strategy</b><small class="live">10 guides</small></span></a>
+    <a class="cat card" href="#learn-cards"><img src="/assets/img/cat-cards.svg" alt="" width="96" height="96"><span><b>Cards</b><small class="live">10 guides</small></span></a>
+    <a class="cat card" href="#learn-puzzles"><img src="/assets/img/cat-puzzles.svg" alt="" width="96" height="96"><span><b>Puzzles</b><small class="live">10 guides</small></span></a>
+    <a class="cat card" href="#learn-dice"><img src="/assets/img/cat-dice.svg" alt="" width="96" height="96"><span><b>Dice</b><small class="live">10 guides</small></span></a>
+    <a class="cat card" href="#learn-word"><img src="/assets/img/cat-word.svg" alt="" width="96" height="96"><span><b>Word</b><small class="live">10 guides</small></span></a>
   </div>
+</section>
 
-  <h2>Puzzles</h2>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/sudoku">
-      <b>Sudoku</b>
-      <span>Scanning, pencil marks, pairs and the techniques for hard puzzles.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/mines">
-      <b>Mines</b>
-      <span>Flags, quick clearing and the number patterns that avoid guessing.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/slide-merge">
-      <b>Slide & Merge</b>
-      <span>The corner strategy and the chain that gets you to 2048.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/sliding-tiles">
-      <b>Sliding Tiles</b>
-      <span>The row-by-row method that solves any sliding puzzle.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/picture-logic">
-      <b>Picture Logic</b>
-      <span>Reading nonogram clues, the overlap trick and working back and forth.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/tile-match">
-      <b>Tile Match</b>
-      <span>What makes a tile free, and which pairs to take first.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/peg-solitaire">
-      <b>Peg Solitaire</b>
-      <span>Clearing the arms and finishing with one peg in the centre.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/light-switch">
-      <b>Light Switch</b>
-      <span>Chasing the lights down, and the table that finishes the last row.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/box-pusher">
-      <b>Box Pusher</b>
-      <span>Dead squares, wall rules and the order to push your boxes.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/tower-of-hanoi">
-      <b>Tower of Hanoi</b>
-      <span>The pattern that moves any tower in the fewest moves.</span>
-      <small>Read the guide</small>
-    </a>
+<section class="shelf" id="learn-strategy" aria-labelledby="lshelf-strategy">
+  <div class="shelf-head"><h2 id="lshelf-strategy">Strategy</h2><a class="link-green" href="/games/strategy">Play strategy games</a></div>
+  <div class="gts">
+    <article class="gt card">
+      <a class="gt-art" href="/learn/chess" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/chess.webp" alt="" width="480" height="360" loading="lazy"> <span class="gt-path">Learning path</span></a>
+      <div class="gt-body"><h3><a href="/learn/chess">How to play Chess</a></h3><p>How every piece moves, special moves, opening principles and tactics.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/chess" aria-label="Learn Chess">Learn</a><a class="btn btn-outline" href="/play/chess" aria-label="Play Chess">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/checkers" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/checkers.webp" alt="" width="480" height="360" loading="lazy"> <span class="gt-path">Learning path</span></a>
+      <div class="gt-body"><h3><a href="/learn/checkers">How to play Checkers</a></h3><p>Moving, jumping and kings, plus the back row, the centre and forcing shots.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/checkers" aria-label="Learn Checkers">Learn</a><a class="btn btn-outline" href="/play/checkers" aria-label="Play Checkers">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/go" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/go.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/go">How to play Go</a></h3><p>Liberties, captures, two eyes and how area scoring works.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/go" aria-label="Learn Go">Learn</a><a class="btn btn-outline" href="/play/go" aria-label="Play Go">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/reversi" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/reversi.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/reversi">How to play Reversi</a></h3><p>Flipping discs, corners, the squares to avoid, and why fewer discs early wins.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/reversi" aria-label="Learn Reversi">Learn</a><a class="btn btn-outline" href="/play/reversi" aria-label="Play Reversi">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/four-in-a-row" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/four-in-a-row.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/four-in-a-row">How to play Four in a Row</a></h3><p>The rules, the centre column, double threats and the odd and even row trick.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/four-in-a-row" aria-label="Learn Four in a Row">Learn</a><a class="btn btn-outline" href="/play/four-in-a-row" aria-label="Play Four in a Row">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/mancala" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/mancala.webp" alt="" width="480" height="360" loading="lazy"> <span class="gt-path">Learning path</span></a>
+      <div class="gt-body"><h3><a href="/learn/mancala">How to play Mancala</a></h3><p>Counting to your store, chaining turns and setting up captures.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/mancala" aria-label="Learn Mancala">Learn</a><a class="btn btn-outline" href="/play/mancala" aria-label="Play Mancala">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/five-in-a-row" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/five-in-a-row.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/five-in-a-row">How to play Five in a Row</a></h3><p>Open threes, fours and double threats.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/five-in-a-row" aria-label="Learn Five in a Row">Learn</a><a class="btn btn-outline" href="/play/five-in-a-row" aria-label="Play Five in a Row">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/nine-mens-morris" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/nine-mens-morris.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/nine-mens-morris">How to play Nine Men’s Morris</a></h3><p>Flexible placement, running mills and the flying endgame.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/nine-mens-morris" aria-label="Learn Nine Men’s Morris">Learn</a><a class="btn btn-outline" href="/play/nine-mens-morris" aria-label="Play Nine Men’s Morris">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/dots-and-boxes" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/dots-and-boxes.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/dots-and-boxes">How to play Dots and Boxes</a></h3><p>Safe moves, chains and the double-cross.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/dots-and-boxes" aria-label="Learn Dots and Boxes">Learn</a><a class="btn btn-outline" href="/play/dots-and-boxes" aria-label="Play Dots and Boxes">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/hex" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/hex.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/hex">How to play Hex</a></h3><p>Bridges, blocking from a distance and edge templates.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/hex" aria-label="Learn Hex">Learn</a><a class="btn btn-outline" href="/play/hex" aria-label="Play Hex">Play</a></div></div>
+    </article>
   </div>
-
-  <h2>Word games</h2>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/word-guess">
-      <b>Five-Letter Guess</b>
-      <span>Strong starting words and how to read the colours.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/letter-hive">
-      <b>Letter Hive</b>
-      <span>Finding the pangram and growing words from endings.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/word-grid">
-      <b>Word Grid</b>
-      <span>Scanning patterns and hunting the long word.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/word-search">
-      <b>Word Search</b>
-      <span>Rare letters, double letters and fast scanning.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/letter-tiles">
-      <b>Letter Tiles</b>
-      <span>Bonus squares, two-way plays and rack balance.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/hangman">
-      <b>Hangman</b>
-      <span>Which letters to guess first and how to read the shape.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/cryptogram">
-      <b>Cryptogram</b>
-      <span>Short words, letter counts and patterns that crack the code.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/word-ladder">
-      <b>Word Ladder</b>
-      <span>Finding the shortest route, and when to step sideways.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/unscramble">
-      <b>Unscramble</b>
-      <span>Letter pairs, endings and when to shuffle.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/word-chain">
-      <b>Word Chain</b>
-      <span>Awkward endings and backup words to beat the computer.</span>
-      <small>Read the guide</small>
-    </a>
+  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all 10 strategy guides</button>
+</section>
+<section class="shelf" id="learn-cards" aria-labelledby="lshelf-cards">
+  <div class="shelf-head"><h2 id="lshelf-cards">Cards</h2><a class="link-green" href="/games/cards">Play card games</a></div>
+  <div class="gts">
+    <article class="gt card">
+      <a class="gt-art" href="/learn/solitaire" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/solitaire.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/solitaire">How to play Solitaire</a></h3><p>Klondike rules, Draw 1 vs Draw 3, and which moves to make first.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/solitaire" aria-label="Learn Solitaire">Learn</a><a class="btn btn-outline" href="/play/solitaire" aria-label="Play Solitaire">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/freecell" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/freecell.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/freecell">How to play FreeCell</a></h3><p>Freeing Aces, keeping cells empty and using empty columns.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/freecell" aria-label="Learn FreeCell">Learn</a><a class="btn btn-outline" href="/play/freecell" aria-label="Play FreeCell">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/spider" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/spider.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/spider">How to play Spider Solitaire</a></h3><p>Building in suit, emptying columns and when to deal.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/spider" aria-label="Learn Spider Solitaire">Learn</a><a class="btn btn-outline" href="/play/spider" aria-label="Play Spider Solitaire">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/hearts" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/hearts.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/hearts">How to play Hearts</a></h3><p>Which cards to pass, how to duck and shooting the moon.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/hearts" aria-label="Learn Hearts">Learn</a><a class="btn btn-outline" href="/play/hearts" aria-label="Play Hearts">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/spades" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/spades.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/spades">How to play Spades</a></h3><p>Counting tricks for your bid and helping your partner.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/spades" aria-label="Learn Spades">Learn</a><a class="btn btn-outline" href="/play/spades" aria-label="Play Spades">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/gin-rummy" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/gin-rummy.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/gin-rummy">How to play Gin Rummy</a></h3><p>What to discard, reading your opponent and when to knock.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/gin-rummy" aria-label="Learn Gin Rummy">Learn</a><a class="btn btn-outline" href="/play/gin-rummy" aria-label="Play Gin Rummy">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/crazy-eights" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/crazy-eights.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/crazy-eights">How to play Crazy Eights</a></h3><p>Saving eights and steering the suit.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/crazy-eights" aria-label="Learn Crazy Eights">Learn</a><a class="btn btn-outline" href="/play/crazy-eights" aria-label="Play Crazy Eights">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/tripeaks" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/tripeaks.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/tripeaks">How to play TriPeaks</a></h3><p>Planning long chains to clear all three peaks.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/tripeaks" aria-label="Learn TriPeaks">Learn</a><a class="btn btn-outline" href="/play/tripeaks" aria-label="Play TriPeaks">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/pyramid" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/pyramid.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/pyramid">How to play Pyramid</a></h3><p>The pairs that make 13 and which to take first.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/pyramid" aria-label="Learn Pyramid">Learn</a><a class="btn btn-outline" href="/play/pyramid" aria-label="Play Pyramid">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/golf" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/golf.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/golf">How to play Golf</a></h3><p>Planning runs and dealing with Kings for a low score.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/golf" aria-label="Learn Golf">Learn</a><a class="btn btn-outline" href="/play/golf" aria-label="Play Golf">Play</a></div></div>
+    </article>
   </div>
-
-  <h2>Dice games</h2>
-  <div class="guide-list">
-    <a class="guide-card card" href="/learn/five-dice">
-      <b>Five Dice</b>
-      <span>The upper bonus, which dice to keep and where to take a zero.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/backgammon">
-      <b>Backgammon</b>
-      <span>Opening moves, making points, blots and when to race.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/ludo">
-      <b>Ludo</b>
-      <span>Getting counters out, staying safe and finishing well.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/hot-dice">
-      <b>Hot Dice</b>
-      <span>The farkle odds and when to bank your points.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/snakes-and-ladders">
-      <b>Snakes and Ladders</b>
-      <span>The rules, and the long history behind the game.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/liars-dice">
-      <b>Liar’s Dice</b>
-      <span>The one-in-three rule, bidding and bluffing.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/dice-poker">
-      <b>Dice Poker</b>
-      <span>The hand rankings and which dice to keep.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/shut-the-box">
-      <b>Shut the Box</b>
-      <span>Which tiles to shut first and the dice odds.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/pig">
-      <b>Pig</b>
-      <span>The hold-at-20 rule and when to break it.</span>
-      <small>Read the guide</small>
-    </a>
-    <a class="guide-card card" href="/learn/ship-captain-crew">
-      <b>Ship, Captain and Crew</b>
-      <span>Finding your crew and when to re-roll the cargo.</span>
-      <small>Read the guide</small>
-    </a>
+  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all 10 cards guides</button>
+</section>
+<section class="shelf" id="learn-puzzles" aria-labelledby="lshelf-puzzles">
+  <div class="shelf-head"><h2 id="lshelf-puzzles">Puzzles</h2><a class="link-green" href="/games/puzzles">Play puzzles</a></div>
+  <div class="gts">
+    <article class="gt card">
+      <a class="gt-art" href="/learn/sudoku" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/sudoku.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/sudoku">How to play Sudoku</a></h3><p>Scanning, pencil marks, pairs and the techniques for hard puzzles.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/sudoku" aria-label="Learn Sudoku">Learn</a><a class="btn btn-outline" href="/play/sudoku" aria-label="Play Sudoku">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/mines" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/mines.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/mines">How to play Mines</a></h3><p>Flags, quick clearing and the number patterns that avoid guessing.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/mines" aria-label="Learn Mines">Learn</a><a class="btn btn-outline" href="/play/mines" aria-label="Play Mines">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/slide-merge" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/slide-merge.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/slide-merge">How to play Slide & Merge</a></h3><p>The corner strategy and the chain that gets you to 2048.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/slide-merge" aria-label="Learn Slide & Merge">Learn</a><a class="btn btn-outline" href="/play/slide-merge" aria-label="Play Slide & Merge">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/sliding-tiles" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/sliding-tiles.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/sliding-tiles">How to play Sliding Tiles</a></h3><p>The row-by-row method that solves any sliding puzzle.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/sliding-tiles" aria-label="Learn Sliding Tiles">Learn</a><a class="btn btn-outline" href="/play/sliding-tiles" aria-label="Play Sliding Tiles">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/picture-logic" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/picture-logic.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/picture-logic">How to play Picture Logic</a></h3><p>Reading nonogram clues, the overlap trick and working back and forth.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/picture-logic" aria-label="Learn Picture Logic">Learn</a><a class="btn btn-outline" href="/play/picture-logic" aria-label="Play Picture Logic">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/tile-match" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/tile-match.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/tile-match">How to play Tile Match</a></h3><p>What makes a tile free, and which pairs to take first.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/tile-match" aria-label="Learn Tile Match">Learn</a><a class="btn btn-outline" href="/play/tile-match" aria-label="Play Tile Match">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/peg-solitaire" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/peg-solitaire.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/peg-solitaire">How to play Peg Solitaire</a></h3><p>Clearing the arms and finishing with one peg in the centre.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/peg-solitaire" aria-label="Learn Peg Solitaire">Learn</a><a class="btn btn-outline" href="/play/peg-solitaire" aria-label="Play Peg Solitaire">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/light-switch" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/light-switch.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/light-switch">How to play Light Switch</a></h3><p>Chasing the lights down, and the table that finishes the last row.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/light-switch" aria-label="Learn Light Switch">Learn</a><a class="btn btn-outline" href="/play/light-switch" aria-label="Play Light Switch">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/tower-of-hanoi" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/tower-of-hanoi.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/tower-of-hanoi">How to play Tower of Hanoi</a></h3><p>The pattern that moves any tower in the fewest moves.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/tower-of-hanoi" aria-label="Learn Tower of Hanoi">Learn</a><a class="btn btn-outline" href="/play/tower-of-hanoi" aria-label="Play Tower of Hanoi">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/box-pusher" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/box-pusher.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/box-pusher">How to play Box Pusher</a></h3><p>Dead squares, wall rules and the order to push your boxes.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/box-pusher" aria-label="Learn Box Pusher">Learn</a><a class="btn btn-outline" href="/play/box-pusher" aria-label="Play Box Pusher">Play</a></div></div>
+    </article>
   </div>
-
-  <h2>Practise every day</h2>
-  <p>The quickest way to get better is a little practice often. Try the <a href="/daily">daily challenge</a>: three puzzles every day, picked from chess, checkers, mancala, Sudoku, Word Guess, Letter Hive and Four in a Row, the same for everyone. Solutions and tips are posted on our <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">YouTube channel</a>.</p>
-</article>
+  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all 10 puzzles guides</button>
+</section>
+<section class="shelf" id="learn-dice" aria-labelledby="lshelf-dice">
+  <div class="shelf-head"><h2 id="lshelf-dice">Dice</h2><a class="link-green" href="/games/dice">Play dice games</a></div>
+  <div class="gts">
+    <article class="gt card">
+      <a class="gt-art" href="/learn/five-dice" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/five-dice.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/five-dice">How to play Five Dice</a></h3><p>The upper bonus, which dice to keep and where to take a zero.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/five-dice" aria-label="Learn Five Dice">Learn</a><a class="btn btn-outline" href="/play/five-dice" aria-label="Play Five Dice">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/backgammon" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/backgammon.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/backgammon">How to play Backgammon</a></h3><p>Opening moves, making points, blots and when to race.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/backgammon" aria-label="Learn Backgammon">Learn</a><a class="btn btn-outline" href="/play/backgammon" aria-label="Play Backgammon">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/ludo" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/ludo.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/ludo">How to play Ludo</a></h3><p>Getting counters out, staying safe and finishing well.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/ludo" aria-label="Learn Ludo">Learn</a><a class="btn btn-outline" href="/play/ludo" aria-label="Play Ludo">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/hot-dice" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/hot-dice.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/hot-dice">How to play Hot Dice</a></h3><p>The farkle odds and when to bank your points.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/hot-dice" aria-label="Learn Hot Dice">Learn</a><a class="btn btn-outline" href="/play/hot-dice" aria-label="Play Hot Dice">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/snakes-and-ladders" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/snakes-and-ladders.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/snakes-and-ladders">How to play Snakes and Ladders</a></h3><p>The rules, and the long history behind the game.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/snakes-and-ladders" aria-label="Learn Snakes and Ladders">Learn</a><a class="btn btn-outline" href="/play/snakes-and-ladders" aria-label="Play Snakes and Ladders">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/liars-dice" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/liars-dice.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/liars-dice">How to play Liar’s Dice</a></h3><p>The one-in-three rule, bidding and bluffing.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/liars-dice" aria-label="Learn Liar’s Dice">Learn</a><a class="btn btn-outline" href="/play/liars-dice" aria-label="Play Liar’s Dice">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/dice-poker" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/dice-poker.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/dice-poker">How to play Dice Poker</a></h3><p>The hand rankings and which dice to keep.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/dice-poker" aria-label="Learn Dice Poker">Learn</a><a class="btn btn-outline" href="/play/dice-poker" aria-label="Play Dice Poker">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/shut-the-box" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/shut-the-box.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/shut-the-box">How to play Shut the Box</a></h3><p>Which tiles to shut first and the dice odds.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/shut-the-box" aria-label="Learn Shut the Box">Learn</a><a class="btn btn-outline" href="/play/shut-the-box" aria-label="Play Shut the Box">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/pig" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/pig.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/pig">How to play Pig</a></h3><p>The hold-at-20 rule and when to break it.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/pig" aria-label="Learn Pig">Learn</a><a class="btn btn-outline" href="/play/pig" aria-label="Play Pig">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/ship-captain-crew" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/ship-captain-crew.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/ship-captain-crew">How to play Ship, Captain and Crew</a></h3><p>Finding your crew and when to re-roll the cargo.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/ship-captain-crew" aria-label="Learn Ship, Captain and Crew">Learn</a><a class="btn btn-outline" href="/play/ship-captain-crew" aria-label="Play Ship, Captain and Crew">Play</a></div></div>
+    </article>
+  </div>
+  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all 10 dice guides</button>
+</section>
+<section class="shelf" id="learn-word" aria-labelledby="lshelf-word">
+  <div class="shelf-head"><h2 id="lshelf-word">Word</h2><a class="link-green" href="/games/word">Play word games</a></div>
+  <div class="gts">
+    <article class="gt card">
+      <a class="gt-art" href="/learn/word-guess" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/word-guess.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/word-guess">How to play Five-Letter Guess</a></h3><p>Strong starting words and how to read the colours.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/word-guess" aria-label="Learn Five-Letter Guess">Learn</a><a class="btn btn-outline" href="/play/word-guess" aria-label="Play Five-Letter Guess">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/letter-hive" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/letter-hive.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/letter-hive">How to play Letter Hive</a></h3><p>Finding the pangram and growing words from endings.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/letter-hive" aria-label="Learn Letter Hive">Learn</a><a class="btn btn-outline" href="/play/letter-hive" aria-label="Play Letter Hive">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/word-grid" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/word-grid.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/word-grid">How to play Word Grid</a></h3><p>Scanning patterns and hunting the long word.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/word-grid" aria-label="Learn Word Grid">Learn</a><a class="btn btn-outline" href="/play/word-grid" aria-label="Play Word Grid">Play</a></div></div>
+    </article>
+    <article class="gt card">
+      <a class="gt-art" href="/learn/word-search" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/word-search.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/word-search">How to play Word Search</a></h3><p>Rare letters, double letters and fast scanning.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/word-search" aria-label="Learn Word Search">Learn</a><a class="btn btn-outline" href="/play/word-search" aria-label="Play Word Search">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/letter-tiles" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/letter-tiles.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/letter-tiles">How to play Letter Tiles</a></h3><p>Bonus squares, two-way plays and rack balance.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/letter-tiles" aria-label="Learn Letter Tiles">Learn</a><a class="btn btn-outline" href="/play/letter-tiles" aria-label="Play Letter Tiles">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/hangman" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/hangman.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/hangman">How to play Hangman</a></h3><p>Which letters to guess first and how to read the shape.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/hangman" aria-label="Learn Hangman">Learn</a><a class="btn btn-outline" href="/play/hangman" aria-label="Play Hangman">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/cryptogram" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/cryptogram.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/cryptogram">How to play Cryptogram</a></h3><p>Short words, letter counts and patterns that crack the code.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/cryptogram" aria-label="Learn Cryptogram">Learn</a><a class="btn btn-outline" href="/play/cryptogram" aria-label="Play Cryptogram">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/word-ladder" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/word-ladder.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/word-ladder">How to play Word Ladder</a></h3><p>Finding the shortest route, and when to step sideways.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/word-ladder" aria-label="Learn Word Ladder">Learn</a><a class="btn btn-outline" href="/play/word-ladder" aria-label="Play Word Ladder">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/unscramble" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/unscramble.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/unscramble">How to play Unscramble</a></h3><p>Letter pairs, endings and when to shuffle.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/unscramble" aria-label="Learn Unscramble">Learn</a><a class="btn btn-outline" href="/play/unscramble" aria-label="Play Unscramble">Play</a></div></div>
+    </article>
+    <article class="gt card gt-more">
+      <a class="gt-art" href="/learn/word-chain" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/word-chain.webp" alt="" width="480" height="360" loading="lazy"></a>
+      <div class="gt-body"><h3><a href="/learn/word-chain">How to play Word Chain</a></h3><p>Awkward endings and backup words to beat the computer.</p>
+      <div class="gt-actions"><a class="btn btn-gold" href="/learn/word-chain" aria-label="Learn Word Chain">Learn</a><a class="btn btn-outline" href="/play/word-chain" aria-label="Play Word Chain">Play</a></div></div>
+    </article>
+  </div>
+  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all 10 word guides</button>
+</section>
+</div>
 
 <footer class="footer">
   <div class="footer-brand">

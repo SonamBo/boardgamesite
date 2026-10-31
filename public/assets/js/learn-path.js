@@ -16,3 +16,22 @@ for (const el of document.querySelectorAll('[data-path]')) {
   const cta = el.querySelector('[data-path-cta]');
   if (cta && finished) cta.textContent = finished === links.length ? 'Open your path' : 'Continue: lesson ' + (finished + 1) + ' of ' + links.length;
 }
+
+// Learning-path cards on the Learn page: progress bar and button text.
+for (const card of document.querySelectorAll('[data-path-card]')) {
+  const game = card.dataset.pathCard, total = Number(card.dataset.total) || 1;
+  const n = Object.keys(progress(game).done).length;
+  card.querySelector('.lpc-bar span').style.width = Math.round((Math.min(n, total) / total) * 100) + '%';
+  if (n) card.querySelector('.lpc-btn').textContent = n >= total ? 'Open your path' : 'Continue · ' + n + '/' + total;
+}
+
+// "See all" on the Learn page shelves.
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.gt-all');
+  if (!b) return;
+  const shelf = b.closest('.shelf');
+  if (!b.dataset.label) b.dataset.label = b.textContent;
+  const open = shelf.classList.toggle('open');
+  b.setAttribute('aria-expanded', String(open));
+  b.textContent = open ? 'Show fewer' : b.dataset.label;
+});

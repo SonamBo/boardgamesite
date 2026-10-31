@@ -23,6 +23,9 @@ Inside a page's content:
     {{shelves}}            the home page's game shelves, one per category
     {{gamegrid:strategy}}  every game in a category as cards (category pages)
     {{course:chess}}       the learning path for a game: every lesson by unit, then the practice ladder
+    {{learnpaths}}         the Learn page's learning-path cards (one per course)
+    {{learncats}}          category tiles that jump to the Learn page's shelves
+    {{learnshelves}}       the Learn page's shelves: a guide card for every game, by category
     <section class="faq"> with <h3>question</h3><p>answer</p> pairs also becomes FAQ structured data.
 
 Courses: each src/courses/<game>.json (format in src/courses/README.md) becomes
@@ -188,6 +191,55 @@ def shelves_html():
             f'  <div class="shelf-head"><h3 id="shelf-{key}">{c["name"]}</h3>{more}</div>\n'
             f'  <div class="games">\n{cards}\n  </div>\n</div>'
         )
+    return "\n".join(out)
+
+
+def learn_paths_html():
+    cards = []
+    for game, c in sorted(COURSES.items(), key=lambda kv: list(GAMES).index(kv[0])):
+        n = sum(len(u["lessons"]) for u in c["units"])
+        cards.append(
+            f'  <a class="lpc card" href="/learn/{game}/path" data-path-card="{game}" data-total="{n}">\n'
+            f'    <img src="/assets/img/thumb/{game}.webp" alt="" width="480" height="360" loading="lazy">\n'
+            f'    <span class="lpc-body"><b>{c["name"]}</b><small>{n} lessons · rules to rated games</small>\n'
+            f'    <span class="lpc-bar" aria-hidden="true"><span></span></span><span class="btn btn-gold lpc-btn">Start learning</span></span>\n'
+            f'  </a>')
+    return '<div class="lpcs">\n' + "\n".join(cards) + "\n</div>"
+
+
+def learn_cats_html():
+    tiles = []
+    for key, c in CATS.items():
+        if key == "multiplayer":
+            continue
+        n = len([1 for s, g in in_cat(key) if has_guide(s)])
+        tiles.append(f'    <a class="cat card" href="#learn-{key}"><img src="/assets/img/{c["icon"]}" alt="" width="96" height="96">'
+                     f'<span><b>{c["name"]}</b><small class="live">{n} guides</small></span></a>')
+    return '<div class="cats">\n' + "\n".join(tiles) + "\n  </div>"
+
+
+def learn_shelves_html():
+    out = []
+    for key, c in CATS.items():
+        if key == "multiplayer":
+            continue
+        cards = []
+        for slug, g in in_cat(key):
+            if not has_guide(slug):
+                continue
+            more = ' gt-more' if len(cards) >= 4 else ''
+            path = f' <span class="gt-path">Learning path</span>' if slug in COURSES else ""
+            cards.append(
+                f'    <article class="gt card{more}">\n'
+                f'      <a class="gt-art" href="/learn/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="" width="480" height="360" loading="lazy">{path}</a>\n'
+                f'      <div class="gt-body"><h3><a href="/learn/{slug}">How to play {g["name"]}</a></h3><p>{g.get("tip", g["blurb"])}</p>\n'
+                f'      <div class="gt-actions"><a class="btn btn-gold" href="/learn/{slug}" aria-label="Learn {g["name"]}">Learn</a><a class="btn btn-outline" href="/play/{slug}" aria-label="Play {g["name"]}">Play</a></div></div>\n'
+                f'    </article>')
+        out.append(f'<section class="shelf" id="learn-{key}" aria-labelledby="lshelf-{key}">\n'
+                   f'  <div class="shelf-head"><h2 id="lshelf-{key}">{c["name"]}</h2><a class="link-green" href="/games/{key}">Play {c.get("noun", c["name"].lower() + " games")}</a></div>\n'
+                   f'  <div class="gts">\n' + "\n".join(cards) + "\n  </div>\n"
+                   + (f'  <button type="button" class="btn btn-outline gt-all" aria-expanded="false">See all {len(cards)} {c["name"].lower()} guides</button>\n' if len(cards) > 4 else "")
+                   + "</section>")
     return "\n".join(out)
 
 
@@ -441,6 +493,7 @@ for page in sorted((SRC / "pages").rglob("*.html")):
     body = re.sub(r"\{\{gamegrid:([a-z0-9-]+)\}\}", lambda m: gamegrid_html(m.group(1)), body)
     body = body.replace("{{cats}}", cats_html()).replace("{{shelves}}", shelves_html())
     body = re.sub(r"\{\{course:([a-z0-9-]+)\}\}", lambda m: course_html(m.group(1)), body)
+    body = body.replace("{{learnpaths}}", learn_paths_html()).replace("{{learncats}}", learn_cats_html()).replace("{{learnshelves}}", learn_shelves_html())
     h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", body, re.S)
     meta["h1"] = h1s[0] if h1s else meta["title"]
     if len(h1s) != 1:
