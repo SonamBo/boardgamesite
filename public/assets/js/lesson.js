@@ -31,7 +31,8 @@ async function start(el) {
   runLesson(el, course, flat[at], flat[at + 1] || null, at);
 }
 
-function runLesson(el, course, lesson, next, index) {
+// opts.finish(card, mistakes): replaces the normal end-of-lesson card (daily puzzles use it).
+export function runLesson(el, course, lesson, next, index, opts = {}) {
   el.innerHTML = `
   <div class="lp">
     <div class="lp-top">
@@ -57,11 +58,11 @@ function runLesson(el, course, lesson, next, index) {
   const boardWrap = $('.lp-board-wrap');
   const board = makeBoard(course.board, $('.lp-board-el'));
   const steps = lesson.steps;
-  let k = 0, tries = 0, started = false;
+  let k = 0, tries = 0, mistakes = 0, started = false;
   let timers = [];
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 
-  const kicker = lesson.unit.name + ' · Lesson ' + (lesson.unit.lessons.indexOf(lesson.unit.lessons.find((l) => l.slug === lesson.slug)) + 1);
+  const kicker = opts.kicker || lesson.unit.name + ' · Lesson ' + (lesson.unit.lessons.indexOf(lesson.unit.lessons.find((l) => l.slug === lesson.slug)) + 1);
   $('.lp-kicker').textContent = kicker;
 
   function setProgress() {
@@ -81,7 +82,9 @@ function runLesson(el, course, lesson, next, index) {
     n.disabled = false;
     n.textContent = k === steps.length - 1 ? 'Finish lesson' : 'Continue';
     n.focus({ preventScroll: true });
-    if (!started) { started = true; track('lesson_start', { game: course.game, lesson: lesson.slug }); }
+    // a daily puzzle goes straight to its result card
+    if (opts.finish && k === steps.length - 1) { n.disabled = true; later(finish, 900); }
+    if (!started && !opts.finish) { started = true; track('lesson_start', { game: course.game, lesson: lesson.slug }); }
   }
 
   function show() {
@@ -127,7 +130,7 @@ function runLesson(el, course, lesson, next, index) {
           if (s.pick || found.size === targets.size) ready(s.done);
           else feedback('Yes! ' + (targets.size - found.size) + ' to go.', 'good');
         } else {
-          tries++;
+          tries++; mistakes++;
           play('error');
           const marks = { ...(s.marks || {}) };
           found.forEach((f) => { marks[f] = 'good'; });
@@ -148,7 +151,7 @@ function runLesson(el, course, lesson, next, index) {
         const ok = line ? name === want || name === want + 'q'
           : (s.accept && s.accept.includes(name)) || (s.goal && (s.goal === 'any' || facts[s.goal]));
         if (!ok) {
-          tries++;
+          tries++; mistakes++;
           play('error');
           feedback(wrongText(s, facts), 'bad');
           return false;
@@ -187,7 +190,7 @@ function runLesson(el, course, lesson, next, index) {
             play('select');
             ready(s.done || s.explain);
           } else {
-            tries++;
+            tries++; mistakes++;
             b.classList.add('wrong');
             b.disabled = true;
             play('error');
@@ -209,6 +212,12 @@ function runLesson(el, course, lesson, next, index) {
   }
 
   function finish() {
+    if (opts.finish) {
+      $('.lp-bar span').style.width = '100%';
+      $('.lp-count').textContent = 'Done';
+      $('.lp-card').classList.add('lp-done');
+      return opts.finish($('.lp-card'), mistakes);
+    }
     const first = complete(course.game, lesson.slug, lesson.xp || 20);
     track('lesson_complete', { game: course.game, lesson: lesson.slug, first });
     play('win', 0.05);
@@ -223,7 +232,7 @@ function runLesson(el, course, lesson, next, index) {
       '<p class="text-2">' + (lesson.wrap || 'Nicely done.') + '</p>' + nextLink +
       '<a class="lp-path-link" href="/learn/' + course.game + '#path">Back to the ' + course.name + ' path</a>' +
       '<button type="button" class="link-btn lp-again">Do this lesson again</button>';
-    card.querySelector('.lp-again').addEventListener('click', () => runLesson(el, course, lesson, next, index));
+    card.querySelector('.lp-again').addEventListener('click', () => runLesson(el, course, lesson, next, index, opts));
   }
 
   $('.lp-next').addEventListener('click', () => {
