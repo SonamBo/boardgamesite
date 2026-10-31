@@ -15,6 +15,26 @@ export function yesterdayKey() {
   const d = new Date(); d.setDate(d.getDate() - 1); return dateKey(d);
 }
 
+// ---------- Light / dark theme ----------
+// Dark ("Cosy Den") by default; the choice is remembered on this device. layout.html applies it before paint.
+function applyTheme(light) {
+  const root = document.documentElement;
+  if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = light ? '#FFF7EC' : '#1D1411';
+  document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
+    b.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+    b.setAttribute('aria-pressed', String(light));
+  });
+}
+applyTheme(document.documentElement.dataset.theme === 'light');
+document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListener('click', () => {
+  const light = document.documentElement.dataset.theme !== 'light';
+  applyTheme(light);
+  try { localStorage.setItem('bgs-theme', light ? 'light' : 'dark'); } catch (e) { /* private mode: this page only */ }
+  track('theme_change', { theme: light ? 'light' : 'dark' });
+}));
+
 // ---------- Mobile menu ----------
 const sidebar = document.querySelector('.sidebar');
 const toggle = document.querySelector('.menu-toggle');

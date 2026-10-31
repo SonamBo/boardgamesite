@@ -1,6 +1,6 @@
 // Offline helper. Always tries the network first, so visitors get the latest version;
 // falls back to the last copy it saw when there is no connection.
-const CACHE = 'bgs-v4';
+const CACHE = 'bgs-v5';
 const CORE = [
   '/',
   '/play/solitaire',
@@ -8,8 +8,8 @@ const CORE = [
   '/play/reversi',
   '/play/four-in-a-row',
   '/assets/css/site.css',
-  '/assets/fonts/dm-sans-latin.woff',
-  '/assets/fonts/instrument-serif-latin.woff',
+  '/assets/fonts/nunito-latin.woff2',
+  '/assets/fonts/fredoka-latin.woff2',
   '/assets/js/site.js',
   '/assets/js/store.js',
   '/assets/js/accounts.js',
