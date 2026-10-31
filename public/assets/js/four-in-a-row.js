@@ -15,8 +15,8 @@ window.addEventListener('hashchange', () => location.reload());
 
 const SAVE = 'bgs-c4-game';
 const MASCOT = {
-  win: '/assets/img/fox-wink.webp',
-  lose: '/assets/img/fox-away.webp',
+  win: '/assets/img/fox-trophy.webp',
+  lose: '/assets/img/fox-shrug.webp',
   draw: '/assets/img/fox-three.webp'
 };
 

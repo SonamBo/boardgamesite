@@ -1906,3 +1906,28 @@ canvas.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; z-inde
 .prow:has(.ppop) { z-index: 4; }
 .ptrack { overflow-x: clip; }
 .pboss-face { font-size: 30px; }
+
+/* ---------- Fox poses ---------- */
+.lp-head { display: flex; align-items: center; gap: 12px; }
+.lp-fox { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--surface-2); object-fit: cover; object-position: center 20%; }
+.lp-fox.react { animation: ppop .45s ease-out; }
+.pchest-fox { position: absolute; bottom: 56px; left: 50%; width: 150px; height: auto; transform: translateX(-50%); z-index: 3; pointer-events: none; animation: pchestfox 1.4s ease-out forwards; }
+@keyframes pchestfox { 0% { opacity: 0; translate: 0 20px; scale: .6; } 20% { opacity: 1; translate: 0 0; scale: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+.punit-fox { width: 96px; height: auto; flex: none; margin: -26px -6px -16px 0; }
+.punit.ladder .punit-head { overflow: visible; }
+.ladder-box { position: relative; }
+.ladder-fox { position: absolute; right: 8px; top: 6px; width: 64px; height: auto; pointer-events: none; }
+.ladder-box .ladder-kicker { padding-right: 70px; }
+.page-head-fox { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.page-head-fox img { width: 110px; height: auto; flex: none; margin: -12px 0 -20px; }
+.path-cta { position: relative; }
+.path-cta-fox { width: 92px; height: auto; flex: none; margin: -24px 0 -18px -6px; }
+.path-cta > div { flex: 1; min-width: 200px; }
+#daily.feature img, .feature img[src*="fox-flame"] { object-fit: contain; }
+@media (max-width: 600px) {
+  .page-head-fox img { width: 84px; }
+  .punit-fox { width: 76px; }
+  .path-cta-fox { width: 72px; }
+  .lp-fox { width: 46px; height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) { .lp-fox.react, .pchest-fox { animation: none; } .pchest-fox { display: none; } }

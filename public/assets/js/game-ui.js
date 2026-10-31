@@ -5,8 +5,8 @@ import { onProgressLoaded } from './store.js';
 const $ = (id) => document.getElementById(id);
 
 export const MASCOT = {
-  win: '/assets/img/fox-wink.webp',
-  lose: '/assets/img/fox-away.webp',
+  win: '/assets/img/fox-trophy.webp',
+  lose: '/assets/img/fox-shrug.webp',
   draw: '/assets/img/fox-three.webp'
 };
 
