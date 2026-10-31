@@ -48,7 +48,7 @@ SRC = ROOT / "src"
 OUT = ROOT / "public"
 SITE = "https://boardgamesite.com"
 SITE_NAME = "BoardGameSite"
-NAV_ITEMS = ["play", "daily", "puzzles", "learn", "dashboard", "about"]
+NAV_ITEMS = ["play", "daily", "learn", "dashboard", "about"]
 DEFAULT_IMAGE = "/assets/img/og.png"
 YOUTUBE = "https://www.youtube.com/@Pixel-Art-Games-000"
 

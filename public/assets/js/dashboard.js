@@ -2,7 +2,7 @@
 // Everything comes from this browser's saved progress (synced to the account when signed in).
 import { progress, streak, ACTIVITY, dayKey } from './learn-progress.js';
 import { ratingOf, show, settlePending, nextBot, isProvisional } from './rating.js';
-import { puzzleLog, solvedToday, puzzleStreak, PUZZLE_GAMES } from './puzzles.js';
+import { todayProgress, dailyStreak, noteToday } from './daily.js';
 import { GAMES } from './games-data.js';
 import { store, onProgressLoaded } from './store.js';
 import { whenReady, displayName } from './accounts.js';
@@ -77,7 +77,7 @@ function paint() {
   const lessonsWeek = COURSES.reduce((n, g) => n + st[g].recent, 0);
   $('st-lessons').textContent = lessonsDone;
   $('st-lessons-s').textContent = lessonsWeek ? '+' + lessonsWeek + ' this week' : 'of ' + total;
-  const log = puzzleLog();
+  const log = store.get('bgs-puzzles', {}) || {};
   const solved = Object.values(log).reduce((n, d) => n + Object.keys(d || {}).length, 0);
   const weekAgo = dayKey(new Date(Date.now() - 6 * 864e5));
   const solvedWeek = Object.entries(log).filter(([d]) => d >= weekAgo).reduce((n, [, v]) => n + Object.keys(v || {}).length, 0);
@@ -142,12 +142,13 @@ function paint() {
   $('rec-another').hidden = recs.length < 2;
 
   // ---- daily puzzles ----
-  const today = Object.keys(solvedToday()).length, ps = puzzleStreak();
-  $('pz-t').textContent = 'Today’s puzzles: ' + today + ' of ' + PUZZLE_GAMES.length + ' solved';
-  const waiting = PUZZLE_GAMES.filter((g) => !solvedToday()[g.game]).map((g) => g.name);
+  noteToday();
+  const tp = todayProgress(), ps = dailyStreak();
+  $('pz-t').textContent = 'Today’s challenges: ' + tp.done + ' of ' + tp.total + ' done';
+  const waiting = tp.games.filter((g) => !g.done).map((g) => g.name);
   $('pz-s').textContent = waiting.length
     ? waiting.join(' and ').replace(/ and (?=.* and )/, ', ') + (waiting.length === 1 ? ' is' : ' are') + ' waiting.' + (ps > 1 ? ' Keep your ' + ps + '-day streak going.' : '')
-    : 'All done for today. New puzzles at midnight.';
+    : 'All done for today. New challenges at midnight.';
 }
 
 // What to learn next: unstarted learning paths first, then guides for games like the ones the player plays most.
@@ -176,7 +177,7 @@ function recommendations(st) {
         why: 'You play a lot of ' + top.name + '. ' + g.name + ' is another game in the same family, and the guide gets you playing in minutes.' });
     }
   }
-  if (!out.length) out.push({ tag: 'Daily puzzles', name: 'Keep your skills sharp', cta: 'Solve today’s puzzles', href: '/puzzles', why: 'You’ve started every learning path. A daily puzzle in each game keeps the ideas fresh.' });
+  if (!out.length) out.push({ tag: 'Daily puzzles', name: 'Keep your skills sharp', cta: 'Play today’s challenges', href: '/daily', why: 'You’ve started every learning path. Three daily challenges keep the ideas fresh.' });
   return out;
 }
 
