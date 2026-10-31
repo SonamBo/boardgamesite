@@ -16,7 +16,7 @@ const GAMES = [
   { game: 'mancala', name: 'Mancala', icon: 'seeds' }
 ];
 const UNIT_COLORS = ['#8A2443', '#2F5568', '#5C4A1E', '#55306A', '#2F5E46', '#6B3A2A', '#34465E'];
-const MASCOTS = ['mascot-wave', 'mascot-confused', 'mascot-trophy'];
+const MASCOTS = ['mascot-wave', 'mascot-kneel', 'mascot-three'];
 const WAVE = [0, -1, -2, -1, 0, 1, 2, 1];          // the path's sideways swing, node by node
 const CHEST_XP = 30, JUMP_PASS = 2;              // a jump test allows up to 2 mistakes
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));

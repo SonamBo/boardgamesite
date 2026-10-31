@@ -259,7 +259,7 @@ function buildDialog() {
     '<button type="button" class="dialog-close" aria-label="Close">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
     '<div class="dialog-inner">' +
-    '<img src="/assets/img/mascot-wave.webp" alt="" width="280" height="287">' +
+    '<img src="/assets/img/mascot-wave.webp" alt="" width="280" height="280">' +
     '<h2 id="auth-title"></h2>' +
     '<p class="text-2 auth-sub"></p>' +
     '<button type="button" class="btn btn-light btn-block" data-auth="google">' + GOOGLE_ICON + 'Continue with Google</button>' +
