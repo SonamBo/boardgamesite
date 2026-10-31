@@ -27,10 +27,10 @@ const CORE = [
   '/assets/js/solitaire-engine.js',
   '/assets/js/solitaire.js',
   '/assets/img/logo.webp',
-  '/assets/img/hero.webp',
-  '/assets/img/mascot-wave.webp',
-  '/assets/img/mascot-confused.webp',
-  '/assets/img/mascot-trophy.webp'
+  '/assets/img/hero-fox.webp',
+  '/assets/img/fox-hello.webp',
+  '/assets/img/fox-away.webp',
+  '/assets/img/fox-wink.webp'
 ];
 
 self.addEventListener('install', (event) => {

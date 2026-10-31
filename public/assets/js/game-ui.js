@@ -5,9 +5,9 @@ import { onProgressLoaded } from './store.js';
 const $ = (id) => document.getElementById(id);
 
 export const MASCOT = {
-  win: '/assets/img/mascot-trophy.webp',
-  lose: '/assets/img/mascot-confused.webp',
-  draw: '/assets/img/mascot-three.webp'
+  win: '/assets/img/fox-wink.webp',
+  lose: '/assets/img/fox-away.webp',
+  draw: '/assets/img/fox-three.webp'
 };
 
 export function setStatus(text, kind) {
