@@ -51,6 +51,12 @@ function paint() {
     .sort((a, b) => Math.max(0, ...Object.values(progress(b).done)) - Math.max(0, ...Object.values(progress(a).done)))[0];
   const ladderNext = COURSES.find((g) => st[g].complete && ratingOf(g).n < 5);
   $('dash-hi').textContent = greeting();
+  // the fox: yawning when a streak has lapsed, jumping once today's challenges are all done, otherwise ready to play
+  const act0 = store.get(ACTIVITY, {}) || {};
+  const lapsed = !streak() && Object.keys(act0).length > 0;
+  const tp0 = todayProgress();
+  const pose = lapsed ? 'fox-yawn' : tp0.done === tp0.total ? 'fox-jump' : 'fox-kneel';
+  document.querySelector('.dash-hero img').src = '/assets/img/' + pose + '.webp';
   const cta = $('dash-cta');
   if (inProgress) {
     const s = st[inProgress], left = s.all.length - s.finished.length;
@@ -71,6 +77,7 @@ function paint() {
     cta.textContent = 'Start learning ' + NAME[g];
     cta.href = first ? '/learn/' + g + '/' + first.slug : '/learn/' + g;
   }
+  if (lapsed) $('dash-next').textContent = 'Your streak needs waking up! ' + $('dash-next').textContent;
 
   // ---- stats ----
   const lessonsDone = COURSES.reduce((n, g) => n + st[g].finished.length, 0);

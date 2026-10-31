@@ -65,7 +65,8 @@ export function ladder(game, hooks = {}) {
   function paint(result, r) {
     const p = ratingOf(game);
     const idx = BOTS.indexOf(bot), next = BOTS[idx + 1];
-    let html = '<p class="ladder-kicker">Rated game · Practice ladder</p>' +
+    let html = '<img class="ladder-fox" src="/assets/img/' + (result === 'win' ? 'fox-trophy' : result ? 'fox-shrug' : 'fox-cross') + '.webp" alt="" width="280" height="280">' +
+      '<p class="ladder-kicker">Rated game · Practice ladder</p>' +
       '<div class="ladder-vs"><span><b>You</b><em>' + show(p) + '</em></span><i>vs</i><span><b>' + esc(bot.name) + '</b><em>' + bot.rating + '</em></span></div>';
     if (r) {
       const word = result === 'win' ? 'You beat ' + bot.name : result === 'draw' ? 'Draw with ' + bot.name : bot.name + ' won';

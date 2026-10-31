@@ -339,7 +339,7 @@ def course_html(game):
     out = [f'<section class="path" id="path" data-path="{game}" aria-labelledby="path-h">',
            f'  <h2 id="path-h">Learn {c["name"]} step by step</h2>',
            f'  <p class="text-2">{c["intro"]}</p>',
-           f'  <div class="path-cta card"><div><b>Learn {c["name"]} step by step</b><span class="text-2">{total} hands-on lessons, unlock as you go, then rated games.</span></div>'
+           f'  <div class="path-cta card"><img class="path-cta-fox" src="/assets/img/fox-point.webp" alt="" width="280" height="280"><div><b>Learn {c["name"]} step by step</b><span class="text-2">{total} hands-on lessons, unlock as you go, then rated games.</span></div>'
            f'<a class="btn btn-gold btn-lg" href="/learn/{game}/path" data-path-cta>Start the {c["name"]} path</a></div>',
            f'  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">{total} lessons</span></div>',
            f'  <details class="path-all"><summary>See all {total} lessons</summary>']

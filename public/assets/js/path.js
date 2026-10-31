@@ -16,7 +16,7 @@ const GAMES = [
   { game: 'mancala', name: 'Mancala', icon: 'seeds' }
 ];
 const UNIT_COLORS = ['#8A2443', '#2F5568', '#5C4A1E', '#55306A', '#2F5E46', '#6B3A2A', '#34465E'];
-const MASCOTS = ['fox-hello', 'fox-kneel', 'fox-three'];
+const MASCOTS = ['fox-hello', 'fox-study', 'fox-think', 'fox-point', 'fox-kneel', 'fox-three'];
 const WAVE = [0, -1, -2, -1, 0, 1, 2, 1];          // the path's sideways swing, node by node
 const CHEST_XP = 30, JUMP_PASS = 2;              // a jump test allows up to 2 mistakes
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -123,12 +123,12 @@ function paint(el, game, course) {
     const beaten = beatenBots(game);
     const nextBot = course.ladder.find((b) => !beaten[b.id]);
     html += '<section class="punit ladder" id="ladder" aria-labelledby="ladder-h"><div class="punit-head"><div><p class="punit-kicker">Practice ladder · BGS Rating</p><h2 id="ladder-h">Rated games</h2>' +
-      '<p>' + (S.ladderOpen ? 'Beat each bot to climb. Every game counts towards your BGS Rating, which starts at 800.' : 'Pass the rules check to unlock rated games.') + '</p></div></div><div class="ptrack">';
+      '<p>' + (S.ladderOpen ? 'Beat each bot to climb. Every game counts towards your BGS Rating, which starts at 800.' : 'Pass the rules check to unlock rated games.') + '</p></div><img class="punit-fox" src="/assets/img/fox-cross.webp" alt="" width="280" height="280"></div><div class="ptrack">';
     course.ladder.forEach((b, k) => {
       const st = !S.ladderOpen ? 'locked' : beaten[b.id] ? 'done' : b === nextBot ? 'cur' : 'open';
       html += '<div class="prow" style="--off:' + [1, -1, 0][k % 3] + '">' + (st === 'cur' ? '<span class="pbubble">Play</span>' : '') +
         (S.ladderOpen ? '<a' : '<span') + ' class="pboss ' + st + '"' + (S.ladderOpen ? ' href="/play/' + game + '?bot=' + b.id + '"' : '') + ' aria-label="' + esc(b.name) + ', rated ' + b.rating + (st === 'done' ? ' (beaten)' : '') + '">' +
-        '<span class="pboss-face">' + ({ penny: '🐣', mira: '🦊', monocle: '🧐' }[b.id] || esc(b.name[0])) + '</span><span class="pboss-name">' + esc(b.name) + '<small>' + b.rating + '</small></span>' + (st === 'done' ? '<span class="pcheck">✓</span>' : st === 'locked' ? '<span class="plock">🔒</span>' : '') +
+        '<span class="pboss-face">' + ({ penny: '🐣', mira: '🦉', monocle: '🧐' }[b.id] || esc(b.name[0])) + '</span><span class="pboss-name">' + esc(b.name) + '<small>' + b.rating + '</small></span>' + (st === 'done' ? '<span class="pcheck">✓</span>' : st === 'locked' ? '<span class="plock">🔒</span>' : '') +
         (S.ladderOpen ? '</a>' : '</span>') + '</div>';
     });
     html += '</div></section>';
@@ -174,6 +174,10 @@ function chest(el, game, course, node) {
   toast.className = 'pxp-toast';
   toast.innerHTML = '+<b>0</b> XP';
   node.parentElement.appendChild(toast);
+  const cheer = document.createElement('img');
+  cheer.className = 'pchest-fox';
+  cheer.src = '/assets/img/fox-chest.webp'; cheer.alt = ''; cheer.width = 280; cheer.height = 280;
+  node.parentElement.appendChild(cheer);
   countUp(toast.querySelector('b'), CHEST_XP);
   setTimeout(() => paint(el, game, course), 1400);
 }
@@ -203,7 +207,9 @@ function jumpTest(el, game, course, unitIndex) {
       const ok = mistakes <= JUMP_PASS;
       track('jump_end', { game, unit: unitIndex, passed: ok, mistakes });
       if (ok) { jumpTo(game, unitIndex); confetti(); }
-      card.innerHTML = '<div class="lp-done-head"><p class="lp-done-title">' + (ok ? 'You jumped ahead!' : 'Not quite yet') + '</p></div>' +
+      card.classList.add('lp-celebrate');
+      card.innerHTML = '<img class="lp-cheer" src="/assets/img/' + (ok ? 'fox-jump' : 'fox-shrug') + '.webp" alt="" width="280" height="280">' +
+        '<p class="lp-done-title">' + (ok ? 'You jumped ahead!' : 'Not quite yet') + '</p>' +
         '<p class="text-2" style="margin:0">' + (ok ? 'Unit ' + (unitIndex + 1) + ' is unlocked. The lessons you skipped are still there whenever you want them.'
           : mistakes + ' mistakes this time. The lessons before this unit will get you there, or try the test again.') + '</p>' +
         '<button type="button" class="btn btn-gold btn-block jt-done">' + (ok ? 'Continue' : 'Back to the path') + '</button>' +
