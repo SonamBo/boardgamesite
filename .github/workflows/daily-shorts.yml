@@ -23,6 +23,11 @@ on:
         description: 'Upload to YouTube'
         type: boolean
         default: false
+      privacy:
+        description: 'Privacy for this run''s uploads'
+        type: choice
+        options: [unlisted, private, public]
+        default: unlisted
 
 concurrency:
   group: daily-shorts
@@ -73,6 +78,6 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          YT_PRIVACY: ${{ vars.YT_PRIVACY }}
+          YT_PRIVACY: ${{ inputs.privacy || vars.YT_PRIVACY }}
         run: |
           for meta in dist/short/*.json; do node tools/daily-short/upload.mjs "$meta"; done
