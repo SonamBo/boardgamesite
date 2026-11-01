@@ -173,7 +173,7 @@ function checkersBoard(el) {
     if (done) doMove(done, true); else render();
   }
   return Object.assign(b, {
-    set(rows) { B = checkersFrom(rows); side = 1; partial = []; last = null; render(); },
+    set(rows) { B = Array.isArray(rows) ? rows.slice() : checkersFrom(rows); side = 1; partial = []; last = null; render(); },
     play(n) {
       const m = legal().find((x) => name(x) === n);
       return m ? doMove(m, false) : null;

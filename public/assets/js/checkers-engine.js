@@ -156,3 +156,20 @@ export function pickComputerMove(b, level = 'medium', rnd = Math.random) {
   }
   return best;
 }
+
+// Post-game review: score every legal move for `side` (from that side's point of view), searching deeper
+// until the time budget runs out. Returns [{ move, score }] best first, and the depth reached.
+export function analysePosition(b, side, timeMs = 600) {
+  const moves = legalMoves(b, side);
+  if (!moves.length) return { scores: [], depth: 0 };
+  const t0 = Date.now();
+  let scores = moves.map((m) => ({ move: m, score: 0 })), depth = 0;
+  for (let d = 2; d <= 14; d++) {
+    const next = [];
+    for (const m of moves) next.push({ move: m, score: -negamax(applyMove(b, m), -side, d - 1, -Infinity, Infinity) });
+    scores = next.sort((a, z) => z.score - a.score);
+    depth = d;
+    if (Date.now() - t0 > timeMs / 3) break;   // the next depth would take several times longer
+  }
+  return { scores, depth };
+}

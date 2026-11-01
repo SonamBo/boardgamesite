@@ -45,6 +45,13 @@ async function start(el) {
   const cur = el.querySelector('.pnode.cur, .pchest.ready');
   if (cur) cur.scrollIntoView({ block: 'center' });
   // just finished a lesson: let its node pop
+  // arrived from the welcome flow saying they know the rules: offer the jump test to the first strategy unit
+  const q = new URLSearchParams(location.search).get('jump');
+  if (q) {
+    history.replaceState(null, '', location.pathname);
+    const ui = q === 'strategy' ? course.units.findIndex((u) => u.stage === 'strategy') : Number(q);
+    if (ui > 0 && ui < course.units.length && progress(game).jump < ui) jumpTest(el, game, course, ui);
+  }
   const just = sessionStorage.getItem('bgs-path-just');
   if (just) {
     sessionStorage.removeItem('bgs-path-just');
