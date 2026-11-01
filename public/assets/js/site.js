@@ -2,6 +2,7 @@
 import { configured, startAnalytics, track, addEntry } from './firebase.js';
 import { store } from './store.js';
 import { noteToday, todayProgress, dailyStreak } from './daily.js';
+import { streak, activeToday, totalXp } from './learn-progress.js';
 import { startAccounts, openAccounts, currentUser } from './accounts.js';
 
 export { store };
@@ -35,6 +36,38 @@ document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListen
   track('theme_change', { theme: light ? 'light' : 'dark' });
 }));
 
+// ---------- Recently played games (for "Play again" on the home page) ----------
+{
+  const m = location.pathname.match(/^\/play\/([a-z0-9-]+)$/);
+  if (m) {
+    const recent = (store.get('bgs-recent', []) || []).filter((x) => x !== m[1]);
+    store.set('bgs-recent', [m[1]].concat(recent).slice(0, 8));
+  }
+}
+
+// ---------- Streak and XP chip (top right on desktop, top bar on phones) ----------
+// The flame lights up once the player has done something today. Gems get their own slot here when they arrive.
+function paintStats() {
+  const days = streak(), lit = activeToday(), xp = totalXp();
+  const gems = store.get('bgs-gems', null);
+  document.querySelectorAll('[data-stats-chip]').forEach((chip) => {
+    const s = chip.querySelector('.sc-streak');
+    s.classList.toggle('lit', lit);
+    s.querySelector('b').textContent = days;
+    s.title = days ? days + '-day streak' + (lit ? '' : ': play today to keep it') : 'Start a streak today';
+    chip.querySelector('.sc-xp b').textContent = xp >= 10000 ? Math.round(xp / 1000) + 'k' : xp;
+    let g = chip.querySelector('.sc-gems');
+    if (typeof gems === 'number') {
+      if (!g) { g = document.createElement('span'); g.className = 'sc sc-gems'; g.title = 'Gems'; chip.appendChild(g); }
+      g.innerHTML = '💎 <b>' + gems + '</b>';
+    }
+    chip.setAttribute('aria-label', days + '-day streak, ' + xp + ' XP' + (typeof gems === 'number' ? ', ' + gems + ' gems' : '') + '. Open your progress');
+  });
+}
+paintStats();
+store.onChange((key) => { if (/^bgs-(learn-|activity|daily|puzzles|rating-|gems)/.test(key)) paintStats(); });
+window.addEventListener('bgs-progress', paintStats);
+
 // ---------- Mobile menu ----------
 const sidebar = document.querySelector('.sidebar');
 const toggle = document.querySelector('.menu-toggle');
@@ -51,24 +84,26 @@ const APP_HOSTS = /(^|\.)boardgamesite\.com$|\.web\.app$|\.firebaseapp\.com$|^lo
 if ('serviceWorker' in navigator && APP_HOSTS.test(location.hostname)) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
-// "Install app" button, shown only when the browser offers installing.
-const installBtn = document.getElementById('install-app');
+// "Install app" buttons (sidebar, account page), shown only when the browser offers installing.
+const installBtns = [...document.querySelectorAll('#install-app, [data-install-app]')];
+const installBoxes = [...document.querySelectorAll('[data-install-app-box]')];
+const showInstall = (on) => { installBtns.forEach((b) => { b.hidden = !on; }); installBoxes.forEach((b) => { b.hidden = !on; }); };
 let installPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   installPrompt = e;
-  if (installBtn) installBtn.hidden = false;
+  showInstall(true);
 });
-installBtn?.addEventListener('click', async () => {
+installBtns.forEach((btn) => btn.addEventListener('click', async () => {
   if (!installPrompt) return;
   installPrompt.prompt();
   const choice = await installPrompt.userChoice.catch(() => null);
   track('app_install_prompt', { outcome: choice ? choice.outcome : 'unknown' });
   installPrompt = null;
-  installBtn.hidden = true;
-});
+  showInstall(false);
+}));
 window.addEventListener('appinstalled', () => {
-  if (installBtn) installBtn.hidden = true;
+  showInstall(false);
   track('app_installed');
 });
 

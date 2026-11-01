@@ -49,16 +49,19 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
         <div class="lp-text"></div>
         <div class="lp-choices"></div>
         <div class="lp-pips" aria-hidden="true"></div>
-        <p class="lp-feedback" role="status" aria-live="polite"></p>
-        <div class="lp-actions">
-          <button type="button" class="btn btn-outline lp-retry" hidden>Try again</button>
-          <button type="button" class="btn btn-gold lp-next" disabled>Continue</button>
+        <div class="lp-sheet">
+          <div class="lp-sheet-msg"><span class="lp-mark" aria-hidden="true"></span><div><b class="lp-verdict"></b><p class="lp-feedback" role="status" aria-live="polite"></p></div></div>
+          <div class="lp-actions">
+            <button type="button" class="btn btn-outline lp-retry" hidden>Try again</button>
+            <button type="button" class="btn btn-gold lp-next" disabled>Continue</button>
+          </div>
         </div>
       </div>
     </div>
   </div>`;
   const $ = (s) => el.querySelector(s);
-  if (opts.autoFinish) $('.lp').classList.add('lp-puzzle');   // a puzzle finishes by itself: no Continue button
+  if (opts.autoFinish) $('.lp').classList.add('lp-puzzle');
+  if (!opts.finish) document.body.classList.add('in-lesson');   // full-screen lesson on phones: no tab bar   // a puzzle finishes by itself: no Continue button
   const boardWrap = $('.lp-board-wrap');
   const board = makeBoard(course.board, $('.lp-board-el'));
   const steps = lesson.steps;
@@ -81,10 +84,17 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     img.src = '/assets/img/fox-face-' + mood + '.webp';
     img.classList.remove('react'); void img.offsetWidth; img.classList.add('react');
   }
+  // The feedback sheet: neutral (the prompt), green when right, red on a miss. Fixed to the bottom on phones.
+  const CHEERS = ['Nice!', 'Great move!', 'Correct!', 'You got it!', 'Spot on!', 'Brilliant!'];
+  const MISSES = ['Not quite', 'Almost!', 'Try again'];
   function feedback(text, kind) {
     const f = $('.lp-feedback');
     f.textContent = text || '';
     f.className = 'lp-feedback' + (kind ? ' ' + kind : '');
+    const sheet = $('.lp-sheet');
+    sheet.classList.toggle('good', kind === 'good');
+    sheet.classList.toggle('bad', kind === 'bad');
+    $('.lp-verdict').textContent = kind === 'good' ? CHEERS[Math.floor(Math.random() * CHEERS.length)] : kind === 'bad' ? MISSES[Math.floor(Math.random() * MISSES.length)] : '';
     if (kind) face(kind === 'good' ? 'laugh' : 'sad');
   }
   function ready(text) {

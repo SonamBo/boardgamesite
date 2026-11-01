@@ -58,12 +58,22 @@ export function logActivity(game, n = 1) {
   store.set(ACTIVITY, a);
 }
 
-// Days in a row (ending today or yesterday) with any activity.
-export function streak() {
+// Days in a row (ending today or yesterday) with any activity: a lesson, puzzle, rated game or daily challenge.
+function activeDays() {
   const a = store.get(ACTIVITY, {}) || {};
+  const daily = store.get('bgs-daily-log', {}) || {};
+  return (k) => !!(a[k] && Object.keys(a[k]).length) || !!(daily[k] && daily[k].hub);
+}
+export function streak() {
+  const on = activeDays();
   const d = new Date();
-  if (!a[dayKey(d)]) d.setDate(d.getDate() - 1);
+  if (!on(dayKey(d))) d.setDate(d.getDate() - 1);
   let n = 0;
-  while (a[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
+  while (on(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
   return n;
 }
+export const activeToday = () => activeDays()(dayKey());
+
+// XP across every learning path (lessons and gift chests).
+export const LEARN_GAMES = ['chess', 'checkers', 'mancala'];
+export const totalXp = () => LEARN_GAMES.reduce((n, g) => n + progress(g).xp, 0);
