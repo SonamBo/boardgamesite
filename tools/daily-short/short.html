@@ -3,30 +3,34 @@
 <!-- Draws one frame of a daily-challenge Short (1080×1920). render.mjs sets window.SCRIPT (from shorts.mjs),
      then calls render(t) for every frame and screenshots it. Nothing here moves on its own. -->
 <style>
-@font-face { font-family: 'DM Sans'; src: url('../../public/assets/fonts/dm-sans-latin.woff'); font-weight: 400 700; }
-@font-face { font-family: 'Serif'; src: url('../../public/assets/fonts/instrument-serif-latin.woff'); }
+/* The site's own fonts and "Cosy Den" colours (public/assets/css/site.css). */
+@font-face { font-family: 'Nunito'; src: url('../../public/assets/fonts/nunito-latin.woff2') format('woff2'); font-weight: 200 1000; }
+@font-face { font-family: 'Fredoka'; src: url('../../public/assets/fonts/fredoka-latin.woff2') format('woff2'); font-weight: 300 700; }
 * { box-sizing: border-box; margin: 0; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #110D0E; }
-body { position: relative; font-family: 'DM Sans', sans-serif; color: #F5EFE7; }
-#bg { position: absolute; inset: 0; background: radial-gradient(90% 55% at 50% 52%, #4A1226 0%, #2A0A15 45%, #110D0E 85%); }
-.layer { position: absolute; left: 0; right: 0; text-align: center; }
-#eyebrow { top: 186px; font-size: 30px; letter-spacing: .14em; color: #CFAA62; font-weight: 600; text-transform: uppercase; }
-#title { top: 244px; font-family: 'Serif', serif; font-size: 108px; line-height: 1.03; padding: 0 64px; }
-#title em, #sub em { font-style: normal; color: #CFAA62; }
-#sub { top: 498px; font-size: 40px; color: #DCD2CA; padding: 0 96px; line-height: 1.22; }
-#below { font-size: 36px; color: #C6BBB3; padding: 0 90px; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #1D1411; }
+body { position: relative; font-family: 'Nunito', sans-serif; color: #FFF3E6; }
+#bg { position: absolute; inset: 0; background: radial-gradient(90% 55% at 50% 52%, #3E2A20 0%, #2B1E19 45%, #1D1411 85%); }
+.layer { position: absolute; left: 0; right: 0; text-align: center; text-wrap: balance; }
+#eyebrow { top: 186px; font-size: 30px; letter-spacing: .14em; color: #F7B455; font-weight: 800; text-transform: uppercase; }
+#title { top: 244px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 96px; line-height: 1.06; padding: 0 64px; letter-spacing: -0.01em; }
+#title em, #sub em { font-style: normal; color: #F7B455; }
+#sub { top: 498px; font-size: 40px; font-weight: 600; color: #E2CDBB; padding: 0 96px; line-height: 1.22; }
+#below { font-size: 36px; font-weight: 600; color: #C2AA97; padding: 0 90px; }
 #stage { position: absolute; inset: 0; }
 #timer { position: absolute; left: 490px; top: 548px; width: 100px; height: 100px; }
 #timer svg { width: 100px; height: 100px; transform: rotate(-90deg); }
-#timer b { position: absolute; inset: 0; display: grid; place-items: center; font-family: 'Serif', serif; font-size: 58px; font-weight: 400; }
-#flash { position: absolute; inset: 0; background: #110D0E; pointer-events: none; }
-#end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding-bottom: 260px;
-  background: radial-gradient(90% 55% at 50% 45%, #4A1226 0%, #2A0A15 45%, #110D0E 85%); opacity: 0; }
-#end img { width: 190px; height: 190px; border-radius: 40px; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
-#end .h { font-family: 'Serif', serif; font-size: 92px; line-height: 1.04; text-align: center; padding: 0 60px; }
-#end .h em { font-style: normal; color: #CFAA62; }
-#end .s { font-size: 38px; color: #DCD2CA; text-align: center; padding: 0 60px; }
-#end .url { margin-top: 26px; font-size: 52px; font-weight: 700; padding: 22px 50px; border-radius: 999px; background: #8A2443; color: #F7EFE6; box-shadow: inset 0 -6px 0 #5E1530; }
+#timer b { position: absolute; inset: 0; display: grid; place-items: center; font-family: 'Fredoka', sans-serif; font-size: 54px; font-weight: 600; }
+#flash { position: absolute; inset: 0; background: #1D1411; pointer-events: none; }
+#end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding-bottom: 300px;
+  background: radial-gradient(90% 55% at 50% 45%, #3E2A20 0%, #2B1E19 45%, #1D1411 85%); opacity: 0; }
+#end .fox { width: 420px; height: 420px; object-fit: contain; filter: drop-shadow(0 24px 40px rgba(0,0,0,.45)); }
+#end .brand { display: flex; align-items: center; gap: 18px; font: 700 50px/1 'Fredoka', sans-serif; color: #FFF3E6; }
+#end .brand img { width: 72px; height: 72px; border-radius: 16px; }
+#end .h { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 84px; line-height: 1.06; text-align: center; padding: 0 60px; }
+#end .h em { font-style: normal; color: #F7B455; }
+#end .s { font-size: 38px; font-weight: 600; color: #E2CDBB; text-align: center; padding: 0 60px; }
+#end .url { margin-top: 18px; font-size: 52px; font-weight: 800; padding: 22px 50px; border-radius: 999px; background: #F07A2B; color: #2A1306; box-shadow: inset 0 -6px 0 #A94E14; }
+#fox { position: absolute; left: 30px; top: 8px; width: 178px; height: 178px; object-fit: contain; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.5)); transform-origin: 50% 100%; }
 
 /* shared board bits */
 .abs { position: absolute; }
@@ -44,18 +48,18 @@ body { position: relative; font-family: 'DM Sans', sans-serif; color: #F5EFE7; }
 .pz.b { fill: #2A1D20; stroke: #FBF6EA; stroke-width: .9; stroke-linejoin: round; }
 .pz .eye { stroke: none; } .pz.w .eye { fill: #2A1D20; } .pz.b .eye { fill: #FBF6EA; }
 .pz .cut { fill: none; stroke-width: 1.6; } .pz.w .cut { stroke: #2A1D20; } .pz.b .cut { stroke: #FBF6EA; }
-.coord { position: absolute; font: 700 22px/1 'DM Sans'; color: rgba(60,40,30,.6); }
+.coord { position: absolute; font: 700 22px/1 'Nunito'; color: rgba(60,40,30,.6); }
 .pit { position: absolute; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); box-shadow: inset 0 5px 10px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.12); }
 .pit.store { border-radius: 999px; }
 .seed { position: absolute; width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,.5); }
-.count { position: absolute; transform: translate(-50%, -50%); font: 700 34px/1 'DM Sans'; color: #F5EFE7; background: rgba(0,0,0,.6); padding: 5px 12px; border-radius: 99px; }
-.lbl { position: absolute; font: 700 26px/1 'DM Sans'; letter-spacing: .12em; color: #C6BBB3; text-transform: uppercase; }
-.cell { position: absolute; display: grid; place-items: center; font: 700 50px/1 'DM Sans'; }
-.tile { position: absolute; display: grid; place-items: center; font: 700 64px/1 'DM Sans'; text-transform: uppercase; border-radius: 12px; }
-.hex { position: absolute; display: grid; place-items: center; font: 700 84px/1 'DM Sans'; text-transform: uppercase;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.count { position: absolute; transform: translate(-50%, -50%); font: 700 34px/1 'Nunito'; color: #F5EFE7; background: rgba(0,0,0,.6); padding: 5px 12px; border-radius: 99px; }
+.lbl { position: absolute; font: 700 26px/1 'Nunito'; letter-spacing: .12em; color: #C6BBB3; text-transform: uppercase; }
+.cell { position: absolute; display: grid; place-items: center; font: 700 50px/1 'Nunito'; }
+.tile { position: absolute; display: grid; place-items: center; font: 700 64px/1 'Nunito'; text-transform: uppercase; border-radius: 12px; }
+.hex { position: absolute; display: grid; place-items: center; font: 800 84px/1 'Nunito'; text-transform: uppercase;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); }
 .chips { position: absolute; left: 70px; right: 70px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
-.chip { font: 600 42px/1 'DM Sans'; padding: 16px 26px; border-radius: 999px; background: #292124; color: #F5EFE7; text-transform: lowercase; }
+.chip { font: 700 42px/1 'Nunito'; padding: 16px 26px; border-radius: 999px; background: #35261F; color: #FFF3E6; text-transform: lowercase; }
 .chip.pg { background: #CFAA62; color: #2A1D0A; font-size: 56px; font-weight: 700; padding: 20px 36px; }
 </style></head>
 <body>
@@ -65,13 +69,15 @@ body { position: relative; font-family: 'DM Sans', sans-serif; color: #F5EFE7; }
 <p id="sub" class="layer"></p>
 <div id="stage"></div>
 <p id="below" class="layer"></p>
-<div id="timer"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#3D0F1F" stroke-width="10"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#CFAA62" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><b id="tnum">5</b></div>
+<div id="timer"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#35261F" stroke-width="10"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#F07A2B" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><b id="tnum">5</b></div>
 <div id="end">
-  <img src="../../public/assets/img/logo.webp" alt="">
+  <img class="fox" src="../../public/assets/img/fox-wave.webp" alt="">
+  <p class="brand"><img src="../../public/assets/img/logo.webp" alt="">BoardGameSite</p>
   <p class="h"></p>
   <p class="s"></p>
   <p class="url"></p>
 </div>
+<img id="fox" alt="" style="opacity:0">
 <div id="flash"></div>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -291,49 +297,50 @@ const sdRect = (i) => ({ x: SD.x + (i % 9) * SD.cell, y: SD.y + Math.floor(i / 9
 function drawSudoku(t) {
   const { pos, anim } = stateAt(t);
   const given = S.keys[0].pos;
-  el('div', 'abs', { left: px(SD.x - 12), top: px(SD.y - 12), width: px(816), height: px(816), borderRadius: '16px', background: '#45383C', boxShadow: '0 40px 80px rgba(0,0,0,.6)' });
+  el('div', 'abs', { left: px(SD.x - 10), top: px(SD.y - 10), width: px(812), height: px(812), borderRadius: '20px', background: '#F07A2B', boxShadow: '0 40px 80px rgba(0,0,0,.6)' });
+  el('div', 'abs', { left: px(SD.x), top: px(SD.y), width: px(792), height: px(792), background: '#5A4237' });
   const marks = marksAt(t);
   const tint = {};
   for (const m of marks) for (const i of m.cells) if (m.style === 'zone') tint[i] = Math.max(tint[i] || 0, m.op);
   const g = anim ? anim.before : pos;
   for (let i = 0; i < 81; i++) {
     const r = sdRect(i);
-    const bg = tint[i] ? `color-mix(in srgb, #5E1530 ${Math.round(tint[i] * 100)}%, #1F191B)` : '#1F191B';
+    const bg = tint[i] ? `color-mix(in srgb, #7A3A16 ${Math.round(tint[i] * 100)}%, #2B1E19)` : '#2B1E19';
     el('div', 'abs', { left: px(r.x + 1), top: px(r.y + 1), width: px(r.w - 2), height: px(r.h - 2), background: bg });
-    if (g[i]) el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: given[i] ? '#F5EFE7' : '#E3C37F', fontWeight: given[i] ? 700 : 600 }, String(g[i]));
+    if (g[i]) el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: given[i] ? '#FFF3E6' : '#FFCB7A', fontWeight: given[i] ? 800 : 700 }, String(g[i]));
   }
   for (let k = 1; k < 3; k++) {
-    el('div', 'abs', { left: px(SD.x + k * 3 * SD.cell - 3), top: px(SD.y), width: '6px', height: px(9 * SD.cell), background: '#8A2443' });
-    el('div', 'abs', { left: px(SD.x), top: px(SD.y + k * 3 * SD.cell - 3), width: px(9 * SD.cell), height: '6px', background: '#8A2443' });
+    el('div', 'abs', { left: px(SD.x + k * 3 * SD.cell - 3), top: px(SD.y), width: '6px', height: px(9 * SD.cell), background: '#F07A2B' });
+    el('div', 'abs', { left: px(SD.x), top: px(SD.y + k * 3 * SD.cell - 3), width: px(9 * SD.cell), height: '6px', background: '#F07A2B' });
   }
   for (const m of marks) for (const i of m.cells) {
     const r = sdRect(i);
-    if (m.style === 'target') el('div', 'sq-ring', { left: px(r.x + 2), top: px(r.y + 2), width: px(r.w - 4), height: px(r.h - 4), borderColor: '#CFAA62', opacity: m.op });
+    if (m.style === 'target') el('div', 'sq-ring', { left: px(r.x + 2), top: px(r.y + 2), width: px(r.w - 4), height: px(r.h - 4), borderColor: '#F7B455', opacity: m.op });
     if (m.style === 'white') el('div', 'sq-ring', { left: px(r.x + 2), top: px(r.y + 2), width: px(r.w - 4), height: px(r.h - 4), borderColor: '#FFFFFF', opacity: m.op });
     if (m.style === 'red') el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: '#FF8FA8', opacity: m.op, fontSize: '54px', fontWeight: 400 }, '×');
   }
   if (anim && anim.type === 'fill') {
     const k = clamp((t - anim.a) / (anim.b - anim.a)), r = sdRect(anim.cell);
-    el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: '#E3C37F', opacity: k, transform: `scale(${1.5 - 0.5 * ease(k)})` }, String(anim.v));
+    el('div', 'cell', { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), color: '#FFCB7A', opacity: k, transform: `scale(${1.5 - 0.5 * ease(k)})` }, String(anim.v));
   }
   return SD.y + 9 * SD.cell + 20;
 }
 
 // ---------- Word Guess ----------
 const WG = { x: 221, y: 660, tile: 118, gap: 12 };
-const TILE = { s: ['#292124', '#8A2443', '#CFAA62'], c: ['#C6BBB3', '#F7EFE6', '#2A1D0A'] };
+const TILE = { s: ['#35261F', '#F07A2B', '#CFAA62'], c: ['#E2CDBB', '#2A1306', '#2A1D0A'] };
 function drawWordGuess(t) {
   const { pos, anim } = stateAt(t);
   const rows = (anim ? anim.before : pos).rows;
   for (let r = 0; r < 6; r++) for (let c = 0; c < 5; c++) {
     const x = WG.x + c * (WG.tile + WG.gap), y = WG.y + r * (WG.tile + WG.gap);
-    let ch = '', sc = null, sy = 1, border = '#45383C';
-    if (rows[r]) { ch = rows[r].word[c]; sc = rows[r].score ? rows[r].score[c] : null; border = '#ADA29A'; }
+    let ch = '', sc = null, sy = 1, border = '#5A4237';
+    if (rows[r]) { ch = rows[r].word[c]; sc = rows[r].score ? rows[r].score[c] : null; border = '#C2AA97'; }
     if (anim && r === anim.row) {
       const k = (t - anim.a) / (anim.b - anim.a);
-      if (anim.type === 'type') { ch = c < Math.floor(k * 5) + 1 ? anim.word[c] : ''; border = ch ? '#ADA29A' : '#45383C'; }
+      if (anim.type === 'type') { ch = c < Math.floor(k * 5) + 1 ? anim.word[c] : ''; border = ch ? '#C2AA97' : '#5A4237'; }
       if (anim.type === 'flip') {
-        ch = anim.word[c]; border = '#ADA29A';
+        ch = anim.word[c]; border = '#C2AA97';
         const local = clamp((t - anim.a - c * 0.2) / 0.35);
         sy = Math.abs(Math.cos(local * Math.PI));
         if (local >= 0.5) sc = anim.score[c];
@@ -341,29 +348,33 @@ function drawWordGuess(t) {
     }
     const filled = sc !== null && sc !== undefined;
     el('div', 'tile', { left: px(x), top: px(y), width: px(WG.tile), height: px(WG.tile), transform: `scaleY(${sy})`,
-      background: filled ? TILE.s[sc] : 'transparent', color: filled ? TILE.c[sc] : '#F5EFE7', border: filled ? 'none' : `4px solid ${border}` }, ch);
+      background: filled ? TILE.s[sc] : 'transparent', color: filled ? TILE.c[sc] : '#FFF3E6', border: filled ? 'none' : `4px solid ${border}` }, ch);
   }
   return WG.y + 6 * (WG.tile + WG.gap);
 }
 
 // ---------- Letter Hive ----------
-const HV = { cx: 540, cy: 960, r: 104 };
+const HV = { cx: 540, cy: 980, r: 104 };
 function drawHive(t) {
   const { pos, anim } = stateAt(t);
   const { centre, outer } = S.extra;
-  const w = Math.sqrt(3) * HV.r, h = 2 * HV.r, dist = w + 14;
+  // flat-topped hexes, laid out like the game page: one above, one below, two each side
+  const h = 186, w = h * 1.1547, dist = h * 1.04;
   const spots = [{ ch: centre, x: HV.cx, y: HV.cy, c: true }].concat(outer.map((ch, k) => {
-    const a = (Math.PI / 3) * k + Math.PI / 6; return { ch, x: HV.cx + Math.cos(a) * dist, y: HV.cy + Math.sin(a) * dist };
+    const a = -Math.PI / 2 + (Math.PI / 3) * k; return { ch, x: HV.cx + Math.cos(a) * dist, y: HV.cy + Math.sin(a) * dist };
   }));
+  el('div', 'abs', { left: px(HV.cx - 330), top: px(HV.cy - dist - h / 2 - 40), width: '660px', height: px(2 * dist + h + 80), borderRadius: '28px',
+    background: 'radial-gradient(ellipse at 50% 30%, #5C1830, #3D0F1F 85%)', boxShadow: '0 0 0 8px #1A120D, 0 40px 80px rgba(0,0,0,.5)' });
   let lit = -1;
   if (anim && anim.type === 'word') { const k = clamp((t - anim.a) / (anim.b - anim.a)); lit = anim.word[Math.min(anim.word.length - 1, Math.floor(k * anim.word.length))]; }
   for (const s of spots) {
     const on = s.ch === lit;
     el('div', 'hex', { left: px(s.x - w / 2), top: px(s.y - h / 2), width: px(w), height: px(h), transform: on ? 'scale(1.08)' : 'none',
-      background: s.c ? (on ? '#F0D59A' : '#CFAA62') : (on ? '#B03A5B' : '#8A2443'), color: s.c ? '#2A1D0A' : '#F7EFE6' }, s.ch);
+      background: s.c ? (on ? 'linear-gradient(180deg, #F6DCA4, #E6C88A)' : 'linear-gradient(180deg, #E6C88A, #CFAA62)') : (on ? 'linear-gradient(180deg, #FFE7CF, #FFD9B5)' : 'linear-gradient(180deg, #F7F0E4, #EFE6D8)'),
+      color: s.c ? '#2A1D0A' : '#F07A2B' }, s.ch);
   }
   const found = (anim ? anim.before : pos).found;
-  const chips = el('div', 'chips', { top: px(HV.cy + dist + h / 2 + 30) });
+  const chips = el('div', 'chips', { top: px(HV.cy + dist + h / 2 + 70) });
   const show = found.slice();
   let pop = null;
   if (anim && anim.type === 'word') { show.push(anim.word); pop = anim; }
@@ -400,6 +411,16 @@ window.render = function (t) {
     $('arc').setAttribute('stroke-dashoffset', String(326.7 * (1 - left / (tm.b - tm.a))));
     $('tnum').textContent = String(Math.max(1, Math.ceil(left)));
   }
+  // the fox, top left: reacts to what's happening (shorts.mjs decides when)
+  const fx = (S.foxes || []).find((f) => t >= f.a && t < f.b);
+  const fox = $('fox');
+  if (fx) {
+    const src = '../../public/assets/img/' + fx.img + '.webp';
+    if (!fox.src.endsWith(fx.img + '.webp')) fox.src = src;
+    const k = fade(t, fx.a, fx.a + 0.3), o = 1 - fade(t, fx.b - 0.2, fx.b);
+    fox.style.opacity = Math.min(k, o);
+    fox.style.transform = `scale(${0.6 + 0.4 * ease(k) + 0.06 * Math.sin(Math.min(k, 1) * Math.PI)})`;
+  } else fox.style.opacity = 0;
   let dip = 0;
   for (const d of S.dips) dip = Math.max(dip, Math.min(fade(t, d - 0.25, d), 1 - fade(t, d, d + 0.3)));
   $('flash').style.opacity = dip;

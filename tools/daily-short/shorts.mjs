@@ -117,7 +117,7 @@ const course = (g) => JSON.parse(readFileSync(resolve(ROOT, 'public/assets/learn
 // Builds the timed lists the page draws from. Times are seconds from the start of the Short.
 class Timeline {
   constructor(kind, start) {
-    this.s = { kind, keys: [{ t: 0, pos: start }], anims: [], marks: [], caps: [], sounds: [], timer: null, dips: [], extra: {} };
+    this.s = { kind, keys: [{ t: 0, pos: start }], anims: [], marks: [], caps: [], sounds: [], timer: null, dips: [], extra: {}, foxes: [] };
     this.pos = start;
     this.t = 0;
   }
@@ -130,6 +130,8 @@ class Timeline {
   mark(a, b, cells, style, pulse = false) { this.s.marks.push({ a, b, cells, style, pulse }); }
   cap(a, b, slot, html) { this.s.caps.push({ a, b, slot, html }); }
   sound(t, name) { this.s.sounds.push({ t, name }); }
+  // the fox mascot's reaction (an image in public/assets/img), shown top left
+  fox(a, b, img) { this.s.foxes = this.s.foxes.filter((f) => f.b <= a || f.a >= b); this.s.foxes.push({ a, b, img }); }
 }
 
 // The shared shape: hook (3 s), a 5-second timer, an optional wrong-but-tempting try, the solution, the end card.
@@ -142,11 +144,14 @@ function frame(tl, { eyebrow, hook, hookSub, hookBelow, timerTitle, timerSub }) 
   tl.cap(HOOK, HOOK + TIMER, 'title', timerTitle || 'Find it.');
   tl.cap(HOOK, HOOK + TIMER, 'sub', timerSub || 'Pause if you need to. We’ll wait.');
   tl.s.timer = { a: HOOK, b: HOOK + TIMER };
+  tl.fox(0.3, HOOK, 'fox-hello');
+  tl.fox(HOOK, HOOK + TIMER, 'fox-think');
   for (let k = 0; k < TIMER; k++) tl.sound(HOOK + k, 'tick');
   tl.sound(HOOK + TIMER, 'select');
   return HOOK + TIMER;
 }
 function finish(tl, t, meta) {
+  tl.fox(Math.max(0, t - 3.2), t, 'fox-trophy');
   tl.s.end = { t, head: 'Three new challenges<br><em>every day.</em>', sub: 'Chess · Sudoku · Word games · and more', url: 'boardgamesite.com/daily' };
   tl.sound(t + 0.2, 'king');
   tl.s.dur = +(t + END).toFixed(2);
@@ -188,6 +193,7 @@ function fourInARow(date) {
     const myLine = C4.findLine(C4.place(b0, ans, C4.YOU), C4.YOU);
     tl.cap(t + 2.6, t + 5.3, 'title', cpuWins ? '…and the computer <em>wins.</em>' : '…so the computer<br>blocks <em>you.</em>');
     tl.cap(t + 3.6, t + 5.3, 'sub', 'Polite. But wrong.');
+    tl.fox(t + 3.1, t + 5.4, 'fox-shrug');
     tl.mark(t + 3.15, t + 5.4, myLine, 'red');
     t += 5.5;
     tl.s.dips.push(t - 0.15);
@@ -281,6 +287,7 @@ function chess(date) {
         tl.sound(t + 1.3, 'lose');
         tl.cap(t + 1.6, t + 4.3, 'title', 'Stalemate.<br><em>Only a draw.</em>');
         tl.cap(t + 2.1, t + 4.3, 'sub', 'Black can’t move, but isn’t in check.');
+        tl.fox(t + 1.6, t + 4.3, 'fox-shrug');
         tl.mark(t + 1.3, t + 4.3, [kingSq(r.next)], 'ivory', true);
         t += 4.4;
       } else {
@@ -291,6 +298,7 @@ function chess(date) {
         play(reply, t + 2.0);
         tl.sound(t + 2.6, 'lose');
         tl.cap(t + 2.6, t + 4.4, 'sub', 'Check isn’t checkmate.');
+        tl.fox(t + 2.6, t + 4.4, 'fox-shrug');
         t += 4.5;
       }
       tl.s.dips.push(t - 0.15);
@@ -641,7 +649,7 @@ function wordGuess(date) {
   const tl = new Timeline('wordguess', { rows: [] });
   tl.s.eyebrow = 'Daily challenge · Word Guess';
   tl.cap(0, HOOK + 0.4, 'title', 'Five letters.<br><em>Six tries.</em>');
-  tl.cap(0.25, HOOK + 0.4, 'sub', 'Gold: right spot. Wine: in the word, wrong spot.');
+  tl.cap(0.25, HOOK + 0.4, 'sub', 'Gold: right spot. Orange: in the word, wrong spot.');
   let t = 0.6;
   let state = { rows: [] };
   const playRow = (row, at) => {
@@ -662,6 +670,8 @@ function wordGuess(date) {
   tl.cap(t, t + TIMER, 'title', remaining === 1 ? 'Only one word <em>fits.</em>' : 'What’s the <em>word?</em>');
   tl.cap(t, t + TIMER, 'sub', 'Pause if you need to. We’ll wait.');
   tl.s.timer = { a: t, b: t + TIMER };
+  tl.fox(0.3, Math.min(t, HOOK + 0.4), 'fox-hello');
+  tl.fox(t, t + TIMER, 'fox-think');
   for (let k = 0; k < TIMER; k++) tl.sound(t + k, 'tick');
   t += TIMER;
   tl.sound(t, 'select');
