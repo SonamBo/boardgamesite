@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers and Mancala, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -15,6 +15,7 @@ import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
 import * as K from './checkers-engine.js';
 import * as M from './mancala-rules.js';
+import { RULES } from './lesson-rules.js';   // Go, Reversi, Four in a Row (positions and move names documented there)
 import { play as sound } from './sound.js';
 
 const FILES = 'abcdefgh';
@@ -258,8 +259,81 @@ function mancalaBoard(el) {
   });
 }
 
+// ---------- Go, Reversi, Four in a Row ----------
+// One board for the three, on the shared lesson rules; each draws itself like its game page.
+function ruleBoard(kind, el) {
+  const b = base(el);
+  const A = RULES[kind];
+  let S, last = null, extra = new Set();
+  const n = A.cells.length;
+  el.className = (kind === 'go' ? 'go-board' : kind === 'reversi' ? 'grid8 rv' : 'board c4-lesson') + ' lp-board';
+  el.setAttribute('role', 'group');
+  const cells = [];
+  for (let i = 0; i < n; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    if (kind === 'go') {
+      const r = Math.floor(i / 9), c = i % 9;
+      btn.className = 'gp' + ([2, 4, 6].includes(r) && [2, 4, 6].includes(c) && (r === 4) === (c === 4) ? ' star' : '');
+    } else btn.innerHTML = '<span></span>';
+    btn.addEventListener('click', () => tap(i));
+    el.appendChild(btn);
+    cells.push(btn);
+  }
+  const legal = () => (b.live ? A.list(S) : []);
+  function render() {
+    const can = new Set(legal().map((x) => (kind === 'c4' ? x.c : x.i)));
+    for (let i = 0; i < n; i++) {
+      const v = S.b[i], c = cells[i], nm = A.name(i);
+      if (kind === 'go') {
+        c.className = 'gp' + (c.classList.contains('star') ? ' star' : '') + (v === 1 ? ' bk' : v === 2 ? ' wh' : '') + (i === last ? ' last' : '');
+        c.disabled = !!v;   // empty points stay tappable; tap() decides what a tap does
+        c.setAttribute('aria-label', nm + (v ? (v === 1 ? ', black' : ', white') : ''));
+      } else if (kind === 'reversi') {
+        c.firstChild.className = v === 1 ? 'disc you' : v === -1 ? 'disc cpu' : can.has(i) ? 'move-dot' : '';
+        c.classList.toggle('last', i === last);
+        c.classList.toggle('flip', extra.has(i));
+        c.classList.toggle('can', !!b.tapFn || can.has(i));
+        c.setAttribute('aria-label', nm + (v === 1 ? ', gold' : v === -1 ? ', black' : can.has(i) ? ', you can play here' : ''));
+      } else {
+        c.firstChild.className = 'disc' + (v === 1 ? ' p1' : v === 2 ? ' p2' : '') + (extra.has(i) ? ' win' : '') + (i === last ? ' drop' : '');
+        c.disabled = !S.b[i % 7] ? false : !b.tapFn;   // full columns can't take a disc
+        c.setAttribute('aria-label', 'Column ' + (i % 7 + 1) + ', ' + nm + (v === 1 ? ', gold' : v === 2 ? ', ivory' : ''));
+      }
+      c.dataset.mark = b.marks[nm] || (kind === 'c4' && i >= 35 ? b.marks[String(i % 7 + 1)] || '' : '');
+    }
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, last, extra };
+    const r = A.apply(S, x);
+    S = r.s;
+    last = kind === 'c4' ? r.cell : x.i;
+    extra = new Set(kind === 'reversi' ? r.flips : kind === 'c4' ? r.line || [] : []);
+    sound(kind === 'go' ? (r.f.capture ? 'capture' : 'place') : kind === 'reversi' ? 'flip' : 'drop');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
+      setTimeout(() => { S = prev.S; last = prev.last; extra = prev.extra; render(); }, 650);
+    }
+    return r.f;
+  }
+  function tap(i) {
+    if (b.tapFn) return b.tapFn(A.name(i));
+    if (!b.live) return;
+    const x = legal().find((m) => (kind === 'c4' ? m.c === i % 7 : m.i === i));
+    if (x) doMove(x, true);
+  }
+  return Object.assign(b, {
+    set(p) { S = A.load(p); last = null; extra = new Set(); render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; render(); },
+    side: () => S.side
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : mancalaBoard(el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'mancala' ? mancalaBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;

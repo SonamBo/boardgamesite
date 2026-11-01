@@ -233,6 +233,13 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     if (s.goal === 'mate') return facts.check ? 'Check, but not mate: the king can still escape. Look again.' : 'That isn’t checkmate. Look for a move that leaves the king nowhere to go.';
     if (s.goal === 'check') return 'That doesn’t give check. Which piece can attack the king?';
     if (s.goal === 'capture') return 'Look for a move that captures.';
+    if (s.goal === 'atari') return 'That doesn’t put a group in atari. Find the point that leaves an enemy group just one liberty.';
+    if (s.goal === 'saved') return 'Your stones still have too few liberties. Find the move that gives them room to breathe.';
+    if (s.goal === 'corner') return 'Look for a move that takes a corner.';
+    if (s.goal === 'threat') return 'That doesn’t set up a winning drop. Find the move that threatens four in a row.';
+    if (s.goal === 'double') return 'Only one threat (or none). Find the move that makes two at once, so one block can’t stop both.';
+    if (s.goal === 'block') return 'Your opponent can still win next turn. Find the column they need and fill it first.';
+    if (s.goal === 'win') return 'Not a winning move. Look again.';
     return 'Not that move. Try again.';
   }
 
