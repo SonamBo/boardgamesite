@@ -2241,3 +2241,19 @@ body.returning .hero { display: none; }
 .wb-goal-bar span { display: block; height: 100%; background: var(--brand); border-radius: inherit; transition: width .4s; }
 .wb-goal.met .wb-goal-bar span { background: var(--good); }
 .wb-goal-pick { font: inherit; font-size: 14px; font-weight: 700; color: var(--text); background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 4px 8px; min-height: 36px; }
+.onb-intent { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.onb-intent .onb-opt { flex-direction: column; text-align: center; padding: 18px 14px; }
+.onb-intent .onb-opt img { width: 110px; height: 110px; object-fit: contain; }
+.onb-intent .onb-opt > span { align-items: center; }
+.onb-play .onb-opt { padding: 8px; }
+.onb-play .onb-opt b { font-size: 16px; text-align: center; }
+.onb-all { align-self: center; min-height: 48px; }
+@media (max-width: 640px) {
+  .onb-intent { grid-template-columns: 1fr; }
+  .onb-intent .onb-opt { flex-direction: row; text-align: left; padding: 12px 14px; }
+  .onb-intent .onb-opt img { width: 72px; height: 72px; }
+  .onb-intent .onb-opt > span { align-items: flex-start; }
+  .onb-games.onb-play { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .onb-games.onb-play .onb-opt { display: flex; flex-direction: column; align-items: stretch; }
+  .onb-games.onb-play .onb-opt img { width: 100%; }
+}
