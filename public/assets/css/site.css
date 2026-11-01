@@ -22,8 +22,8 @@
   font-style: normal;
   font-display: swap;
 }
-/* Theme "Cosy Den": warm cocoa and fox orange, built around the fox mascot. Dark by default;
-   a light theme is chosen with the toggle (data-theme="light" on <html>, see site.js). */
+/* Theme "Cosy Den": warm cocoa and fox orange, built around the fox mascot. These are the dark values;
+   the light theme (the default, data-theme="light" on <html>, set in layout.html) overrides them below. */
 :root {
   color-scheme: dark;
   /* Neutrals */

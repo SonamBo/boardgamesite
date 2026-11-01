@@ -17,7 +17,7 @@ export function yesterdayKey() {
 }
 
 // ---------- Light / dark theme ----------
-// Dark ("Cosy Den") by default; the choice is remembered on this device. layout.html applies it before paint.
+// Light by default; dark ("Cosy Den") when the player picks it. Remembered on this device; layout.html applies it before paint.
 function applyTheme(light) {
   const root = document.documentElement;
   if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
