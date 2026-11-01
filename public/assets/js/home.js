@@ -1,13 +1,14 @@
 // The home page for returning players: what to do next (continue learning, today's challenges, play again)
 // instead of the welcome hero. New visitors see the hero as before.
 import { store } from './store.js';
-import { progress, streak, activeToday, totalXp, LEARN_GAMES } from './learn-progress.js';
+import { progress, streak, activeToday, totalXp, LEARN_GAMES, LEARN_NAME } from './learn-progress.js';
+import { RATED_GAMES } from './rating.js';
 import { todayProgress } from './daily.js';
 import { GAMES } from './games-data.js';
 import { shouldWelcome, welcome, GOALS } from './welcome.js';
 
 const box = document.getElementById('welcome-back');
-const NAME = { chess: 'Chess', checkers: 'Checkers', mancala: 'Mancala' };
+const NAME = LEARN_NAME;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const gameBySlug = Object.fromEntries(GAMES.map((g) => [g.slug, g]));
 
@@ -81,6 +82,9 @@ async function paint() {
       '<span class="wb-bar" aria-hidden="true"><span style="width:' + Math.round((L.n / Math.max(1, L.total)) * 100) + '%"></span></span>' +
       '<span class="wb-sub">' + (L.started ? 'Lesson ' + (L.n + 1) + ' of ' + L.total : L.total + ' hands-on lessons') + '</span>' +
       '<span class="btn btn-gold">' + (L.started ? 'Continue' : 'Start') + '</span></a>');
+  } else if (!RATED_GAMES.includes(L.game)) {
+    cards.push('<a class="wb-card wb-learn card" href="/play/' + L.game + '"><span class="wb-kicker">' + NAME[L.game] + ' path complete</span><b>Put it into practice</b>' +
+      '<span class="wb-sub">Try the ideas against the computer</span><span class="btn btn-gold">Play ' + NAME[L.game] + '</span></a>');
   } else {
     cards.push('<a class="wb-card wb-learn card" href="/learn/' + L.game + '/path"><span class="wb-kicker">' + NAME[L.game] + ' path complete</span><b>Climb the practice ladder</b>' +
       '<span class="wb-sub">Rated games for your BGS Rating</span><span class="btn btn-gold">Open the path</span></a>');

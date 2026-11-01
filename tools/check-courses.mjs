@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path';
 import * as C from '../public/assets/js/chess-engine.js';
 import * as K from '../public/assets/js/checkers-engine.js';
 import * as M from '../public/assets/js/mancala-rules.js';
+import { RULES } from '../public/assets/js/lesson-rules.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = join(root, 'src/courses');
@@ -81,7 +82,9 @@ const mancala = {
   dests: () => [],
   isSquare: (n) => /^(t?[1-6]|store|tstore)$/.test(n)
 };
-const ADAPTERS = { chess, checkers, mancala };
+// Go, Reversi and Four in a Row: the lesson boards' own rules, so the two can't disagree
+const wrap = (A) => ({ ...A, load(p, where) { try { return A.load(p); } catch (e) { err(where, e.message); return null; } } });
+const ADAPTERS = { chess, checkers, mancala, go: wrap(RULES.go), reversi: wrap(RULES.reversi), c4: wrap(RULES.c4) };
 
 function checkCourse(file) {
   const course = JSON.parse(readFileSync(join(dir, file), 'utf8'));
@@ -141,7 +144,7 @@ function checkCourse(file) {
         }
         if (s.type === 'move') {
           if (!s.accept && !s.goal && !s.line) return err(W, 'move needs accept, goal or line');
-          if (s.goal && !['check', 'mate', 'capture', 'castle', 'promote', 'king', 'again', 'any', 'win'].includes(s.goal)) err(W, 'unknown goal ' + s.goal);
+          if (s.goal && !['check', 'mate', 'capture', 'castle', 'promote', 'king', 'again', 'any', 'win', 'atari', 'saved', 'corner', 'threat', 'double', 'block'].includes(s.goal)) err(W, 'unknown goal ' + s.goal);
           const before = state;
           if (s.line) {
             if (s.line.length % 2 !== 1) err(W, 'a line ends on the person’s move (odd length)');

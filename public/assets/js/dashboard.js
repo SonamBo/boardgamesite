@@ -1,14 +1,15 @@
 // The player dashboard (/dashboard): learning progress, BGS Ratings, activity, daily puzzles and what to learn next.
 // Everything comes from this browser's saved progress (synced to the account when signed in).
-import { progress, streak, ACTIVITY, dayKey } from './learn-progress.js';
-import { ratingOf, show, settlePending, nextBot, isProvisional } from './rating.js';
+import { progress, streak, ACTIVITY, dayKey, LEARN_GAMES, LEARN_NAME } from './learn-progress.js';
+import { ratingOf, show, settlePending, nextBot, isProvisional, RATED_GAMES } from './rating.js';
 import { todayProgress, dailyStreak, noteToday } from './daily.js';
 import { GAMES } from './games-data.js';
 import { store, onProgressLoaded } from './store.js';
 import { whenReady, displayName } from './accounts.js';
 
-const COURSES = ['chess', 'checkers', 'mancala'];
-const NAME = { chess: 'Chess', checkers: 'Checkers', mancala: 'Mancala' };
+const COURSES = LEARN_GAMES;
+const NAME = LEARN_NAME;
+const isRated = (g) => RATED_GAMES.includes(g);
 const COLORS = ['#CFAA62', '#B8465F', '#EFE6D8', '#7E6A70', '#5FA36B', '#6B8FC4'];
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -49,7 +50,7 @@ function paint() {
   // ---- hero: the single best next step ----
   const inProgress = COURSES.filter((g) => st[g].started && !st[g].complete)
     .sort((a, b) => Math.max(0, ...Object.values(progress(b).done)) - Math.max(0, ...Object.values(progress(a).done)))[0];
-  const ladderNext = COURSES.find((g) => st[g].complete && ratingOf(g).n < 5);
+  const ladderNext = COURSES.find((g) => isRated(g) && st[g].complete && ratingOf(g).n < 5);
   $('dash-hi').textContent = greeting();
   // the fox: yawning when a streak has lapsed, jumping once today's challenges are all done, otherwise ready to play
   const act0 = store.get(ACTIVITY, {}) || {};
@@ -136,9 +137,9 @@ function paint() {
     const s = st[g], p = ratingOf(g);
     const pct = s.all.length ? Math.round((s.finished.length / s.all.length) * 100) : 0;
     const href = '/learn/' + g + '/path';
-    const line = s.complete ? 'Path complete · next: ' + nextBot(g).name + ' on the ladder' : s.started ? 'Next: ' + s.next.title : 'Not started · ' + s.all.length + ' lessons';
+    const line = s.complete ? (isRated(g) ? 'Path complete · next: ' + nextBot(g).name + ' on the ladder' : 'Path complete · play ' + NAME[g]) : s.started ? 'Next: ' + s.next.title : 'Not started · ' + s.all.length + ' lessons';
     return '<a class="dash-game" href="' + href + '"><span class="dash-badge">' + NAME[g][0] + '</span><span class="dash-game-body"><span class="dash-game-name">' + NAME[g] +
-      ' <span class="muted">· ' + (p.n ? 'BGS ' + show(p) : 'unrated') + '</span></span><span class="dash-game-line">' + esc(line) +
+      (isRated(g) ? ' <span class="muted">· ' + (p.n ? 'BGS ' + show(p) : 'unrated') + '</span>' : '') + '</span><span class="dash-game-line">' + esc(line) +
       '</span><span class="dash-prog"><span style="width:' + pct + '%"></span></span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>';
   }).join('');
 
@@ -168,7 +169,10 @@ function recommendations(st) {
       href: first ? '/learn/' + g + '/' + first.slug : '/learn/' + g,
       why: { chess: 'The world’s favourite strategy game. Start with how the pieces move, finish with checkmate patterns and a BGS Rating.',
         checkers: 'Learn the rules in five minutes, then the forcing jumps that win games. Quick to learn, deep to master.',
-        mancala: 'An ancient counting game. Learn sowing, free turns and captures, then plan chains of free turns.' }[g] });
+        mancala: 'An ancient counting game. Learn sowing, free turns and captures, then plan chains of free turns.',
+        go: 'Simple rules, endless depth. Learn liberties, captures and ko on a 9×9 board, then ladders and living groups.',
+        reversi: 'Flip discs to your colour. Learn the rules in two minutes, then why corners and quiet moves win.',
+        'four-in-a-row': 'A quick classic. Learn to block, then the centre column, double threats and the odd-even trick.' }[g] });
   }
   // the player's most-played games, by category
   const plays = GAMES.map((g) => {

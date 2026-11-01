@@ -13,7 +13,10 @@ import { onProgressLoaded } from './store.js';
 const GAMES = [
   { game: 'chess', name: 'Chess', icon: 'piece:N' },
   { game: 'checkers', name: 'Checkers', icon: 'ck' },
-  { game: 'mancala', name: 'Mancala', icon: 'seeds' }
+  { game: 'mancala', name: 'Mancala', icon: 'seeds' },
+  { game: 'go', name: 'Go', icon: 'go' },
+  { game: 'reversi', name: 'Reversi', icon: 'rv' },
+  { game: 'four-in-a-row', name: 'Four in a Row', icon: 'c4' }
 ];
 const UNIT_COLORS = ['#8A2443', '#2F5568', '#5C4A1E', '#55306A', '#2F5E46', '#6B3A2A', '#34465E'];
 const MASCOTS = ['fox-hello', 'fox-study', 'fox-think', 'fox-point', 'fox-kneel', 'fox-three'];
@@ -26,6 +29,9 @@ export function iconHtml(icon) {
   if (icon.startsWith('piece:')) return '<span class="ni ni-piece">' + pieceSvg(icon.slice(6)) + '</span>';
   if (icon === 'ck') return '<span class="ni ni-ck"></span>';
   if (icon === 'ck-king') return '<span class="ni ni-ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg></span>';
+  if (icon === 'go') return '<span class="ni ni-go"><i></i><i></i></span>';
+  if (icon === 'rv') return '<span class="ni ni-rv"></span>';
+  if (icon === 'c4') return '<span class="ni ni-c4"><i></i><i></i><i></i><i></i></span>';
   if (icon === 'seeds') return '<span class="ni ni-seeds"><i></i><i></i><i></i></span>';
   return '<span class="ni ni-text' + ([...icon].length > 2 ? ' small' : '') + '">' + esc(icon) + '</span>';
 }
@@ -84,7 +90,7 @@ function paint(el, game, course) {
     '<nav class="lpath-games" aria-label="Choose a game">' + GAMES.map((x) => '<a href="/learn/' + x.game + '/path"' + (x.game === game ? ' aria-current="page"' : '') + ' title="' + x.name + '">' + iconHtml(x.icon) + '<span class="sr-only">' + x.name + '</span></a>').join('') + '</nav>' +
     '<span class="lpath-stat" title="Day streak">🔥 <b>' + streak() + '</b></span>' +
     '<span class="lpath-stat" title="' + g.name + ' XP">⭐ <b>' + S.p.xp + '</b> <small>XP</small></span>' +
-    '<a class="lpath-stat rating" href="#ladder" title="Your ' + g.name + ' BGS Rating">♛ <b>' + (r.n ? show(r) : '–') + '</b></a>';
+    (course.ladder ? '<a class="lpath-stat rating" href="#ladder" title="Your ' + g.name + ' BGS Rating">♛ <b>' + (r.n ? show(r) : '–') + '</b></a>' : '');
 
   // ---- units and nodes ----
   const body = el.querySelector('.lpath-body');

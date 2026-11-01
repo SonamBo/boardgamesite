@@ -10,7 +10,10 @@ import { GAMES as ALL } from './games-data.js';
 const GAMES = [
   { id: 'chess', name: 'Chess', blurb: 'The classic. 23 lessons from the moves to mating patterns.' },
   { id: 'checkers', name: 'Checkers', blurb: 'Quick to learn, full of clever jumps.' },
-  { id: 'mancala', name: 'Mancala', blurb: 'Sow seeds, plan ahead, fill your store.' }
+  { id: 'mancala', name: 'Mancala', blurb: 'Sow seeds, plan ahead, fill your store.' },
+  { id: 'go', name: 'Go', blurb: 'Simple rules, endless depth. Learn on 9×9.' },
+  { id: 'reversi', name: 'Reversi', blurb: 'Flip discs to your colour and grab the corners.' },
+  { id: 'four-in-a-row', name: 'Four in a Row', blurb: 'Block, then build double threats.' }
 ];
 // popular games for someone who just wants to play (all have thumbnails in /assets/img/thumb/)
 const PLAY = [
@@ -65,7 +68,7 @@ export function welcome() {
     frame(1, 4, null, 'fox-wave', 'Hi! Welcome to BoardGameSite.', 'What would you like to do today?',
       '<div class="onb-opts onb-intent">' +
         '<button type="button" class="onb-opt card" data-v="play"><img src="/assets/img/fox-three.webp" alt="" width="120" height="120"><span><b>Play a game now</b><small>' + ALL.length + ' free games: cards, strategy, puzzles and words. No sign-up.</small></span></button>' +
-        '<button type="button" class="onb-opt card" data-v="learn"><img src="/assets/img/fox-study.webp" alt="" width="120" height="120"><span><b>Learn a game</b><small>Short hands-on lessons for Chess, Checkers or Mancala.</small></span></button>' +
+        '<button type="button" class="onb-opt card" data-v="learn"><img src="/assets/img/fox-study.webp" alt="" width="120" height="120"><span><b>Learn a game</b><small>Short hands-on lessons for Chess, Go, Checkers and more.</small></span></button>' +
       '</div><button type="button" class="link-btn onb-browse">I just want to look around</button>');
     box.querySelectorAll('.onb-opt').forEach((b) => b.addEventListener('click', () => { pick.intent = b.dataset.v; (pick.intent === 'play' ? stepPlay : stepGame)(); }));
     box.querySelector('.onb-browse').addEventListener('click', () => done('browse'));
@@ -109,7 +112,7 @@ export function welcome() {
       store.set('bgs-goal', Number(b.dataset.v));
       done('finish');
       const g = pick.game;
-      location.href = pick.level === 'play' ? '/play/' + g + '?bot=mira' : '/learn/' + g + '/path' + (pick.level === 'rules' ? '?jump=strategy' : '');
+      location.href = pick.level === 'play' ? '/play/' + g + (['chess', 'checkers', 'mancala'].includes(g) ? '?bot=mira' : '') : '/learn/' + g + '/path' + (pick.level === 'rules' ? '?jump=strategy' : '');
     }));
   }
   box.addEventListener('keydown', (e) => { if (e.key === 'Escape') done('skip'); });
