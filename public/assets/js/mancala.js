@@ -3,6 +3,10 @@
 import { store } from './site.js';
 import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
 import { ladder } from './ladder.js';
+import { offerReview, hideReview } from './review.js';
+
+// every move this game, for the post-game review (pits '1'–'6' along the bottom, 't1'–'t6' along the top)
+let gameLog = [];
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -77,7 +81,7 @@ async function moveFrom(i) {
   if (vsCpu() && turn === 1) cpuTurn();
 }
 let prevBoard = null;
-function play0(i) { prevBoard = B.slice(); moveFrom(i); }
+function play0(i) { prevBoard = B.slice(); gameLog.push({ position: B.slice(), side: turn, move: i <= 5 ? String(i + 1) : 't' + (13 - i) }); moveFrom(i); }
 const turnText = () => (vsCpu() ? (turn === 0 ? 'Your turn: pick a pit' : cpuName + '’s turn') : (turn === 0 ? 'Player 1' : 'Player 2') + '’s turn');
 
 async function cpuTurn() {
@@ -90,6 +94,7 @@ async function cpuTurn() {
 
 function finish(resigned = false) {
   over = true;
+  if (vsCpu()) offerReview(() => ({ game: 'mancala', board: 'mancala', plies: gameLog, me: 0, final: B.slice() }));
   render();
   store.set(SAVE, null);
   const [a, b] = [B[6], B[13]];
@@ -115,6 +120,7 @@ function resume() {
 }
 function newGame() {
   L?.newGame();
+  gameLog = []; hideReview();
   B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1;
   $('result').hidden = true;
   store.set(SAVE, null);

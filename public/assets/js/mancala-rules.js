@@ -48,3 +48,21 @@ export function pick(b, p, level = 'medium', rnd = Math.random) {
   }
   return best;
 }
+
+// Post-game review: score every legal move for player p (final store difference from p's point of view),
+// searching deeper until the time budget runs out. Returns [{ pit, score }] best first, and the depth reached.
+export function analysePosition(b, p, timeMs = 600) {
+  const ms = moves(b, p);
+  if (!ms.length) return { scores: [], depth: 0 };
+  const t0 = Date.now();
+  let scores = ms.map((i) => ({ pit: i, score: 0 })), depth = 0;
+  for (let d = 2; d <= 16; d++) {
+    scores = ms.map((i) => {
+      const r = sow(b, p, i);
+      return { pit: i, score: minimax(r.b, r.again && !ended(r.b) ? p : 1 - p, d - 1, -Infinity, Infinity, p) };
+    }).sort((a, z) => z.score - a.score);
+    depth = d;
+    if (Date.now() - t0 > timeMs / 3) break;
+  }
+  return { scores, depth };
+}

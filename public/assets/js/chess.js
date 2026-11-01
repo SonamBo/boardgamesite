@@ -8,6 +8,7 @@ import { play } from './sound.js';
 import { shake } from './solo.js';
 import { online, roomInLink } from './online.js';
 import { ladder } from './ladder.js';
+import { offerReview, hideReview } from './review.js';
 
 const $ = (id) => document.getElementById(id);
 const SAVE = 'bgs-chess-game';
@@ -22,6 +23,7 @@ const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('chess-board');
 
 let mySide = L ? L.side : store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
+let gameLog = [];   // every move this game, for the post-game review
 let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo, onlineOn = roomInLink && !L, ol = null;
 
 const sqEls = [];
@@ -98,6 +100,7 @@ function tap(i) {
 }
 
 function doMove(m, remote = false) {
+  gameLog.push({ position: C.toFen(S), side: S.turn, move: C.sqName(m.from) + C.sqName(m.to) + (m.promo ? m.promo.toLowerCase() : '') });
   if (!started) { started = true; track('game_start', { game: 'chess', opponent: onlineOn ? 'online' : getOpp(), level: getLevel() }); L?.start(); }
   history.push({ S, last, sans: sans.slice(), keys: keys.slice() });
   sans.push(C.san(S, m));
@@ -131,6 +134,7 @@ function cpuMove() {
 
 function finish(st) {
   over = true;
+  if (vsCpu() && !onlineOn) offerReview(() => ({ game: 'chess', board: 'chess', plies: gameLog, me: mySide, final: C.toFen(S) }));
   render();
   store.set(SAVE, null);
   if (onlineOn) {
@@ -168,6 +172,7 @@ function save() { if (started && !over && !onlineOn && !L) store.set(SAVE, { opp
 function resume() {
   const g = store.get(SAVE, null);
   if (L || !g || g.opp !== getOpp() || (vsCpu() && g.side !== mySide) || typeof g.fen !== 'string') return false;
+  gameLog = [];   // moves before a refresh are not kept, so a review covers the moves from here on
   S = C.fromFen(g.fen); sans = g.sans || []; keys = g.keys || []; last = g.last || null; history = []; sel = null; over = false; busy = false; started = true; promo = null;
   legalNow = C.legal(S);
   render();
@@ -177,6 +182,7 @@ function resume() {
 }
 function newGame() {
   if (L) { L.newGame(); mySide = L.side; }
+  gameLog = []; hideReview();
   S = C.fromFen(C.START); sel = null; last = null; sans = []; keys = [C.key(S)]; history = []; over = false; busy = false; started = false; promo = null;
   legalNow = C.legal(S);
   $('result').hidden = true;
@@ -197,6 +203,7 @@ $('undo').addEventListener('click', () => {
   let h = history.pop();
   if (vsCpu() && h.S.turn !== mySide && history.length) h = history.pop();
   ({ S, last, sans, keys } = h);
+  gameLog.length = history.length;
   sel = null; promo = null;
   legalNow = C.legal(S);
   play('card');

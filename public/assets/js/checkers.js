@@ -6,6 +6,12 @@ import { store } from './site.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
 import { ladder } from './ladder.js';
+import { offerReview, hideReview } from './review.js';
+
+// every move this game, for the post-game review (squares named a1–h8, gold moves up from rank 1)
+let gameLog = [];
+const SQ = (i) => 'abcdefgh'[i % 8] + (8 - Math.floor(i / 8));
+const logMove = (b, side, m) => gameLog.push({ position: b.slice(), side, move: m.path.map(SQ).join('-') });
 
 const SAVE = 'bgs-ck-game';
 
@@ -127,6 +133,7 @@ const clearGame = () => store.set(SAVE, null);
 
 function finish(result, resigned = false) {
   over = true;
+  if (!friend() && !onlineOn) offerReview(() => ({ game: 'checkers', board: 'checkers', plies: gameLog, me: E.YOU, final: board.slice() }));
   clearGame();
   setTurn(null);
   if (onlineOn) {
@@ -162,6 +169,7 @@ function finish(result, resigned = false) {
 }
 
 function playerMove(m, remote = false) {
+  logMove(board, turn, m);
   if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); L?.start(); }
   noteQuiet(m);
   moveSound(m);
@@ -193,6 +201,7 @@ function computerMove() {
   const m = E.pickComputerMove(board, getLevel());
   busy = false;
   if (!m) return finish('win');
+  logMove(board, E.CPU, m);
   noteQuiet(m);
   moveSound(m);
   board = E.applyMove(board, m);
@@ -207,6 +216,7 @@ function computerMove() {
 
 function newGame() {
   L?.newGame();
+  gameLog = []; hideReview();
   board = E.startBoard();
   over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false; turn = E.YOU;
   clearTimeout(cpuTimer);
