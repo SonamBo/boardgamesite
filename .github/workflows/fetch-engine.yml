@@ -1,0 +1,27 @@
+# One-off: fetch the Stockfish 10 browser build (stockfish.js 10.0.2, GPL-3.0) for post-game review.
+name: Fetch engine
+on:
+  push:
+    branches: [fetch-engine]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    if: "!contains(github.event.head_commit.message, '[engine fetched]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          mkdir -p public/assets/engine tmp && cd tmp
+          npm pack stockfish.js@10.0.2
+          tar xzf stockfish.js-10.0.2.tgz
+          cp package/stockfish.wasm.js package/stockfish.wasm package/stockfish.js package/Copying.txt package/Readme.md ../public/assets/engine/
+          cd .. && rm -rf tmp && ls -l public/assets/engine
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/engine
+          git commit -m "Stockfish 10 browser build [engine fetched]"
+          git push
