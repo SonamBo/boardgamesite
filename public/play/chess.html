@@ -6,8 +6,8 @@
 <title>Chess – Play Free Online vs Computer or a Friend | BoardGameSite</title>
 <meta name="description" content="Play chess free in your browser against the computer at three levels or a friend on one device. Full rules, move list, undo and saved games. No sign-up.">
 <link rel="canonical" href="https://boardgamesite.com/play/chess">
-<meta name="theme-color" content="#1D1411">
-<script>/* the saved theme, applied before the page paints */try{if(localStorage.getItem('bgs-theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name=theme-color]').content='#FFF7EC'}}catch(e){}</script>
+<meta name="theme-color" content="#FFF7EC">
+<script>/* light by default; dark only if the player chose it. Applied before the page paints */(function(){var d=false;try{d=localStorage.getItem('bgs-theme')==='dark'}catch(e){}if(d){document.querySelector('meta[name=theme-color]').content='#1D1411'}else{document.documentElement.dataset.theme='light'}})()</script>
 <meta name="robots" content="max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BoardGameSite">

@@ -6,8 +6,8 @@
 <title>Page not found | BoardGameSite</title>
 <meta name="description" content="This page doesn't exist. Head back to BoardGameSite to play a game.">
 <link rel="canonical" href="https://boardgamesite.com/404">
-<meta name="theme-color" content="#1D1411">
-<script>/* the saved theme, applied before the page paints */try{if(localStorage.getItem('bgs-theme')==='light'){document.documentElement.dataset.theme='light';document.querySelector('meta[name=theme-color]').content='#FFF7EC'}}catch(e){}</script>
+<meta name="theme-color" content="#FFF7EC">
+<script>/* light by default; dark only if the player chose it. Applied before the page paints */(function(){var d=false;try{d=localStorage.getItem('bgs-theme')==='dark'}catch(e){}if(d){document.querySelector('meta[name=theme-color]').content='#1D1411'}else{document.documentElement.dataset.theme='light'}})()</script>
 <meta name="robots" content="noindex">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BoardGameSite">
