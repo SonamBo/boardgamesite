@@ -1,0 +1,857 @@
+{
+ "game": "backgammon",
+ "name": "Backgammon",
+ "board": "backgammon",
+ "play": "/play/backgammon",
+ "intro": "Learn Backgammon step by step: the board, moving with the dice, hitting and the bar, bearing off, then strategy: the best opening moves, safe play, primes and the pip count.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Backgammon works",
+   "blurb": "The board, the dice, hitting and bearing off.",
+   "lessons": [
+    {
+     "slug": "backgammon-board-setup",
+     "title": "How to play Backgammon: the board and setup",
+     "summary": "Backgammon in two minutes: the 24 points, where your 15 checkers start, which way they move and what your home board is.",
+     "wrap": "Fifteen checkers, all heading home. Next: how the dice move them.",
+     "icon": "🎲",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ]
+       },
+       "text": "<p>Backgammon is played on a board of <strong>24 narrow triangles</strong>, called <strong>points</strong>. You have 15 <strong>gold</strong> checkers and your opponent has 15 <strong>ivory</strong> ones.</p><p>The points are numbered 1 to 24 from your side. Your checkers travel from the high numbers down towards point 1.</p>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ]
+       },
+       "targets": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+       ],
+       "marks": {},
+       "text": "<p>Points 1 to 6, at the bottom right, are your <strong>home board</strong>. Your goal is to bring all 15 checkers home, then take them off the board. That’s called <strong>bearing off</strong>.</p>",
+       "prompt": "Tap all six points of your home board.",
+       "wrong": "Your home board is the bottom-right quarter: points 1 to 6.",
+       "done": "That’s home. The first player to bear off all 15 checkers wins."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Your opponent moves the other way round the board, towards their own home board at the top right.</p>",
+       "prompt": "Which way do your checkers move?",
+       "options": [
+        "From point 1 towards point 24",
+        "From point 24 towards point 1"
+       ],
+       "answer": 1,
+       "explain": "From 24 down to 1, then off the board."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-moving-checkers",
+     "title": "Backgammon moves: using the dice",
+     "summary": "How to move in Backgammon: each die moves one checker that many points, the two dice can move one checker or two, and doubles move four times.",
+     "wrap": "Each die is its own move, and doubles count twice. Next: points you can’t land on.",
+     "icon": "⚀",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         5
+        ]
+       },
+       "text": "<p>On your turn you roll two dice. <strong>Each die is a separate move</strong>: one checker moves the number on one die, and one checker (the same or another) moves the number on the other.</p><p>To move, tap a checker, then tap the point it should go to. The bright outlines show where you can go.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         5
+        ]
+       },
+       "goal": "any",
+       "text": "<p>You rolled 6 and 5.</p>",
+       "prompt": "Play your 6 and your 5. Any legal move is fine.",
+       "done": "Both dice used."
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         2,
+         2
+        ]
+       },
+       "goal": "any",
+       "text": "<p>Rolling a <strong>double</strong> is special: you play the number <strong>four times</strong>.</p>",
+       "prompt": "You rolled double 2. Make four moves of 2.",
+       "done": "Four moves from one roll."
+      },
+      {
+       "type": "choice",
+       "text": "<p>One more rule: if you can play both dice, you must. If you can only play one, play the bigger one if you can.</p>",
+       "prompt": "You roll 4 and 4. How many points can you move in total?",
+       "options": [
+        "8",
+        "16",
+        "4"
+       ],
+       "answer": 1,
+       "explain": "Sixteen: four moves of 4."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-hitting-and-the-bar",
+     "title": "Backgammon hitting: blots and the bar",
+     "summary": "In Backgammon a single checker is a blot. Land on one to hit it and send it to the bar, and learn how checkers come back in from the bar.",
+     "wrap": "Hit lone checkers, and come in from the bar before anything else. Next: bearing off.",
+     "icon": "⚔",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 4,
+         "10": 1
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         5
+        ]
+       },
+       "marks": {
+        "10": "target"
+       },
+       "text": "<p>You can’t land on a point with <strong>two or more</strong> of your opponent’s checkers. That point is blocked, or <strong>made</strong>.</p><p>But a point with just <strong>one</strong> opposing checker, called a <strong>blot</strong>, is open. Land on it and you <strong>hit</strong> it: the blot goes to the <strong>bar</strong> in the middle and has to start again.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 4,
+         "10": 1
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         5
+        ]
+       },
+       "goal": "hit",
+       "text": "<p>Ivory has left a blot on point 10.</p>",
+       "prompt": "Hit the blot.",
+       "wrong": "Find a checker that can land exactly on point 10 with one of your dice.",
+       "done": "Hit! That checker has to go all the way back round."
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 4
+        },
+        "them": {
+         "19": 2,
+         "20": 2,
+         "12": 5,
+         "17": 3,
+         "1": 2,
+         "22": 1
+        },
+        "bar": [
+         1,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         4
+        ]
+       },
+       "goal": "entered",
+       "marks": {
+        "19": "bad",
+        "21": "good"
+       },
+       "text": "<p>Now one of <strong>your</strong> checkers is on the bar. Before you move anything else, it must come back in, on your opponent’s home board at the top right. A 1 enters on point 24, a 2 on 23, and so on down to a 6 on 19.</p><p>You rolled 6 and 4. Point 19 is blocked, so the 6 can’t bring it in.</p>",
+       "prompt": "Bring your checker in from the bar, then play the other die.",
+       "wrong": "Tap your checker on the bar first. Only the 4 lands on an open point.",
+       "done": "Back in on point 21, then the 6 played elsewhere."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-bearing-off",
+     "title": "Backgammon bearing off: finishing the race",
+     "summary": "Once all 15 of your checkers are home you can bear them off. Learn how the dice take checkers off, and what to do with a roll bigger than you need.",
+     "wrap": "All home, then off by the dice. Next: a quick rules check.",
+     "icon": "🏁",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "6": 3,
+         "5": 3,
+         "4": 3,
+         "3": 2,
+         "2": 2,
+         "1": 2
+        },
+        "them": {
+         "19": 3,
+         "20": 3,
+         "21": 3,
+         "22": 2,
+         "23": 2,
+         "24": 2
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         4
+        ]
+       },
+       "accept": [
+        "6/off 4/off"
+       ],
+       "text": "<p>When <strong>all 15</strong> of your checkers are in your home board, you can start <strong>bearing off</strong>. A die takes a checker off from the point with that number: a 6 from the 6 point, a 4 from the 4 point.</p><p>To bear off, tap a checker, then tap the tray on the right.</p>",
+       "prompt": "You rolled 6 and 4. Bear off two checkers.",
+       "wrong": "Use each die to take a checker off from the point with that number.",
+       "done": "Two off, thirteen to go."
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "3": 5,
+         "2": 5,
+         "1": 5
+        },
+        "them": {
+         "19": 3,
+         "20": 3,
+         "21": 3,
+         "22": 2,
+         "23": 2,
+         "24": 2
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         5
+        ]
+       },
+       "accept": [
+        "3/off 3/off"
+       ],
+       "text": "<p>If a die is <strong>higher</strong> than your highest checker, you can use it to bear off from your highest point.</p>",
+       "prompt": "You rolled 6 and 5, but your highest checkers are on 3. Bear off two.",
+       "wrong": "A die bigger than you need bears off from your highest point.",
+       "done": "Both dice bear off from the 3 point."
+      },
+      {
+       "type": "choice",
+       "text": "<p>One more rule.</p>",
+       "prompt": "You’re bearing off and one of your checkers gets hit. What happens?",
+       "options": [
+        "Nothing, keep bearing off",
+        "It must come in from the bar and get home before you bear off again"
+       ],
+       "answer": 1,
+       "explain": "It goes to the bar. It has to come back in and travel home before you can bear off any more."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Show you know the rules, then on to strategy.",
+   "lessons": [
+    {
+     "slug": "backgammon-rules-check",
+     "title": "Backgammon rules check",
+     "summary": "A quick Backgammon rules check: hit a blot, then answer two questions about the bar and doubles. Pass it to move on to strategy.",
+     "wrap": "Rules done. Now for the strategy that wins races and battles.",
+     "icon": "🎓",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 4,
+         "10": 1
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         5
+        ]
+       },
+       "goal": "hit",
+       "text": "<p>Three questions. First, a move.</p>",
+       "prompt": "Hit the ivory blot.",
+       "done": "Sent to the bar."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Second.</p>",
+       "prompt": "You have a checker on the bar. What must you do first?",
+       "options": [
+        "Bring it in before any other move",
+        "Anything, as long as you bring it in this turn",
+        "Wait until it’s your opponent’s turn"
+       ],
+       "answer": 0,
+       "explain": "A checker on the bar must come in before you move anything else."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Last one.</p>",
+       "prompt": "Can you land on a point with two of your opponent’s checkers?",
+       "options": [
+        "Yes, and you hit them both",
+        "No, it’s blocked"
+       ],
+       "answer": 1,
+       "explain": "No. Two or more checkers make a point that you can’t land on."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Winning ideas",
+   "blurb": "Opening moves, safety, primes and the race.",
+   "lessons": [
+    {
+     "slug": "backgammon-opening-moves",
+     "title": "Backgammon opening moves: the best first rolls",
+     "summary": "The best Backgammon opening moves for 3-1, 4-2 and 6-1: use the roll to make a new point in front of your home board.",
+     "wrap": "With 3-1, 4-2 and 6-1, make a point. Next: staying safe from hits.",
+     "icon": "🎯",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ]
+       },
+       "marks": {
+        "5": "target",
+        "4": "target",
+        "7": "target"
+       },
+       "text": "<p>The best opening rolls let you <strong>make a point</strong>: put two checkers together on a new point, so it’s safe from hits and blocks your opponent.</p><p>The most valuable points to make early are your <strong>5 point</strong>, your <strong>4 point</strong> and your <strong>7 point</strong> (the bar point).</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         1
+        ]
+       },
+       "accept": [
+        "8/5 6/5"
+       ],
+       "text": "<p>3-1 is the best opening roll of all.</p>",
+       "prompt": "Use 3-1 to make your 5 point.",
+       "wrong": "Bring one checker from 8 and one from 6 to land together.",
+       "done": "The 5 point. Strong players make it every time."
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         4,
+         2
+        ]
+       },
+       "accept": [
+        "8/4 6/4"
+       ],
+       "text": "<p>4-2 works the same way.</p>",
+       "prompt": "Use 4-2 to make your 4 point.",
+       "wrong": "Which two checkers can both land on point 4?",
+       "done": "The 4 point."
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         6,
+         1
+        ]
+       },
+       "accept": [
+        "13/7 8/7"
+       ],
+       "text": "<p>And 6-1 makes the bar point, right next to the bar.</p>",
+       "prompt": "Use 6-1 to make your 7 point.",
+       "wrong": "One checker from 13 and one from 8 can meet on 7.",
+       "done": "Three points in a row: 8, 7 and 6. That’s the start of a wall."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-blots-and-safety",
+     "title": "Backgammon strategy: avoid leaving blots",
+     "summary": "Single checkers, called blots, can be hit and sent back. Learn to count your blots and choose the play that keeps your checkers safe.",
+     "wrap": "Play safe when you can. Next: building a prime.",
+     "icon": "🛡",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 4,
+         "8": 3,
+         "6": 5,
+         "5": 1
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         1
+        ]
+       },
+       "marks": {
+        "5": "bad"
+       },
+       "text": "<p>Every <strong>blot</strong> is a risk. If your opponent rolls the number that reaches it, it gets hit and loses all the ground it had covered.</p><p>When you have a choice, prefer plays that leave <strong>no blots</strong>, or leave them where they’re hard to hit.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 4,
+         "8": 3,
+         "6": 5,
+         "5": 1
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ],
+        "dice": [
+         3,
+         1
+        ]
+       },
+       "goal": "safe",
+       "text": "<p>You have a blot on your 5 point and rolled 3-1.</p>",
+       "prompt": "Play the roll so that no checker is left alone.",
+       "wrong": "That still leaves a blot somewhere. Try covering the 5 point.",
+       "done": "No blots, and the 5 point made too."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-primes",
+     "title": "Backgammon strategy: building a prime",
+     "summary": "A prime is a wall of points in a row that your opponent can’t get past. Learn why six points in a row traps their checkers completely.",
+     "wrap": "Points in a row make a wall. Next: counting the race.",
+     "icon": "🧱",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "9": 2,
+         "8": 2,
+         "7": 2,
+         "6": 3,
+         "5": 2,
+         "4": 2,
+         "13": 2
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ]
+       },
+       "marks": {
+        "9": "target",
+        "8": "target",
+        "7": "target",
+        "6": "target",
+        "5": "target",
+        "4": "target"
+       },
+       "text": "<p>A <strong>prime</strong> is a row of made points next to each other. Your opponent’s checkers behind it can only jump as far as a die allows, and no die is bigger than 6.</p><p>Six points in a row, a <strong>full prime</strong>, can’t be passed at all. Here, ivory’s two checkers on your 1 point are trapped.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Check the idea.</p>",
+       "prompt": "Why can’t ivory’s checkers get past six points in a row?",
+       "options": [
+        "Because they’d need to move 7 or more in one hop",
+        "Because primes are a special rule",
+        "They can, with doubles"
+       ],
+       "answer": 0,
+       "explain": "Each die moves one hop, and the most a die can show is 6. Every landing spot within reach is blocked, even with doubles."
+      }
+     ]
+    },
+    {
+     "slug": "backgammon-pip-count",
+     "title": "Backgammon pip count: who is ahead in the race",
+     "summary": "The pip count is the total distance your checkers must travel to bear off. Learn to count it and use it to decide whether to race or fight.",
+     "wrap": "Count the race before you decide how to play. That’s the Backgammon path complete!",
+     "icon": "🧮",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "you": {
+         "24": 2,
+         "13": 5,
+         "8": 3,
+         "6": 5
+        },
+        "them": {
+         "1": 2,
+         "12": 5,
+         "17": 3,
+         "19": 5
+        },
+        "bar": [
+         0,
+         0
+        ],
+        "off": [
+         0,
+         0
+        ]
+       },
+       "text": "<p>Each checker needs to travel its point number to bear off: a checker on 13 needs 13 pips. Add them all up and you have your <strong>pip count</strong>. Lower is better.</p><p>At the start, both players need <strong>167</strong>: 2×24 + 5×13 + 3×8 + 5×6.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>The game page shows both pip counts above the board.</p>",
+       "prompt": "You need 120 pips and your opponent needs 145. Who’s ahead in the race?",
+       "options": [
+        "You",
+        "Your opponent"
+       ],
+       "answer": 0,
+       "explain": "You, by 25 pips. Fewer pips means fewer rolls to get home."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Last question.</p>",
+       "prompt": "You’re well ahead in the race. What should you usually do?",
+       "options": [
+        "Keep hitting and fighting",
+        "Get your checkers home safely and race",
+        "Leave more blots"
+       ],
+       "answer": 1,
+       "explain": "When you’re ahead, avoid contact: run home safely and bear off. Hitting and blocking matter more when you’re behind."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

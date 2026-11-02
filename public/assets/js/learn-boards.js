@@ -15,7 +15,9 @@ import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
 import * as K from './checkers-engine.js';
 import * as M from './mancala-rules.js';
-import { RULES } from './lesson-rules.js';   // Go, Reversi, Four in a Row (positions and move names documented there)
+import { RULES } from './lesson-rules.js';
+import * as BGE from './backgammon-engine.js';
+import { makeDie, paintDie } from './dice-ui.js';   // Go, Reversi, Four in a Row (positions and move names documented there)
 import { play as sound } from './sound.js';
 
 const FILES = 'abcdefgh';
@@ -332,8 +334,302 @@ function ruleBoard(kind, el) {
   });
 }
 
+// ---------- Sudoku ----------
+// Tap an empty cell, then a number. A clashing number counts as a wrong answer and is taken back.
+function sudokuBoard(el) {
+  const b = base(el);
+  const A = RULES.sudoku;
+  let S, givens = [], sel = null, last = null, flash = null;
+  el.className = 'sdk-lesson lp-board';
+  el.innerHTML = '';
+  const grid = document.createElement('div'); grid.className = 'sdk';
+  const pad = document.createElement('div'); pad.className = 'sdk-pad';
+  el.append(grid, pad);
+  const boxes = Array.from({ length: 9 }, () => { const d = document.createElement('div'); d.className = 'sdk-box'; grid.appendChild(d); return d; });
+  const cells = [];
+  for (let i = 0; i < 81; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sdk-cell';
+    btn.dataset.i = String(i);
+    btn.addEventListener('click', () => tap(i));
+    boxes[Math.floor(i / 27) * 3 + Math.floor((i % 9) / 3)].appendChild(btn);
+    cells.push(btn);
+  }
+  for (let v = 1; v <= 9; v++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pad-num';
+    btn.innerHTML = '<b>' + v + '</b>';
+    btn.setAttribute('aria-label', 'Enter ' + v);
+    btn.addEventListener('click', () => enter(v));
+    pad.appendChild(btn);
+  }
+  function notesFor(i) {
+    if (!S.notes || S.g[i]) return '';
+    const n = S.notes === 'auto' ? A.candidates(S.g, i).join('') : S.notes[A.name(i)] || '';
+    if (!n) return '';
+    return '<span class="notes">' + [1, 2, 3, 4, 5, 6, 7, 8, 9].map((v) => '<i>' + (n.includes(String(v)) ? v : '') + '</i>').join('') + '</span>';
+  }
+  function render() {
+    const selVal = sel != null ? S.g[sel] : 0;
+    for (let i = 0; i < 81; i++) {
+      const c = cells[i], v = S.g[i], nm = A.name(i);
+      c.innerHTML = v ? String(v) : notesFor(i);
+      c.classList.toggle('given', !!v && givens[i]);
+      c.classList.toggle('mine', !!v && !givens[i]);
+      c.classList.toggle('sel', i === sel);
+      c.classList.toggle('peer', sel != null && i !== sel && (Math.floor(i / 9) === Math.floor(sel / 9) || i % 9 === sel % 9));
+      c.classList.toggle('last', i === last);
+      c.classList.toggle('bad', i === flash);
+      c.dataset.mark = b.marks[nm] || '';
+      c.setAttribute('aria-label', 'Row ' + (Math.floor(i / 9) + 1) + ', column ' + (i % 9 + 1) + (v ? ', ' + v : ', empty'));
+    }
+    pad.classList.toggle('off', !(b.live && sel != null));
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, last };
+    const r = A.apply(S, x);
+    S = r.s; last = x.i; sel = null;
+    sound('place');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
+      setTimeout(() => { S = prev.S; last = prev.last; render(); }, 650);
+    }
+    return r.f;
+  }
+  function tap(i) {
+    if (b.tapFn) return b.tapFn(A.name(i));
+    if (!b.live || S.g[i]) return;
+    sel = sel === i ? null : i;
+    if (sel != null) sound('select');
+    render();
+  }
+  function enter(v) {
+    if (!b.live || sel == null) return;
+    const name = A.name(sel) + '=' + v;
+    const x = A.find(S, name);
+    if (x) return doMove(x, true);
+    // a clash: show it, count it as a wrong answer, then clear it
+    const i = sel;
+    S = { ...S, g: S.g.map((w, k) => (k === i ? v : w)) };
+    flash = i; sel = null;
+    render();
+    if (b.moveFn) b.moveFn(name, { clash: true });
+    setTimeout(() => { S = { ...S, g: S.g.map((w, k) => (k === i ? 0 : w)) }; flash = null; render(); }, 650);
+  }
+  return Object.assign(b, {
+    set(p) { S = A.load(p); givens = S.g.map(Boolean); sel = null; last = null; flash = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; if (!on) sel = null; render(); },
+    side: () => 0
+  });
+}
+
+// ---------- Backgammon ----------
+// Drawn like the game page. Tap a checker, then where it goes, once per die; when the roll is used up the
+// whole play is reported, e.g. '8/5 6/5'. Points, the bar and the tray can be tapped in tap steps too.
+function backgammonBoard(el) {
+  const b = base(el);
+  const A = RULES.backgammon;
+  let T, cur, made = [], sel = null, lastTo = [];
+  el.className = 'bg-lesson lp-board';
+  el.innerHTML = '<svg class="bg-board" viewBox="0 0 300 220" role="group" aria-label="Backgammon board"></svg><div class="bg-ldice"></div>';
+  const svg = el.querySelector('svg');
+  const dieEls = [makeDie(el.querySelector('.bg-ldice')), makeDie(el.querySelector('.bg-ldice'))];
+  const colX = (col) => 10 + col * 20 + (col >= 6 ? 20 : 0);
+  const spot = (i) => (i < 12 ? { col: 11 - i, top: false } : { col: i - 12, top: true });
+  const zone = (i) => { const { col, top } = spot(i); return { x: colX(col) + 1, y: top ? 9 : 127, w: 18, h: 84 }; };
+  const ZONES = { bar: { x: 131, y: 10, w: 18, h: 200 }, off: { x: 274, y: 112, w: 20, h: 100 } };
+  let stat = '<rect x="0" y="0" width="300" height="220" rx="8" class="frame"/><rect x="8" y="8" width="122" height="204" class="felt"/><rect x="150" y="8" width="122" height="204" class="felt"/>' +
+    '<rect x="130" y="8" width="20" height="204" class="bar"/><rect x="274" y="8" width="20" height="204" rx="3" class="tray"/>';
+  for (let i = 0; i < 24; i++) {
+    const { col, top } = spot(i), x = colX(col);
+    stat += '<polygon points="' + (top ? x + ',8 ' + (x + 20) + ',8 ' + (x + 10) + ',92' : x + ',212 ' + (x + 20) + ',212 ' + (x + 10) + ',128') + '" class="pt ' + (i % 2 ? 'p1' : 'p2') + '"/>' +
+      '<text x="' + (x + 10) + '" y="' + (top ? 5.8 : 218.6) + '" class="lbl">' + (i + 1) + '</text>';
+  }
+  svg.innerHTML = stat + '<g class="bgl-marks"></g><g class="bgl-ck"></g><g class="bgl-hl"></g><g class="bgl-hit"></g>';
+  // invisible tap targets: 24 points, the bar and the tray
+  let hits = '';
+  for (let i = 0; i < 24; i++) { const z = zone(i); hits += '<rect data-at="' + i + '" x="' + (z.x - 1) + '" y="' + (z.y - 1) + '" width="20" height="86" fill="transparent"><title>Point ' + (i + 1) + '</title></rect>'; }
+  hits += '<rect data-at="bar" x="130" y="8" width="20" height="204" fill="transparent"><title>Bar</title></rect><rect data-at="off" x="274" y="8" width="20" height="204" fill="transparent"><title>Borne off</title></rect>';
+  svg.querySelector('.bgl-hit').innerHTML = hits;
+  svg.addEventListener('click', (e) => { const r = e.target.closest('[data-at]'); if (r) tap(r.dataset.at === 'bar' || r.dataset.at === 'off' ? r.dataset.at : Number(r.dataset.at)); });
+  const ptName = (at) => (typeof at === 'number' ? String(at + 1) : at);
+  const box = (z, cls) => '<rect x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h + '" class="' + cls + '"/>';
+  // next single moves allowed, given what has been played so far this turn
+  function nextMoves() {
+    if (!T.dice || !b.live) return [];
+    const all = BGE.plays(T.s, 0, T.dice, false);
+    const out = [], seen = new Set();
+    all.forEach((p) => {
+      if (!made.every((m, j) => p.seq[j] && String(p.seq[j].from) === String(m.from) && String(p.seq[j].to) === String(m.to))) return;
+      const m = p.seq[made.length];
+      if (m && !seen.has(m.from + '>' + m.to)) { seen.add(m.from + '>' + m.to); out.push(m); }
+    });
+    return out;
+  }
+  function render() {
+    const disc = (x, y, side, cls = '', label = '') => '<g class="ck s' + side + ' ' + cls + '"><circle cx="' + x + '" cy="' + y + '" r="8.6"/><circle cx="' + x + '" cy="' + y + '" r="5.4" class="ring"/>' + (label ? '<text x="' + x + '" y="' + (y + 2.6) + '" class="cnt">' + label + '</text>' : '') + '</g>';
+    let h = '';
+    for (let i = 0; i < 24; i++) {
+      const n = Math.abs(cur.pts[i]);
+      if (!n) continue;
+      const side = cur.pts[i] > 0 ? 0 : 1, x = colX(spot(i).col) + 10, top = spot(i).top, shown = Math.min(n, 5);
+      for (let k = 0; k < shown; k++) h += disc(x, top ? 17 + k * 17 : 203 - k * 17, side, (sel === i && k === shown - 1 ? 'sel' : '') + (lastTo.includes(i) && k === shown - 1 ? ' moved' : ''), k === shown - 1 && n > 5 ? String(n) : '');
+    }
+    [0, 1].forEach((side) => { for (let k = 0; k < Math.min(cur.bar[side], 3); k++) h += disc(140, side === 0 ? 70 - k * 17 : 150 + k * 17, side, sel === 'bar' && side === 0 && k === 0 ? 'sel' : '', k === 0 && cur.bar[side] > 3 ? String(cur.bar[side]) : ''); });
+    [0, 1].forEach((side) => { for (let k = 0; k < cur.off[side]; k++) { const y = side === 0 ? 209 - k * 6 : 11 + k * 6; h += '<rect x="276" y="' + (side === 0 ? y - 4.6 : y) + '" width="16" height="4.6" rx="1.2" class="offck s' + side + '"/>'; } });
+    svg.querySelector('.bgl-ck').innerHTML = h;
+    let mk = '';
+    for (const [k, v] of Object.entries(b.marks)) { const z = k === 'bar' || k === 'off' ? ZONES[k] : zone(Number(k) - 1); if (z) mk += box(z, 'mk ' + v); }
+    svg.querySelector('.bgl-marks').innerHTML = mk;
+    let hl = '';
+    const nx = nextMoves();
+    if (sel == null) new Set(nx.map((m) => m.from)).forEach((f) => { hl += box(f === 'bar' ? { x: 131, y: 10, w: 18, h: 98 } : zone(f), 'can'); });
+    else nx.filter((m) => m.from === sel).forEach((m) => { hl += box(m.to === 'off' ? ZONES.off : zone(m.to), 'dest'); });
+    svg.querySelector('.bgl-hl').innerHTML = hl;
+    const used = made.map((m) => m.d);
+    dieEls.forEach((d, k) => {
+      el.querySelector('.bg-ldice').hidden = !T.dice;
+      const v = T.dice ? T.dice[k] : 0;
+      const dim = T.dice ? (T.dice[0] === T.dice[1] ? used.length >= (k === 0 ? 2 : 4) : used.includes(v)) : false;
+      paintDie(d, v, { dim });
+    });
+  }
+  function finishPlay(fromPerson) {
+    const key = A.key(cur);
+    const x = A.list(T).find((p) => A.key(p.end) === key);
+    const r = A.apply(T, x);
+    const start = T;
+    T = { ...r.s, s: cur };
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
+      setTimeout(() => { T = start; cur = start.s; made = []; lastTo = []; sel = null; render(); }, 650);
+    }
+    render();
+    return r.f;
+  }
+  function step(m, fromPerson) {
+    const hit = typeof m.to === 'number' && cur.pts[m.to] === -1;
+    cur = BGE.apply(cur, 0, { ...m });
+    made.push(m); lastTo.push(m.to); sel = null;
+    sound(hit ? 'capture' : 'move');
+    if (!nextMoves().length) return finishPlay(fromPerson);
+    render();
+    return null;
+  }
+  function tap(at) {
+    if (b.tapFn) return b.tapFn(ptName(at));
+    if (!b.live) return;
+    const nx = nextMoves();
+    if (sel != null) {
+      const m = nx.find((x) => x.from === sel && x.to === at);
+      if (m) return step(m, true);
+    }
+    sel = nx.some((x) => x.from === at) && sel !== at ? at : null;
+    if (sel != null) sound('select');
+    render();
+  }
+  return Object.assign(b, {
+    set(p) { T = A.load(p); cur = T.s; made = []; sel = null; lastTo = []; render(); },
+    play(name) {
+      const x = A.find(T, name);
+      if (!x) return null;
+      cur = x.end; made = x.seq.slice(); lastTo = x.seq.map((m) => m.to);
+      return finishPlay(false);
+    },
+    moves: () => A.list(T).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; if (!on) sel = null; else { cur = T.s; made = []; lastTo = []; } render(); },
+    side: () => T.side
+  });
+}
+
+// ---------- Solitaire ----------
+// A card table like the game page. Tap a card (or the deck to draw), then where it should go.
+const SUIT_SVG = ['M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z',
+  'M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z',
+  'M12 1.5l8.5 10.5L12 22.5 3.5 12z',
+  'M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z'];
+const suitIcon = (su, cls = '') => '<svg viewBox="0 0 24 24"' + (cls ? ' class="' + cls + '"' : '') + ' aria-hidden="true"><path d="' + SUIT_SVG[su] + '"/></svg>';
+function solitaireBoard(el) {
+  const b = base(el);
+  const A = RULES.solitaire;
+  let T, sel = null, lastCard = null;
+  el.className = 'sol-lesson lp-board';
+  el.innerHTML = '<div class="sl-top"></div><div class="sl-tab"></div>';
+  // card width comes from the CSS (--cw, sized to the table with container units)
+  const R = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  const face = (n) => {
+    const r = R[n % 13], su = Math.floor(n / 13), code = A.cardCode(n);
+    return '<button type="button" class="pc face' + (su === 1 || su === 2 ? ' red' : '') + (sel === code ? ' sel' : '') + (lastCard === code ? ' moved' : '') + '" data-at="' + code + '" data-mark="' + (b.marks[code] || '') + '" aria-label="' + code + '">' +
+      '<span class="ix"><span>' + r + '</span>' + suitIcon(su) + '</span>' + suitIcon(su, 'pip') + '</button>';
+  };
+  const slot = (at, inner, label) => '<button type="button" class="sl-slot" data-at="' + at + '" data-mark="' + (b.marks[at] || '') + '" aria-label="' + label + '">' + (inner || '') + '</button>';
+  function render() {
+    const k = T.k;
+    const top = (arr) => arr[arr.length - 1];
+    let h = '<div class="sl-pile">' + (k.stock.length ? '<button type="button" class="pc back" data-at="stock" data-mark="' + (b.marks.stock || '') + '" aria-label="Deck, ' + k.stock.length + ' cards"></button>' : slot('stock', '<svg viewBox="0 0 24 24" class="recycle" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>', 'Deck: turn the pile over')) + '</div>';
+    h += '<div class="sl-pile">' + (k.waste.length ? face(top(k.waste)) : slot('waste', '', 'Waste pile, empty')) + '</div><div></div>';
+    k.found.forEach((f, su) => { h += '<div class="sl-pile sl-found" data-mark="' + (b.marks.f || '') + '">' + (f.length ? face(top(f)) : slot('f', suitIcon(su), 'Foundation')) + '</div>'; });
+    el.querySelector('.sl-top').innerHTML = h;
+    el.querySelector('.sl-tab').innerHTML = k.tab.map((pile, col) => {
+      let y = 0, cards = '';
+      pile.forEach((x, idx) => {
+        cards += '<div class="sl-card" style="top:calc(var(--cw) * ' + y.toFixed(2) + ')">' + (x.up ? face(x.c) : '<span class="pc back" aria-label="Face-down card"></span>') + '</div>';
+        if (idx < pile.length - 1) y += x.up ? 0.38 : 0.16;
+      });
+      return '<div class="sl-col" style="height:calc(var(--cw) * ' + (y + 1.4).toFixed(2) + ')">' + slot('t' + (col + 1), '', 'Column ' + (col + 1) + (pile.length ? '' : ', empty')) + cards + '</div>';
+    }).join('');
+  }
+  // where a tap on a card or slot would send the selected card
+  function destFor(at) {
+    if (at === 'f' || /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(at) && T.k.found.some((f) => f.length && A.cardCode(f[f.length - 1]) === at)) return 'f';
+    if (/^t[1-7]$/.test(at)) return at;
+    const col = T.k.tab.findIndex((p) => p.some((x) => x.up && A.cardCode(x.c) === at));
+    return col >= 0 ? 't' + (col + 1) : null;
+  }
+  function doMove(x, fromPerson) {
+    const prev = { T, lastCard };
+    const r = A.apply(T, x);
+    T = r.s; sel = null;
+    lastCard = x.draw ? null : x.name.split('-')[0];
+    sound(x.draw ? 'card' : r.f.found ? 'found' : 'card');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
+      setTimeout(() => { T = prev.T; lastCard = prev.lastCard; render(); }, 650);
+    }
+    return r.f;
+  }
+  function tap(at) {
+    if (b.tapFn) return b.tapFn(at);
+    if (!b.live) return;
+    const all = A.list(T);
+    if (at === 'stock') { const d = all.find((x) => x.draw); if (d) doMove(d, true); return; }
+    if (sel) {
+      const dest = destFor(at);
+      const m = dest && all.find((x) => x.name === sel + '-' + dest);
+      if (m) return doMove(m, true);
+    }
+    sel = all.some((x) => x.name.startsWith(at + '-')) && sel !== at ? at : null;
+    if (sel) sound('select');
+    render();
+  }
+  el.addEventListener('click', (e) => { const t = e.target.closest('[data-at]'); if (t) tap(t.dataset.at); });
+  return Object.assign(b, {
+    set(p) { T = A.load(p); sel = null; lastCard = null; render(); },
+    play(name) { const x = A.find(T, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(T).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; if (!on) sel = null; render(); },
+    side: () => 0
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'mancala' ? mancalaBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;

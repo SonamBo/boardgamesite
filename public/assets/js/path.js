@@ -16,7 +16,10 @@ const GAMES = [
   { game: 'mancala', name: 'Mancala', icon: 'seeds' },
   { game: 'go', name: 'Go', icon: 'go' },
   { game: 'reversi', name: 'Reversi', icon: 'rv' },
-  { game: 'four-in-a-row', name: 'Four in a Row', icon: 'c4' }
+  { game: 'four-in-a-row', name: 'Four in a Row', icon: 'c4' },
+  { game: 'sudoku', name: 'Sudoku', icon: 'sdk' },
+  { game: 'backgammon', name: 'Backgammon', icon: 'bgm' },
+  { game: 'solitaire', name: 'Solitaire', icon: 'card' }
 ];
 const UNIT_COLORS = ['#8A2443', '#2F5568', '#5C4A1E', '#55306A', '#2F5E46', '#6B3A2A', '#34465E'];
 const MASCOTS = ['fox-hello', 'fox-study', 'fox-think', 'fox-point', 'fox-kneel', 'fox-three'];
@@ -32,6 +35,9 @@ export function iconHtml(icon) {
   if (icon === 'go') return '<span class="ni ni-go"><i></i><i></i></span>';
   if (icon === 'rv') return '<span class="ni ni-rv"></span>';
   if (icon === 'c4') return '<span class="ni ni-c4"><i></i><i></i><i></i><i></i></span>';
+  if (icon === 'sdk') return '<span class="ni ni-sdk"><i></i><i></i><i></i><i></i></span>';
+  if (icon === 'bgm') return '<span class="ni ni-bgm"><i></i><i></i></span>';
+  if (icon === 'card') return '<span class="ni ni-card">A</span>';
   if (icon === 'seeds') return '<span class="ni ni-seeds"><i></i><i></i><i></i></span>';
   return '<span class="ni ni-text' + ([...icon].length > 2 ? ' small' : '') + '">' + esc(icon) + '</span>';
 }
