@@ -1,0 +1,477 @@
+{
+ "game": "sudoku",
+ "name": "Sudoku",
+ "board": "sudoku",
+ "play": "/play/sudoku",
+ "intro": "Learn Sudoku from the rules to real solving techniques: cross-hatching, naked and hidden singles, pencil marks, naked pairs and pointing pairs, with no guessing.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Sudoku works",
+   "blurb": "The grid, the boxes and the one rule.",
+   "lessons": [
+    {
+     "slug": "sudoku-rules",
+     "title": "How to play Sudoku: the rules",
+     "summary": "Sudoku in one minute: fill the 9×9 grid so every row, column and 3×3 box has the digits 1 to 9 exactly once. Learn by playing.",
+     "wrap": "One of each digit in every row, column and box. Next: columns and boxes.",
+     "icon": "#",
+     "steps": [
+      {
+       "type": "info",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "text": "<p>A Sudoku is a 9×9 grid, split into nine <strong>3×3 boxes</strong>. Some digits are filled in to start with. They’re called <strong>givens</strong>.</p><p>Your job is to fill every empty cell with a digit from 1 to 9 so that each <strong>row</strong>, each <strong>column</strong> and each <strong>box</strong> contains every digit exactly once.</p>"
+      },
+      {
+       "type": "tap",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "targets": [
+        "r1c2",
+        "r2c3",
+        "r3c1",
+        "r3c3"
+       ],
+       "text": "<p>The thick lines mark the boxes.</p>",
+       "prompt": "Tap every empty cell in the top-left box.",
+       "wrong": "Stay inside the top-left 3×3 box, marked by the thick lines.",
+       "done": "Four empty cells in that box."
+      },
+      {
+       "type": "move",
+       "position": "8.4..31.9/962481.57/.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "accept": [
+        "r2c7=3"
+       ],
+       "marks": {
+        "r2c1": "hint",
+        "r2c2": "hint",
+        "r2c3": "hint",
+        "r2c4": "hint",
+        "r2c5": "hint",
+        "r2c6": "hint",
+        "r2c7": "hint",
+        "r2c8": "hint",
+        "r2c9": "hint"
+       },
+       "text": "<p>Row 2 is almost full. Only one digit from 1 to 9 is missing.</p><p>To fill a cell, <strong>tap it</strong>, then tap a number below the grid.</p>",
+       "prompt": "Fill the last empty cell in row 2.",
+       "wrong": "Check which digit from 1 to 9 isn’t in row 2 yet.",
+       "done": "3 was the only digit missing from the row."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "Can the same digit appear twice in one box?",
+       "options": [
+        "Yes, if they’re in different rows",
+        "No, never"
+       ],
+       "answer": 1,
+       "explain": "Never. Every row, column and box has each digit exactly once."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-columns-and-boxes",
+     "title": "Sudoku basics: columns and boxes",
+     "summary": "The Sudoku rule works the same in columns and boxes as in rows. Practise finding the missing digit in a column and in a 3×3 box.",
+     "wrap": "Rows, columns and boxes: the same rule three ways. Next: a quick rules check.",
+     "icon": "▦",
+     "steps": [
+      {
+       "type": "move",
+       "position": "854..31.9/96......./.7.29.86./34..5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7153..6.2",
+       "accept": [
+        "r8c2=8"
+       ],
+       "marks": {
+        "r1c2": "hint",
+        "r2c2": "hint",
+        "r3c2": "hint",
+        "r4c2": "hint",
+        "r5c2": "hint",
+        "r6c2": "hint",
+        "r7c2": "hint",
+        "r8c2": "hint",
+        "r9c2": "hint"
+       },
+       "text": "<p>Columns run from top to bottom. Column 2 has one empty cell left.</p>",
+       "prompt": "Fill the last cell in column 2.",
+       "wrong": "Read down column 2. Which digit from 1 to 9 is missing?",
+       "done": "8 completes the column."
+      },
+      {
+       "type": "move",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26578/.......31/7.53..692",
+       "accept": [
+        "r8c7=4"
+       ],
+       "marks": {
+        "r7c7": "hint",
+        "r7c8": "hint",
+        "r7c9": "hint",
+        "r8c7": "hint",
+        "r8c8": "hint",
+        "r8c9": "hint",
+        "r9c7": "hint",
+        "r9c8": "hint",
+        "r9c9": "hint"
+       },
+       "text": "<p>The same goes for every 3×3 box. The bottom-right box is missing one digit.</p>",
+       "prompt": "Complete the bottom-right box.",
+       "wrong": "Which digit from 1 to 9 isn’t in the bottom-right box yet?",
+       "done": "4 finishes the box."
+      },
+      {
+       "type": "choice",
+       "text": "<p>One more.</p>",
+       "prompt": "In a finished Sudoku, how many times does the digit 7 appear on the whole grid?",
+       "options": [
+        "Once",
+        "3 times",
+        "9 times"
+       ],
+       "answer": 2,
+       "explain": "Nine times: once in each row, once in each column and once in each box."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Show you know the rules, then on to technique.",
+   "lessons": [
+    {
+     "slug": "sudoku-rules-check",
+     "title": "Sudoku rules check",
+     "summary": "A quick Sudoku rules check: complete a row and answer a question about the rules. Pass it to unlock the solving techniques.",
+     "wrap": "Rules done. Now for the techniques that solve real puzzles.",
+     "icon": "🎓",
+     "steps": [
+      {
+       "type": "move",
+       "position": "8.4..31.9/962481.57/.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "accept": [
+        "r2c7=3"
+       ],
+       "text": "<p>Two questions. First, a cell to fill.</p>",
+       "prompt": "Row 2 has one cell left. Fill it.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Second.</p>",
+       "prompt": "Which of these must contain every digit from 1 to 9?",
+       "options": [
+        "Only the rows",
+        "Rows and columns",
+        "Rows, columns and the 3×3 boxes"
+       ],
+       "answer": 2,
+       "explain": "All three: rows, columns and boxes."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Solving techniques",
+   "blurb": "Singles, pencil marks, pairs and a routine for any puzzle.",
+   "lessons": [
+    {
+     "slug": "sudoku-cross-hatching",
+     "title": "Sudoku technique: cross-hatching",
+     "summary": "Cross-hatching is the first Sudoku technique to learn: follow a digit across rows and columns to find the one cell in a box where it fits.",
+     "wrap": "Pick a digit, scan the box, cross out the rows and columns. Next: cells with only one possible digit.",
+     "icon": "✚",
+     "steps": [
+      {
+       "type": "info",
+       "position": "41..83.../.7621...9/..3.4..18/5.8..2.7./.69.5.84./.4.3..5.2/69..2.3../1...3495./...67..24",
+       "marks": {
+        "r1c4": "hint",
+        "r1c5": "hint",
+        "r1c6": "hint",
+        "r2c4": "hint",
+        "r2c5": "hint",
+        "r2c6": "hint",
+        "r3c4": "hint",
+        "r3c5": "hint",
+        "r3c6": "hint"
+       },
+       "text": "<p>Pick a box and a digit it’s missing. The top-middle box has no <strong>6</strong> yet.</p><p>Every 6 elsewhere rules out its whole row and column. Cross them out in your head, like hatching lines across the box.</p>"
+      },
+      {
+       "type": "move",
+       "position": "41..83.../.7621...9/..3.4..18/5.8..2.7./.69.5.84./.4.3..5.2/69..2.3../1...3495./...67..24",
+       "accept": [
+        "r3c6=6"
+       ],
+       "marks": {
+        "r1c4": "hint",
+        "r1c5": "hint",
+        "r1c6": "hint",
+        "r2c4": "hint",
+        "r2c5": "hint",
+        "r2c6": "hint",
+        "r3c4": "hint",
+        "r3c5": "hint",
+        "r3c6": "hint"
+       },
+       "text": "<p>Find the 6s in the rows and columns that cross the top-middle box.</p>",
+       "prompt": "Put the 6 in the only cell of the top-middle box where it can go.",
+       "wrong": "That cell shares a row or column with another 6, or isn’t in the top-middle box.",
+       "done": "The other 6s rule out every other empty cell in the box."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-naked-singles",
+     "title": "Sudoku technique: naked singles",
+     "summary": "A naked single is a Sudoku cell with only one possible digit, because its row, column and box already hold the other eight. Learn to spot one.",
+     "wrap": "Count what a cell can see: if eight digits are taken, the ninth goes in. Next: hidden singles.",
+     "icon": "1",
+     "steps": [
+      {
+       "type": "info",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "marks": {
+        "r3c9": "target"
+       },
+       "text": "<p>Look at one empty cell and list the digits already in its <strong>row</strong>, its <strong>column</strong> and its <strong>box</strong>. If that covers eight different digits, the cell can only be the ninth.</p><p>That’s a <strong>naked single</strong>.</p>"
+      },
+      {
+       "type": "move",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "accept": [
+        "r3c9=4"
+       ],
+       "marks": {
+        "r3c9": "hint"
+       },
+       "text": "<p>The marked cell sees 1, 2, 3, 5, 6, 7, 8 and 9 in its row, column and box.</p>",
+       "prompt": "Fill the marked cell.",
+       "wrong": "That digit is already in its row, column or box. Which digit is the only one left?",
+       "done": "4 was the only digit left for that cell."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-hidden-singles",
+     "title": "Sudoku technique: hidden singles",
+     "summary": "A hidden single is a digit that has only one possible place in a Sudoku row, column or box, even though that cell could hold other digits.",
+     "wrap": "Ask “where can this digit go in this row?” as well as “what can go in this cell?”. Next: pencil marks.",
+     "icon": "🔎",
+     "steps": [
+      {
+       "type": "info",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "marks": {
+        "r3c1": "hint",
+        "r3c2": "hint",
+        "r3c3": "hint",
+        "r3c4": "hint",
+        "r3c5": "hint",
+        "r3c6": "hint",
+        "r3c7": "hint",
+        "r3c8": "hint",
+        "r3c9": "hint"
+       },
+       "text": "<p>Sometimes a cell has several possible digits, but one of them has <strong>nowhere else to go</strong> in its row, column or box. That’s a <strong>hidden single</strong>.</p><p>Row 3 is missing a <strong>5</strong>. Check each empty cell in the row for whether a 5 is allowed.</p>"
+      },
+      {
+       "type": "move",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "accept": [
+        "r3c6=5"
+       ],
+       "marks": {
+        "r3c1": "hint",
+        "r3c2": "hint",
+        "r3c3": "hint",
+        "r3c4": "hint",
+        "r3c5": "hint",
+        "r3c6": "hint",
+        "r3c7": "hint",
+        "r3c8": "hint",
+        "r3c9": "hint"
+       },
+       "text": "<p>Most of row 3’s empty cells already see a 5 in their column or box.</p>",
+       "prompt": "Put the 5 in the only cell of row 3 where it fits.",
+       "wrong": "That cell sees a 5 in its column or box. Try another cell in row 3.",
+       "done": "The only place for 5 in row 3, even though that cell could also have been a 1 or a 4."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-pencil-marks",
+     "title": "Sudoku pencil marks: noting the candidates",
+     "summary": "Pencil marks are the small digits that list every candidate for a Sudoku cell. Learn how they help you spot singles and pairs in harder puzzles.",
+     "wrap": "Notes turn hard puzzles into patterns you can see. Next: naked pairs.",
+     "icon": "✎",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "grid": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+        "notes": "auto"
+       },
+       "text": "<p>In harder puzzles, write the <strong>candidates</strong> (the digits a cell could still be) as small <strong>pencil marks</strong>. The game’s notes button does this.</p><p>Here every empty cell shows its candidates.</p>"
+      },
+      {
+       "type": "tap",
+       "pick": true,
+       "position": {
+        "grid": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+        "notes": "auto"
+       },
+       "targets": [
+        "r3c9"
+       ],
+       "text": "<p>With notes on, naked singles jump out: a cell with only one small digit.</p>",
+       "prompt": "Tap the cell in row 3 that has only one candidate.",
+       "wrong": "Look along row 3 for a cell with a single small digit.",
+       "done": "Only one candidate: it must be 4."
+      },
+      {
+       "type": "choice",
+       "text": "<p>One thing to remember.</p>",
+       "prompt": "You fill in a 7. Which pencil marks should you update?",
+       "options": [
+        "None",
+        "The 7s in the same row, column and box",
+        "Every 7 on the grid"
+       ],
+       "answer": 1,
+       "explain": "Remove 7 from the notes of every cell in the same row, column and box. Those cells can’t be 7 any more."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-naked-pairs",
+     "title": "Sudoku technique: naked pairs",
+     "summary": "A naked pair is two Sudoku cells in the same row, column or box with the same two candidates. Learn to use them to clear the rest of the unit.",
+     "wrap": "Two cells, two digits: no one else in the unit can have them. Next: pointing pairs.",
+     "icon": "⚭",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "grid": ".9..2.8../.7...5..4/...93...2/...8...26/...3.9.../85...6.../5...94.../1..7...8./..6.8..9.",
+        "notes": "auto"
+       },
+       "marks": {
+        "r2c4": "hint",
+        "r2c5": "hint"
+       },
+       "text": "<p>In row 2, the two marked cells can each only be <strong>1 or 6</strong>. One of them is 1 and the other is 6. We don’t know which yet, but those two digits are used up.</p><p>So <strong>no other cell in row 2</strong> can be 1 or 6. That’s a <strong>naked pair</strong>.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "grid": ".9..2.8../.7...5..4/...93...2/...8...26/...3.9.../85...6.../5...94.../1..7...8./..6.8..9.",
+        "notes": "auto"
+       },
+       "accept": [
+        "r2c8=3"
+       ],
+       "marks": {
+        "r2c4": "hint",
+        "r2c5": "hint",
+        "r2c8": "target"
+       },
+       "text": "<p>The outlined cell’s notes say 1, 3 or 6. Take away the pair’s 1 and 6.</p>",
+       "prompt": "Fill the outlined cell.",
+       "wrong": "The pair has 1 and 6 covered, so the cell can’t be either.",
+       "done": "3. The pair cleared the way."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-pointing-pairs",
+     "title": "Sudoku technique: pointing pairs",
+     "summary": "Pointing pairs in Sudoku: when a digit’s candidates in a box all sit on one row or column, it can be crossed out of the rest of that line.",
+     "wrap": "Box first, then the line it points along. Next: putting it all together.",
+     "icon": "➶",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "grid": "......1.9/.6......./.7.2..86./....5.9.6/.9.6.7.4./621.3..../.39..6.7./.......31/7.5......",
+        "notes": "auto"
+       },
+       "marks": {
+        "r5c7": "hint",
+        "r5c9": "hint"
+       },
+       "text": "<p>In the middle-right box, the digit <strong>3</strong> can only go in the two marked cells, and both are on <strong>row 5</strong>.</p><p>Whichever one it is, the box’s 3 is on row 5. So no other cell on row 5 can be 3. The pair <strong>points</strong> along the row.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "grid": "......1.9/.6......./.7.2..86./....5.9.6/.9.6.7.4./621.3..../.39..6.7./.......31/7.5......",
+        "notes": "auto"
+       },
+       "accept": [
+        "r5c3=8"
+       ],
+       "marks": {
+        "r5c7": "hint",
+        "r5c9": "hint",
+        "r5c3": "target"
+       },
+       "text": "<p>The outlined cell on row 5 has candidates 3 and 8.</p>",
+       "prompt": "Use the pointing pair to fill the outlined cell.",
+       "wrong": "The box’s 3 must be on row 5 to the right, so this cell can’t be 3.",
+       "done": "8. Pointing pairs often unlock a stuck puzzle."
+      }
+     ]
+    },
+    {
+     "slug": "sudoku-solving-routine",
+     "title": "How to solve a Sudoku: a step-by-step routine",
+     "summary": "A simple routine for solving any Sudoku: scan for singles, add pencil marks, then look for pairs. Never guess. Learn the order that works.",
+     "wrap": "Singles, notes, pairs, never guess. That’s the Sudoku path complete!",
+     "icon": "🏁",
+     "steps": [
+      {
+       "type": "info",
+       "position": "8.4..31.9/96......./.7.29.86./3...5.916/59.6.7.43/621.3...5/.39.26.7./.......31/7.53..6.2",
+       "text": "<p>Strong solvers follow a routine:</p><p>1. <strong>Cross-hatch</strong> each digit, 1 to 9, through every box.<br>2. Look for <strong>hidden singles</strong> in rows and columns.<br>3. When that dries up, add <strong>pencil marks</strong> and look for <strong>naked singles</strong>.<br>4. Then <strong>pairs</strong> and <strong>pointing pairs</strong>, which clear notes and reveal new singles.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Every proper Sudoku has exactly one solution, and it can be reached by logic alone.</p>",
+       "prompt": "You’re stuck. What should you do?",
+       "options": [
+        "Guess a digit and see",
+        "Go back to scanning for singles and pairs with fresh notes",
+        "Start over"
+       ],
+       "answer": 1,
+       "explain": "Recheck your notes and look again. A guess that turns out wrong is very hard to undo."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Last question.</p>",
+       "prompt": "Which digits are usually easiest to place first?",
+       "options": [
+        "Digits that already appear many times",
+        "Digits that hardly appear yet",
+        "Always 1, then 2, then 3"
+       ],
+       "answer": 0,
+       "explain": "A digit that’s already on the grid six or seven times leaves very few places, so cross-hatching finds them fast."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

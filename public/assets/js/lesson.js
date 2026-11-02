@@ -228,6 +228,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
   }
 
   function wrongText(s, facts) {
+    if (facts && facts.clash) return 'That number is already in the same row, column or box. Try again.';
     if (s.wrong) return s.wrong;
     if (s.goal === 'mate' && facts.stalemate) return 'That’s stalemate: Black has no legal move but isn’t in check, so it’s a draw. Find the mate.';
     if (s.goal === 'mate') return facts.check ? 'Check, but not mate: the king can still escape. Look again.' : 'That isn’t checkmate. Look for a move that leaves the king nowhere to go.';
@@ -240,6 +241,11 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     if (s.goal === 'double') return 'Only one threat (or none). Find the move that makes two at once, so one block can’t stop both.';
     if (s.goal === 'block') return 'Your opponent can still win next turn. Find the column they need and fill it first.';
     if (s.goal === 'win') return 'Not a winning move. Look again.';
+    if (s.goal === 'hit') return 'No hit there. Find a checker that lands exactly on the lone ivory checker.';
+    if (s.goal === 'entered') return 'Your checker on the bar has to come in first.';
+    if (s.goal === 'safe') return 'That leaves a checker on its own. Find a play with no blots.';
+    if (s.goal === 'point') return 'Try to land two checkers on the same point.';
+    if (s.goal === 'off') return 'Bear a checker off: tap it, then the tray on the right.';
     return 'Not that move. Try again.';
   }
 

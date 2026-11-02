@@ -2276,7 +2276,58 @@ body.returning .hero { display: none; }
 @keyframes rv-flip { from { transform: rotateY(90deg); } }
 @media (prefers-reduced-motion: reduce) { .rv button.flip .disc { animation: none; } }
 /* six learning paths: the game switcher scrolls rather than squeezing the stats */
-.lpath-games { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.lpath-games { flex: 1 1 0; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.lpath-bar > .lpath-stat { flex: none; }
 .lpath-games::-webkit-scrollbar { display: none; }
 .lpath-games a { flex: none; }
 @media (max-width: 640px) { .lpath-games a { width: 36px; height: 36px; border-radius: 10px; } .lpath-bar { gap: 8px; } }
+/* Sudoku lesson board */
+.lp-board.sdk-lesson { width: 100%; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.sdk-lesson .sdk-cell { cursor: default; }
+.sdk-lesson .sdk-cell:not(.given):not(.mine) { cursor: pointer; }
+.sdk-lesson .sdk-cell.last { background: color-mix(in srgb, var(--good) 22%, var(--surface)); }
+.sdk-lesson .sdk-cell.bad { color: var(--bad); background: color-mix(in srgb, var(--bad) 18%, var(--surface)); }
+.sdk-lesson .sdk-cell[data-mark="hint"] { background: color-mix(in srgb, var(--accent-text) 18%, var(--surface)); }
+.sdk-lesson .sdk-cell[data-mark="hint"]::before { display: none; }
+.sdk-lesson .sdk-pad.off { opacity: .45; pointer-events: none; }
+.sdk-lesson .pad-num { min-height: 46px; }
+/* Backgammon lesson board */
+.lp-board.bg-lesson { width: 100%; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.bg-lesson .bg-board { cursor: pointer; }
+.bg-ldice { display: flex; gap: 10px; justify-content: center; }
+.bg-ldice[hidden] { display: none; }
+.bg-ldice .die { width: 48px; }
+.bg-lesson .mk { fill: transparent; stroke-width: 1.4; rx: 3; pointer-events: none; }
+.bg-lesson .mk.good { stroke: #5FA36B; } .bg-lesson .mk.bad { stroke: #D2564B; }
+.bg-lesson .mk.target { stroke: var(--accent-text); } .bg-lesson .mk.hint { fill: color-mix(in srgb, var(--accent-text) 25%, transparent); stroke: none; }
+.bg-lesson .ck.moved circle:first-child { stroke: #fff; stroke-width: 1.2; }
+/* Solitaire lesson table */
+.lp-board.sol-lesson { container-type: inline-size; width: 100%; max-width: 680px; margin: 0 auto; padding: 12px; border-radius: 16px; display: flex; flex-direction: column; gap: 14px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%); box-shadow: inset 0 0 0 1px var(--felt-dark); user-select: none; -webkit-user-select: none; }
+.sol-lesson > * { --cw: min(96px, calc((100cqw - 36px) / 7)); }
+.sl-top, .sl-tab { display: grid; grid-template-columns: repeat(7, var(--cw)); gap: 6px; justify-content: center; }
+.sl-pile { position: relative; width: var(--cw); height: calc(var(--cw) * 1.4); }
+.sl-col { position: relative; width: var(--cw); min-height: calc(var(--cw) * 1.4); }
+.sl-card { position: absolute; left: 0; width: 100%; }
+.sol-lesson .pc { position: relative; display: block; width: var(--cw); height: calc(var(--cw) * 1.4); padding: 0; font: inherit; cursor: default; transition: none; }
+.sol-lesson .sl-pile > .pc, .sol-lesson .sl-slot { position: absolute; inset: 0; }
+.sol-lesson button.pc { cursor: pointer; }
+.sol-lesson .pc.back > * { display: none; }
+.sol-lesson .pc.sel { outline: 3px solid var(--brand); outline-offset: 1px; transform: translateY(-3px); }
+.sol-lesson .pc.moved { box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 70%, transparent); }
+.sl-slot { width: var(--cw); height: calc(var(--cw) * 1.4); border-radius: 8px; border: 2px dashed rgba(233,239,230,.3); background: transparent; color: rgba(233,239,230,.4); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.sl-slot svg { width: 42%; height: 42%; fill: currentColor; }
+.sl-slot svg.recycle { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+.sl-col > .sl-slot { position: absolute; top: 0; left: 0; }
+.sol-lesson [data-mark="good"], .sol-lesson [data-mark="bad"], .sol-lesson [data-mark="target"] { border-radius: 8px; }
+.sol-lesson [data-mark="hint"] { box-shadow: 0 0 0 3px var(--accent-text); }
+.sol-lesson [data-mark="hint"]::before { display: none; }
+.ni-sdk { display: grid; grid-template-columns: repeat(2, 12px); gap: 2px; padding: 3px; border: 2px solid currentColor; border-radius: 5px; }
+.ni-sdk i { height: 12px; border-radius: 2px; background: color-mix(in srgb, currentColor 35%, transparent); }
+.ni-sdk i:nth-child(2), .ni-sdk i:nth-child(3) { background: currentColor; }
+.ni-bgm { display: flex; gap: 3px; }
+.ni-bgm i { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 26px solid currentColor; }
+.ni-bgm i:last-child { border-bottom-color: var(--you); }
+.ni-card { width: 24px; height: 32px; border-radius: 4px; background: #FBF8EF; color: #C23B22; border: 1px solid #CFC6AE; font: 700 15px/1 var(--body); }
+.lpath-games .ni-sdk { transform: scale(.75); } .lpath-games .ni-bgm { transform: scale(.75); } .lpath-games .ni-card { width: 18px; height: 24px; font-size: 12px; }
+.lpath { min-width: 0; max-width: 100%; }

@@ -12,7 +12,7 @@ import { GAMES } from './games-data.js';
 
 // Progress that follows the player between devices: every game's record (from games.py) plus the daily streak.
 // Learning paths, BGS Ratings, the practice ladder, daily puzzles and the activity log sync too.
-const LEARN_GAMES = ['chess', 'checkers', 'mancala', 'go', 'reversi', 'four-in-a-row'];   // as learn-progress.js
+const LEARN_GAMES = ['chess', 'checkers', 'mancala', 'go', 'reversi', 'four-in-a-row', 'sudoku', 'backgammon', 'solitaire'];   // as learn-progress.js
 const LEARN_KEYS = LEARN_GAMES.flatMap((g) => ['bgs-learn-' + g, 'bgs-rating-' + g, 'bgs-ladder-' + g]).concat('bgs-activity', 'bgs-puzzles', 'bgs-daily-log');
 export const SYNC_KEYS = [...new Set(GAMES.map((g) => g.key))].concat('bgs-daily', LEARN_KEYS);
 const AUTH_FLAG = 'bgs-auth'; // set while signed in, so pages only load the sign-in code when needed
