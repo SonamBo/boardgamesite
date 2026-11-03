@@ -548,18 +548,18 @@ ART = {
 }
 
 CSS = f"""
-@font-face {{ font-family: 'DM Sans'; src: url('{(PUB / "assets/fonts/dm-sans-latin.woff").as_uri()}'); font-weight: 400 700; }}
-@font-face {{ font-family: 'Instrument Serif'; src: url('{(PUB / "assets/fonts/instrument-serif-latin.woff").as_uri()}'); }}
+@font-face {{ font-family: 'Nunito'; src: url('{(PUB / "assets/fonts/nunito-latin.woff2").as_uri()}') format('woff2'); font-weight: 200 1000; }}
+@font-face {{ font-family: 'Fredoka'; src: url('{(PUB / "assets/fonts/fredoka-latin.woff2").as_uri()}') format('woff2'); font-weight: 300 700; }}
 * {{ box-sizing: border-box; margin: 0; }}
-body {{ width: 1200px; height: 630px; overflow: hidden; background: #110D0E; color: #F5EFE7; font-family: 'DM Sans', sans-serif; }}
+body {{ width: 1200px; height: 630px; overflow: hidden; background: #110D0E; color: #F5EFE7; font-family: 'Nunito', sans-serif; }}
 .wrap {{ position: relative; width: 1200px; height: 630px; display: flex; }}
 .left {{ width: 560px; padding: 70px 0 0 72px; display: flex; flex-direction: column; }}
 .brand {{ display: flex; align-items: center; gap: 22px; }}
 .brand img {{ width: 84px; height: 84px; border-radius: 18px; }}
-.brand span {{ font-family: 'Instrument Serif', serif; font-size: 46px; }}
-h1 {{ font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 100px; line-height: 1; margin-top: 92px; letter-spacing: -0.01em; }}
+.brand span {{ font-family: 'Fredoka', serif; font-size: 46px; }}
+h1 {{ font-family: 'Fredoka', serif; font-weight: 400; font-size: 100px; line-height: 1; margin-top: 92px; letter-spacing: -0.01em; }}
 h1.long {{ font-size: 84px; }}
-.tag {{ font-family: 'Instrument Serif', serif; font-size: 60px; line-height: 1.05; color: {GOLD}; margin-top: 8px; }}
+.tag {{ font-family: 'Fredoka', serif; font-size: 60px; line-height: 1.05; color: {GOLD}; margin-top: 8px; }}
 .sub {{ font-size: 27px; color: #C6BBB3; margin-top: 30px; }}
 .url {{ font-size: 19px; letter-spacing: .06em; color: {GOLD}; position: absolute; left: 75px; bottom: 74px; }}
 .right {{ position: absolute; right: 0; top: 0; width: 640px; height: 630px; display: grid; place-items: center;
@@ -589,19 +589,19 @@ h1.long {{ font-size: 84px; }}
 
 .sdk {{ display: grid; grid-template-columns: repeat(9, 50px); grid-template-rows: repeat(9, 50px); gap: 1px; padding: 4px; background: #45383C;
   border-radius: 12px; box-shadow: 0 0 0 4px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
-.sdk b {{ background: #1F191B; display: grid; place-items: center; font: 700 26px 'DM Sans'; color: #F5EFE7; }}
+.sdk b {{ background: #1F191B; display: grid; place-items: center; font: 700 26px 'Nunito'; color: #F5EFE7; }}
 .sdk b.er {{ margin-right: 3px; }} .sdk b.eb {{ margin-bottom: 3px; }}
-.sdk b.mine {{ font: 400 34px 'Instrument Serif'; color: #E3C37F; }}
+.sdk b.mine {{ font: 400 34px 'Fredoka'; color: #E3C37F; }}
 .sdk b.sel {{ background: {MERLOT}; }}
 .mn {{ display: grid; grid-template-columns: repeat(9, 54px); grid-template-rows: repeat(6, 54px); gap: 3px; padding: 8px; border-radius: 14px;
   background: #2C0A16; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
-.mn b {{ border-radius: 6px; background: linear-gradient(180deg, #5C1830, #4F1428); box-shadow: inset 0 -4px 0 #3D0F1F; display: grid; place-items: center; font: 700 28px 'DM Sans'; }}
+.mn b {{ border-radius: 6px; background: linear-gradient(180deg, #5C1830, #4F1428); box-shadow: inset 0 -4px 0 #3D0F1F; display: grid; place-items: center; font: 700 28px 'Nunito'; }}
 .mn b.o {{ background: #1F191B; box-shadow: none; }}
 .mn b svg {{ width: 70%; height: 70%; fill: none; stroke: {GOLD}; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }}
 .mn .n1 {{ color: #8FB8E8; }} .mn .n2 {{ color: #8FD19E; }} .mn .n3 {{ color: #FF9C8A; }}
 .mg {{ display: grid; grid-template-columns: repeat(4, 96px); grid-template-rows: repeat(4, 96px); gap: 12px; padding: 12px; border-radius: 18px;
   background: #3D0F1F; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
-.mg b {{ border-radius: 10px; background: #2C0A16; display: grid; place-items: center; font: 700 38px 'DM Sans'; color: #3A2A2E; }}
+.mg b {{ border-radius: 10px; background: #2C0A16; display: grid; place-items: center; font: 700 38px 'Nunito'; color: #3A2A2E; }}
 .mg .v2 {{ background: {IVORY}; }} .mg .v4 {{ background: #E6D3B3; }} .mg .v8 {{ background: #D9A273; color: #FFF8EE; }}
 .mg .v16 {{ background: #C97E5A; color: #FFF8EE; }} .mg .v32 {{ background: #B85C4F; color: #FFF8EE; }}
 .mg .v128 {{ background: {GOLD}; color: #2A1D0A; font-size: 32px; }} .mg .v256 {{ background: #E6C88A; color: #2A1D0A; font-size: 32px; }}
@@ -609,7 +609,7 @@ h1.long {{ font-size: 84px; }}
 .st {{ display: grid; grid-template-columns: repeat(4, 100px); grid-template-rows: repeat(4, 100px); gap: 6px; padding: 10px; border-radius: 18px;
   background: #2C0A16; box-shadow: 0 0 0 8px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
 .st b {{ border-radius: 12px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8; display: grid; place-items: center;
-  font: 400 52px 'Instrument Serif'; color: {MERLOT}; }}
+  font: 400 52px 'Fredoka'; color: {MERLOT}; }}
 .st b.gap {{ background: transparent; box-shadow: none; }}
 .pl {{ display: grid; grid-template-columns: repeat(7, 60px); grid-template-rows: repeat(7, 60px); gap: 2px; padding: 4px; background: #C9BBA6; border-radius: 10px;
   box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
@@ -647,45 +647,45 @@ h1.long {{ font-size: 84px; }}
 
 .wgb {{ display: flex; flex-direction: column; gap: 10px; margin-left: 40px; transform: rotate(-3deg); }}
 .wgr {{ display: flex; gap: 10px; }}
-.wgr b {{ width: 76px; height: 76px; border-radius: 10px; border: 3px solid #45383C; display: grid; place-items: center; font: 700 40px 'DM Sans'; text-transform: uppercase; color: #F5EFE7; }}
+.wgr b {{ width: 76px; height: 76px; border-radius: 10px; border: 3px solid #45383C; display: grid; place-items: center; font: 700 40px 'Nunito'; text-transform: uppercase; color: #F5EFE7; }}
 .wgr b.m0 {{ background: #292124; border-color: #292124; color: #C6BBB3; }} .wgr b.m1 {{ background: {MERLOT}; border-color: {MERLOT}; }} .wgr b.m2 {{ background: {GOLD}; border-color: {GOLD}; color: #2A1D0A; }}
 .hive {{ position: relative; width: 420px; height: 400px; margin-left: 40px; }}
 .hive b {{ position: absolute; left: calc(50% - 69px); top: calc(50% - 60px); width: 138px; height: 120px; clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-  background: linear-gradient(180deg, #F7F0E4, {IVORY}); color: {MERLOT}; display: grid; place-items: center; font: 700 50px 'DM Sans'; text-transform: uppercase; }}
+  background: linear-gradient(180deg, #F7F0E4, {IVORY}); color: {MERLOT}; display: grid; place-items: center; font: 700 50px 'Nunito'; text-transform: uppercase; }}
 .hive b.c {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; }}
 .wgd {{ display: grid; grid-template-columns: repeat(4, 96px); gap: 12px; transform: rotate(-3deg); margin-left: 40px; }}
 .wgd b {{ height: 96px; border-radius: 16px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8, 0 8px 14px rgba(0,0,0,.4);
-  display: grid; place-items: center; font: 700 48px 'DM Sans'; color: {MERLOT}; text-transform: capitalize; }}
+  display: grid; place-items: center; font: 700 48px 'Nunito'; color: {MERLOT}; text-transform: capitalize; }}
 .wgd b.h {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -6px 0 #97793A, 0 8px 14px rgba(0,0,0,.4); }}
 .wsa {{ position: relative; margin-left: 40px; transform: rotate(-3deg); }}
 .wsg {{ display: grid; grid-template-columns: repeat(7, 52px); grid-auto-rows: 52px; padding: 12px; border-radius: 14px; background: {IVORY}; box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); }}
-.wsg b {{ display: grid; place-items: center; font: 700 30px 'DM Sans'; text-transform: uppercase; color: #2A1D20; }}
+.wsg b {{ display: grid; place-items: center; font: 700 30px 'Nunito'; text-transform: uppercase; color: #2A1D20; }}
 .wsa i {{ position: absolute; height: 44px; border-radius: 22px; background: rgba(207,170,98,.55); }}
 .ltb {{ display: grid; grid-template-columns: repeat(6, 70px); grid-auto-rows: 70px; gap: 4px; padding: 10px; border-radius: 14px; background: #2C0A16; box-shadow: 0 0 0 6px #17110F, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
 .ltb b {{ border-radius: 6px; position: relative; }}
 .ltb .e {{ background: #4F1428; }} .ltb .dl {{ background: #4B6C8A; }} .ltb .tl {{ background: #2F4E73; }} .ltb .dw {{ background: #B0405F; }} .ltb .tw {{ background: #C8742F; }}
-.ltb .t {{ background: linear-gradient(180deg, #FBF3E2, #EBDDC2); box-shadow: inset 0 -4px 0 #CDBFA8; display: grid; place-items: center; font: 700 38px 'DM Sans'; text-transform: uppercase; color: #2A1D20; }}
+.ltb .t {{ background: linear-gradient(180deg, #FBF3E2, #EBDDC2); box-shadow: inset 0 -4px 0 #CDBFA8; display: grid; place-items: center; font: 700 38px 'Nunito'; text-transform: uppercase; color: #2A1D20; }}
 .ltb .t small {{ position: absolute; right: 6px; bottom: 4px; font-size: 14px; }}
 .hgm {{ display: flex; flex-direction: column; align-items: center; gap: 10px; margin-left: 40px; }}
 .hgm .slots {{ display: flex; gap: 10px; }}
-.hgm .slots b {{ width: 52px; height: 60px; border-bottom: 5px solid {GOLD}; display: grid; place-items: center; font: 700 40px 'DM Sans'; text-transform: uppercase; color: #F5EFE7; }}
+.hgm .slots b {{ width: 52px; height: 60px; border-bottom: 5px solid {GOLD}; display: grid; place-items: center; font: 700 40px 'Nunito'; text-transform: uppercase; color: #F5EFE7; }}
 .cgm {{ display: flex; gap: 8px; padding: 34px 30px; border-radius: 16px; background: {IVORY}; box-shadow: 0 0 0 6px {MERLOT}, 0 30px 60px rgba(0,0,0,.55); transform: rotate(-3deg); margin-left: 40px; }}
 .cgm b {{ width: 56px; display: flex; flex-direction: column; align-items: center; gap: 6px; }}
-.cgm b span {{ width: 100%; height: 66px; border-bottom: 4px solid #8E7E6C; display: grid; place-items: center; font: 700 44px 'DM Sans'; text-transform: uppercase; color: {MERLOT}; }}
-.cgm b small {{ font: 700 22px 'DM Sans'; text-transform: uppercase; color: #6E6158; }}
+.cgm b span {{ width: 100%; height: 66px; border-bottom: 4px solid #8E7E6C; display: grid; place-items: center; font: 700 44px 'Nunito'; text-transform: uppercase; color: {MERLOT}; }}
+.cgm b small {{ font: 700 22px 'Nunito'; text-transform: uppercase; color: #6E6158; }}
 .cgm i.sp {{ width: 26px; }}
 .lad {{ display: flex; flex-direction: column; gap: 10px; align-items: center; margin-left: 40px; }}
 .lad .lr {{ display: flex; gap: 10px; }}
-.lad b {{ width: 66px; height: 66px; border-radius: 10px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -5px 0 #CDBFA8; display: grid; place-items: center; font: 700 36px 'DM Sans'; text-transform: uppercase; color: #3D0F1F; }}
+.lad b {{ width: 66px; height: 66px; border-radius: 10px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -5px 0 #CDBFA8; display: grid; place-items: center; font: 700 36px 'Nunito'; text-transform: uppercase; color: #3D0F1F; }}
 .lad b.h {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -5px 0 #97793A; }}
 .uns {{ display: flex; flex-direction: column; align-items: center; gap: 18px; margin-left: 40px; }}
 .uns .row {{ display: flex; gap: 12px; }}
-.uns .row b {{ width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8, 0 8px 14px rgba(0,0,0,.4); display: grid; place-items: center; font: 700 44px 'DM Sans'; text-transform: uppercase; color: {MERLOT}; }}
+.uns .row b {{ width: 80px; height: 80px; border-radius: 12px; background: linear-gradient(180deg, #F7F0E4, {IVORY}); box-shadow: inset 0 -6px 0 #CDBFA8, 0 8px 14px rgba(0,0,0,.4); display: grid; place-items: center; font: 700 44px 'Nunito'; text-transform: uppercase; color: {MERLOT}; }}
 .uns .row:first-child b:nth-child(odd) {{ transform: rotate(-7deg) translateY(6px); }} .uns .row:first-child b:nth-child(even) {{ transform: rotate(6deg); }}
 .uns .ans b {{ background: linear-gradient(180deg, #E6C88A, {GOLD}); color: #2A1D0A; box-shadow: inset 0 -6px 0 #97793A, 0 8px 14px rgba(0,0,0,.4); }}
 .uns .arrow {{ font-size: 46px; color: {GOLD}; }}
 .chn {{ display: flex; flex-direction: column; gap: 14px; width: 440px; margin-left: 40px; }}
-.chn b {{ padding: 14px 24px; border-radius: 22px; font: 700 36px 'DM Sans'; text-transform: uppercase; letter-spacing: .04em; }}
+.chn b {{ padding: 14px 24px; border-radius: 22px; font: 700 36px 'Nunito'; text-transform: uppercase; letter-spacing: .04em; }}
 .chn b.p1 {{ align-self: flex-start; background: {GOLD}; color: #2A1D0A; border-bottom-left-radius: 6px; }}
 .chn b.p2 {{ align-self: flex-end; background: {IVORY}; color: #3D0F1F; border-bottom-right-radius: 6px; }}
 .chn u {{ text-underline-offset: 6px; }}
@@ -697,7 +697,7 @@ h1.long {{ font-size: 84px; }}
 .dd.big {{ width: 200px; height: 200px; padding: 30px; border-radius: 44px; }}
 .dset {{ display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: center; width: 560px; margin-left: 30px; }}
 .dset.six {{ width: 400px; }}
-.bidtag {{ width: 100%; text-align: center; font: 400 54px 'Instrument Serif'; color: #E6C88A; margin-top: 14px; }}
+.bidtag {{ width: 100%; text-align: center; font: 400 54px 'Fredoka'; color: #E6C88A; margin-top: 14px; }}
 .bgb {{ position: relative; width: 352px; height: 300px; background: #3D0F1F; border: 14px solid #17110F; border-radius: 12px; margin-left: 40px; box-shadow: 0 30px 60px rgba(0,0,0,.55); }}
 .bgb .tri {{ position: absolute; top: 0; width: 0; height: 0; border-left: 24px solid transparent; border-right: 24px solid transparent; border-top: 130px solid #E4D4B8; }}
 .bgb .tri.b {{ border-top-color: #8E2C48; }}
@@ -722,7 +722,7 @@ h1.long {{ font-size: 84px; }}
 .liar .dd {{ width: 84px; height: 84px; padding: 12px; }}
 .stb {{ display: flex; flex-direction: column; align-items: center; gap: 30px; margin-left: 30px; }}
 .stb .tiles {{ display: flex; gap: 8px; padding: 16px; border-radius: 12px; background: linear-gradient(#6B4A2E, #4A3220); box-shadow: 0 20px 40px rgba(0,0,0,.5); }}
-.stb .tiles b {{ width: 46px; height: 86px; border-radius: 6px; background: linear-gradient(#FBF3E2, #E4D4B8); display: grid; place-items: center; font: 400 40px 'Instrument Serif'; color: {MERLOT}; box-shadow: inset 0 -5px 0 #C7B596; }}
+.stb .tiles b {{ width: 46px; height: 86px; border-radius: 6px; background: linear-gradient(#FBF3E2, #E4D4B8); display: grid; place-items: center; font: 400 40px 'Fredoka'; color: {MERLOT}; box-shadow: inset 0 -5px 0 #C7B596; }}
 .stb .tiles b.shut {{ background: #3A2818; box-shadow: none; height: 86px; transform: scaleY(.25) translateY(130px); }}
 .stb .dpair {{ display: flex; gap: 18px; }}
 .pigart {{ display: flex; flex-direction: column; align-items: center; margin-left: 30px; }}
@@ -730,7 +730,7 @@ h1.long {{ font-size: 84px; }}
 .cdt {{ position: relative; width: 420px; height: 300px; margin-left: 50px; zoom: 1.35; }}
 .cd {{ position: absolute; width: 92px; height: 128px; border-radius: 10px; background: #FBF8EF; border: 1px solid #CFC6AE; box-shadow: 0 6px 12px rgba(0,0,0,.4); color: #1C1F1D; }}
 .cd.red {{ color: #C23B22; }}
-.cd i {{ position: absolute; left: 8px; top: 4px; font: 700 26px 'DM Sans'; font-style: normal; }}
+.cd i {{ position: absolute; left: 8px; top: 4px; font: 700 26px 'Nunito'; font-style: normal; }}
 .cd svg {{ position: absolute; left: 50%; top: 56%; width: 46px; height: 46px; transform: translate(-50%, -50%); fill: currentColor; }}
 .cd.back {{ background: repeating-linear-gradient(45deg, {MERLOT} 0 8px, #5E1530 8px 16px); border: 4px solid #F3EBD6; }}
 .cd.back i, .cd.back svg {{ display: none; }}
@@ -768,9 +768,43 @@ h1.long {{ font-size: 84px; }}
 """
 
 
+# The link previews use the site's light "Cosy Den" look: cream page, dark brown text, orange tagline, wooden frames
+# around the boards, and the fox. Applied on top of CSS for the 1200×630 pictures only.
+OG_CSS = """
+body { background: #FFF7EC; color: #3A2418; font-family: 'Nunito', sans-serif; }
+.brand span { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 44px; color: #3A2418; }
+h1 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 92px; line-height: 1.02; margin-top: 64px; color: #3A2418; }
+h1.long { font-size: 74px; }
+h1.xlong { font-size: 62px; }
+.tag { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 54px; color: #EE6B1F; margin-top: 10px; }
+.sub { font-size: 27px; font-weight: 600; color: #5C4232; margin-top: 26px; max-width: 320px; }
+.left { height: 630px; padding-bottom: 70px; }
+.url { font-weight: 800; color: #B4520F; letter-spacing: .08em; }
+.left .url { position: static; margin-top: auto; padding-top: 18px; }
+/* boards that the site now shows light */
+.sdk { background: #DDBF9F; box-shadow: 0 0 0 5px #EE6B1F, 0 30px 60px rgba(120,70,30,.28); }
+.sdk b { background: #FFFFFF; color: #3A2418; }
+.sdk b.mine { color: #B4520F; }
+.sdk b.sel { background: #FFD2AE; }
+.wgr b { border-color: #DDBF9F; color: #3A2418; }
+.wgr b.m0 { background: #FBECDD; border-color: #FBECDD; color: #5C4232; }
+.wgr b.m1 { background: #EE6B1F; border-color: #EE6B1F; color: #FFFFFF; }
+.bidtag { color: #B4520F; font-weight: 600; }
+.hgm .slots b { color: #3A2418; border-bottom-color: #B4520F; }
+.right { background: radial-gradient(80% 75% at 62% 48%, #FFFFFF 0%, #FFF3E4 45%, #FBE3CC 100%); }
+.right::before { background: linear-gradient(90deg, #FFF7EC 0%, rgba(255,247,236,0) 24%); }
+.ogfox { position: absolute; left: 404px; bottom: -4px; width: 180px; height: 180px; object-fit: contain; z-index: 2; filter: drop-shadow(0 10px 16px rgba(120,70,30,.25)); }
+"""
+
+
+def og_css():
+    # dark frames become the site's wood, and shadows warm and soft on the cream page
+    return CSS.replace("#17110F", "#6B4A2E").replace("rgba(0,0,0,.55)", "rgba(120,70,30,.28)").replace("rgba(0,0,0,.5)", "rgba(120,70,30,.26)") + OG_CSS
+
+
 def page(name, tag, art):
-    long = " long" if len(name) > 10 else ""
-    return f"""<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>
+    long = " xlong" if len(name) > 13 and " " not in name else " long" if len(name) > 8 else ""
+    return f"""<!doctype html><html><head><meta charset="utf-8"><style>{og_css()}</style></head><body>
 <div class="wrap">
   <div class="right">{art()}</div>
   <div class="left">
@@ -778,8 +812,28 @@ def page(name, tag, art):
     <h1 class="{long.strip()}">{name}</h1>
     <p class="tag">{tag}</p>
     <p class="sub">Play free in your browser. No download.</p>
+    <p class="url">BOARDGAMESITE.COM</p>
   </div>
-  <p class="url">BOARDGAMESITE.COM</p>
+  <img class="ogfox" src="{(PUB / 'assets/img/fox-wink.webp').as_uri()}" alt="">
+</div></body></html>"""
+
+
+def home_page():
+    # public/assets/img/og.png: the picture for the home page and every page without its own
+    return f"""<!doctype html><html><head><meta charset="utf-8"><style>{og_css()}
+.right {{ padding: 40px 40px 40px 0; }}
+.right img.hero {{ position: relative; z-index: 1; width: 600px; height: 450px; object-fit: cover; border-radius: 28px; box-shadow: 0 0 0 8px #6B4A2E, 0 30px 60px rgba(120,70,30,.3); transform: rotate(-2deg); }}
+h1 {{ font-size: 68px; margin-top: 56px; max-width: 450px; }}
+.sub {{ max-width: 380px; }}
+</style></head><body>
+<div class="wrap">
+  <div class="right"><img class="hero" src="{(PUB / 'assets/img/hero-fox.webp').as_uri()}" alt=""></div>
+  <div class="left">
+    <div class="brand"><img src="{(PUB / 'assets/img/logo.webp').as_uri()}" alt=""><span>BoardGameSite</span></div>
+    <h1>Board games, ready when you are.</h1>
+    <p class="sub">50 free games to play and learn in your browser.</p>
+    <p class="url">BOARDGAMESITE.COM</p>
+  </div>
 </div></body></html>"""
 
 
@@ -795,7 +849,9 @@ body {{ width: 640px; height: 480px; }}
 
 
 def main():
-    only = set(sys.argv[1:])
+    # --og-only: redraw the link previews (and og.png) but leave the home-page card pictures as they are
+    og_only = "--og-only" in sys.argv
+    only = set(a for a in sys.argv[1:] if not a.startswith("--"))
     missing = [s for s in GAMES if s not in ART and (not only or s in only)]
     if missing:
         sys.exit("No art for: " + ", ".join(missing))
@@ -815,6 +871,10 @@ def main():
             tab.evaluate("document.fonts.ready")
             tab.wait_for_timeout(150)
             tab.screenshot(path=str(OUT / f"{slug}.jpg"), type="jpeg", quality=86)
+            if og_only:
+                html_file.unlink()
+                print("drew", slug)
+                continue
             html_file.write_text(thumb(art), encoding="utf-8")
             small.goto(html_file.as_uri())
             small.evaluate("document.fonts.ready")
@@ -823,6 +883,15 @@ def main():
             img.save(THUMBS / f"{slug}.webp", "WEBP", quality=82, method=6)
             html_file.unlink()
             print("drew", slug)
+        if not only or "home" in only:
+            home = OUT / ".home.html"
+            home.write_text(home_page(), encoding="utf-8")
+            tab.goto(home.as_uri())
+            tab.evaluate("document.fonts.ready")
+            tab.wait_for_timeout(300)
+            tab.screenshot(path=str(PUB / "assets/img/og.png"), type="png")
+            home.unlink()
+            print("drew og.png")
         browser.close()
 
 
