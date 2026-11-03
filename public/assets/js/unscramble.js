@@ -55,6 +55,7 @@ function render() {
     const t = letters.find((x) => x.id === picked[i]);
     s.textContent = t ? t.ch : '';
     s.disabled = !t || i < hintsUsed || over;
+    s.setAttribute('aria-label', 'Space ' + (i + 1) + (t ? ': ' + t.ch.toUpperCase() + (s.disabled ? '' : ', tap to take it back') : ', empty'));
     s.addEventListener('click', () => unpick(i));
     ans.appendChild(s);
   }

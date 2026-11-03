@@ -257,10 +257,28 @@ document.addEventListener('visibilitychange', () => {
 $('undo').addEventListener('click', () => { if (!history.length || done) return; S = history.pop(); moves++; sel = null; play('card'); T.hideAll(); render(); save(); });
 $('new-game').addEventListener('click', () => { play('shuffle'); newGame(); });
 $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
+// Pick a numbered deal: a small form under the button (no browser pop-up).
+const dealForm = document.createElement('form');
+dealForm.className = 'deal-form card';
+dealForm.hidden = true;
+dealForm.innerHTML = '<label for="deal-input">Deal number, 1 to 32000</label><div><input id="deal-input" type="number" inputmode="numeric" min="1" max="32000" required>' +
+  '<button type="submit" class="btn btn-gold">Play deal</button><button type="button" class="btn btn-outline" data-cancel>Cancel</button></div>';
+$('pick-deal').closest('.card-bar').after(dealForm);
+$('pick-deal').setAttribute('aria-expanded', 'false');
+const closeDeal = () => { dealForm.hidden = true; $('pick-deal').setAttribute('aria-expanded', 'false'); };
 $('pick-deal').addEventListener('click', () => {
-  const v = prompt('Deal number (1 to 32000)', String(dealNo));
-  const n = Math.floor(Number(v));
-  if (n >= 1 && n <= 32000) { play('shuffle'); newGame(n); }
+  dealForm.hidden = !dealForm.hidden;
+  $('pick-deal').setAttribute('aria-expanded', String(!dealForm.hidden));
+  if (!dealForm.hidden) { const i = dealForm.querySelector('input'); i.value = String(dealNo); i.select(); i.focus(); }
+});
+dealForm.querySelector('[data-cancel]').addEventListener('click', closeDeal);
+dealForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const n = Math.floor(Number(dealForm.querySelector('input').value));
+  if (!(n >= 1 && n <= 32000)) return;
+  closeDeal();
+  play('shuffle');
+  newGame(n);
 });
 let raf = 0;
 window.addEventListener('resize', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { measure(); render(); }); });
