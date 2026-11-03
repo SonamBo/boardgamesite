@@ -2331,3 +2331,21 @@ body.returning .hero { display: none; }
 .ni-card { width: 24px; height: 32px; border-radius: 4px; background: #FBF8EF; color: #C23B22; border: 1px solid #CFC6AE; font: 700 15px/1 var(--body); }
 .lpath-games .ni-sdk { transform: scale(.75); } .lpath-games .ni-bgm { transform: scale(.75); } .lpath-games .ni-card { width: 18px; height: 24px; font-size: 12px; }
 .lpath { min-width: 0; max-width: 100%; }
+/* Backgammon: dice and buttons share one row without spilling off a phone screen */
+.bg-wrap .sl-controls { gap: 10px; }
+.bg-wrap .sl-controls .dice-row { width: auto; flex: none; gap: 8px; }
+@media (max-width: 480px) {
+  .bg-wrap .sl-controls .die { width: 46px; }
+  .bg-wrap .sl-controls .btn, .bg-wrap .sl-controls .btn-outline { min-width: 0; flex: 1 1 0; padding: 0 12px; }
+}
+.lpath-games, .lpath-games a { position: relative; }   /* keeps the hidden game names inside the scrolling switcher */
+.dash-badge { background: var(--surface-2); color: var(--accent-text); font-size: 20px; }
+.dash-badge .ni-piece svg { width: 32px; height: 32px; }
+.dash-badge .ni-ck { width: 26px; height: 26px; }
+/* FreeCell: choose a deal number */
+.deal-form { display: flex; flex-direction: column; gap: 6px; padding: 12px; width: 100%; }
+.deal-form[hidden] { display: none; }
+.deal-form label { font-size: 14px; color: var(--text-2); }
+.deal-form > div { display: flex; gap: 8px; flex-wrap: wrap; }
+.deal-form input { width: 110px; min-height: 44px; font: inherit; font-size: 17px; padding: 0 10px; border-radius: 10px; border: 2px solid var(--border-strong); background: var(--surface); color: var(--text); }
+.deal-form .btn { min-height: 44px; }

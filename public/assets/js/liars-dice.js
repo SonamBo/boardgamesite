@@ -15,6 +15,7 @@ const NAMES = ['You', 'Rosa', 'Otto', 'Mei'];
 
 let seats = [2, 3].includes(store.get(SEATS_KEY, 3)) ? store.get(SEATS_KEY, 3) : 3; // computer players
 let counts, hands, turn, bid, log, over, busy, revealed, started, qty, face;
+let round = 0;   // bumped by every new round and game, so a reveal or computer turn still waiting can tell it's stale
 
 const myDice = [0, 1, 2, 3, 4].map(() => makeDie($('ld-mine')));
 const alive = () => counts.map((n, p) => (n > 0 ? p : -1)).filter((p) => p >= 0);
@@ -80,6 +81,8 @@ function makeBid(p, q, f) {
 }
 
 async function callLiar(p) {
+  if (!bid) return;
+  const r = round;
   busy = true;
   const target = bid.by;
   log.push(NAMES[p] + ': Liar!');
@@ -88,6 +91,7 @@ async function callLiar(p) {
   revealed = true;
   render();
   await wait(900);
+  if (r !== round) return;   // a new game started meanwhile
   const actual = countOf(bid.f);
   const bidderRight = actual >= bid.q;
   const loser = bidderRight ? p : target;
@@ -97,6 +101,7 @@ async function callLiar(p) {
   play(loser === 0 ? 'lose' : 'capture');
   render();
   await wait(2300);
+  if (r !== round) return;
   busy = false;
   if (counts[0] === 0) return finish(false);
   if (alive().length === 1) return finish(true);
@@ -105,9 +110,11 @@ async function callLiar(p) {
 
 // The computer weighs the bid against what it can see and what's likely in the cups it can't.
 async function cpuTurn() {
+  const r = round;
   busy = true;
   render();
   await wait(900 + Math.random() * 700);
+  if (r !== round) return;
   busy = false;
   if (over) return;
   const p = turn, lvl = getLevel();
@@ -136,6 +143,7 @@ async function cpuTurn() {
 }
 
 function newRound(start) {
+  round++;
   hands = counts.map((n) => Array.from({ length: n }, d6).sort());
   bid = null; revealed = false; turn = start;
   qty = 1; face = 2;

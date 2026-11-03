@@ -4,6 +4,7 @@ import { progress, streak, ACTIVITY, dayKey, LEARN_GAMES, LEARN_NAME } from './l
 import { ratingOf, show, settlePending, nextBot, isProvisional, RATED_GAMES } from './rating.js';
 import { todayProgress, dailyStreak, noteToday } from './daily.js';
 import { GAMES } from './games-data.js';
+import { iconHtml, LEARN_ICONS } from './learn-icons.js';
 import { store, onProgressLoaded } from './store.js';
 import { whenReady, displayName } from './accounts.js';
 

@@ -3,6 +3,7 @@ import { store } from './store.js';
 import { GAMES } from './games-data.js';
 import { whenReady, currentUser, displayName, signOutEverywhere, refreshUserUI, setLocalName, SYNC_KEYS } from './accounts.js';
 import { updateName, saveProfile, deleteAccount, resendVerification, track } from './firebase.js';
+import { dailyStreak, noteToday } from './daily.js';
 
 const $ = (id) => document.getElementById(id);
 const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
@@ -39,9 +40,12 @@ function paintStats() {
         [plural(s.won || 0, 'win', 'wins'), 'of ' + plural(s.played || 0, 'game', 'games') + extra]) });
     }
   }
-  const daily = store.get('bgs-daily', null);
-  cards.push({ played: daily ? 1 : 0, el: statCard('Daily challenge', '/play/four-in-a-row?mode=daily',
-    [plural(daily && daily.streak ? daily.streak : 0, 'day', 'days'), 'current streak']) });
+  // the daily challenge page's streak (any of the day's three challenges counts)
+  noteToday();
+  const streakDays = dailyStreak();
+  const log = store.get('bgs-daily-log', null);
+  cards.push({ played: log && Object.keys(log).length ? 1 : 0, el: statCard('Daily challenge', '/daily',
+    [plural(streakDays, 'day', 'days'), 'current streak']) });
   // Games they've played first; the rest keep the site's order.
   cards.sort((x, y) => (y.played > 0) - (x.played > 0)).forEach((c) => grid.append(c.el));
 }

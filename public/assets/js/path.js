@@ -4,43 +4,19 @@
 // finished that way shows as done here.
 import { progress, streak, openChest, jumpTo } from './learn-progress.js';
 import { ratingOf, show, BOTS, beatenBots } from './rating.js';
-import { pieceSvg } from './chess-pieces.js';
+import { iconHtml, LEARN_ICONS as GAMES } from './learn-icons.js';
+export { iconHtml };
 import { runLesson } from './lesson.js';
 import { confetti, countUp } from './confetti.js';
 import { track } from './firebase.js';
 import { onProgressLoaded } from './store.js';
 
-const GAMES = [
-  { game: 'chess', name: 'Chess', icon: 'piece:N' },
-  { game: 'checkers', name: 'Checkers', icon: 'ck' },
-  { game: 'mancala', name: 'Mancala', icon: 'seeds' },
-  { game: 'go', name: 'Go', icon: 'go' },
-  { game: 'reversi', name: 'Reversi', icon: 'rv' },
-  { game: 'four-in-a-row', name: 'Four in a Row', icon: 'c4' },
-  { game: 'sudoku', name: 'Sudoku', icon: 'sdk' },
-  { game: 'backgammon', name: 'Backgammon', icon: 'bgm' },
-  { game: 'solitaire', name: 'Solitaire', icon: 'card' }
-];
 const UNIT_COLORS = ['#8A2443', '#2F5568', '#5C4A1E', '#55306A', '#2F5E46', '#6B3A2A', '#34465E'];
 const MASCOTS = ['fox-hello', 'fox-study', 'fox-think', 'fox-point', 'fox-kneel', 'fox-three'];
 const WAVE = [0, -1, -2, -1, 0, 1, 2, 1];          // the path's sideways swing, node by node
 const CHEST_XP = 30, JUMP_PASS = 2;              // a jump test allows up to 2 mistakes
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-export function iconHtml(icon) {
-  if (!icon) return '';
-  if (icon.startsWith('piece:')) return '<span class="ni ni-piece">' + pieceSvg(icon.slice(6)) + '</span>';
-  if (icon === 'ck') return '<span class="ni ni-ck"></span>';
-  if (icon === 'ck-king') return '<span class="ni ni-ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg></span>';
-  if (icon === 'go') return '<span class="ni ni-go"><i></i><i></i></span>';
-  if (icon === 'rv') return '<span class="ni ni-rv"></span>';
-  if (icon === 'c4') return '<span class="ni ni-c4"><i></i><i></i><i></i><i></i></span>';
-  if (icon === 'sdk') return '<span class="ni ni-sdk"><i></i><i></i><i></i><i></i></span>';
-  if (icon === 'bgm') return '<span class="ni ni-bgm"><i></i><i></i></span>';
-  if (icon === 'card') return '<span class="ni ni-card">A</span>';
-  if (icon === 'seeds') return '<span class="ni ni-seeds"><i></i><i></i><i></i></span>';
-  return '<span class="ni ni-text' + ([...icon].length > 2 ? ' small' : '') + '">' + esc(icon) + '</span>';
-}
 
 const root = document.getElementById('lpath');
 if (root) start(root);
