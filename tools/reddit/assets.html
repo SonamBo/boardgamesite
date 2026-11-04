@@ -1,0 +1,43 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;src:url(../../public/assets/fonts/fredoka-latin.woff2);font-weight:300 700}
+@font-face{font-family:Nunito;src:url(../../public/assets/fonts/nunito-latin.woff2);font-weight:200 1000}
+*{box-sizing:border-box;margin:0}
+body{background:#888}
+.felt{position:relative;overflow:hidden;
+ background:radial-gradient(120% 140% at 50% 30%,#8A2A40 0%,#6A1C30 55%,#4F1428 100%)}
+.felt::before{content:"";position:absolute;inset:0;opacity:.07;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%23FFF3E6' font-family='serif' font-size='34'%3E%3Ctext x='10' y='40'%3E%E2%99%A0%3C/text%3E%3Ctext x='70' y='40'%3E%E2%99%9E%3C/text%3E%3Ctext x='70' y='100'%3E%E2%99%A5%3C/text%3E%3Ctext x='10' y='100'%3E%E2%9A%80%3C/text%3E%3C/g%3E%3C/svg%3E")}
+.name{font-family:Fredoka;font-weight:600;color:#FFF3E6;letter-spacing:.5px;text-shadow:0 4px 0 #3D0F1F}
+.name b{color:#F7B455;font-weight:600}
+.tag{font-family:Nunito;font-weight:800;color:#F1CFD6}
+.pill{display:inline-block;font-family:Nunito;font-weight:900;color:#2A1306;background:#F7B455;border-radius:999px}
+.thumb{position:absolute;border-radius:22px;border:6px solid #FFF3E6;box-shadow:0 14px 30px rgba(0,0,0,.35);object-fit:cover}
+#desk{width:1920px;height:384px}
+#mob{width:1600px;height:480px}
+#icon{width:256px;height:256px;border-radius:0;background:radial-gradient(circle at 50% 40%,#F68D45,#EE6B1F 60%,#C9560F)}
+</style>
+
+<div id="desk" class="felt">
+  <img class="thumb" src="../../public/assets/img/thumb/chess.webp" style="left:70px;top:60px;width:250px;height:188px;transform:rotate(-7deg)">
+  <img class="thumb" src="../../public/assets/img/thumb/solitaire.webp" style="left:260px;top:160px;width:210px;height:158px;transform:rotate(5deg)">
+  <img class="thumb" src="../../public/assets/img/thumb/sudoku.webp" style="right:260px;top:160px;width:210px;height:158px;transform:rotate(-5deg)">
+  <img class="thumb" src="../../public/assets/img/thumb/word-guess.webp" style="right:70px;top:60px;width:250px;height:188px;transform:rotate(7deg)">
+  <img src="../../public/assets/img/fox-wave.webp" style="position:absolute;left:530px;bottom:-40px;height:400px">
+  <div style="position:absolute;left:836px;top:96px">
+    <div class="name" style="font-size:88px;line-height:1">BoardGame<b>Site</b></div>
+    <div class="tag" style="font-size:30px;margin-top:14px">Chess, cards, puzzles &amp; word games, free</div>
+    <div class="pill" style="font-size:25px;padding:8px 22px;margin-top:18px">Daily challenges · share your wins</div>
+  </div>
+</div>
+
+<div id="mob" class="felt">
+  <img src="../../public/assets/img/fox-wave.webp" style="position:absolute;left:110px;bottom:-30px;height:430px">
+  <img class="thumb" src="../../public/assets/img/thumb/solitaire.webp" style="left:560px;top:150px;width:260px;height:195px;transform:rotate(-6deg)">
+  <img class="thumb" src="../../public/assets/img/thumb/chess.webp" style="left:860px;top:120px;width:290px;height:218px;transform:rotate(3deg)">
+  <img class="thumb" src="../../public/assets/img/thumb/word-guess.webp" style="left:1190px;top:150px;width:260px;height:195px;transform:rotate(7deg)">
+</div>
+
+<div id="icon" style="position:relative;overflow:hidden">
+  <img src="../../public/assets/img/fox-wink.webp" style="position:absolute;left:-10px;top:6px;width:276px">
+</div>
