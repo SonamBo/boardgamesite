@@ -2349,3 +2349,33 @@ body.returning .hero { display: none; }
 .deal-form > div { display: flex; gap: 8px; flex-wrap: wrap; }
 .deal-form input { width: 110px; min-height: 44px; font: inherit; font-size: 17px; padding: 0 10px; border-radius: 10px; border: 2px solid var(--border-strong); background: var(--surface); color: var(--text); }
 .deal-form .btn { min-height: 44px; }
+
+/* ---------- Popularity race (articles/board-game-popularity-over-time) ---------- */
+.poprace { margin: 24px 0; padding: 20px 20px 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); }
+.pr-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 14px; }
+.poprace .pr-kicker { margin: 0; font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--text); }
+.poprace .pr-sub { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+.poprace .pr-year { margin: 0; font-family: var(--display); font-weight: 600; line-height: 1; color: var(--brand); white-space: nowrap; }
+.pr-y { font-size: clamp(40px, 9vw, 64px); font-variant-numeric: tabular-nums; }
+.pr-q { font-size: 18px; color: var(--muted); }
+.pr-bars { position: relative; height: calc(10 * 38px); overflow: hidden; }
+.pr-row { position: absolute; left: 0; right: 0; top: 0; height: 38px; display: grid; grid-template-columns: 112px 1fr; align-items: center; gap: 10px; transition: transform .45s ease, opacity .45s ease; }
+.pr-name { font-weight: 800; font-size: 14px; text-align: right; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr-track { display: flex; align-items: center; gap: 8px; min-width: 0; padding-right: 40px; }
+.pr-bar { display: block; height: 28px; min-width: 3px; border-radius: 6px; }
+.pr-val { font-weight: 800; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.poprace .pr-event { min-height: 3em; margin: 14px 0 0; padding: 10px 14px; border-radius: 12px; background: var(--side); border-left: 4px solid var(--brand); font-weight: 700; color: var(--text); opacity: 0; transition: opacity .3s; }
+.pr-event.on { opacity: 1; }
+.pr-controls { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.pr-play { min-width: 92px; }
+.pr-scrub { flex: 1; accent-color: var(--brand); }
+.poprace .pr-note { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+@media (max-width: 560px) {
+  .pr-head { flex-direction: column-reverse; align-items: flex-start; gap: 6px; }
+  .poprace .pr-kicker { font-size: 17px; }
+  .poprace { padding: 16px 12px 12px; }
+  .pr-row { grid-template-columns: 86px 1fr; gap: 8px; height: 32px; }
+  .pr-bars { height: calc(10 * 32px); }
+  .pr-bar { height: 22px; }
+  .pr-name, .pr-val { font-size: 12px; }
+}
