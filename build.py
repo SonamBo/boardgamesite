@@ -11,11 +11,11 @@ Each page file starts with a few settings lines, then its content:
     <!-- script: /assets/js/x.js -->    (optional: extra module script)
     <!-- sitemap: no -->                (optional: leave out of sitemap.xml)
     <!-- robots: noindex -->            (optional: ask search engines not to list the page)
-    <!-- kind: game -->                 (optional: home, game, guide or category; adds the matching structured data)
+    <!-- kind: game -->                 (optional: home, game, guide, article or category; adds the matching structured data)
     <!-- cat: strategy -->              (category pages: which category, see CATS in games.py)
     <!-- game: checkers -->             (game and guide pages: which game, see GAMES below)
     <!-- image: /assets/img/og/x.png --> (optional: link-preview image; game pages default to their game's)
-    <!-- published: 2026-10-26 -->      (guide pages: first published date)
+    <!-- published: 2026-10-26 -->      (guide and article pages: first published date)
 
 Inside a page's content:
     {{related:checkers}}   a "More games" strip: games in the same category first, then others
@@ -26,6 +26,8 @@ Inside a page's content:
     {{learnpaths}}         the Learn page's learning-path cards (one per course)
     {{learncats}}          category tiles that jump to the Learn page's shelves
     {{learnshelves}}       the Learn page's shelves: a guide card for every game, by category
+    {{articles}}           every article (src/pages/articles/*.html), newest first; {{articles:3}} for the newest 3
+    {{cards:chess,go}}     game cards for the named games, in that order (for articles)
     <section class="faq"> with <h3>question</h3><p>answer</p> pairs also becomes FAQ structured data.
 
 Courses: each src/courses/<game>.json (format in src/courses/README.md) becomes
@@ -104,6 +106,8 @@ def crumbs_for(meta):
     items = [("Home", "/")]
     if path.startswith("/learn/"):
         items.append(("Learn", "/learn"))
+    if path.startswith("/articles/"):
+        items.append(("Articles", "/articles"))
     if path.startswith("/play/") and meta.get("game"):
         c = GAMES[meta["game"]]["cat"]
         items.append((CATS[c]["name"] + " games", "/games/" + c))
@@ -243,6 +247,35 @@ def learn_shelves_html():
     return "\n".join(out)
 
 
+def cards_html(slugs):
+    picks = [s.strip() for s in slugs.split(",")]
+    for s in picks:
+        if s not in GAMES:
+            sys.exit(f"unknown game '{s}' in {{{{cards:...}}}}")
+    return '<div class="games">\n' + "\n".join(game_card(s, GAMES[s]) for s in picks) + "\n</div>"
+
+
+def articles_html(limit=None):
+    items = []
+    for f in (SRC / "pages" / "articles").glob("*.html"):
+        meta, text = {}, f.read_text(encoding="utf-8")
+        for line in text.splitlines():
+            m = meta_re.match(line)
+            if not m:
+                break
+            meta[m.group(1)] = m.group(2)
+        h1 = re.search(r"<h1[^>]*>(.*?)</h1>", text, re.S)
+        items.append((meta.get("published", ""), meta["path"], plain(h1.group(1)) if h1 else meta["title"], meta["description"]))
+    items.sort(reverse=True)
+    if limit:
+        items = items[:limit]
+    cards = [
+        f'    <a class="related-card card" href="{p}">\n      <b>{htmllib.escape(t)}</b>\n      <span>{htmllib.escape(d)}</span>\n    </a>'
+        for _, p, t, d in items
+    ]
+    return '<div class="related-grid">\n' + "\n".join(cards) + "\n  </div>"
+
+
 def gamegrid_html(cat):
     if cat not in CATS:
         sys.exit(f"unknown category '{cat}'")
@@ -304,7 +337,7 @@ def structured_data(meta, body, image, modified):
                 for i, (slug, g) in enumerate(in_cat(meta["cat"]))
             ],
         })
-    elif kind == "guide":
+    elif kind in ("guide", "article"):
         graph.append({
             "@type": "Article",
             "@id": page_url + "#article",
@@ -335,7 +368,7 @@ def structured_data(meta, body, image, modified):
             "publisher": {"@id": SITE + "/#org"},
             "mainEntityOfPage": page_url,
         })
-    if kind in ("game", "guide", "lesson"):
+    if kind in ("game", "guide", "article", "lesson"):
         graph.append(ORG)   # the publisher the game/article points at
 
     crumbs = crumbs_for(meta)
@@ -493,6 +526,8 @@ for page in sorted((SRC / "pages").rglob("*.html")):
     body = re.sub(r"\{\{gamegrid:([a-z0-9-]+)\}\}", lambda m: gamegrid_html(m.group(1)), body)
     body = body.replace("{{cats}}", cats_html()).replace("{{shelves}}", shelves_html())
     body = re.sub(r"\{\{course:([a-z0-9-]+)\}\}", lambda m: course_html(m.group(1)), body)
+    body = re.sub(r"\{\{cards:([a-z0-9,-]+)\}\}", lambda m: cards_html(m.group(1)), body)
+    body = re.sub(r"\{\{articles(?::(\d+))?\}\}", lambda m: articles_html(int(m.group(1)) if m.group(1) else None), body)
     body = body.replace("{{learnpaths}}", learn_paths_html()).replace("{{learncats}}", learn_cats_html()).replace("{{learnshelves}}", learn_shelves_html())
     h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", body, re.S)
     meta["h1"] = h1s[0] if h1s else meta["title"]
@@ -529,7 +564,7 @@ for page, meta, body in pages:
     if meta.get("kind") == "category" and not in_cat(meta["cat"]):
         robots = "noindex"   # nothing to list yet
     html = html.replace("{{robots}}", robots)
-    html = html.replace("{{ogtype}}", "article" if meta.get("kind") in ("guide", "lesson") else "website")
+    html = html.replace("{{ogtype}}", "article" if meta.get("kind") in ("guide", "article", "lesson") else "website")
     html = html.replace("{{image}}", SITE + image)
     html = html.replace("{{imagealt}}", htmllib.escape(plain(meta["h1"]) + " on " + SITE_NAME, quote=True))
     html = html.replace("{{jsonld}}", structured_data(meta, body, image, modified))

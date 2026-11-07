@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://boardgamesite.com/</loc><lastmod>2026-11-01</lastmod></url>
   <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://boardgamesite.com/articles</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/articles/best-2-player-board-games-online</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/articles/board-games-for-kids</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/articles/solitaire-vs-freecell-vs-spider</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/contact</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/daily</loc><lastmod>2026-10-31</lastmod></url>
   <url><loc>https://boardgamesite.com/games/cards</loc><lastmod>2026-10-27</lastmod></url>
@@ -10,7 +14,7 @@
   <url><loc>https://boardgamesite.com/games/puzzles</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/strategy</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/word</loc><lastmod>2026-10-27</lastmod></url>
-  <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://boardgamesite.com/learn</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/learn/backgammon</loc><lastmod>2026-11-02</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/backgammon/backgammon-bearing-off</loc><lastmod>2026-11-02</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/learn/backgammon/backgammon-blots-and-safety</loc><lastmod>2026-11-02</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
