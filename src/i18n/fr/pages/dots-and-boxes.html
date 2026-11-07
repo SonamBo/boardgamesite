@@ -1,0 +1,112 @@
+<!-- title: Pipopipette gratuite en ligne (petits carrés) | BoardGameSite -->
+<!-- description: Jouez gratuitement à la pipopipette, le jeu des points et des carrés : reliez les points, fermez des carrés et gagnez. Contre l’ordinateur sur trois niveaux ou un ami. -->
+<!-- path: /fr/jouer/pipopipette -->
+<!-- out: fr/jouer/pipopipette.html -->
+<!-- alt: /play/dots-and-boxes -->
+<!-- nav: play -->
+<!-- script: /assets/js/dots-and-boxes.js -->
+<!-- kind: game -->
+<!-- game: dots-and-boxes -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Tous les jeux
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 1">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Pipopipette</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">À vous : tracez un trait</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Son" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit db-wrap">
+        <svg id="db-board" class="db-board" viewBox="0 0 100 100" role="group" aria-label="Grille de pipopipette. Touchez entre deux points pour tracer un trait."></svg>
+      </div>
+      <p class="board-hint">Touchez entre deux points voisins pour tracer un trait. Votre historique : <span id="record">Victoires : 0 · Défaites : 0 · Nuls : 0</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Vous</b><small id="score-you">0</small></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Ordinateur</b><small id="score-cpu">0</small></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Taille de la grille</p>
+        <div class="seg" role="group" aria-label="Taille de la grille (lance une nouvelle partie)">
+          <button type="button" data-dsize="3">3×3</button>
+          <button type="button" data-dsize="4">4×4</button>
+          <button type="button" data-dsize="5">5×5</button>
+          <button type="button" data-dsize="6">6×6</button>
+        </div>
+        <p class="seg-label">Adversaire</p>
+        <div class="seg" role="group" aria-label="Adversaire (lance une nouvelle partie)">
+          <button type="button" data-opponent="cpu">Ordinateur</button>
+          <button type="button" data-opponent="friend">2 joueurs</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Niveau de l’ordinateur</p>
+        <div class="seg" role="group" aria-label="Niveau de l’ordinateur" data-cpu-only>
+          <button type="button" data-level="easy">Facile</button>
+          <button type="button" data-level="medium">Moyen</button>
+          <button type="button" data-level="hard">Difficile</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Rejouer</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Nouvelle partie</button>
+
+      <div class="panel-box card-dark">
+        <h2>Comment jouer</h2>
+        <p>Chacun son tour, tracez un trait entre deux points voisins. Tracez le quatrième côté d’un carré pour le gagner, puis rejouez. Le plus de carrés l’emporte.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Créez un compte gratuit pour retrouver votre historique sur tous vos appareils.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Inscription gratuite</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Comment jouer à la pipopipette</h2>
+  <p>La pipopipette, aussi appelée jeu des petits carrés ou jeu des points, est un classique du papier-crayon : simple à apprendre et plein de pièges astucieux.</p>
+  <ol>
+    <li><strong>Chacun son tour, tracez un trait</strong> entre deux points voisins, à l’horizontale ou à la verticale.</li>
+    <li><strong>Fermez un carré</strong> en traçant son quatrième côté : il est à vous.</li>
+    <li><strong>Fermer un carré donne un nouveau tour,</strong> si bien qu’on peut parfois en prendre plusieurs d’affilée.</li>
+    <li><strong>Quand tous les traits sont tracés,</strong> celui qui a le plus de carrés gagne.</li>
+  </ol>
+
+  <h2>Conseils pour gagner</h2>
+  <ul>
+    <li><strong>Ne tracez pas le troisième côté d’un carré.</strong> Vous l’offrez à votre adversaire.</li>
+    <li><strong>Comptez les chaînes.</strong> En fin de partie, la grille se découpe en chaînes de carrés. Quand vous devez en céder une, cédez la plus courte.</li>
+    <li><strong>Le double sacrifice.</strong> Les experts laissent parfois les deux derniers carrés d’une longue chaîne à l’adversaire, pour l’obliger à ouvrir la chaîne suivante.</li>
+  </ul>
+
+  <h2>Questions fréquentes sur la pipopipette</h2>
+  <section class="faq">
+    <h3>La pipopipette est-elle gratuite ?</h3>
+    <p>Oui. Affrontez l’ordinateur ou un ami autant que vous voulez, gratuitement dans votre navigateur.</p>
+    <h3>Rejoue-t-on après avoir fermé un carré ?</h3>
+    <p>Oui. Chaque fois que vous complétez un carré, vous tracez un autre trait.</p>
+    <h3>Quelles tailles de grille ?</h3>
+    <p>3×3, 4×4, 5×5 ou 6×6 carrés. Les grandes grilles durent plus longtemps et laissent plus de place à la stratégie.</p>
+    <h3>Quel est le niveau de l’ordinateur ?</h3>
+    <p>En Facile, il rate parfois des carrés et vous les laisse. En Moyen, il ne vous donne jamais un carré s’il peut l’éviter. En Difficile, il limite aussi ses pertes au minimum en fin de partie.</p>
+    <h3>Peut-il y avoir match nul ?</h3>
+    <p>Oui, sur les grilles comptant un nombre pair de carrés, si les deux joueurs finissent à égalité.</p>
+  </section>
+</section>
+
+{{related:dots-and-boxes}}

@@ -1,0 +1,96 @@
+<!-- title: Solitario online gratis: Klondike clásico | BoardGameSite -->
+<!-- description: Juega gratis al solitario Klondike en tu navegador. Roba 1 o 3 cartas, mueve tocando o arrastrando y deshaz sin límite. Sin descargas ni registro. -->
+<!-- path: /es/jugar/solitario -->
+<!-- out: es/jugar/solitario.html -->
+<!-- alt: /play/solitaire -->
+<!-- nav: play -->
+<!-- script: /assets/js/solitaire.js -->
+<!-- kind: game -->
+<!-- game: solitaire -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <symbol id="suit-0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>
+  <symbol id="suit-1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>
+  <symbol id="suit-2" viewBox="0 0 24 24"><path d="M12 1.5l8.5 10.5L12 22.5 3.5 12z"/></symbol>
+  <symbol id="suit-3" viewBox="0 0 24 24"><path d="M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z"/></symbol>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 16px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos los juegos
+  </a>
+  <div class="sol-wrap" data-max-root>
+  <div class="board-head">
+    <h1 id="board-title">Solitario</h1>
+    <div class="head-right">
+      <p id="status" class="status" role="status" aria-live="polite">Ordena cada palo del As al Rey</p>
+      <button type="button" class="icon-btn" data-sound-toggle aria-label="Sonido" aria-pressed="true"></button>
+    </div>
+  </div>
+
+  <div class="sol-bar">
+    <button id="new-game" type="button" class="btn btn-gold raised">Nueva partida</button>
+    <button id="undo" type="button" class="btn btn-outline" disabled>Deshacer</button>
+    <button id="finish" type="button" class="btn btn-green" hidden>Terminar</button>
+    <div class="seg" role="group" aria-label="Cartas que se roban (empieza una partida nueva)" style="flex: 0 0 auto">
+      <button type="button" data-draw="1">Robar 1</button>
+      <button type="button" data-draw="3">Robar 3</button>
+    </div>
+    <p class="sol-stats"><span>Movimientos <b id="moves">0</b></span><span>Tiempo <b id="time">0:00</b></span></p>
+  </div>
+
+  <div id="table" class="sol-table">
+    <div id="area" class="sol-area" aria-label="Mesa del solitario"></div>
+    <div id="sol-result" class="sol-result" hidden>
+      <div id="result" class="result">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big">¡Has ganado!</p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Jugar otra vez</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <p class="board-hint">Toca una carta para llevarla al mejor sitio, o arrástrala. Toca el mazo para robar. Tu historial: <span id="record">0 partidas ganadas</span></p>
+
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Cómo jugar al solitario</h2>
+  <p>Este es el Klondike, la versión más popular del solitario. El objetivo es llevar las 52 cartas a las cuatro bases de arriba a la derecha, una por palo, ordenando cada una del As al Rey.</p>
+  <ol>
+    <li><strong>El reparto.</strong> Las cartas se reparten en siete columnas: la primera tiene una carta, la segunda dos, y así hasta siete. Solo la última carta de cada columna está boca arriba. El resto del mazo queda boca abajo arriba a la izquierda.</li>
+    <li><strong>Baja alternando colores.</strong> En las columnas, pon una carta sobre otra que sea un número más alta y del color contrario: un 6 rojo sobre un 7 negro, una Jota negra sobre una Reina roja.</li>
+    <li><strong>Mueve escaleras enteras.</strong> Puedes mover a otra columna una escalera completa de cartas boca arriba en orden. Cuando destapas una carta boca abajo, se da la vuelta.</li>
+    <li><strong>Solo los Reyes van a las columnas vacías.</strong> Una columna vacía solo puede ocuparla un Rey, o una escalera que empiece por un Rey.</li>
+    <li><strong>Roba cuando te atasques.</strong> Toca el mazo para dar la vuelta a cartas. Cuando se acaba, tócalo otra vez para volver a empezarlo, tantas veces como quieras.</li>
+    <li><strong>Ganas</strong> cuando los cuatro palos llegan hasta su Rey.</li>
+  </ol>
+  <p>Toca una carta para enviarla automáticamente al mejor sitio, o arrástrala adonde quieras. ¿Te has equivocado? Deshaz todas las jugadas que quieras. Cuando todas las cartas están boca arriba y el mazo está vacío, el botón <strong>Terminar</strong> sube el resto de cartas por ti.</p>
+
+  <h2>¿Robar 1 o robar 3?</h2>
+  <p>Con <strong>Robar 1</strong> das la vuelta a una carta cada vez, así que todas las cartas del mazo están siempre a tu alcance. Se gana mucho más a menudo y es ideal para una partida tranquila. <strong>Robar 3</strong> es la versión clásica y más difícil: las cartas salen de tres en tres y solo se puede jugar la de arriba, así que algunas quedan enterradas hasta la siguiente vuelta. Al cambiar de modo empieza una partida nueva.</p>
+
+  <h2>Consejos para ganar más partidas</h2>
+  <ul>
+    <li><strong>Destapa primero las cartas boca abajo.</strong> Cada carta oculta que descubres te da nuevas opciones. Trabaja en las columnas con más cartas boca abajo.</li>
+    <li><strong>Sube los Ases y los Doses enseguida.</strong> No sirven para nada en otro sitio.</li>
+    <li><strong>No vacíes una columna si no tienes un Rey para ponerlo.</strong> Una columna vacía que no puedes llenar no te sirve de nada.</li>
+    <li><strong>No te precipites con las bases.</strong> Un 5 o un 6 que dejas en las columnas puede servir para colocar un 4 o un 5 del otro color.</li>
+  </ul>
+
+  <h2>Preguntas frecuentes sobre el solitario</h2>
+  <section class="faq">
+    <h3>¿Es gratis este solitario?</h3>
+    <p>Sí. Juega todas las partidas que quieras en tu navegador, en el móvil, la tablet o el ordenador. No hay nada que descargar ni hace falta crear una cuenta.</p>
+    <h3>¿Se pueden ganar todas las partidas de solitario?</h3>
+    <p>No. Algunos repartos no se pueden ganar por muy bien que juegues, sobre todo con Robar 3. Si te quedas atascado de verdad, empieza otra partida: no quiere decir que lo hayas hecho mal.</p>
+    <h3>¿Cuántas veces puedo pasar el mazo?</h3>
+    <p>Todas las que quieras. Cuando el mazo se acaba, tócalo para volver a darle la vuelta.</p>
+    <h3>¿Hay límite para deshacer?</h3>
+    <p>No. Puedes deshacer todas las jugadas hasta el principio de la partida.</p>
+    <h3>¿Qué diferencia hay entre el Klondike y el solitario?</h3>
+    <p>Solitario es el nombre de cualquier juego de cartas para una persona. El Klondike es la versión concreta en la que piensa casi todo el mundo cuando dice solitario, y es la que puedes jugar aquí.</p>
+  </section>
+</section>
+
+{{related:solitaire}}

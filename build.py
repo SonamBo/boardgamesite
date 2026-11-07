@@ -73,6 +73,40 @@ ORG = {
 errors, warnings = [], []
 layout = (SRC / "layout.html").read_text(encoding="utf-8")
 meta_re = re.compile(r"^<!--\s*([a-z]+):\s*(.*?)\s*-->\s*$")
+
+# ---------- Languages ----------
+# English pages live in src/pages. Translations live in src/i18n/<lang>/pages, each naming its English
+# page with <!-- alt: /play/chess -->; src/i18n/<lang>.json holds the layout words ("ui"), game names
+# ("games") and the in-game words that assets/js/i18n.js swaps in at runtime ("runtime").
+LANGS = {
+    "en": {"name": "English", "locale": "en_US", "home": "/"},
+    "es": {"name": "Español", "locale": "es_ES", "home": "/es"},
+    "fr": {"name": "Français", "locale": "fr_FR", "home": "/fr"},
+}
+I18N = {l: json.loads((SRC / "i18n" / f"{l}.json").read_text(encoding="utf-8")) for l in LANGS if l != "en"}
+MISSING = set()
+
+
+def T(lang, text):
+    """A layout or card word in this page's language."""
+    if lang == "en":
+        return text
+    got = I18N[lang]["ui"].get(text)
+    if got is None:
+        MISSING.add(f"{lang}: ui string {text!r}")
+        return text
+    return got
+
+
+def gname(slug, lang, key="name"):
+    g = GAMES[slug]
+    if lang == "en":
+        return g[key]
+    t = I18N[lang]["games"].get(slug, {})
+    if key not in t:
+        MISSING.add(f"{lang}: games.{slug}.{key}")
+        return g[key]
+    return t[key]
 today = datetime.date.today().isoformat()
 
 
@@ -103,6 +137,14 @@ def crumbs_for(meta):
     path = meta["path"]
     if path == "/" or "noindex" in meta.get("robots", ""):
         return []
+    lang = meta.get("lang", "en")
+    if lang != "en":
+        items = [(T(lang, "Home"), LANGS[lang]["home"])]
+        if meta.get("game"):
+            items.append((gname(meta["game"], lang), path))
+        else:
+            items.append((plain(meta["h1"]), path))
+        return items
     items = [("Home", "/")]
     if path.startswith("/learn/"):
         items.append(("Learn", "/learn"))
@@ -125,7 +167,13 @@ def has_guide(slug):
     return (SRC / "pages" / "learn" / f"{slug}.html").exists()
 
 
-def related_html(skip):
+def related_html(skip, lang="en"):
+    if lang != "en":
+        picks = [s for s in I18N[lang]["games"] if s != skip and s in TRANSLATED_GAMES[lang]][:6]
+        cards = "\n".join(f'    <a class="related-card card" href="/play/{s}">\n      <b>{gname(s, lang)}</b>\n      <span>{gname(s, lang, "blurb")}</span>\n    </a>' for s in picks)
+        return ('<section class="related" aria-labelledby="related-h">\n'
+                f'  <h2 id="related-h">{T(lang, "More games to play")}</h2>\n'
+                '  <div class="related-grid">\n' + cards + "\n  </div>\n</section>")
     g0 = GAMES[skip]
     same = [(s, g) for s, g in GAMES.items() if s != skip and g["cat"] == g0["cat"]]
     other = [(s, g) for s, g in GAMES.items() if s != skip and g["cat"] != g0["cat"]]
@@ -147,7 +195,20 @@ def related_html(skip):
     )
 
 
-def game_card(slug, g, lazy=True):
+def game_card(slug, g, lazy=True, lang="en"):
+    if lang != "en":
+        name, card = gname(slug, lang), gname(slug, lang, "card")
+        chips = "".join(f'<span class="chip">{T(lang, c)}</span>' for c in g["chips"])
+        loading = ' loading="lazy"' if lazy else ""
+        return f"""    <article class="game-card card">
+      <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="" width="480" height="360"{loading}></a>
+      <div class="game-body">
+        <h3>{name}</h3>
+        <p>{card}</p>
+        <div class="chips">{chips}</div>
+        <a class="btn btn-green btn-block" href="/play/{slug}" aria-label="{T(lang, 'Play')} {name}">{T(lang, 'Play')}</a>
+      </div>
+    </article>"""
     chips = "".join(f'<span class="chip">{c}</span>' for c in g["chips"])
     learn = f'\n        <a class="learn-link" href="/learn/{slug}">How to play {g["name"]}</a>' if has_guide(slug) else ""
     loading = ' loading="lazy"' if lazy else ""
@@ -247,12 +308,12 @@ def learn_shelves_html():
     return "\n".join(out)
 
 
-def cards_html(slugs):
+def cards_html(slugs, lang="en"):
     picks = [s.strip() for s in slugs.split(",")]
     for s in picks:
         if s not in GAMES:
             sys.exit(f"unknown game '{s}' in {{{{cards:...}}}}")
-    return '<div class="games">\n' + "\n".join(game_card(s, GAMES[s]) for s in picks) + "\n</div>"
+    return '<div class="games">\n' + "\n".join(game_card(s, GAMES[s], lazy=i > 3, lang=lang) for i, s in enumerate(picks)) + "\n</div>"
 
 
 def articles_html(limit=None):
@@ -287,6 +348,7 @@ def gamegrid_html(cat):
 
 def structured_data(meta, body, image, modified):
     page_url = url_for(meta["path"])
+    lang = meta.get("lang", "en")
     graph = []
     kind = meta.get("kind")
     if kind == "home":
@@ -296,17 +358,17 @@ def structured_data(meta, body, image, modified):
             "@id": SITE + "/#website",
             "name": SITE_NAME,
             "alternateName": "Board Game Site",
-            "url": SITE + "/",
+            "url": SITE + ("/" if lang == "en" else LANGS[lang]["home"] + "/"),
             "description": meta["description"],
-            "inLanguage": "en",
+            "inLanguage": lang,
             "publisher": {"@id": SITE + "/#org"},
         })
         graph.append({
             "@type": "ItemList",
             "name": "Free board games on " + SITE_NAME,
             "itemListElement": [
-                {"@type": "ListItem", "position": i + 1, "url": f"{SITE}/play/{slug}", "name": g["name"]}
-                for i, (slug, g) in enumerate(GAMES.items())
+                {"@type": "ListItem", "position": i + 1, "url": SITE + TRANSLATIONS.get(f"/play/{slug}", {}).get(lang, f"/play/{slug}"), "name": gname(slug, lang)}
+                for i, slug in enumerate([s for s in GAMES if lang == "en" or s in TRANSLATED_GAMES[lang]])
             ],
         })
     elif kind == "game":
@@ -314,7 +376,7 @@ def structured_data(meta, body, image, modified):
         graph.append({
             "@type": ["VideoGame", "WebApplication"],
             "@id": page_url + "#game",
-            "name": g["full"],
+            "name": gname(meta["game"], lang, "full"),
             "url": page_url,
             "description": meta["description"],
             "image": SITE + image,
@@ -323,7 +385,7 @@ def structured_data(meta, body, image, modified):
             "applicationCategory": "GameApplication",
             "operatingSystem": "Any",
             "playMode": players(g),
-            "inLanguage": "en",
+            "inLanguage": lang,
             "isAccessibleForFree": True,
             "offers": {"@type": "Offer", "price": 0, "priceCurrency": "USD"},
             "publisher": {"@id": SITE + "/#org"},
@@ -346,7 +408,7 @@ def structured_data(meta, body, image, modified):
             "image": SITE + image,
             "datePublished": meta.get("published", modified),
             "dateModified": modified,
-            "inLanguage": "en",
+            "inLanguage": lang,
             "author": {"@id": SITE + "/#org"},
             "publisher": {"@id": SITE + "/#org"},
             "mainEntityOfPage": page_url,
@@ -363,7 +425,7 @@ def structured_data(meta, body, image, modified):
             "teaches": "How to play " + GAMES[meta["game"]]["name"],
             "isAccessibleForFree": True,
             "dateModified": modified,
-            "inLanguage": "en",
+            "inLanguage": lang,
             "author": {"@id": SITE + "/#org"},
             "publisher": {"@id": SITE + "/#org"},
             "mainEntityOfPage": page_url,
@@ -508,10 +570,25 @@ def lesson_pages():
     return made
 
 
+SOURCES = [(p, "en") for p in sorted((SRC / "pages").rglob("*.html"))]
+for _l in I18N:
+    SOURCES += [(p, _l) for p in sorted((SRC / "i18n" / _l / "pages").rglob("*.html"))]
+# English path -> {lang: translated path}, read up front so links and cards can point at translations.
+TRANSLATIONS, TRANSLATED_GAMES = {}, {l: set() for l in LANGS}
+for _p, _l in SOURCES:
+    if _l == "en":
+        continue
+    _m = dict(meta_re.match(x).groups() for x in _p.read_text(encoding="utf-8").splitlines()[:14] if meta_re.match(x))
+    if "alt" not in _m:
+        sys.exit(f"{_p}: translated pages need <!-- alt: /english/path -->")
+    TRANSLATIONS.setdefault(_m["alt"], {"en": _m["alt"]})[_l] = _m["path"]
+    if _m["alt"].startswith("/play/"):
+        TRANSLATED_GAMES[_l].add(_m["alt"][6:])
+
 pages = []
-for page in sorted((SRC / "pages").rglob("*.html")):
+for page, lang in SOURCES:
     lines = page.read_text(encoding="utf-8").splitlines()
-    meta = {"_file": str(page.relative_to(ROOT))}
+    meta = {"_file": str(page.relative_to(ROOT)), "lang": lang}
     while lines and meta_re.match(lines[0]):
         key, value = meta_re.match(lines[0]).groups()
         meta[key] = value
@@ -522,11 +599,11 @@ for page in sorted((SRC / "pages").rglob("*.html")):
     if meta.get("game") and meta["game"] not in GAMES:
         sys.exit(f"{page.name}: unknown game '{meta['game']}'")
     body = "\n".join(lines).strip()
-    body = re.sub(r"\{\{related:([a-z0-9-]+)\}\}", lambda m: related_html(m.group(1)), body)
+    body = re.sub(r"\{\{related:([a-z0-9-]+)\}\}", lambda m: related_html(m.group(1), lang), body)
     body = re.sub(r"\{\{gamegrid:([a-z0-9-]+)\}\}", lambda m: gamegrid_html(m.group(1)), body)
     body = body.replace("{{cats}}", cats_html()).replace("{{shelves}}", shelves_html())
     body = re.sub(r"\{\{course:([a-z0-9-]+)\}\}", lambda m: course_html(m.group(1)), body)
-    body = re.sub(r"\{\{cards:([a-z0-9,-]+)\}\}", lambda m: cards_html(m.group(1)), body)
+    body = re.sub(r"\{\{cards:([a-z0-9,-]+)\}\}", lambda m: cards_html(m.group(1), lang), body)
     body = re.sub(r"\{\{articles(?::(\d+))?\}\}", lambda m: articles_html(int(m.group(1)) if m.group(1) else None), body)
     body = body.replace("{{learnpaths}}", learn_paths_html()).replace("{{learncats}}", learn_cats_html()).replace("{{learnshelves}}", learn_shelves_html())
     h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", body, re.S)
@@ -555,7 +632,32 @@ for page, meta, body in pages:
         errors.append(f"{meta['_file']}: share image {image} not found (run python3 tools/make_share_images.py)")
     modified = last_changed(page)
 
-    html = layout
+    lang = meta.get("lang", "en")
+    html = re.sub(r"\{\{t:([^}]+)\}\}", lambda m: T(lang, m.group(1)), layout)
+    en_path = meta.get("alt", meta["path"])
+    versions = TRANSLATIONS.get(en_path, {})
+    html = html.replace("{{lang}}", lang).replace("{{oglocale}}", LANGS[lang]["locale"])
+    alts = ""
+    if len(versions) > 1 and "noindex" not in meta.get("robots", ""):
+        alts = "".join(f'<link rel="alternate" hreflang="{l}" href="{url_for(p)}">\n' for l, p in sorted(versions.items()))
+        alts += f'<link rel="alternate" hreflang="x-default" href="{url_for(versions["en"])}">'
+    html = html.replace("{{hreflang}}", alts)
+    switch = []
+    for l, info in LANGS.items():
+        target = versions.get(l) or info["home"]
+        cur = ' aria-current="true"' if l == lang else ""
+        switch.append(f'<a href="{target}" hreflang="{l}" lang="{l}"{cur}>{info["name"]}</a>')
+    html = html.replace("{{langs}}", "".join(switch))
+    if lang != "en":
+        rt = I18N[lang].get("runtime", {})
+        d = {"exact": dict(rt.get("common", {}).get("exact", {})), "patterns": list(rt.get("common", {}).get("patterns", []))}
+        for scope in filter(None, [meta.get("game"), meta.get("i18n")]):
+            d["exact"].update(rt.get(scope, {}).get("exact", {}))
+            d["patterns"] = rt.get(scope, {}).get("patterns", []) + d["patterns"]
+        payload = json.dumps(d, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        html = html.replace("{{i18n}}", f'<script>window.BGS_I18N={payload}</script>\n<script src="/assets/js/i18n.js"></script>')
+    else:
+        html = html.replace("{{i18n}}", "")
     for item in NAV_ITEMS:
         html = html.replace("{{cur_%s}}" % item, 'aria-current="page"' if meta.get("nav") == item else "")
     script = meta.get("script")
@@ -573,6 +675,14 @@ for page, meta, body in pages:
     html = html.replace("{{path}}", "" if meta["path"] == "/" else meta["path"])
     html = html.replace("{{body}}", body)
     html = re.sub(r" +>", ">", html)
+    if lang != "en":
+        # keep readers in their language wherever a translation exists
+        def _swap(m):
+            href = m.group(1)
+            path, rest = re.match(r"([^#?]*)(.*)", href).groups()
+            t = TRANSLATIONS.get(path or "/", {}).get(lang)
+            return f'href="{t}{rest}"' if t else m.group(0)
+        html = re.sub(r'href="(/[^"]*)"(?! hreflang)', _swap, html)
     if "{{" in html:
         errors.append(f"{meta['_file']}: unfilled placeholder {re.search(r'{{[^}]*}}', html).group(0)}")
 
@@ -628,6 +738,7 @@ for page, meta, body in pages:
 (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
 print("built public/sitemap.xml, public/robots.txt")
 
+errors += sorted(MISSING)
 for w in warnings:
     print("warning:", w)
 if errors:

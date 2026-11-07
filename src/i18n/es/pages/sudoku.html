@@ -1,0 +1,131 @@
+<!-- title: Sudoku online gratis: fácil, medio y difícil | BoardGameSite -->
+<!-- description: Juega al sudoku gratis en tu navegador: tres niveles, notas, pistas, deshacer y un sudoku diario nuevo cada día. Sin descargas ni registro. -->
+<!-- path: /es/jugar/sudoku -->
+<!-- out: es/jugar/sudoku.html -->
+<!-- alt: /play/sudoku -->
+<!-- nav: play -->
+<!-- script: /assets/js/sudoku.js -->
+<!-- kind: game -->
+<!-- game: sudoku -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos los juegos
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: .78">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Sudoku</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Rellena cada fila, columna y caja del 1 al 9</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sonido" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit sdk-wrap">
+        <div id="grid" class="sdk" role="group" aria-label="Cuadrícula de sudoku. Usa las flechas para moverte y del 1 al 9 para rellenar una casilla."></div>
+        <div class="sdk-tools">
+          <button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Deshacer</button>
+          <button id="erase" type="button" class="tool-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 20H9l-5-5 10-10 7 7-6 6"/><path d="M7 12l6 6"/></svg>Borrar</button>
+          <button id="notes-btn" type="button" class="tool-btn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg>Notas <small>No</small></button>
+          <button id="hint" type="button" class="tool-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Pista</button>
+        </div>
+        <div id="pad" class="sdk-pad" role="group" aria-label="Números"></div>
+      </div>
+      <p class="board-hint">Toca una casilla y luego un número. Activa Notas para apuntar los candidatos. Tu historial: <span id="record">0 sudokus resueltos</span></p>
+    </section>
+
+    <aside class="panel">
+      <nav class="mode-tabs" aria-label="Modo de juego">
+        <a href="/play/sudoku" data-mode-link="classic">Jugar</a>
+        <a href="/play/sudoku?mode=daily" data-mode-link="daily">Sudoku diario</a>
+      </nav>
+
+      <div class="players card solo-stats">
+        <p><span>Tiempo</span><b id="time">0:00</b></p>
+        <p><span>Pistas usadas</span><b id="hints-used">0</b></p>
+      </div>
+
+      <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Dificultad</p>
+        <div class="seg" role="group" aria-label="Dificultad (empieza un sudoku nuevo)">
+          <button type="button" data-level="easy">Fácil</button>
+          <button type="button" data-level="medium">Medio</button>
+          <button type="button" data-level="hard">Difícil</button>
+        </div>
+      </div>
+
+      <div id="daily-panel" class="panel-box card" hidden>
+        <div style="display: flex; align-items: center; gap: 14px">
+          <img src="/assets/img/flame.svg" alt="" width="96" height="96" style="width: 40px">
+          <div>
+            <p class="muted" style="font-size: 14px">Tu racha</p>
+            <p id="daily-streak" style="font-family: var(--display); font-size: 34px; line-height: 1.1; color: var(--text)">0 días</p>
+          </div>
+        </div>
+        <p><b id="daily-title" style="color: var(--text)">Sudoku diario</b>. El mismo sudoku de nivel medio para todos hoy. A medianoche llega uno nuevo.</p>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Nuevo sudoku</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Nuevo sudoku</button>
+
+      <div class="panel-box card-dark">
+        <h2>Cómo se juega</h2>
+        <p>Rellena la cuadrícula para que cada fila, cada columna y cada caja de 3×3 tenga los números del 1 al 9 una sola vez. Los números repetidos se ponen en rojo.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Crea una cuenta gratis para guardar tu historial en cualquier dispositivo.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Regístrate gratis</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Cómo jugar al sudoku</h2>
+  <p>El sudoku se juega en una cuadrícula de 9×9 dividida en nueve cajas de 3×3. Algunas casillas ya tienen un número. Tu tarea es rellenar el resto.</p>
+  <ol>
+    <li><strong>Un número de cada en cada fila.</strong> Cada fila tiene que contener los números del 1 al 9, sin repetir ninguno.</li>
+    <li><strong>Uno de cada en cada columna.</strong> Lo mismo vale para las nueve columnas.</li>
+    <li><strong>Uno de cada en cada caja.</strong> Y para cada una de las nueve cajas de 3×3, marcadas con líneas más gruesas.</li>
+    <li><strong>No hace falta adivinar.</strong> Cada sudoku tiene una única solución, y siempre se puede llegar a ella con lógica.</li>
+  </ol>
+  <p>Toca una casilla y luego un número para rellenarla. Con teclado, usa las flechas para moverte, del 1 al 9 para escribir y la tecla de borrar para vaciar la casilla. Si un número choca con otro de la misma fila, columna o caja, los dos se ponen en rojo.</p>
+
+  <h2>Notas, pistas y deshacer</h2>
+  <p>Activa <strong>Notas</strong> (o pulsa N) para apuntar números pequeños en una casilla mientras piensas qué puede ir ahí. Al colocar un número, se borra solo de las notas de su fila, columna y caja. <strong>Pista</strong> rellena una casilla por ti: la que tengas seleccionada o la más fácil que quede. <strong>Deshacer</strong> anula todas las jugadas que quieras.</p>
+
+  <h2>El sudoku diario</h2>
+  <p>Cada día hay un <a href="/play/sudoku?mode=daily">sudoku diario</a> nuevo, el mismo de nivel medio para todo el mundo. Resuélvelo para alargar tu racha y vuelve mañana a por el siguiente.</p>
+
+  <h2>Trucos para resolver más rápido</h2>
+  <ul>
+    <li><strong>Empieza por las filas, columnas y cajas más llenas.</strong> Cuantos más números hay, menos opciones quedan.</li>
+    <li><strong>Busca el único sitio donde puede ir un número.</strong> Elige un número y una caja, y descarta todas las casillas en las que chocaría. Muchas veces solo queda una.</li>
+    <li><strong>Busca el único número que admite una casilla.</strong> Comprueba qué números del 1 al 9 ya están en su fila, su columna y su caja.</li>
+    <li><strong>Usa las notas en los sudokus difíciles.</strong> Apuntar los candidatos deja ver patrones difíciles de retener de memoria.</li>
+  </ul>
+
+  <h2>Preguntas frecuentes sobre el sudoku</h2>
+  <section class="faq">
+    <h3>¿Es gratis este sudoku?</h3>
+    <p>Sí. Juega todos los sudokus que quieras, más uno diario nuevo, gratis en tu navegador, en el móvil, la tablet o el ordenador. Sin descargas y sin cuenta.</p>
+    <h3>¿Todos los sudokus tienen una sola solución?</h3>
+    <p>Sí. Cada sudoku se comprueba al generarlo, así que solo hay una forma correcta de rellenarlo y nunca tienes que adivinar.</p>
+    <h3>¿Qué diferencia hay entre fácil, medio y difícil?</h3>
+    <p>Los fáciles empiezan con unos 40 números, los medios con unos 32 y los difíciles con unos 26. Menos números de partida significa menos pistas y más que pensar.</p>
+    <h3>¿Pierdo el sudoku si cierro la página?</h3>
+    <p>No. Tu sudoku, tus notas y tu tiempo se guardan en el navegador, así que puedes seguir donde lo dejaste.</p>
+    <h3>¿Hay que saber matemáticas para jugar al sudoku?</h3>
+    <p>No. El sudoku usa números, pero no hay que sumar nada. Se podría jugar igual con nueve letras o nueve colores. Es un juego de lógica.</p>
+  </section>
+</section>
+
+{{related:sudoku}}

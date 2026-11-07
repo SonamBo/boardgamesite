@@ -1,0 +1,111 @@
+<!-- title: Ludo online gratis contra la máquina o amigos | BoardGameSite -->
+<!-- description: Juega gratis al ludo, el primo del parchís, en tu navegador: de 2 a 4 jugadores, contra la máquina o con amigos en el mismo dispositivo. Sin descargas ni registro. -->
+<!-- path: /es/jugar/ludo -->
+<!-- out: es/jugar/ludo.html -->
+<!-- alt: /play/ludo -->
+<!-- nav: play -->
+<!-- script: /assets/js/ludo.js -->
+<!-- kind: game -->
+<!-- game: ludo -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos los juegos
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.85">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Ludo</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Tu turno: tira</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sonido" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit sl-wrap">
+        <svg id="lu-board" class="lu-board" viewBox="0 0 150 150" role="group" aria-label="Tablero de ludo. Después de tirar, toca una de tus fichas iluminadas para moverla."></svg>
+        <div class="sl-controls">
+          <div id="lu-die" class="dice-row"></div>
+          <button id="roll" type="button" class="btn btn-gold raised">Tirar</button>
+        </div>
+      </div>
+      <p class="board-hint">Tira y toca una ficha iluminada para moverla. Con un 6 sale una ficha y vuelves a tirar. Tu historial: <span id="record">Victorias: 0 · Derrotas: 0 · Empates: 0</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-box card"><div id="lu-players" class="sl-players"></div></div>
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Jugar con</p>
+        <div class="seg" role="group" aria-label="Contra quién juegas (empieza una partida nueva)">
+          <button type="button" data-lopp="cpu">Máquina</button>
+          <button type="button" data-lopp="friend">Amigos</button>
+        </div>
+        <p class="seg-label">Jugadores</p>
+        <div class="seg" role="group" aria-label="Número de jugadores (empieza una partida nueva)">
+          <button type="button" data-ln="2">2</button>
+          <button type="button" data-ln="4">4</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Jugar otra vez</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Nueva partida</button>
+
+      <div class="panel-box card-dark">
+        <h2>Cómo se juega</h2>
+        <p>Saca un 6 para meter una ficha en el tablero. Da la vuelta al tablero y sube por tu pasillo de color hasta el centro. Si caes sobre un rival, lo mandas a su base. Gana quien lleva antes sus cuatro fichas a casa.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Crea una cuenta gratis para guardar tu historial en cualquier dispositivo.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Regístrate gratis</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Cómo jugar al ludo</h2>
+  <p>El ludo es una carrera clásica para dos a cuatro jugadores, basada en el antiguo juego indio del pachisi, igual que el parchís. Cada jugador tiene cuatro fichas que debe sacar de su base, llevar alrededor del tablero y meter en el centro.</p>
+  <ol>
+    <li><strong>Saca un 6 para empezar.</strong> Con un 6, una de tus fichas sale de la base a tu casilla de salida.</li>
+    <li><strong>Avanza en el sentido de las agujas del reloj</strong> tantas casillas como marque el dado. Tú eliges qué ficha mover.</li>
+    <li><strong>Con un 6, vuelves a tirar.</strong> Pero si sacas tres 6 seguidos, se acaba tu turno.</li>
+    <li><strong>¡Come!</strong> Cae justo en la casilla de una ficha rival para mandarla a su base. Además, vuelves a tirar.</li>
+    <li><strong>Casillas seguras.</strong> Las fichas que están en una casilla con estrella no se pueden comer.</li>
+    <li><strong>Llega a casa.</strong> Tras dar una vuelta completa, entra por tu pasillo de color hasta el centro. Necesitas el número exacto para meter cada ficha, y meter una te da otra tirada.</li>
+    <li><strong>Gana quien mete antes sus cuatro fichas.</strong></li>
+  </ol>
+
+  <h2>Ludo y parchís: ¿en qué se diferencian?</h2>
+  <p>Son primos con el mismo origen. En el parchís hay barreras de dos fichas, se cuentan 20 al comer y 10 al llegar a casa, y en algunas reglas se sale con un 5. En el ludo no hay barreras ni casillas de premio: se sale con un 6, se vuelve a tirar con cada 6 y las estrellas son casillas seguras.</p>
+
+  <h2>Consejos para ganar</h2>
+  <ul>
+    <li><strong>Saca fichas pronto.</strong> Cuantas más fichas tengas en el tablero, más opciones tendrás con cada tirada.</li>
+    <li><strong>Mira quién viene detrás.</strong> Una ficha a seis casillas o menos delante de un rival está en peligro.</li>
+    <li><strong>Usa las estrellas.</strong> Descansa en una casilla segura cuando los rivales estén cerca.</li>
+    <li><strong>Come siempre que puedas.</strong> Mandar a casa una ficha que casi ha completado la vuelta cambia la partida.</li>
+  </ul>
+
+  <h2>Preguntas frecuentes sobre el ludo</h2>
+  <section class="faq">
+    <h3>¿Es gratis el ludo?</h3>
+    <p>Sí. Juega todas las partidas que quieras contra la máquina o con amigos, gratis en tu navegador.</p>
+    <h3>¿Hace falta un 6 para salir?</h3>
+    <p>Sí. Una ficha solo puede salir de la base cuando sacas un 6.</p>
+    <h3>¿Qué son las casillas con estrella?</h3>
+    <p>Casillas seguras, incluidas las de salida de cada jugador. Una ficha sobre una estrella no se puede comer.</p>
+    <h3>¿Hace falta el número exacto para llegar a casa?</h3>
+    <p>Sí. Si con la tirada una ficha se pasaría del centro, no puedes moverla. Elige otra.</p>
+    <h3>¿Cuántas personas pueden jugar?</h3>
+    <p>Dos o cuatro. Con dos, jugáis con colores opuestos. Juega contra la máquina o pasaos el dispositivo entre amigos.</p>
+  </section>
+</section>
+
+{{related:ludo}}

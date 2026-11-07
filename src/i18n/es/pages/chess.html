@@ -1,0 +1,131 @@
+<!-- title: Ajedrez online gratis contra la máquina | BoardGameSite -->
+<!-- description: Juega al ajedrez gratis en tu navegador contra la máquina en tres niveles o contra un amigo en el mismo dispositivo. Todas las reglas, deshacer y sin registro. -->
+<!-- path: /es/jugar/ajedrez -->
+<!-- out: es/jugar/ajedrez.html -->
+<!-- alt: /play/chess -->
+<!-- nav: play -->
+<!-- script: /assets/js/chess.js -->
+<!-- kind: game -->
+<!-- game: chess -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos los juegos
+  </a>
+
+  <div class="game-layout" data-max-root style="--board-ratio: 0.9">
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Ajedrez</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Tu turno</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Sonido" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-fit cs-wrap">
+        <div id="chess-board" class="cs-board" role="grid" aria-label="Tablero de ajedrez. Toca una pieza y luego la casilla a la que quieres moverla."></div>
+        <div id="promo" class="cs-promo" hidden>
+          <span>Coronar como</span>
+          <button type="button" class="btn btn-outline" data-promo="q">Dama</button>
+          <button type="button" class="btn btn-outline" data-promo="r">Torre</button>
+          <button type="button" class="btn btn-outline" data-promo="b">Alfil</button>
+          <button type="button" class="btn btn-outline" data-promo="n">Caballo</button>
+        </div>
+        <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Deshacer</button></div>
+      </div>
+      <p class="board-hint">Toca una pieza para ver adónde puede ir y luego toca una casilla. Deshacer anula tu última jugada. Tu historial: <span id="record">Victorias: 0 · Derrotas: 0 · Empates: 0</span></p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-w" class="player"><span class="dot cs-dot w" aria-hidden="true"></span><b id="name-w">Tú (blancas)</b></div>
+        <div id="cap-w" class="cs-cap" aria-label="Piezas capturadas por las blancas"></div>
+        <div id="row-b" class="player"><span class="dot cs-dot b" aria-hidden="true"></span><b id="name-b">Máquina (negras)</b></div>
+        <div id="cap-b" class="cs-cap" aria-label="Piezas capturadas por las negras"></div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Rival</p>
+        <div class="seg" role="group" aria-label="Rival (empieza una partida nueva)">
+          <button type="button" data-opponent="cpu">Máquina</button>
+          <button type="button" data-opponent="friend">2 jugadores</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Juegas con</p>
+        <div class="seg" role="group" aria-label="Tu color (empieza una partida nueva)" data-cpu-only>
+          <button type="button" data-side="w">Blancas</button>
+          <button type="button" data-side="b">Negras</button>
+        </div>
+        <p class="seg-label" data-cpu-only>Nivel de la máquina</p>
+        <div class="seg" role="group" aria-label="Nivel de la máquina" data-cpu-only>
+          <button type="button" data-level="easy">Fácil</button>
+          <button type="button" data-level="medium">Medio</button>
+          <button type="button" data-level="hard">Difícil</button>
+        </div>
+      </div>
+
+      <div class="panel-box card"><p class="seg-label" style="margin:0">Jugadas</p><ol id="moves" class="cs-moves"></ol></div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Jugar otra vez</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Nueva partida</button>
+
+      <div class="panel-box card-dark">
+        <h2>Cómo se juega</h2>
+        <p>Cada pieza se mueve a su manera. Ataca al rey rival de forma que no pueda escapar: eso es jaque mate, y gana la partida.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Crea una cuenta gratis para guardar tu historial en cualquier dispositivo.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Regístrate gratis</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Cómo jugar al ajedrez</h2>
+  <p>El ajedrez es el juego de estrategia más famoso del mundo. Dos ejércitos de 16 piezas se enfrentan y el objetivo es dar jaque mate al rey enemigo.</p>
+  <ol>
+    <li><strong>Las piezas.</strong> El <strong>rey</strong> se mueve una casilla en cualquier dirección. La <strong>dama</strong> se mueve las casillas que quiera en línea recta, en cualquier dirección. Las <strong>torres</strong> se mueven por filas y columnas, los <strong>alfiles</strong> por las diagonales, y los <strong>caballos</strong> saltan en forma de L por encima de otras piezas. Los <strong>peones</strong> avanzan una casilla (dos en su primer movimiento) y capturan en diagonal.</li>
+    <li><strong>Capturar</strong> es mover una pieza a la casilla de una pieza enemiga.</li>
+    <li><strong>Jaque.</strong> Cuando el rey está atacado, está en jaque, y su jugador tiene que salir del jaque en esa misma jugada.</li>
+    <li><strong>Jaque mate</strong> es cuando el rey está en jaque y no tiene escapatoria. Quien lo da gana la partida.</li>
+    <li><strong>Tablas.</strong> La partida acaba en tablas por rey ahogado (sin jugadas legales pero sin estar en jaque), por triple repetición, por la regla de los 50 movimientos o cuando a ninguno le quedan piezas suficientes para dar mate.</li>
+  </ol>
+
+  <h2>Movimientos especiales</h2>
+  <ul>
+    <li><strong>Enroque:</strong> el rey se mueve dos casillas hacia una torre y la torre salta por encima de él. Solo se puede si ninguno de los dos se ha movido, las casillas entre ellos están vacías y el rey no está en jaque, ni pasa ni cae en una casilla atacada.</li>
+    <li><strong>Captura al paso:</strong> si un peón avanza dos casillas y queda junto a uno de tus peones, puedes capturarlo como si hubiera avanzado solo una, pero únicamente en la jugada siguiente.</li>
+    <li><strong>Coronación:</strong> el peón que llega a la última fila se convierte en dama, torre, alfil o caballo. Tú eliges.</li>
+  </ul>
+
+  <h2>Consejos para principiantes</h2>
+  <ul>
+    <li><strong>Controla el centro</strong> con peones y piezas desde el principio.</li>
+    <li><strong>Desarrolla caballos y alfiles</strong> antes de mover dos veces la misma pieza.</li>
+    <li><strong>Enroca pronto</strong> para proteger a tu rey.</li>
+    <li><strong>Revisa cada jugada:</strong> ¿qué amenaza mi rival y está segura la pieza que voy a mover?</li>
+  </ul>
+
+  <h2>Preguntas frecuentes sobre el ajedrez</h2>
+  <section class="faq">
+    <h3>¿Es gratis jugar al ajedrez aquí?</h3>
+    <p>Sí. Juega contra la máquina o contra un amigo todas las veces que quieras, gratis y en tu navegador. Sin descargas y sin necesidad de cuenta.</p>
+    <h3>¿Qué nivel tiene la máquina?</h3>
+    <p>En Fácil solo mira una jugada por delante y comete bastantes errores. En Medio juega un ajedrez sólido, de club. En Difícil calcula más lejos y es un buen reto para la mayoría de jugadores.</p>
+    <h3>¿Puedo jugar con negras?</h3>
+    <p>Sí. Contra la máquina, elige Negras y el tablero gira para que tus piezas queden abajo.</p>
+    <h3>¿Están incluidos el enroque, la captura al paso y la coronación?</h3>
+    <p>Sí. Están todas las reglas del ajedrez, incluidas las tablas por rey ahogado, por repetición, por la regla de los 50 movimientos y por falta de material.</p>
+    <h3>¿Puedo deshacer una jugada?</h3>
+    <p>Sí. Deshacer anula tu última jugada (y la respuesta de la máquina).</p>
+  </section>
+</section>
+
+{{related:chess}}

@@ -1,0 +1,88 @@
+<!-- title: Jeux de société gratuits en ligne | BoardGameSite -->
+<!-- description: Jouez gratuitement aux échecs, aux dames, au solitaire, au sudoku, au Puissance 4, au démineur et plus dans votre navigateur. Sans téléchargement ni inscription. -->
+<!-- path: /fr -->
+<!-- out: fr.html -->
+<!-- alt: / -->
+<!-- nav: play -->
+<!-- kind: home -->
+<!-- script: /assets/js/home.js -->
+<section class="wb" id="welcome-back" hidden aria-labelledby="wb-h">
+  <div class="wb-head">
+    <img class="wb-fox" src="/assets/img/fox-wave.webp" alt="" width="280" height="280">
+    <div class="wb-hi"><h2 id="wb-h">Bon retour</h2><p class="wb-streak text-2"></p>
+      <div class="wb-goal" hidden><span class="wb-goal-bar" aria-hidden="true"><span></span></span><select class="wb-goal-pick" aria-label="Objectif du jour"></select><small class="muted"></small></div></div>
+  </div>
+  <div class="wb-cards"></div>
+  <div class="wb-recent" hidden><h3>Vos jeux</h3><div class="wb-recent-row"></div></div>
+</section>
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Gratuit · Sans téléchargement · Dans votre navigateur</p>
+    <h1>Des jeux de société gratuits, prêts quand vous l’êtes.</h1>
+    <p class="hero-lede">Échecs, dames, solitaire, sudoku, dés et bien plus, en un clic. Affrontez l’ordinateur ou passez l’appareil à un ami.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold btn-lg raised" href="#games">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+        Jouer maintenant
+      </a>
+      <button type="button" class="btn btn-outline btn-lg" data-open-accounts="hero">Créer un compte gratuit</button>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="/assets/img/hero-fox.webp" alt="Notre renard en sweat bordeaux, agenouillé près d’un échiquier en noyer avec un roi, un cavalier, des dés dorés, des jetons et un éventail de cartes" width="1200" height="896" fetchpriority="high">
+  </div>
+</section>
+
+<section id="games" style="display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 80px">
+  <h2 class="section-title">Choisissez un jeu</h2>
+  <div class="shelf" aria-labelledby="shelf-strategy">
+    <div class="shelf-head"><h3 id="shelf-strategy">Jeux de stratégie</h3></div>
+{{cards:chess,checkers,four-in-a-row,reversi,mancala,dots-and-boxes}}
+  </div>
+  <div class="shelf" aria-labelledby="shelf-more">
+    <div class="shelf-head"><h3 id="shelf-more">Cartes, réflexion et dés</h3></div>
+{{cards:solitaire,sudoku,mines,backgammon,ludo,snakes-and-ladders}}
+  </div>
+  <article class="soon-card soon-wide">
+    <span class="bubble"><img src="/assets/img/fox-kneel.webp" alt="" width="280" height="280"></span>
+    <div>
+      <h3>Plus de 50 jeux en anglais</h3>
+      <p>Nous traduisons le reste des jeux et des guides en français. En attendant, vous pouvez tous les jouer dans la version anglaise.</p>
+      <a class="link-green" href="https://boardgamesite.com/#games">Voir tous les jeux (en anglais)</a>
+    </div>
+  </article>
+</section>
+
+<section class="watch card-dark">
+  <div class="watch-copy">
+    <h2>Regardez et apprenez</h2>
+    <p class="text-2">Solutions des défis du jour, astuces et nouveautés sur notre chaîne YouTube.</p>
+  </div>
+  <a class="yt-link" href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+    <span class="yt-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
+    <span class="yt-text"><b>Pixel Art Games</b><small>S’abonner sur YouTube</small></span>
+    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+</section>
+
+<section class="intro" aria-labelledby="intro-h">
+  <h2 id="intro-h">Jeux de société gratuits, sans téléchargement</h2>
+  <p>BoardGameSite rassemble les grands classiques des jeux de société et de cartes, à lancer tout de suite dans votre navigateur, sur téléphone, tablette ou ordinateur. Rien à installer et aucun compte nécessaire. Jouez aux <a href="/play/chess">échecs</a> ou aux <a href="/play/checkers">dames</a> contre l’ordinateur sur trois niveaux, de facile à difficile ; détendez-vous avec un <a href="/play/solitaire">solitaire</a> ou un <a href="/play/sudoku">sudoku</a> ; ou défiez un ami au <a href="/play/four-in-a-row">Puissance 4</a>, au <a href="/play/ludo">ludo</a> ou aux <a href="/play/snakes-and-ladders">serpents et échelles</a> sur le même appareil.</p>
+  <p>Chaque jeu est accompagné de ses règles expliquées simplement et de quelques conseils pour gagner plus souvent.</p>
+</section>
+
+<section id="newsletter" class="newsletter">
+  <div class="newsletter-copy">
+    <h2>Soyez les premiers à découvrir les nouveaux jeux</h2>
+    <p>Un e-mail court à chaque nouveau jeu ou nouvelle fonction. Pas de spam.</p>
+  </div>
+  <form class="nl-form" data-newsletter="home-fr" novalidate>
+    <div class="nl-row">
+      <label class="visually-hidden" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" autocomplete="email" placeholder="vous@exemple.fr" required>
+      <button type="submit" class="btn btn-gold" style="min-height: 50px">Me prévenir</button>
+    </div>
+    <p class="form-msg" role="status"></p>
+  </form>
+</section>

@@ -1,0 +1,1096 @@
+{
+ "ui": {
+  "Skip to content": "Aller au contenu",
+  "Your streak and XP": "Votre série et vos XP",
+  "Day streak": "Série de jours",
+  "XP from lessons": "XP des leçons",
+  "Switch to light theme": "Passer au thème clair",
+  "Light or dark": "Clair ou sombre",
+  "Menu": "Menu",
+  "Main": "Principal",
+  "Play": "Jouer",
+  "Daily challenge": "Défi du jour",
+  "Learn": "Apprendre",
+  "My progress": "Ma progression",
+  "Watch on YouTube": "Regarder sur YouTube",
+  "(opens in a new tab)": "(s’ouvre dans un nouvel onglet)",
+  "About": "À propos",
+  "Sign up": "S’inscrire",
+  "Log in": "Se connecter",
+  "Install app": "Installer l’appli",
+  "Footer": "Pied de page",
+  "How to play": "Règles des jeux",
+  "Articles": "Articles",
+  "Contact": "Contact",
+  "Privacy Policy": "Politique de confidentialité",
+  "Terms": "Conditions d’utilisation",
+  "Language": "Langue",
+  "Quick links": "Liens rapides",
+  "Daily": "Défi",
+  "Progress": "Progrès",
+  "Me": "Moi",
+  "Home": "Accueil",
+  "More games to play": "D’autres jeux",
+  "Strategy": "Stratégie",
+  "vs Computer": "Contre l’ordinateur",
+  "2 players": "2 joueurs",
+  "2–4 players": "2 à 4 joueurs",
+  "Cards": "Cartes",
+  "Dice": "Dés",
+  "Puzzle": "Réflexion",
+  "Single player": "Solo",
+  "3 min": "3 min",
+  "5 min": "5 min",
+  "10 min": "10 min"
+ },
+ "games": {
+  "chess": {
+   "name": "Échecs",
+   "full": "Échecs",
+   "card": "Le grand jeu de stratégie, avec toutes les règles. Affrontez l’ordinateur sur trois niveaux ou un ami.",
+   "blurb": "Le classique. Faites échec et mat pour gagner."
+  },
+  "checkers": {
+   "name": "Dames",
+   "full": "Jeu de dames",
+   "card": "Sautez les pions adverses, faites des dames et videz le plateau. La prise est obligatoire.",
+   "blurb": "Sautez les pions, faites des dames, videz le plateau."
+  },
+  "solitaire": {
+   "name": "Solitaire",
+   "full": "Solitaire Klondike",
+   "card": "Le Klondike classique. Rangez chaque couleur de l’As au Roi, en tirant 1 ou 3 cartes, avec annulation illimitée.",
+   "blurb": "Le Klondike classique, tirage 1 ou 3, annulation illimitée."
+  },
+  "sudoku": {
+   "name": "Sudoku",
+   "full": "Sudoku",
+   "card": "Remplissez chaque ligne, colonne et carré avec les chiffres de 1 à 9. Trois niveaux, notes, indices et une grille du jour.",
+   "blurb": "Remplissez la grille de 1 à 9. Trois niveaux et une grille du jour."
+  },
+  "four-in-a-row": {
+   "name": "Puissance 4",
+   "full": "Puissance 4",
+   "card": "Faites tomber vos jetons et alignez-en quatre avant votre adversaire : à l’horizontale, à la verticale ou en diagonale.",
+   "blurb": "Faites tomber vos jetons et alignez-en quatre."
+  },
+  "mancala": {
+   "name": "Mancala",
+   "full": "Mancala (Kalah)",
+   "card": "L’ancien jeu de semailles, avec les règles du Kalah. Semez, enchaînez les tours bonus et capturez les graines adverses.",
+   "blurb": "Semez, gagnez des tours bonus et capturez pour gagner."
+  },
+  "backgammon": {
+   "name": "Backgammon",
+   "full": "Backgammon",
+   "card": "L’ancienne course de pions. Frappez les pions isolés, bâtissez des points et sortez vos 15 pions avant l’ordinateur ou un ami.",
+   "blurb": "Ramenez vos pions et sortez-les les premiers."
+  },
+  "reversi": {
+   "name": "Reversi",
+   "full": "Reversi (Othello)",
+   "card": "Encadrez les pions adverses entre les vôtres pour les retourner. Celui qui a le plus de pions quand le plateau est plein gagne.",
+   "blurb": "Encadrez les pions adverses pour les retourner."
+  },
+  "ludo": {
+   "name": "Ludo",
+   "full": "Ludo",
+   "card": "Le cousin des petits chevaux. Faites le tour du plateau avec vos quatre pions, capturez vos rivaux et abritez-vous sur les étoiles.",
+   "blurb": "Ramenez quatre pions à la maison. Faites 6 pour sortir."
+  },
+  "snakes-and-ladders": {
+   "name": "Serpents et échelles",
+   "full": "Serpents et échelles",
+   "card": "La course en famille jusqu’à la case 100. Montez aux échelles et évitez les serpents, jusqu’à quatre joueurs.",
+   "blurb": "Montez aux échelles, évitez les serpents, filez vers 100."
+  },
+  "mines": {
+   "name": "Démineur",
+   "full": "Démineur",
+   "card": "Dévoilez toutes les cases sûres grâce aux chiffres et marquez les mines cachées. Le premier clic est toujours sûr.",
+   "blurb": "Déminez le terrain grâce aux chiffres. Ne touchez aucune mine."
+  },
+  "dots-and-boxes": {
+   "name": "Pipopipette",
+   "full": "Pipopipette (jeu des petits carrés)",
+   "card": "Reliez les points à tour de rôle. Fermez le quatrième côté d’un carré pour le gagner et rejouez. Le plus de carrés l’emporte.",
+   "blurb": "Reliez les points et fermez des carrés pour les gagner."
+  }
+ },
+ "runtime": {
+  "common": {
+   "exact": {
+    "Your move": "À vous de jouer",
+    "Your turn": "À vous de jouer",
+    "Your turn again": "Vous rejouez",
+    "You": "Vous",
+    "Computer": "Ordinateur",
+    "The computer": "L’ordinateur",
+    "Player": "Joueur",
+    "Player 1": "Joueur 1",
+    "Player 2": "Joueur 2",
+    "Player 3": "Joueur 3",
+    "Player 4": "Joueur 4",
+    "Computer 1": "Ordinateur 1",
+    "Computer 2": "Ordinateur 2",
+    "Computer 3": "Ordinateur 3",
+    "You win!": "Vous avez gagné !",
+    "You won!": "Vous avez gagné !",
+    "Computer wins": "L’ordinateur gagne",
+    "The computer won": "L’ordinateur a gagné",
+    "Your friend wins": "Votre ami gagne",
+    "It’s a draw": "Match nul",
+    "Draw": "Partie nulle",
+    "You resigned": "Vous avez abandonné",
+    "Good game.": "Belle partie.",
+    "Nicely played.": "Bien joué.",
+    "Have another go?": "Une autre partie ?",
+    "Computer is thinking…": "L’ordinateur réfléchit…",
+    "Computer is thinking": "L’ordinateur réfléchit",
+    "Waiting for your friend": "En attente de votre ami",
+    "Welcome back. Your turn": "Bon retour. À vous de jouer",
+    "Play again": "Rejouer",
+    "New game": "Nouvelle partie",
+    "Undo": "Annuler",
+    "Full screen": "Plein écran",
+    "Exit full screen": "Quitter le plein écran",
+    "Exit full screen (Esc)": "Quitter le plein écran (Échap)",
+    "Sound": "Son",
+    "Sound on": "Son activé",
+    "Sound off": "Son coupé",
+    "Switch to dark theme": "Passer au thème sombre",
+    "Switch to light theme": "Passer au thème clair",
+    "Start a streak today": "Commencez une série aujourd’hui",
+    "Install app": "Installer l’appli",
+    "Die": "Dé",
+    "Keep": "Garder",
+    "Kept": "Gardé",
+    "Face-down card": "Carte face cachée",
+    "Close": "Fermer",
+    "Easy": "Facile",
+    "Medium": "Moyen",
+    "Hard": "Difficile",
+    "White": "Blancs",
+    "Black": "Noirs",
+    "Gold": "Or",
+    "Ivory": "Ivoire",
+    "Red": "Rouge",
+    "Green": "Vert",
+    "Yellow": "Jaune",
+    "Blue": "Bleu",
+    "Play a friend online": "Jouer en ligne avec un ami",
+    "Get a link to send to a friend. You’ll play on separate devices.": "Obtenez un lien à envoyer à un ami. Chacun joue sur son appareil.",
+    "Create a game link": "Créer un lien de partie",
+    "Creating a game…": "Création de la partie…",
+    "Connecting…": "Connexion…",
+    "Couldn’t start online play. Check your connection and try again": "Impossible de lancer la partie en ligne. Vérifiez votre connexion et réessayez",
+    "Copy link": "Copier le lien",
+    "Link copied. Send it to your friend": "Lien copié. Envoyez-le à votre ami",
+    "Send this link. The game starts when they open it.": "Envoyez ce lien. La partie commence quand votre ami l’ouvre.",
+    "Online game": "Partie en ligne",
+    "Resign": "Abandonner",
+    "Leave": "Quitter",
+    "Rematch": "Revanche",
+    "Their move": "Au tour de l’adversaire",
+    "Your friend": "Votre ami",
+    "Lost the connection to the online game": "Connexion à la partie en ligne perdue",
+    "Please log in to play online": "Connectez-vous pour jouer en ligne",
+    "That game link isn’t valid any more": "Ce lien de partie n’est plus valable",
+    "This game already has two players": "Cette partie a déjà deux joueurs",
+    "Hi! Welcome to BoardGameSite.": "Bonjour ! Bienvenue sur BoardGameSite.",
+    "Welcome to BoardGameSite": "Bienvenue sur BoardGameSite",
+    "What would you like to do today?": "Que voulez-vous faire aujourd’hui ?",
+    "Play a game now": "Jouer tout de suite",
+    "Learn a game": "Apprendre un jeu",
+    "Short hands-on lessons for Chess, Go, Sudoku, Solitaire and more.": "Courtes leçons pratiques d’échecs, de go, de sudoku, de solitaire et plus (en anglais).",
+    "I just want to look around": "Je veux juste jeter un œil",
+    "Pick one to start. Every game is on the home page too.": "Choisissez-en un pour commencer. Tous les jeux sont aussi sur la page d’accueil.",
+    "Let’s play!": "C’est parti !",
+    "Skip": "Passer",
+    "Back": "Retour",
+    "Cookie choice": "Cookies",
+    "We use analytics cookies to see which games people enjoy.": "Nous utilisons des cookies de mesure d’audience pour savoir quels jeux plaisent.",
+    "Accept": "Accepter",
+    "Decline": "Refuser",
+    "Create account": "Créer un compte",
+    "Create your account": "Créez votre compte",
+    "Create a free account": "Créer un compte gratuit",
+    "Log in": "Se connecter",
+    "Log in to pick up your record and streaks.": "Connectez-vous pour retrouver votre historique et vos séries.",
+    "Free. Save your wins and streaks, and pick them up on any device.": "Gratuit. Gardez vos victoires et vos séries, sur tous vos appareils.",
+    "Continue with Google": "Continuer avec Google",
+    "or": "ou",
+    "Email": "E-mail",
+    "Email address": "Adresse e-mail",
+    "Password": "Mot de passe",
+    "Password (6+ characters)": "Mot de passe (6 caractères min.)",
+    "Name shown on leaderboards": "Nom affiché dans les classements",
+    "Your name": "Votre nom",
+    "Forgot your password?": "Mot de passe oublié ?",
+    "Already have an account?": "Déjà un compte ?",
+    "New here?": "Nouveau ici ?",
+    "Welcome back": "Bon retour",
+    "Your account": "Votre compte",
+    "Please enter a valid email address.": "Saisissez une adresse e-mail valide.",
+    "Please use at least 6 characters for your password.": "Utilisez au moins 6 caractères pour le mot de passe.",
+    "Please choose a name. It’s what other players will see.": "Choisissez un nom. C’est ce que verront les autres joueurs.",
+    "Something went wrong. Please try again.": "Une erreur s’est produite. Réessayez.",
+    "That email and password don’t match. Check them, or reset your password.": "L’e-mail et le mot de passe ne correspondent pas. Vérifiez-les ou réinitialisez votre mot de passe.",
+    "There’s already an account with this email. Try logging in instead.": "Un compte existe déjà avec cet e-mail. Essayez de vous connecter.",
+    "There’s no account with this email yet. Sign up instead?": "Aucun compte avec cet e-mail pour l’instant. Vous inscrire ?",
+    "Too many tries. Please wait a few minutes and try again.": "Trop de tentatives. Patientez quelques minutes et réessayez.",
+    "You seem to be offline. Check your connection and try again.": "Vous semblez hors ligne. Vérifiez votre connexion et réessayez.",
+    "Ace": "As",
+    "Jack": "Valet",
+    "Queen": "Dame",
+    "King": "Roi",
+    "clubs": "trèfle",
+    "diamonds": "carreau",
+    "hearts": "cœur",
+    "spades": "pique",
+    "By continuing you agree to our": "En continuant, vous acceptez nos",
+    "and": "et",
+    "Terms": "Conditions d’utilisation",
+    "Privacy Policy": "Politique de confidentialité",
+    "Snakes and Ladders": "Serpents et échelles",
+    ", move here": ", jouer ici",
+    ", for a gammon (double win)": ", avec gammon (victoire double)",
+    ", for a backgammon (triple win)": ", avec backgammon (victoire triple)"
+   },
+   "patterns": [
+    [
+     "Player (\\d)’s turn",
+     "Au tour du joueur {1}"
+    ],
+    [
+     "Player (\\d) wins!",
+     "Le joueur {1} gagne !"
+    ],
+    [
+     "Player (\\d) won",
+     "Le joueur {1} a gagné"
+    ],
+    [
+     "(\\d+)-day streak, (\\d+) XP\\. Open your progress",
+     "Série de {1} jours, {2} XP. Voir votre progression"
+    ],
+    [
+     "(\\d+) wins? · (\\d+) loss(?:es)? · (\\d+) draws?",
+     "Victoires : {1} · Défaites : {2} · Nuls : {3}"
+    ],
+    [
+     "Welcome back\\. (.+)",
+     "Bon retour. {1}"
+    ],
+    [
+     "(.+) wins!",
+     "{1} gagne !"
+    ],
+    [
+     "(.+) won",
+     "{1} a gagné"
+    ],
+    [
+     "(.+) is thinking…?",
+     "{1} réfléchit…"
+    ],
+    [
+     "Die showing (\\d)",
+     "Dé affichant {1}"
+    ],
+    [
+     "Ace of (\\w+)",
+     "As de {1}"
+    ],
+    [
+     "Jack of (\\w+)",
+     "Valet de {1}"
+    ],
+    [
+     "Queen of (\\w+)",
+     "Dame de {1}"
+    ],
+    [
+     "King of (\\w+)",
+     "Roi de {1}"
+    ],
+    [
+     "(\\d+) of (\\w+)",
+     "{1} de {2}"
+    ],
+    [
+     "Signed in as (.+)",
+     "Connecté en tant que {1}"
+    ],
+    [
+     "Step (\\d+) of (\\d+)",
+     "Étape {1} sur {2}"
+    ]
+   ]
+  },
+  "chess": {
+   "exact": {
+    "Check!": "Échec !",
+    "Checkmate": "Échec et mat",
+    "Checkmate!": "Échec et mat !",
+    "Checkmate! You won": "Échec et mat ! Vous avez gagné",
+    "Checkmate. You lost": "Échec et mat. Vous avez perdu",
+    "That piece can’t move": "Cette pièce ne peut pas bouger",
+    "White to move": "Aux Blancs de jouer",
+    "Black to move": "Aux Noirs de jouer",
+    "stalemate": "pat",
+    "the 50-move rule": "la règle des 50 coups",
+    "not enough pieces to checkmate": "matériel insuffisant pour mater",
+    "threefold repetition": "triple répétition",
+    "Queen": "Dame",
+    "Rook": "Tour",
+    "Bishop": "Fou",
+    "Knight": "Cavalier"
+   },
+   "patterns": [
+    [
+     "Checkmate\\. The computer won",
+     "Échec et mat. L’ordinateur a gagné"
+    ],
+    [
+     "Draw by (.+)",
+     "Nulle par {1}"
+    ],
+    [
+     "By (.+)\\.",
+     "Par {1}."
+    ],
+    [
+     "(\\d+) moves played\\.",
+     "{1} coups joués."
+    ],
+    [
+     "(White|Black) wins by checkmate!",
+     "Les {1} gagnent par échec et mat !"
+    ],
+    [
+     "Checkmate\\. (.+) won",
+     "Échec et mat. {1} a gagné"
+    ],
+    [
+     "(.+) \\(White\\)",
+     "{1} (Blancs)"
+    ],
+    [
+     "(.+) \\(Black\\)",
+     "{1} (Noirs)"
+    ],
+    [
+     "([a-h]\\d), white pawn(, move here)?",
+     "{1}, pion blanc{2}"
+    ],
+    [
+     "([a-h]\\d), white knight(, move here)?",
+     "{1}, cavalier blanc{2}"
+    ],
+    [
+     "([a-h]\\d), white bishop(, move here)?",
+     "{1}, fou blanc{2}"
+    ],
+    [
+     "([a-h]\\d), white rook(, move here)?",
+     "{1}, tour blanche{2}"
+    ],
+    [
+     "([a-h]\\d), white queen(, move here)?",
+     "{1}, dame blanche{2}"
+    ],
+    [
+     "([a-h]\\d), white king(, move here)?",
+     "{1}, roi blanc{2}"
+    ],
+    [
+     "([a-h]\\d), black pawn(, move here)?",
+     "{1}, pion noir{2}"
+    ],
+    [
+     "([a-h]\\d), black knight(, move here)?",
+     "{1}, cavalier noir{2}"
+    ],
+    [
+     "([a-h]\\d), black bishop(, move here)?",
+     "{1}, fou noir{2}"
+    ],
+    [
+     "([a-h]\\d), black rook(, move here)?",
+     "{1}, tour noire{2}"
+    ],
+    [
+     "([a-h]\\d), black queen(, move here)?",
+     "{1}, dame noire{2}"
+    ],
+    [
+     "([a-h]\\d), black king(, move here)?",
+     "{1}, roi noir{2}"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, jouer ici"
+    ]
+   ]
+  },
+  "checkers": {
+   "exact": {
+    "Keep jumping": "Continuez à sauter",
+    "No captures for a long while.": "Aucune prise depuis longtemps.",
+    "Nicely played. New game?": "Bien joué. Une autre partie ?",
+    ", move here": ", jouer ici"
+   },
+   "patterns": [
+    [
+     "(\\d+) pieces?",
+     "{1} pions"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "Au tour de {1} : prise obligatoire"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "À vous : prise obligatoire"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, pion doré{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, pion noir{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, dame dorée{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, dame noire{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, vide"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, jouer ici"
+    ]
+   ]
+  },
+  "four-in-a-row": {
+   "exact": {
+    "The board is full.": "La grille est pleine.",
+    "Nicely played. Swap who goes first?": "Bien joué. On change qui commence ?",
+    "Find the winning move": "Trouvez le coup gagnant",
+    "Solved!": "Résolu !",
+    "Not this time": "Pas cette fois",
+    "Not quite": "Presque",
+    "Daily challenge": "Défi du jour",
+    "Come back tomorrow for a new one.": "Revenez demain pour un nouveau défi."
+   },
+   "patterns": [
+    [
+     "(\\d+) wins?",
+     "{1} victoires"
+    ],
+    [
+     "Column (\\d)",
+     "Colonne {1}"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "(\\d+) days?",
+     "{1} jours"
+    ]
+   ]
+  },
+  "reversi": {
+   "exact": {
+    "32 discs each.": "32 pions chacun.",
+    "Computer has no move.": "L’ordinateur ne peut pas jouer.",
+    "You have no move.": "Vous ne pouvez pas jouer.",
+    "Computer plays again": "L’ordinateur rejoue"
+   },
+   "patterns": [
+    [
+     "(\\d+) discs?",
+     "{1} pions"
+    ],
+    [
+     "You win (\\d+–\\d+)",
+     "Vous gagnez {1}"
+    ],
+    [
+     "Computer wins (\\d+–\\d+)",
+     "L’ordinateur gagne {1}"
+    ],
+    [
+     "Your friend wins (\\d+–\\d+)",
+     "Votre ami gagne {1}"
+    ],
+    [
+     "(.+) wins (\\d+–\\d+)",
+     "{1} gagne {2}"
+    ],
+    [
+     "Final score (\\d+–\\d+) \\(Gold – Black\\)\\.",
+     "Score final {1} (Or – Noirs)."
+    ],
+    [
+     "Final score (\\d+–\\d+)\\.",
+     "Score final {1}."
+    ],
+    [
+     "(.+) has no move\\. Computer plays again",
+     "{1} ne peut pas jouer. L’ordinateur rejoue"
+    ],
+    [
+     "(?:You|.+) ha(?:ve|s) no move\\. Your turn again",
+     "Aucun coup possible. Vous rejouez"
+    ],
+    [
+     "(.+) has no move\\. (.+) again",
+     "{1} ne peut pas jouer. {2} rejoue"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "([a-h]\\d), (?:gold|you)",
+     "{1}, pion doré"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black)",
+     "{1}, pion noir"
+    ],
+    [
+     "([a-h]\\d), you can play here",
+     "{1}, vous pouvez jouer ici"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, vide"
+    ]
+   ]
+  },
+  "dots-and-boxes": {
+   "exact": {
+    "Your turn: draw a line": "À vous : tracez un trait"
+   },
+   "patterns": [
+    [
+     "You closed a box: go again",
+     "Vous fermez un carré : rejouez"
+    ],
+    [
+     "You closed two boxes: go again",
+     "Vous fermez deux carrés : rejouez"
+    ],
+    [
+     "The computer closed a box: go again",
+     "L’ordinateur ferme un carré et rejoue"
+    ],
+    [
+     "The computer closed two boxes: go again",
+     "L’ordinateur ferme deux carrés et rejoue"
+    ],
+    [
+     "Player (\\d) closed a box: go again",
+     "Le joueur {1} ferme un carré et rejoue"
+    ],
+    [
+     "Player (\\d) closed two boxes: go again",
+     "Le joueur {1} ferme deux carrés et rejoue"
+    ],
+    [
+     "Player (\\d)’s turn: draw a line",
+     "Au joueur {1} : tracez un trait"
+    ],
+    [
+     "Computer’s turn",
+     "Au tour de l’ordinateur"
+    ],
+    [
+     "Player (\\d)’s turn",
+     "Au tour du joueur {1}"
+    ],
+    [
+     "Game over: (\\d+) to (\\d+)",
+     "Partie terminée : {1} à {2}"
+    ],
+    [
+     "Boxes: you (\\d+), computer (\\d+)\\.",
+     "Carrés : vous {1}, l’ordinateur {2}."
+    ],
+    [
+     "Boxes: (\\d+) to (\\d+)\\.",
+     "Carrés : {1} à {2}."
+    ],
+    [
+     "Line ([hv]):(\\d+):(\\d+)",
+     "Trait {1}:{2}:{3}"
+    ]
+   ]
+  },
+  "mancala": {
+   "exact": {
+    "Your turn: pick a pit": "À vous : choisissez un trou",
+    "Computer’s turn": "Au tour de l’ordinateur"
+   },
+   "patterns": [
+    [
+     "Computer’s store: 1 seed",
+     "Grenier de l’ordinateur : 1 graine"
+    ],
+    [
+     "Computer’s store: (\\d+) seeds",
+     "Grenier de l’ordinateur : {1} graines"
+    ],
+    [
+     "Pit: 1 seed",
+     "Trou : 1 graine"
+    ],
+    [
+     "(?:You’s|Your) store: 1 seed",
+     "Votre grenier : 1 graine"
+    ],
+    [
+     "You captured (\\d+) seeds!",
+     "Vous capturez {1} graines !"
+    ],
+    [
+     "(.+) captured (\\d+) seeds!",
+     "{1} capture {2} graines !"
+    ],
+    [
+     "You land in the store: go again!",
+     "Vous tombez dans votre grenier : rejouez !"
+    ],
+    [
+     "(.+) lands in the store: go again!",
+     "{1} tombe dans son grenier : il rejoue !"
+    ],
+    [
+     "Player (\\d)’s turn(?:: pick a pit)?",
+     "Au tour du joueur {1}"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "Game over: (\\d+) to (\\d+)",
+     "Partie terminée : {1} à {2}"
+    ],
+    [
+     "You (\\d+), computer (\\d+)\\.",
+     "Vous {1}, l’ordinateur {2}."
+    ],
+    [
+     "You (\\d+), (.+) (\\d+)\\.",
+     "Vous {1}, {2} {3}."
+    ],
+    [
+     "Player 1 (\\d+), Player 2 (\\d+)\\.",
+     "Joueur 1 : {1}, joueur 2 : {2}."
+    ],
+    [
+     "You’s store: (\\d+) seeds?",
+     "Votre grenier : {1} graines"
+    ],
+    [
+     "(.+)’s store: (\\d+) seeds?",
+     "Grenier de {1} : {2} graines"
+    ],
+    [
+     "Pit: (\\d+) seeds?",
+     "Trou : {1} graines"
+    ]
+   ]
+  },
+  "backgammon": {
+   "exact": {
+    "Computer’s turn": "Au tour de l’ordinateur",
+    "Your turn: roll": "À vous : lancez les dés",
+    "All 15 checkers borne off.": "Les 15 pions sont sortis."
+   },
+   "patterns": [
+    [
+     "Computer rolled (\\d) and (\\d): doubles, four moves!",
+     "L’ordinateur fait {1} et {2} : un double, quatre déplacements !"
+    ],
+    [
+     "Computer rolled (\\d) and (\\d): no legal moves",
+     "L’ordinateur fait {1} et {2} : aucun coup possible"
+    ],
+    [
+     "Computer rolled (\\d) and (\\d)",
+     "L’ordinateur fait {1} et {2}"
+    ],
+    [
+     "You rolled (\\d) and (\\d): doubles, four moves!",
+     "Vous faites {1} et {2} : un double, quatre déplacements !"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d): doubles, four moves!",
+     "{1} fait {2} et {3} : un double, quatre déplacements !"
+    ],
+    [
+     "You rolled (\\d) and (\\d)",
+     "Vous faites {1} et {2}"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d): no legal moves",
+     "{1} fait {2} et {3} : aucun coup possible"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d)",
+     "{1} fait {2} et {3}"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "Au tour de {1} : lancez les dés"
+    ],
+    [
+     "You win!",
+     "Vous avez gagné !"
+    ],
+    [
+     "Pips (\\d+)",
+     "Points {1}"
+    ],
+    [
+     "You bore off all 15 checkers first(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "Vous avez sorti vos 15 pions en premier{1}."
+    ],
+    [
+     "The computer bore off first(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "L’ordinateur a sorti ses pions en premier{1}."
+    ],
+    [
+     "All 15 checkers borne off(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "Les 15 pions sont sortis{1}."
+    ]
+   ]
+  },
+  "ludo": {
+   "exact": {
+    "All four counters home.": "Les quatre pions sont à la maison.",
+    "All four of your counters are home.": "Vos quatre pions sont à la maison.",
+    "Your turn: roll. A 6 brings a counter out": "À vous : lancez le dé. Un 6 fait sortir un pion",
+    "Your turn: roll": "À vous : lancez le dé",
+    "Your extra roll!": "Vous relancez !"
+   },
+   "patterns": [
+    [
+     "You rolled (\\d)\\. Need a 6 to start",
+     "Vous faites {1}. Il faut un 6 pour sortir"
+    ],
+    [
+     "You rolled (\\d)\\. No move",
+     "Vous faites {1}. Aucun coup possible"
+    ],
+    [
+     "You rolled (\\d): pick a counter to move",
+     "Vous faites {1} : choisissez un pion"
+    ],
+    [
+     "You rolled three 6s in a row: turn over",
+     "Trois 6 d’affilée : votre tour est terminé"
+    ],
+    [
+     "You sent a counter back to base!",
+     "Vous renvoyez un pion à sa base !"
+    ],
+    [
+     "You got a counter home!",
+     "Un de vos pions arrive à la maison !"
+    ],
+    [
+     "(.+) rolled (\\d)\\. Need a 6 to start",
+     "{1} fait {2}. Il faut un 6 pour sortir"
+    ],
+    [
+     "(.+) rolled (\\d)\\. No move",
+     "{1} fait {2}. Aucun coup possible"
+    ],
+    [
+     "(.+) rolled (\\d): pick a counter to move",
+     "{1} fait {2} : choisissez un pion"
+    ],
+    [
+     "(.+) rolled three 6s in a row: turn over",
+     "{1} : trois 6 d’affilée, tour terminé"
+    ],
+    [
+     "(.+) sent a counter back to base!",
+     "{1} renvoie un pion à sa base !"
+    ],
+    [
+     "(.+) got a counter home!",
+     "{1} ramène un pion à la maison !"
+    ],
+    [
+     "(.+)’s turn: roll\\. A 6 brings a counter out",
+     "Au tour de {1} : lancez le dé. Un 6 fait sortir un pion"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "Au tour de {1} : lancez le dé"
+    ],
+    [
+     "(.+)’s extra roll!",
+     "{1} relance !"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "You got (\\d) of 4 counters home\\.",
+     "Vous avez ramené {1} pions sur 4."
+    ],
+    [
+     "(\\d) / 4 home",
+     "{1} / 4 à la maison"
+    ],
+    [
+     "(\\w+) counter (\\d)",
+     "Pion {2} ({1})"
+    ]
+   ]
+  },
+  "snakes-and-ladders": {
+   "exact": {
+    "First to square 100.": "Premier arrivé à la case 100.",
+    "Your turn: roll": "À vous : lancez le dé",
+    "You climbed a ladder!": "Vous montez à l’échelle !",
+    "Start": "Départ"
+   },
+   "patterns": [
+    [
+     "Computer climbed a ladder!",
+     "L’ordinateur monte à l’échelle !"
+    ],
+    [
+     "Computer (\\d) climbed a ladder!",
+     "L’ordinateur {1} monte à l’échelle !"
+    ],
+    [
+     "Oh no! You slid down a snake",
+     "Oh non ! Vous glissez le long d’un serpent"
+    ],
+    [
+     "Oh no! (.+) slid down a snake",
+     "Oh non ! {1} glisse le long d’un serpent"
+    ],
+    [
+     "(.+) climbed a ladder!",
+     "{1} monte à l’échelle !"
+    ],
+    [
+     "You rolled a 6: roll again!",
+     "Vous faites 6 : relancez !"
+    ],
+    [
+     "(.+) rolled a 6: roll again!",
+     "{1} fait 6 : il relance !"
+    ],
+    [
+     "You rolled (\\d)",
+     "Vous faites {1}"
+    ],
+    [
+     "(.+) rolled (\\d)",
+     "{1} fait {2}"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "Au tour de {1} : lancez le dé"
+    ],
+    [
+     "You reached square (\\d+)\\.",
+     "Vous êtes arrivé à la case {1}."
+    ],
+    [
+     "Square (\\d+)",
+     "Case {1}"
+    ]
+   ]
+  },
+  "solitaire": {
+   "exact": {
+    "Build each suit from Ace to King": "Rangez chaque couleur de l’As au Roi",
+    "Draw from the deck": "Piocher",
+    "Welcome back. Your game is where you left it": "Bon retour. Votre partie vous attend là où vous l’avez laissée"
+   },
+   "patterns": [
+    [
+     "You won in (\\d+:\\d\\d)!",
+     "Gagné en {1} !"
+    ],
+    [
+     "(\\d+) moves in (\\d+:\\d\\d)\\.",
+     "{1} coups en {2}."
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "{1} parties gagnées sur {2}"
+    ],
+    [
+     "best time (\\d+:\\d\\d)",
+     "meilleur temps {1}"
+    ]
+   ]
+  },
+  "sudoku": {
+   "exact": {
+    "Pick a square first": "Choisissez d’abord une case",
+    "Every square is full, but something clashes": "Toutes les cases sont remplies, mais il y a une erreur",
+    "Solved!": "Résolu !",
+    "Puzzle solved!": "Grille résolue !",
+    "Daily puzzle solved!": "Grille du jour résolue !",
+    "New puzzle": "Nouvelle grille",
+    "Play a classic puzzle": "Jouer une grille classique",
+    "Solved today. Come back tomorrow": "Résolue aujourd’hui. Revenez demain",
+    "You’ve solved today’s puzzle": "Vous avez résolu la grille du jour",
+    "A new daily puzzle arrives at midnight. Until then, try a classic puzzle.": "Une nouvelle grille du jour arrive à minuit. En attendant, essayez une grille classique.",
+    "Welcome back. Your puzzle is where you left it": "Bon retour. Votre grille vous attend là où vous l’avez laissée",
+    "On": "Oui",
+    "Off": "Non",
+    "Daily": "Du jour",
+    "Easy puzzle": "Grille facile",
+    "Medium puzzle": "Grille moyenne",
+    "Hard puzzle": "Grille difficile",
+    "A new puzzle arrives at midnight.": "Une nouvelle grille arrive à minuit."
+   },
+   "patterns": [
+    [
+     "Solved in (\\d+:\\d\\d) with (\\d+) hints?\\.",
+     "Résolue en {1} avec {2} indices."
+    ],
+    [
+     "Solved in (\\d+:\\d\\d)\\.",
+     "Résolue en {1}."
+    ],
+    [
+     "A new best time for (Easy|Medium|Hard)!",
+     "Nouveau record en {1} !"
+    ],
+    [
+     "Streak: (\\d+) days?\\.",
+     "Série : {1} jours."
+    ],
+    [
+     "Hint: (\\d) goes in row (\\d), column (\\d)",
+     "Indice : le {1} va ligne {2}, colonne {3}"
+    ],
+    [
+     "(Easy|Medium|Hard) puzzle",
+     "Grille {1}"
+    ],
+    [
+     "Daily puzzle #(\\d+)",
+     "Grille du jour n° {1}"
+    ],
+    [
+     "Enter (\\d)",
+     "Saisir {1}"
+    ],
+    [
+     "row (\\d), column (\\d): empty",
+     "ligne {1}, colonne {2} : vide"
+    ],
+    [
+     "row (\\d), column (\\d): (\\d), clashes",
+     "ligne {1}, colonne {2} : {3}, en conflit"
+    ],
+    [
+     "row (\\d), column (\\d): (\\d)",
+     "ligne {1}, colonne {2} : {3}"
+    ],
+    [
+     "(\\d+) puzzles? solved",
+     "{1} grilles résolues"
+    ],
+    [
+     "(Easy|Medium|Hard) best (\\d+:\\d\\d)",
+     "Record {1} : {2}"
+    ],
+    [
+     "(\\d+) days?",
+     "{1} jours"
+    ]
+   ]
+  },
+  "mines": {
+   "exact": {
+    "Boom! You hit a mine": "Boum ! Vous avez touché une mine",
+    "You hit a mine": "Vous avez touché une mine",
+    "Field cleared!": "Terrain déminé !",
+    "A new best time!": "Nouveau record !"
+   },
+   "patterns": [
+    [
+     "(Easy|Medium|Hard): (\\d+) mines hidden",
+     "{1} : {2} mines cachées"
+    ],
+    [
+     "Cleared in (\\d+:\\d\\d)!",
+     "Déminé en {1} !"
+    ],
+    [
+     "(Easy|Medium|Hard) in (\\d+:\\d\\d)\\.",
+     "{1} en {2}."
+    ],
+    [
+     "(\\d+) safe squares? (?:was|were) left to uncover\\.",
+     "Il restait {1} cases sûres à dévoiler."
+    ],
+    [
+     "Row (\\d+), column (\\d+): hidden",
+     "Ligne {1}, colonne {2} : cachée"
+    ],
+    [
+     "Row (\\d+), column (\\d+): flag",
+     "Ligne {1}, colonne {2} : drapeau"
+    ],
+    [
+     "Row (\\d+), column (\\d+): clear",
+     "Ligne {1}, colonne {2} : vide"
+    ],
+    [
+     "Row (\\d+), column (\\d+): mine",
+     "Ligne {1}, colonne {2} : mine"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (\\d) mines? nearby",
+     "Ligne {1}, colonne {2} : {3} mines à côté"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (.+)",
+     "Ligne {1}, colonne {2} : {3}"
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "{1} parties gagnées sur {2}"
+    ],
+    [
+     "(Easy|Medium|Hard) best (\\d+:\\d\\d)",
+     "Record {1} : {2}"
+    ]
+   ]
+  }
+ }
+}

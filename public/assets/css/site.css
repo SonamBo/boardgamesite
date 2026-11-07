@@ -2379,3 +2379,9 @@ body.returning .hero { display: none; }
   .pr-bar { height: 22px; }
   .pr-name, .pr-val { font-size: 12px; }
 }
+
+/* ---------- Language links in the footer ---------- */
+.footer-langs { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.footer-langs a { color: var(--muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.footer-langs a:hover { color: var(--text); text-decoration: underline; }
+.footer-langs a[aria-current] { color: var(--text); font-weight: 800; }

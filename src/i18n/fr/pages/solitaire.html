@@ -1,0 +1,96 @@
+<!-- title: Solitaire Klondike gratuit en ligne | BoardGameSite -->
+<!-- description: Jouez gratuitement au solitaire Klondike dans votre navigateur. Tirage 1 ou 3, cartes à toucher ou à glisser, annulation illimitée. Sans téléchargement. -->
+<!-- path: /fr/jouer/solitaire -->
+<!-- out: fr/jouer/solitaire.html -->
+<!-- alt: /play/solitaire -->
+<!-- nav: play -->
+<!-- script: /assets/js/solitaire.js -->
+<!-- kind: game -->
+<!-- game: solitaire -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <symbol id="suit-0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>
+  <symbol id="suit-1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>
+  <symbol id="suit-2" viewBox="0 0 24 24"><path d="M12 1.5l8.5 10.5L12 22.5 3.5 12z"/></symbol>
+  <symbol id="suit-3" viewBox="0 0 24 24"><path d="M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z"/></symbol>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 16px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Tous les jeux
+  </a>
+  <div class="sol-wrap" data-max-root>
+  <div class="board-head">
+    <h1 id="board-title">Solitaire</h1>
+    <div class="head-right">
+      <p id="status" class="status" role="status" aria-live="polite">Rangez chaque couleur de l’As au Roi</p>
+      <button type="button" class="icon-btn" data-sound-toggle aria-label="Son" aria-pressed="true"></button>
+    </div>
+  </div>
+
+  <div class="sol-bar">
+    <button id="new-game" type="button" class="btn btn-gold raised">Nouvelle partie</button>
+    <button id="undo" type="button" class="btn btn-outline" disabled>Annuler</button>
+    <button id="finish" type="button" class="btn btn-green" hidden>Terminer</button>
+    <div class="seg" role="group" aria-label="Cartes à tirer (lance une nouvelle partie)" style="flex: 0 0 auto">
+      <button type="button" data-draw="1">Tirer 1</button>
+      <button type="button" data-draw="3">Tirer 3</button>
+    </div>
+    <p class="sol-stats"><span>Coups <b id="moves">0</b></span><span>Temps <b id="time">0:00</b></span></p>
+  </div>
+
+  <div id="table" class="sol-table">
+    <div id="area" class="sol-area" aria-label="Table du solitaire"></div>
+    <div id="sol-result" class="sol-result" hidden>
+      <div id="result" class="result">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big">Vous avez gagné !</p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Rejouer</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <p class="board-hint">Touchez une carte pour l’envoyer au meilleur endroit, ou faites-la glisser. Touchez la pioche pour tirer. Votre historique : <span id="record">0 partie gagnée</span></p>
+
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Comment jouer au solitaire</h2>
+  <p>Voici le Klondike, la version la plus populaire du solitaire. Le but est de placer les 52 cartes sur les quatre fondations en haut à droite, une par couleur, de l’As jusqu’au Roi.</p>
+  <ol>
+    <li><strong>La donne.</strong> Les cartes sont distribuées en sept colonnes : une carte dans la première, deux dans la deuxième, et ainsi de suite jusqu’à sept. Seule la dernière carte de chaque colonne est face visible. Le reste du paquet forme la pioche, face cachée, en haut à gauche.</li>
+    <li><strong>Descendez en alternant les couleurs.</strong> Dans les colonnes, posez une carte sur une carte d’une valeur supérieure et de couleur opposée : un 6 rouge sur un 7 noir, un Valet noir sur une Dame rouge.</li>
+    <li><strong>Déplacez des séquences entières.</strong> Vous pouvez déplacer toute une suite ordonnée de cartes visibles vers une autre colonne. Une carte cachée qui se retrouve découverte se retourne.</li>
+    <li><strong>Seuls les Rois vont dans les colonnes vides.</strong> Une colonne vide ne peut accueillir qu’un Roi, ou une séquence qui commence par un Roi.</li>
+    <li><strong>Piochez quand vous êtes bloqué.</strong> Touchez la pioche pour retourner des cartes. Quand elle est vide, touchez-la à nouveau pour la reformer, autant de fois que vous voulez.</li>
+    <li><strong>Vous gagnez</strong> quand les quatre couleurs montent jusqu’à leur Roi.</li>
+  </ol>
+  <p>Touchez une carte pour l’envoyer automatiquement au meilleur endroit, ou faites-la glisser où vous voulez. Une erreur ? Annulez autant de coups que nécessaire. Quand toutes les cartes sont visibles et la pioche vide, le bouton <strong>Terminer</strong> monte le reste des cartes pour vous.</p>
+
+  <h2>Tirer 1 ou tirer 3 ?</h2>
+  <p>En <strong>Tirer 1</strong>, vous retournez une carte à la fois : toutes les cartes de la pioche restent accessibles. On gagne bien plus souvent, idéal pour une partie détente. <strong>Tirer 3</strong> est la version classique, plus difficile : les cartes sortent par trois et seule celle du dessus est jouable, si bien que certaines restent enfouies jusqu’au tour suivant. Changer de mode lance une nouvelle partie.</p>
+
+  <h2>Conseils pour gagner plus souvent</h2>
+  <ul>
+    <li><strong>Retournez d’abord les cartes cachées.</strong> Chaque carte découverte vous ouvre de nouvelles possibilités. Travaillez sur les colonnes qui en cachent le plus.</li>
+    <li><strong>Montez les As et les 2 tout de suite.</strong> Ils ne servent à rien ailleurs.</li>
+    <li><strong>Ne videz pas une colonne sans Roi pour la remplir.</strong> Une colonne vide inutilisable est une place perdue.</li>
+    <li><strong>Ne vous précipitez pas vers les fondations.</strong> Un 5 ou un 6 laissé dans les colonnes peut encore accueillir un 4 ou un 5 de l’autre couleur.</li>
+  </ul>
+
+  <h2>Questions fréquentes sur le solitaire</h2>
+  <section class="faq">
+    <h3>Ce solitaire est-il gratuit ?</h3>
+    <p>Oui. Jouez autant de parties que vous voulez dans votre navigateur, sur téléphone, tablette ou ordinateur. Rien à télécharger et aucun compte à créer.</p>
+    <h3>Toutes les parties de solitaire peuvent-elles être gagnées ?</h3>
+    <p>Non. Certaines donnes sont impossibles à gagner, même en jouant parfaitement, surtout en Tirer 3. Si vous êtes vraiment bloqué, lancez une nouvelle partie : ce n’est pas forcément votre faute.</p>
+    <h3>Combien de fois peut-on repasser la pioche ?</h3>
+    <p>Autant de fois que vous voulez. Quand la pioche est vide, touchez-la pour la retourner.</p>
+    <h3>Le nombre d’annulations est-il limité ?</h3>
+    <p>Non. Vous pouvez annuler tous les coups jusqu’au début de la partie.</p>
+    <h3>Quelle est la différence entre le Klondike et le solitaire ?</h3>
+    <p>« Solitaire » désigne tout jeu de cartes auquel on joue seul. Le Klondike est la version précise à laquelle presque tout le monde pense, et c’est celle que vous pouvez jouer ici.</p>
+  </section>
+</section>
+
+{{related:solitaire}}
