@@ -1,0 +1,102 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;src:url(../../public/assets/fonts/fredoka-latin.woff2);font-weight:300 700}
+@font-face{font-family:Nunito;src:url(../../public/assets/fonts/nunito-latin.woff2);font-weight:200 1000}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#FFF7EC;color:#3A2418;font-family:Nunito}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.title{position:absolute;left:70px;right:70px;top:150px;font-family:Fredoka;font-weight:600;font-size:66px;line-height:1.05}
+.title b{color:#EE6B1F;font-weight:600}
+.sub{position:absolute;left:72px;top:310px;font-size:34px;font-weight:800;color:#8A6A55}
+.year{position:absolute;right:80px;top:380px;font-family:Fredoka;font-weight:600;font-size:170px;line-height:1;color:#EE6B1F;font-variant-numeric:tabular-nums;text-align:right}
+.year small{display:block;font-size:40px;color:#B48E73;margin-top:-6px}
+#bars{position:absolute;left:60px;right:90px;top:600px;height:900px}
+.row{position:absolute;left:0;right:0;height:90px;display:flex;align-items:center}
+.row .nm{width:230px;flex:none;text-align:right;padding-right:20px;font-weight:900;font-size:36px;white-space:nowrap}
+.row .tr{flex:1;display:flex;align-items:center;gap:14px;padding-right:90px;min-width:0}
+.row .br{height:66px;border-radius:14px;min-width:6px;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.row .vl{font-weight:900;font-size:34px;color:#8A6A55;font-variant-numeric:tabular-nums}
+.cap{position:absolute;left:60px;right:90px;top:1530px;min-height:150px;padding:26px 32px;border-radius:28px;background:#fff;border-left:12px solid #EE6B1F;font-weight:800;font-size:40px;line-height:1.25;box-shadow:0 8px 24px rgba(58,36,24,.08)}
+.brand{position:absolute;left:70px;top:70px;display:flex;align-items:center;gap:16px;font-family:Fredoka;font-weight:600;font-size:40px}
+.brand img{width:64px;height:64px;border-radius:14px}
+.src{position:absolute;left:72px;top:1715px;font-size:26px;font-weight:700;color:#B48E73}
+#hook{position:absolute;inset:0;background:#FFF7EC;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 90px}
+#hook h1{font-family:Fredoka;font-weight:600;font-size:96px;line-height:1.05}
+#hook h1 b{color:#EE6B1F;font-weight:600}
+#hook p{margin-top:30px;font-size:44px;font-weight:800;color:#8A6A55}
+#hook img{width:420px;margin-bottom:30px}
+#end{position:absolute;inset:0;background:#FFF7EC;display:flex;flex-direction:column;align-items:center;padding:200px 80px 0;text-align:center}
+#end h2{font-family:Fredoka;font-weight:600;font-size:80px;line-height:1.05}
+#end .pod{margin-top:50px;width:100%;display:flex;flex-direction:column;gap:22px}
+#end .pod div{display:flex;align-items:center;gap:26px;padding:24px 34px;border-radius:26px;background:#fff;font-weight:900;font-size:46px;box-shadow:0 6px 18px rgba(58,36,24,.08)}
+#end .pod i{font-style:normal;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:Fredoka;font-size:40px}
+#end img{width:360px;margin-top:40px}
+#end .url{margin-top:10px;padding:22px 46px;border-radius:999px;background:#EE6B1F;color:#fff;font-family:Fredoka;font-weight:600;font-size:48px}
+#end .cta{margin-top:24px;font-size:36px;font-weight:800;color:#8A6A55}
+</style>
+<div id="stage">
+  <div class="brand"><img src="../../public/assets/icons/icon-512.png" alt="">BoardGameSite</div>
+  <div class="title">The world’s most-searched <b>board games &amp; puzzles</b></div>
+  <div class="sub">Google searches, worldwide · 2004–2026</div>
+  <div class="year"><span id="y">2004</span><small id="q">Q1</small></div>
+  <div id="bars"></div>
+  <div class="cap" id="cap"></div>
+  <div class="src">Data: Google Trends · relative interest, Wordle’s peak = 100</div>
+  <div id="hook"><img src="../../public/assets/img/fox-think.webp" alt=""><h1>22 years of Google searches.<br><b>Which game wins?</b></h1><p>Chess, Sudoku, Wordle and 16 more</p></div>
+  <div id="end"></div>
+</div>
+<script>
+const COLORS = { Chess:'#7C2236', Solitaire:'#2E7D5B', Sudoku:'#3B6FB6', Wordle:'#5E9E3B', Crossword:'#8A5A2B', Mahjong:'#C2410C', Scrabble:'#B7791F', Monopoly:'#C53030', Checkers:'#4A3B8F', Ludo:'#D69E2E', Minesweeper:'#4A5568', Dominoes:'#2D3748', Backgammon:'#6B4A2E', Battleship:'#2C5282', 'Connect 4':'#D53F8C', Catan:'#DD6B20', Mancala:'#975A16', Yahtzee:'#E53E3E', Jenga:'#B7791F' };
+const EVENTS = {
+  '2004 Q1':'2004: chess is the most-searched game.',
+  '2005 Q3':'Sudoku mania sweeps the world 🔢',
+  '2009 Q4':'Mahjong takes the lead 🀄',
+  '2012 Q1':'Scrabble’s biggest year on Google',
+  '2013 Q4':'The crossword begins a long reign ✏️',
+  '2020 Q2':'Lockdown: Ludo searches nearly triple 🎲',
+  '2020 Q4':'The Queen’s Gambit sends chess soaring ♟️',
+  '2022 Q1':'Wordle goes viral and breaks the chart 🟩',
+  '2023 Q1':'A chess boom: new all-time high ♟️',
+  '2026 Q2':'Chess hits its highest level yet',
+};
+let D, names, rows = {}, pos = {}, lastT = -1;
+window.setup = (data, timing) => {
+  D = data; names = Object.keys(D.series); window.T = timing;
+  const bars = document.getElementById('bars');
+  for (const n of names) {
+    const el = document.createElement('div'); el.className = 'row';
+    el.innerHTML = `<span class="nm">${n}</span><span class="tr"><span class="br" style="background:${COLORS[n]}"></span><span class="vl"></span></span>`;
+    bars.appendChild(el); rows[n] = { el, br: el.querySelector('.br'), vl: el.querySelector('.vl') }; pos[n] = 10;
+  }
+  const fin = names.map((n) => [n, D.series[n].at(-1)]).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  document.getElementById('end').innerHTML = `<h2>2026’s top 3</h2><div class="pod">${fin.map(([n], i) => `<div><i style="background:${COLORS[n]}">${i + 1}</i>${n}</div>`).join('')}</div><img src="../../public/assets/img/fox-trophy.webp" alt=""><div class="url">boardgamesite.com</div><p class="cta">Play chess, Sudoku, word games and 50+ more, free</p>`;
+};
+const last = () => D.quarters.length - 1;
+const ease = (x) => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+window.render = (t) => {
+  const { hook, race, end } = window.T;
+  const x = Math.max(0, Math.min(last(), (t - hook) / race * last()));
+  const val = (n) => { const s = D.series[n], i = Math.floor(x), f = x - i; return i >= last() ? s[last()] : s[i] + (s[i + 1] - s[i]) * f; };
+  const vals = names.map((n) => [n, val(n)]).sort((a, b) => b[1] - a[1]);
+  const max = Math.max(vals[0][1], 1);
+  const dt = lastT < 0 ? 1 : Math.min(1, (t - lastT) * 9); lastT = t;
+  vals.forEach(([n, v], rank) => {
+    const target = rank < 10 ? rank : 10.5;
+    pos[n] += (target - pos[n]) * dt;
+    const r = rows[n];
+    r.el.style.transform = `translateY(${pos[n] * 90}px)`;
+    r.el.style.opacity = Math.max(0, Math.min(1, 10.4 - pos[n]));
+    r.br.style.width = (v / max) * 100 + '%';
+    r.vl.textContent = v >= 10 ? Math.round(v) : v.toFixed(1);
+  });
+  const qi = Math.min(last(), Math.floor(x + 1e-6));
+  const [y, q] = D.quarters[qi].split(' ');
+  document.getElementById('y').textContent = y; document.getElementById('q').textContent = q;
+  let ev = ''; for (let i = qi; i >= 0 && i > qi - 9; i--) if (EVENTS[D.quarters[i]]) { ev = EVENTS[D.quarters[i]]; break; }
+  const cap = document.getElementById('cap'); cap.textContent = ev; cap.style.opacity = ev ? 1 : 0;
+  const hk = document.getElementById('hook');
+  hk.style.opacity = 1 - ease((t - (hook - 0.5)) / 0.5);
+  const e = document.getElementById('end');
+  e.style.opacity = ease((t - (hook + race + 1.2)) / 0.5);
+};
+</script>
