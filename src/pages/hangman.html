@@ -1,5 +1,5 @@
-<!-- title: Hangman – Play the Classic Word Game Free Online | BoardGameSite -->
-<!-- description: Guess the hidden word one letter at a time before the drawing is finished. Play themed words solo, or let a friend pick a secret word. Free in your browser. -->
+<!-- title: Hangman: Play Online Free, Solo or with Friends | BoardGameSite -->
+<!-- description: Play Hangman online free: guess themed words solo, play a friend on one device, or send a friend your own secret word as a link. No download or sign-up. -->
 <!-- path: /play/hangman -->
 <!-- out: play/hangman.html -->
 <!-- nav: play -->
@@ -39,13 +39,21 @@
         </div>
         <div id="hg-word" class="hg-word" aria-live="polite"></div>
         <form id="setup" class="hg-setup card" hidden autocomplete="off">
-          <label for="secret">Player 1, type a secret word. Player 2, look away!</label>
+          <label for="secret" id="secret-label">Player 1, type a secret word. Player 2, look away!</label>
           <div class="hg-setup-row">
             <input id="secret" type="password" inputmode="text" autocapitalize="off" spellcheck="false" maxlength="14" class="input">
-            <button type="submit" class="btn btn-gold raised">Start</button>
+            <button type="submit" class="btn btn-gold raised" id="secret-go">Start</button>
           </div>
           <p id="secret-msg" class="text-2" role="alert"></p>
         </form>
+        <div id="share-box" class="hg-setup card" hidden>
+          <label for="share-link">Your link is ready. Send it to a friend: they’ll get your word to guess.</label>
+          <div class="hg-setup-row">
+            <input id="share-link" class="input" readonly style="font-size: 14px; letter-spacing: 0">
+            <button type="button" class="btn btn-gold raised" id="share-copy">Copy link</button>
+          </div>
+          <button type="button" class="link-btn" id="share-another">Make another word</button>
+        </div>
         <div id="hg-keys" class="wg-keys hg-keys" aria-label="Letters"></div>
       </div>
       <p class="board-hint">Tap a letter or type it on your keyboard. Your record: <span id="record">0 of 0 words guessed</span></p>
@@ -57,6 +65,7 @@
         <div class="seg" role="group" aria-label="Who picks the word (starts a new game)">
           <button type="button" data-hmode="solo">Solo</button>
           <button type="button" data-hmode="friend">2 players</button>
+          <button type="button" data-hmode="link">Send a link</button>
         </div>
       </div>
 
@@ -84,40 +93,52 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Hangman</h2>
-  <p>Hangman is the classic guessing game. A word is hidden as a row of blanks, and you guess it one letter at a time.</p>
+  <p>Hangman is the classic pencil-and-paper guessing game. A word is hidden as a row of blanks, and you guess it one letter at a time before the drawing is finished.</p>
   <ol>
     <li><strong>Guess a letter.</strong> Tap it on the keyboard below the word, or type it.</li>
     <li><strong>Right letters appear</strong> in every place they occur in the word.</li>
     <li><strong>Wrong letters add to the drawing.</strong> You can make six wrong guesses: head, body, two arms and two legs.</li>
     <li><strong>Fill in the whole word</strong> before the drawing is complete to win.</li>
   </ol>
-  <p>In <strong>Solo</strong>, the computer picks a word and gives you its theme as a clue, like Fruit or Space. In <strong>2 players</strong>, Player 1 types a secret word while Player 2 looks away, then Player 2 guesses.</p>
 
-  <h2>Quick tips for guessing right</h2>
+  <h2>Three ways to play</h2>
   <ul>
-    <li><strong>Start with vowels.</strong> Nearly every word has an A, E, I, O or U.</li>
-    <li><strong>Then common consonants.</strong> R, S, T, L and N appear in lots of words.</li>
-    <li><strong>Use the clue.</strong> Think of words in the theme that fit the number of letters.</li>
-    <li><strong>Look at the shape.</strong> Once a few letters are in, endings like -ING, -ER or -TION often jump out.</li>
+    <li><strong>Solo:</strong> the computer picks a word and shows its theme as a clue, like Fruit, Space or Music.</li>
+    <li><strong>2 players on one device:</strong> Player 1 types a secret word while Player 2 looks away, then Player 2 guesses.</li>
+    <li><strong>Send a link:</strong> type a word and send the link to a friend anywhere. They open it on their own phone or computer and try to guess your word, then they can send one back. No accounts, no app.</li>
   </ul>
 
-  <div class="callout card">
-    <p>Learn which letters to guess first and how to read a half-finished word.</p>
-    <a class="btn btn-outline" href="/learn/hangman">Read the Hangman guide</a>
-  </div>
+  <h2>Play Hangman with friends online</h2>
+  <p>Choose <strong>Send a link</strong>, type a word and tap <strong>Make link</strong>. Share it in a chat, a text or an email. Your friend sees the blanks and the drawing, with no clue but the length of the word, and when they finish they can send you a word straight back. It’s a quick way to play with a friend, a class or a family group chat.</p>
+
+  <h2>Which letters to guess first</h2>
+  <p>In English, <strong>E</strong> is the most common letter, followed by letters such as <strong>T, A, O, I, N, S, R</strong> and <strong>H</strong>. A good opening is two or three vowels, then the common consonants. Once a few letters are showing, look at the shape: a word ending in a blank after <strong>-IN_</strong> is often <strong>-ING</strong>, and many words end in <strong>-ER</strong>, <strong>-ED</strong> or <strong>-TION</strong>.</p>
+  <ul>
+    <li><strong>Use the clue.</strong> In Solo, think of words in the theme that fit the number of letters.</li>
+    <li><strong>Count the blanks.</strong> Short words are often harder than long ones: there are fewer letters to find and more words that fit.</li>
+    <li><strong>Watch for double letters.</strong> One right guess can fill two blanks at once, as in BALLOON.</li>
+  </ul>
+
+  <h2>Hard Hangman words to stump a friend</h2>
+  <p>The toughest words are short and use rare letters, so common guesses miss. Try words like <strong>JAZZ</strong>, <strong>FUZZY</strong>, <strong>RHYTHM</strong>, <strong>JINX</strong>, <strong>QUIZ</strong>, <strong>KAYAK</strong> or <strong>ZIGZAG</strong>. Words with few vowels or repeated unusual letters make the guesser burn through their six mistakes fast.</p>
+
+  <h2>A little history</h2>
+  <p>Nobody knows exactly who invented Hangman, but it was a well-known word game by the late 1800s, when it appeared in English books of games. It has stayed popular in classrooms ever since, because it practises spelling and vocabulary while feeling like a game.</p>
 
   <h2>Hangman FAQ</h2>
   <section class="faq">
     <h3>Is Hangman free?</h3>
-    <p>Yes. Play as many words as you like, solo or with a friend, free in your browser. No download and no account needed.</p>
+    <p>Yes. Play as many words as you like, solo or with friends, free in your browser on any phone, tablet or computer. No download and no account needed.</p>
+    <h3>How do I play Hangman online with a friend?</h3>
+    <p>Choose Send a link, type a word and tap Make link, then send the link. Your friend opens it and guesses your word on their own device. To play side by side instead, choose 2 players and pass the device.</p>
     <h3>How many wrong guesses do I get?</h3>
     <p>Six. Each wrong letter adds one part to the drawing: head, body, two arms and two legs.</p>
-    <h3>How do I play with a friend?</h3>
-    <p>Choose 2 players. Player 1 types a secret word while Player 2 looks away, then hands over the device for Player 2 to guess.</p>
+    <h3>Can my friend see the word in the link?</h3>
+    <p>Not at a glance: the word is scrambled in the link, so it doesn’t show as plain text.</p>
     <h3>Where do the words come from?</h3>
-    <p>In Solo, words come from themed lists like Animals, Space and Music, and the theme is shown as a clue.</p>
-    <h3>Can I use my keyboard?</h3>
-    <p>Yes. Type any letter to guess it.</p>
+    <p>In Solo, words come from themed lists like Animals, Space and Music, and the theme is shown as a clue. In 2 players and Send a link, you choose the word, from our list of everyday English words.</p>
+    <h3>Is Hangman good for kids?</h3>
+    <p>Yes. It’s great spelling practice, and the themed clues in Solo help younger players. Teachers often use it as a quick classroom game.</p>
   </section>
 </section>
 

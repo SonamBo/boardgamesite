@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-11-01</lastmod></url>
   <url><loc>https://boardgamesite.com/articles</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/articles/best-2-player-board-games-online</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/articles/board-game-popularity-over-time</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/articles/board-games-for-kids</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/articles/games-to-play-with-friends-online</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/articles/solitaire-vs-freecell-vs-spider</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/contact</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/daily</loc><lastmod>2026-10-31</lastmod></url>
@@ -37,7 +38,7 @@
   <url><loc>https://boardgamesite.com/fr/jouer/sudoku</loc><lastmod>2026-11-07</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/games/cards</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/dice</loc><lastmod>2026-10-27</lastmod></url>
-  <url><loc>https://boardgamesite.com/games/multiplayer</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://boardgamesite.com/games/multiplayer</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/games/puzzles</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/strategy</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://boardgamesite.com/games/word</loc><lastmod>2026-10-27</lastmod></url>
@@ -193,7 +194,7 @@
   <url><loc>https://boardgamesite.com/play/box-pusher</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/box-pusher.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/checkers</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/chess</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/chess.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/play/crazy-eights</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/crazy-eights.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/crazy-eights</loc><lastmod>2026-11-07</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/crazy-eights.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/cryptogram</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/cryptogram.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/dice-poker</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/dice-poker.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/dots-and-boxes</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/dots-and-boxes.jpg</image:loc></image:image></url>
@@ -204,7 +205,7 @@
   <url><loc>https://boardgamesite.com/play/gin-rummy</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/gin-rummy.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/go</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/go.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/golf</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/golf.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/play/hangman</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hangman.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/hangman</loc><lastmod>2026-11-07</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hangman.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/hearts</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hearts.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/hex</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hex.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/hot-dice</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/hot-dice.jpg</image:loc></image:image></url>
@@ -230,6 +231,7 @@
   <url><loc>https://boardgamesite.com/play/spades</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/spades.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/spider</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/spider.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/sudoku</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
+  <url><loc>https://boardgamesite.com/play/tic-tac-toe</loc><lastmod>2026-11-07</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tic-tac-toe.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/tile-match</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tile-match.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/tower-of-hanoi</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tower-of-hanoi.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/tripeaks</loc><lastmod>2026-10-31</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/tripeaks.jpg</image:loc></image:image></url>

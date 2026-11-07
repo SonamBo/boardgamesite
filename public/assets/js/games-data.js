@@ -43,6 +43,13 @@ export const GAMES = [
   "key": "bgs-c4-score"
  },
  {
+  "slug": "tic-tac-toe",
+  "name": "Tic Tac Toe",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-ttt-score"
+ },
+ {
   "slug": "mancala",
   "name": "Mancala",
   "cat": "strategy",

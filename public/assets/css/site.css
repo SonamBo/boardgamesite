@@ -2385,3 +2385,19 @@ body.returning .hero { display: none; }
 .footer-langs a { color: var(--muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
 .footer-langs a:hover { color: var(--text); text-decoration: underline; }
 .footer-langs a[aria-current] { color: var(--text); font-weight: 800; }
+
+/* ---------- Tic Tac Toe ---------- */
+.ttt-wrap { display: flex; justify-content: center; }
+.ttt { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: min(100%, 460px); aspect-ratio: 1; padding: 12px; border-radius: 22px; background: #6B4A2E; box-shadow: inset 0 0 0 4px #84603F, 0 10px 24px rgba(58, 36, 24, .18); }
+.ttt-cell { position: relative; border: 0; border-radius: 14px; background: #F6E7CF; cursor: pointer; padding: 10%; transition: background .15s, transform .1s; }
+.ttt-cell:not(:disabled):hover { background: #FFF3E0; }
+.ttt-cell:not(:disabled):active { transform: scale(.97); }
+.ttt-cell:disabled { cursor: default; opacity: 1; filter: none; }
+.ttt-cell svg, .ttt-mark svg { width: 100%; height: 100%; fill: none; stroke-width: 12; stroke-linecap: round; }
+.ttt-cell.x svg, .ttt-mark svg path { stroke: #E0832B; }
+.ttt-cell.o svg, .ttt-mark svg circle { stroke: #3A2418; }
+.ttt-cell svg { animation: ttt-in .22s ease-out; }
+.ttt-cell.win { background: #FFE2A8; box-shadow: inset 0 0 0 4px #E0A23B; }
+.ttt-mark { display: inline-block; width: 22px; height: 22px; flex: none; }
+@keyframes ttt-in { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ttt-cell svg { animation: none; } }

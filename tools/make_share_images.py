@@ -71,6 +71,14 @@ def four():
     return f'<div class="c4">{cells}</div>'
 
 
+def tic_tac_toe():
+    X = '<svg viewBox="0 0 100 100"><path d="M24 24l52 52M76 24L24 76" fill="none" stroke="#E0832B" stroke-width="13" stroke-linecap="round"/></svg>'
+    O = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="28" fill="none" stroke="#3A2418" stroke-width="13"/></svg>'
+    grid = "XO.OX...X"
+    cells = "".join(f'<b class="{"w" if i in (0, 4, 8) else ""}">{X if ch == "X" else O if ch == "O" else ""}</b>' for i, ch in enumerate(grid))
+    return f'<div class="ttt">{cells}</div>'
+
+
 def solitaire():
     cards = [("A", "♠", False), ("K", "♥", True), ("Q", "♣", False), ("J", "♦", True), ("10", "♠", False)]
     out = []
@@ -499,6 +507,7 @@ ART = {
     "checkers": ("Jump. Crown. Win.", checkers),
     "reversi": ("Flip the board.", reversi),
     "four-in-a-row": ("Line up four.", four),
+    "tic-tac-toe": ("Three in a row.", tic_tac_toe),
     "sudoku": ("One to nine.", sudoku),
     "mines": ("Clear the field.", mines),
     "slide-merge": ("Reach 2048.", slide_merge),
@@ -576,6 +585,10 @@ h1.long {{ font-size: 84px; }}
 .pc.d {{ background: radial-gradient(circle at 35% 30%, #4C544E, #262A27 60%, #141614); box-shadow: 0 0 0 2px #4C544E inset, 0 3px 0 #0B0C0B, 0 6px 10px rgba(0,0,0,.5); }}
 .pc.v {{ background: radial-gradient(circle at 35% 30%, #FFFFFF, {IVORY} 55%, #BFB3A2); box-shadow: 0 3px 0 #8C8273, 0 6px 10px rgba(0,0,0,.4); }}
 .pc.k::after {{ content: ""; width: 52%; height: 52%; border-radius: 50%; border: 3px solid #6E5626; }}
+.ttt {{ display: grid; grid-template-columns: repeat(3, 116px); grid-template-rows: repeat(3, 116px); gap: 12px; padding: 16px; background: #6B4A2E; border-radius: 22px; box-shadow: inset 0 0 0 5px #84603F; }}
+.ttt b {{ background: #F6E7CF; border-radius: 14px; padding: 12px; }}
+.ttt b.w {{ background: #FFE2A8; }}
+.ttt svg {{ width: 100%; height: 100%; display: block; }}
 .c4 {{ display: grid; grid-template-columns: repeat(7, 62px); grid-template-rows: repeat(6, 62px); gap: 8px; padding: 18px;
   background: {MERLOT}; border-radius: 22px; box-shadow: 0 30px 60px rgba(0,0,0,.55), inset 0 -6px 0 #5E1530; margin-left: 70px; }}
 .c4 b {{ background: #1A0D11; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 4px 6px rgba(0,0,0,.6); }}
