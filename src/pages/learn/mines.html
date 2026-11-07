@@ -1,5 +1,5 @@
-<!-- title: Mines (Minesweeper) Rules and Patterns | BoardGameSite -->
-<!-- description: Learn how to play Mines, the classic minesweeping puzzle, and the number patterns that let you clear the field fast without guessing. -->
+<!-- title: Minesweeper Rules and Patterns: How to Play Mines | BoardGameSite -->
+<!-- description: Learn the rules of Minesweeper: what the numbers mean, flags and chording, and the patterns like 1-2-1 and 1-2-2-1 that clear the field without guessing. -->
 <!-- path: /learn/mines -->
 <!-- out: learn/mines.html -->
 <!-- nav: learn -->
@@ -8,7 +8,7 @@
 <!-- published: 2026-10-28 -->
 <article class="page">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Mines</span></nav>
-  <h1>How to play Mines: rules and patterns</h1>
+  <h1>Minesweeper rules and patterns: how to play Mines</h1>
   <p class="lede">Mines looks like luck, but almost every square can be worked out from the numbers. Learn a handful of patterns and you’ll clear fields faster than you thought possible.</p>
 
   <div class="callout card">
@@ -40,6 +40,43 @@
 
   <h2>When you have to guess</h2>
   <p>Mines are placed at random, so now and then the numbers can’t decide between two squares. Before guessing, uncover everything else you can. If you must guess, pick a square that would tell you the most if it’s safe, often one away from the tangle.</p>
+
+    <h2>Reading the numbers: a worked example</h2>
+  <p>Say you open a square showing <strong>1</strong>, and it has three covered neighbours. Exactly one of those three is a mine, but you don’t know which yet. Now look at the number beside it. If that one is also a 1 and it can only see two of the same covered squares, the mine must be in one of those two, so the third square, the one only your first 1 can see, is safe. Most of Minesweeper is this kind of small comparison, repeated across the field.</p>
+
+  <h2>Field sizes and mine counts</h2>
+  <ul>
+    <li><strong>Easy:</strong> 9×9 with 10 mines. Good for learning the patterns.</li>
+    <li><strong>Medium:</strong> 16×16 with 40 mines.</li>
+    <li><strong>Hard:</strong> 30×16 with 99 mines, the classic expert field.</li>
+  </ul>
+  <p>The counter shows mines left minus flags placed. Near the end, that number can solve a stuck position: if two possible patterns are left and only one uses the right number of mines, that’s the answer.</p>
+
+  <h2>Pattern 6: the 1-1 from a wall</h2>
+  <p>Two 1s side by side, starting at the edge of the field or against an opened area, share their mine. The covered square beside the second 1 that the first 1 can’t see is safe. This pattern appears constantly along the borders of a field.</p>
+
+  <h2>A routine for fast clearing</h2>
+  <ol>
+    <li>Open the first square anywhere. Corners and edges open smaller areas; the middle often opens a big patch.</li>
+    <li>Flag every certain mine around the edge of the opening.</li>
+    <li>Chord every satisfied number to open the squares around it.</li>
+    <li>Look for 1-2-1 and 1-2-2-1 along straight edges.</li>
+    <li>Only when nothing else works, compare neighbouring numbers or use the mine count.</li>
+  </ol>
+
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Minesweeper questions</h2>
+    <h3>What do the numbers mean in Minesweeper?</h3>
+    <p>Each number is how many mines touch that square, counting all eight neighbours, including the diagonals. A blank square has no mines next to it.</p>
+    <h3>How do you play Minesweeper on a phone?</h3>
+    <p>Tap to uncover a square and long-press to flag it. You can also switch to Flag mode with the Flag button. Tapping a number whose mines are all flagged opens the rest of its neighbours.</p>
+    <h3>Is Minesweeper luck or skill?</h3>
+    <p>Mostly skill. Nearly every square can be worked out from the numbers. Occasionally the numbers can’t decide between two squares and you have to guess, but good players guess far less often than beginners.</p>
+    <h3>Is the first click in Minesweeper always safe?</h3>
+    <p>On BoardGameSite, yes. Mines are placed after your first tap, never on that square or the squares touching it, so the first tap always opens an area.</p>
+    <h3>What is chording in Minesweeper?</h3>
+    <p>Chording means tapping a number that already has the right number of flags around it. Every other covered square around it opens at once, which saves many separate taps.</p>
+  </section>
 
   <div class="callout card">
     <p>Ready to try it?</p>
