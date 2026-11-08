@@ -186,14 +186,14 @@ function classicMove(c, remote = false) {
   if (line) { highlight = line; finishClassic(me === E.YOU ? 'win' : 'lose'); render(); return; }
   if (E.isFull(board)) { finishClassic('draw'); render(); return; }
   if (onlineOn) {
-    turn = -me;
+    turn = me === E.YOU ? E.CPU : E.YOU;
     setTurn(turn === E.YOU ? 'you' : 'cpu');
     setStatus(ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
     render();
     return;
   }
   if (friend()) {
-    turn = -me;
+    turn = me === E.YOU ? E.CPU : E.YOU;
     saveGame(turn);
     setTurn(turn === E.YOU ? 'you' : 'cpu');
     setStatus(nameOf(turn) + '’s turn', turn === E.CPU ? 'cpu' : '');
