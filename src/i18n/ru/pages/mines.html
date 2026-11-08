@@ -1,0 +1,108 @@
+<!-- title: Сапёр онлайн: играть бесплатно, 3 уровня | BoardGameSite -->
+<!-- description: Сапёр онлайн бесплатно, как в Windows: новичок, любитель и профессионал, флажки, быстрое открытие вокруг цифр и безопасный первый ход. Без скачивания. -->
+<!-- path: /ru/igry/saper -->
+<!-- out: ru/igry/saper.html -->
+<!-- alt: /play/mines -->
+<!-- nav: play -->
+<!-- script: /assets/js/mines.js -->
+<!-- kind: game -->
+<!-- game: mines -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Все игры
+  </a>
+
+  <div class="game-layout" data-max-root>
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Сапёр</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Разминируйте поле</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Звук" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="mines-bar">
+        <div class="seg" role="group" aria-label="Что делает нажатие">
+          <button type="button" data-tool="dig"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4l6 6-9 9H5v-6z"/></svg>Открыть</button>
+          <button type="button" data-tool="flag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V4M7 4h10l-2.5 4L17 12H7"/></svg>Флажок</button>
+        </div>
+        <p class="mines-count"><span>Мины</span><b id="left">10</b></p>
+        <p class="mines-count"><span>Время</span><b id="time">0:00</b></p>
+      </div>
+      <div class="mines-fit board-fit">
+        <div id="field" class="mines" role="grid" aria-label="Минное поле. Стрелки — перемещение, Enter — открыть клетку, F — поставить флажок."></div>
+      </div>
+      <p class="board-hint">Нажмите, чтобы открыть клетку. Удерживайте, нажмите правой кнопкой или переключитесь на Флажок, чтобы отметить мину. Нажмите на цифру, чтобы открыть клетки вокруг неё. Ваша статистика: <span id="record">Выиграно 0 из 0</span></p>
+    </section>
+
+    <aside class="panel">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Уровень</p>
+        <div class="seg" role="group" aria-label="Уровень сложности (начнётся новая игра)">
+          <button type="button" data-level="easy">Лёгкий</button>
+          <button type="button" data-level="medium">Средний</button>
+          <button type="button" data-level="hard">Сложный</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Играть ещё</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Новая игра</button>
+
+      <div class="panel-box card-dark">
+        <h2>Как играть</h2>
+        <p>Откройте все клетки без мин. Цифра показывает, сколько мин касается клетки, включая диагонали. Поставьте флажок туда, где точно лежит мина.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Создайте бесплатный аккаунт, чтобы статистика сохранялась на любом устройстве.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Зарегистрироваться бесплатно</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Как играть в Сапёр</h2>
+  <p>Сапёр — логическая игра на поле из закрытых клеток, под некоторыми из которых спрятаны мины. Многие помнят её по Windows. Чтобы победить, нужно открыть все безопасные клетки и ни разу не подорваться.</p>
+  <ol>
+    <li><strong>Нажмите на клетку, чтобы открыть её.</strong> Первый ход всегда безопасен и открывает сразу целый участок поля.</li>
+    <li><strong>Читайте цифры.</strong> Цифра показывает, сколько мин в восьми соседних клетках: сверху, снизу, по бокам и по диагоналям. Пустая клетка значит, что рядом мин нет.</li>
+    <li><strong>Отмечайте мины флажками.</strong> Если вы уверены, что под клеткой мина, удерживайте её, нажмите правой кнопкой мыши или переключитесь на <strong>Флажок</strong> и нажмите на неё.</li>
+    <li><strong>Открывайте вокруг цифры.</strong> Когда вокруг цифры отмечены все её мины, нажмите на неё, чтобы разом открыть остальные соседние клетки.</li>
+    <li><strong>Вы победили,</strong> когда открыты все клетки без мин. Откроете мину — игра окончена.</li>
+  </ol>
+
+  <h2>Уровни сложности, как в Windows</h2>
+  <p>Размеры полей те же, что в классическом Сапёре. <strong>Лёгкий</strong> (новичок) — поле 9×9 и 10 мин, <strong>Средний</strong> (любитель) — 16×16 и 40 мин, <strong>Сложный</strong> (профессионал) — 30×16 и 99 мин. На телефоне сложное поле поворачивается, чтобы по каждой клетке было удобно попадать пальцем.</p>
+
+  <h2>Как выигрывать в Сапёра</h2>
+  <ul>
+    <li><strong>Начинайте с единиц.</strong> Если рядом с единицей только одна закрытая клетка, мина именно там.</li>
+    <li><strong>Считайте уже поставленные флажки.</strong> Если вокруг двойки уже два флажка, остальные соседние клетки безопасны.</li>
+    <li><strong>Сравнивайте соседние цифры.</strong> У двух цифр рядом почти все соседи общие. Сравнение часто подсказывает, какие клетки безопасны. Самый известный приём — «1-2-1» вдоль края открытой области: мины стоят напротив единиц.</li>
+    <li><strong>Гадайте только в крайнем случае.</strong> Иногда цифры ничего не подсказывают, особенно в последних клетках. Тогда остаётся положиться на удачу.</li>
+  </ul>
+
+  <h2>Частые вопросы о Сапёре</h2>
+  <section class="faq">
+    <h3>Это тот самый Сапёр из Windows?</h3>
+    <p>Да, правила те же, что в классическом Сапёре: открывайте безопасные клетки, по цифрам находите мины и отмечайте их флажками. Те же размеры полей: новичок, любитель и профессионал.</p>
+    <h3>Первый ход всегда безопасен?</h3>
+    <p>Да. Мины расставляются после первого нажатия и никогда не попадают ни в эту клетку, ни в соседние, поэтому игра всегда начинается с открытого участка.</p>
+    <h3>Как поставить флажок на телефоне?</h3>
+    <p>Удерживайте клетку полсекунды или переключите режим Открыть / Флажок на Флажок и нажмите на клетку. Чтобы снова открывать клетки, переключитесь обратно на Открыть.</p>
+    <h3>Можно ли пройти любое поле без угадывания?</h3>
+    <p>Не всегда. Как и в классической игре, мины расставляются случайно, поэтому иногда цифры не позволяют понять, какая клетка безопасна.</p>
+    <h3>Играть в Сапёр можно бесплатно?</h3>
+    <p>Да. Играйте сколько угодно прямо в браузере, на любом устройстве, без скачивания и без регистрации. Лучшее время на каждом уровне сохраняется.</p>
+  </section>
+</section>
+
+{{related:mines}}

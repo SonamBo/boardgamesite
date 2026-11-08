@@ -1,4 +1,4 @@
-# Translations (Spanish, French, German and Portuguese)
+# Translations (Spanish, French, German, Portuguese and Russian)
 
 Translated pages are built alongside the English ones by `build.py`.
 
@@ -21,3 +21,6 @@ section from the strings its script writes (play it with `?i18n-missing` to list
 
 Portuguese is written for Brazil (pt_BR: Lig 4, Paciência, Gamão, Campo minado) but served as `pt`, so it also
 reaches Portugal. To add a language: an entry in `LANGS` in `build.py`, `src/i18n/<lang>.json`, and its pages.
+
+Russian (`/ru`) covers only Косынка (`/ru/igry/kosynka`) and Сапёр (`/ru/igry/saper`) so far, picked for
+search demand. A language doesn't need every game: cards, related links and hreflang only use the pages it has.

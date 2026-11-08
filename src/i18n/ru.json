@@ -1,0 +1,286 @@
+{
+ "ui": {
+  "Skip to content": "Перейти к содержимому",
+  "Your streak and XP": "Ваша серия и XP",
+  "Day streak": "Дней подряд",
+  "XP from lessons": "XP за уроки",
+  "Switch to light theme": "Включить светлую тему",
+  "Light or dark": "Светлая или тёмная",
+  "Menu": "Меню",
+  "Main": "Главное меню",
+  "Play": "Играть",
+  "Daily challenge": "Задача дня",
+  "Learn": "Учиться",
+  "My progress": "Мой прогресс",
+  "Watch on YouTube": "Смотреть на YouTube",
+  "(opens in a new tab)": "(откроется в новой вкладке)",
+  "About": "О сайте",
+  "Sign up": "Регистрация",
+  "Log in": "Войти",
+  "Install app": "Установить приложение",
+  "Footer": "Подвал сайта",
+  "How to play": "Правила игр",
+  "Articles": "Статьи",
+  "Contact": "Контакты",
+  "Privacy Policy": "Конфиденциальность",
+  "Terms": "Условия",
+  "Language": "Язык",
+  "Quick links": "Быстрые ссылки",
+  "Daily": "Задача дня",
+  "Progress": "Прогресс",
+  "Me": "Профиль",
+  "Home": "Главная",
+  "More games to play": "Другие игры",
+  "Strategy": "Стратегия",
+  "vs Computer": "Против компьютера",
+  "2 players": "2 игрока",
+  "2–4 players": "2–4 игрока",
+  "Cards": "Карты",
+  "Dice": "Кости",
+  "Puzzle": "Головоломка",
+  "Single player": "Для одного",
+  "3 min": "3 мин",
+  "5 min": "5 мин",
+  "10 min": "10 мин"
+ },
+ "games": {
+  "solitaire": {
+   "name": "Косынка",
+   "full": "Пасьянс Косынка",
+   "card": "Классический пасьянс Косынка: соберите все масти от туза до короля. Сдача по одной или по три карты, отмена ходов без ограничений.",
+   "blurb": "Пасьянс Косынка по одной или по три карты, с отменой ходов."
+  },
+  "mines": {
+   "name": "Сапёр",
+   "full": "Сапёр",
+   "card": "Тот самый Сапёр: откройте все безопасные клетки по цифрам-подсказкам и отметьте мины флажками. Первый ход всегда безопасен.",
+   "blurb": "Разминируйте поле по цифрам и не подорвитесь."
+  }
+ },
+ "runtime": {
+  "common": {
+   "exact": {
+    "Your move": "Ваш ход",
+    "Your turn": "Ваш ход",
+    "Your turn again": "Снова ваш ход",
+    "You": "Вы",
+    "Computer": "Компьютер",
+    "The computer": "Компьютер",
+    "Player": "Игрок",
+    "Player 1": "Игрок 1",
+    "Player 2": "Игрок 2",
+    "You win!": "Вы победили!",
+    "You won!": "Вы победили!",
+    "Computer wins": "Компьютер победил",
+    "It’s a draw": "Ничья",
+    "Draw": "Ничья",
+    "Good game.": "Хорошая игра.",
+    "Nicely played.": "Отлично сыграно.",
+    "Have another go?": "Ещё раз?",
+    "Welcome back. Your turn": "С возвращением. Ваш ход",
+    "Play again": "Играть ещё",
+    "New game": "Новая игра",
+    "Undo": "Отменить",
+    "Full screen": "Во весь экран",
+    "Exit full screen": "Выйти из полноэкранного режима",
+    "Exit full screen (Esc)": "Выйти из полноэкранного режима (Esc)",
+    "Sound": "Звук",
+    "Sound on": "Звук включён",
+    "Sound off": "Звук выключен",
+    "Switch to dark theme": "Включить тёмную тему",
+    "Switch to light theme": "Включить светлую тему",
+    "Start a streak today": "Начните серию сегодня",
+    "Install app": "Установить приложение",
+    "Face-down card": "Карта рубашкой вверх",
+    "Close": "Закрыть",
+    "Easy": "Лёгкий",
+    "Medium": "Средний",
+    "Hard": "Сложный",
+    "Hi! Welcome to BoardGameSite.": "Привет! Добро пожаловать на BoardGameSite.",
+    "Welcome to BoardGameSite": "Добро пожаловать на BoardGameSite",
+    "What would you like to do today?": "Чем займёмся сегодня?",
+    "Play a game now": "Сыграть сейчас",
+    "Learn a game": "Научиться игре",
+    "Short hands-on lessons for Chess, Go, Sudoku, Solitaire and more.": "Короткие практические уроки по шахматам, го, судоку, пасьянсам и другим играм (на английском).",
+    "I just want to look around": "Просто посмотрю",
+    "Pick one to start. Every game is on the home page too.": "Выберите игру. Все игры есть и на главной странице.",
+    "Let’s play!": "Играем!",
+    "Skip": "Пропустить",
+    "Back": "Назад",
+    "Cookie choice": "Файлы cookie",
+    "We use analytics cookies to see which games people enjoy.": "Мы используем аналитические cookie, чтобы понимать, какие игры нравятся людям.",
+    "Accept": "Принять",
+    "Decline": "Отклонить",
+    "Create account": "Создать аккаунт",
+    "Create your account": "Создайте аккаунт",
+    "Create a free account": "Создать бесплатный аккаунт",
+    "Log in": "Войти",
+    "Log in to pick up your record and streaks.": "Войдите, чтобы вернуть свою статистику и серии.",
+    "Free. Save your wins and streaks, and pick them up on any device.": "Бесплатно. Сохраняйте победы и серии и продолжайте на любом устройстве.",
+    "Continue with Google": "Продолжить с Google",
+    "or": "или",
+    "Email": "Эл. почта",
+    "Email address": "Адрес эл. почты",
+    "Password": "Пароль",
+    "Password (6+ characters)": "Пароль (не меньше 6 символов)",
+    "Name shown on leaderboards": "Имя в таблицах рекордов",
+    "Your name": "Ваше имя",
+    "Forgot your password?": "Забыли пароль?",
+    "Already have an account?": "Уже есть аккаунт?",
+    "New here?": "Впервые здесь?",
+    "Welcome back": "С возвращением",
+    "Your account": "Ваш аккаунт",
+    "Please enter a valid email address.": "Введите корректный адрес эл. почты.",
+    "Please use at least 6 characters for your password.": "Пароль должен быть не короче 6 символов.",
+    "Please choose a name. It’s what other players will see.": "Выберите имя. Его увидят другие игроки.",
+    "Something went wrong. Please try again.": "Что-то пошло не так. Попробуйте ещё раз.",
+    "That email and password don’t match. Check them, or reset your password.": "Почта и пароль не совпадают. Проверьте их или сбросьте пароль.",
+    "There’s already an account with this email. Try logging in instead.": "Аккаунт с этой почтой уже есть. Попробуйте войти.",
+    "There’s no account with this email yet. Sign up instead?": "Аккаунта с этой почтой пока нет. Зарегистрироваться?",
+    "Too many tries. Please wait a few minutes and try again.": "Слишком много попыток. Подождите несколько минут и попробуйте снова.",
+    "You seem to be offline. Check your connection and try again.": "Похоже, нет подключения к интернету. Проверьте связь и попробуйте снова.",
+    "Ace": "Туз",
+    "Jack": "Валет",
+    "Queen": "Дама",
+    "King": "Король",
+    "clubs": "треф",
+    "diamonds": "бубен",
+    "hearts": "червей",
+    "spades": "пик",
+    "By continuing you agree to our": "Продолжая, вы принимаете документы:",
+    "and": "и",
+    "Terms": "Условия",
+    "Privacy Policy": "Политика конфиденциальности"
+   },
+   "patterns": [
+    [
+     "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
+     "Бесплатных игр: {1}. Карты, стратегии, головоломки и игры со словами. Без регистрации."
+    ],
+    [
+     "(\\d+)-day streak, (\\d+) XP\\. Open your progress",
+     "Дней подряд: {1}, XP: {2}. Открыть прогресс"
+    ],
+    [
+     "(\\d+) wins? · (\\d+) loss(?:es)? · (\\d+) draws?",
+     "Победы: {1} · Поражения: {2} · Ничьи: {3}"
+    ],
+    [
+     "Welcome back\\. (.+)",
+     "С возвращением. {1}"
+    ],
+    [
+     "Ace of (\\w+)",
+     "Туз {1}"
+    ],
+    [
+     "Jack of (\\w+)",
+     "Валет {1}"
+    ],
+    [
+     "Queen of (\\w+)",
+     "Дама {1}"
+    ],
+    [
+     "King of (\\w+)",
+     "Король {1}"
+    ],
+    [
+     "(\\d+) of (\\w+)",
+     "{1} {2}"
+    ],
+    [
+     "Signed in as (.+)",
+     "Вы вошли как {1}"
+    ],
+    [
+     "Step (\\d+) of (\\d+)",
+     "Шаг {1} из {2}"
+    ]
+   ]
+  },
+  "solitaire": {
+   "exact": {
+    "Build each suit from Ace to King": "Соберите каждую масть от туза до короля",
+    "Draw from the deck": "Взять карту из колоды",
+    "Welcome back. Your game is where you left it": "С возвращением. Расклад сохранён там, где вы остановились"
+   },
+   "patterns": [
+    [
+     "You won in (\\d+:\\d\\d)!",
+     "Пасьянс сошёлся за {1}!"
+    ],
+    [
+     "(\\d+) moves in (\\d+:\\d\\d)\\.",
+     "Ходов: {1}, время: {2}."
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "Выиграно {1} из {2}"
+    ],
+    [
+     "best time (\\d+:\\d\\d)",
+     "лучшее время {1}"
+    ]
+   ]
+  },
+  "mines": {
+   "exact": {
+    "Boom! You hit a mine": "Бум! Вы подорвались на мине",
+    "You hit a mine": "Вы подорвались на мине",
+    "Field cleared!": "Поле разминировано!",
+    "A new best time!": "Новый рекорд!"
+   },
+   "patterns": [
+    [
+     "(Easy|Medium|Hard): (\\d+) mines hidden",
+     "{1}: мин на поле — {2}"
+    ],
+    [
+     "Cleared in (\\d+:\\d\\d)!",
+     "Разминировано за {1}!"
+    ],
+    [
+     "(Easy|Medium|Hard) in (\\d+:\\d\\d)\\.",
+     "{1} уровень за {2}."
+    ],
+    [
+     "(\\d+) safe squares? (?:was|were) left to uncover\\.",
+     "Осталось открыть безопасных клеток: {1}."
+    ],
+    [
+     "Row (\\d+), column (\\d+): hidden",
+     "Ряд {1}, столбец {2}: закрыта"
+    ],
+    [
+     "Row (\\d+), column (\\d+): flag",
+     "Ряд {1}, столбец {2}: флажок"
+    ],
+    [
+     "Row (\\d+), column (\\d+): clear",
+     "Ряд {1}, столбец {2}: пусто"
+    ],
+    [
+     "Row (\\d+), column (\\d+): mine",
+     "Ряд {1}, столбец {2}: мина"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (\\d) mines? nearby",
+     "Ряд {1}, столбец {2}: мин рядом — {3}"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (.+)",
+     "Ряд {1}, столбец {2}: {3}"
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "Выиграно {1} из {2}"
+    ],
+    [
+     "(Easy|Medium|Hard) best (\\d+:\\d\\d)",
+     "Рекорд ({1}): {2}"
+    ]
+   ]
+  }
+ }
+}

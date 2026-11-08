@@ -1,0 +1,72 @@
+<!-- title: Косынка и Сапёр онлайн бесплатно | BoardGameSite -->
+<!-- description: Играйте бесплатно в пасьянс Косынка и Сапёр прямо в браузере, на телефоне или компьютере. Без скачивания и без регистрации. -->
+<!-- path: /ru -->
+<!-- out: ru.html -->
+<!-- alt: / -->
+<!-- nav: play -->
+<!-- kind: home -->
+<!-- script: /assets/js/home.js -->
+<section class="wb" id="welcome-back" hidden aria-labelledby="wb-h">
+  <div class="wb-head">
+    <img class="wb-fox" src="/assets/img/fox-wave.webp" alt="" width="280" height="280">
+    <div class="wb-hi"><h2 id="wb-h">С возвращением</h2><p class="wb-streak text-2"></p>
+      <div class="wb-goal" hidden><span class="wb-goal-bar" aria-hidden="true"><span></span></span><select class="wb-goal-pick" aria-label="Цель на день"></select><small class="muted"></small></div></div>
+  </div>
+  <div class="wb-cards"></div>
+  <div class="wb-recent" hidden><h3>Ваши игры</h3><div class="wb-recent-row"></div></div>
+</section>
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Бесплатно · Без скачивания · В браузере</p>
+    <h1>Косынка и Сапёр онлайн, бесплатно.</h1>
+    <p class="hero-lede">Классический пасьянс Косынка и Сапёр, как в старом добром Windows, только удобнее: работают на телефоне и компьютере, сохраняют партию и не требуют регистрации.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold btn-lg raised" href="/play/solitaire">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+        Играть в Косынку
+      </a>
+      <a class="btn btn-outline btn-lg" href="/play/mines">Играть в Сапёр</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="/assets/img/hero-fox.webp" alt="Наш лис в бордовом свитере стоит на коленях у шахматной доски из ореха с королём, конём, золотыми кубиками, фишками и веером игральных карт" width="1200" height="896" fetchpriority="high">
+  </div>
+</section>
+
+<section id="games" style="display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 80px">
+  <h2 class="section-title">Выберите игру</h2>
+  <div class="shelf" aria-labelledby="shelf-games">
+    <div class="shelf-head"><h3 id="shelf-games">Пасьянсы и головоломки</h3></div>
+{{cards:solitaire,mines}}
+  </div>
+  <article class="soon-card soon-wide">
+    <span class="bubble"><img src="/assets/img/fox-kneel.webp" alt="" width="280" height="280"></span>
+    <div>
+      <h3>Ещё более 50 игр на английском</h3>
+      <p>Шашки, шахматы, нарды, Паук, Свободная ячейка, судоку и другие. Мы переводим их на русский, а пока в них можно играть в английской версии сайта.</p>
+      <a class="link-green" href="https://boardgamesite.com/#games">Все игры (на английском)</a>
+    </div>
+  </article>
+</section>
+
+<section class="intro" aria-labelledby="intro-h">
+  <h2 id="intro-h">Бесплатные игры без скачивания</h2>
+  <p>На BoardGameSite собраны классические карточные и настольные игры, в которые можно играть сразу в браузере. Ничего не нужно устанавливать, регистрация не требуется. Разложите <a href="/play/solitaire">пасьянс Косынка</a> по одной или по три карты, или разминируйте поле в <a href="/play/mines">Сапёре</a> на одном из трёх уровней сложности.</p>
+  <p>Игра сохраняется сама: закройте вкладку и продолжите с того же места. К каждой игре есть простые правила и советы, как выигрывать чаще.</p>
+</section>
+
+<section id="newsletter" class="newsletter">
+  <div class="newsletter-copy">
+    <h2>Узнавайте о новых играх первыми</h2>
+    <p>Короткое письмо, когда выходит новая игра или перевод. Без спама.</p>
+  </div>
+  <form class="nl-form" data-newsletter="home-ru" novalidate>
+    <div class="nl-row">
+      <label class="visually-hidden" for="nl-email">Адрес эл. почты</label>
+      <input id="nl-email" type="email" name="email" autocomplete="email" placeholder="vy@primer.ru" required>
+      <button type="submit" class="btn btn-gold" style="min-height: 50px">Сообщить мне</button>
+    </div>
+    <p class="form-msg" role="status"></p>
+  </form>
+</section>
