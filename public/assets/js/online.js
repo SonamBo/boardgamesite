@@ -66,10 +66,21 @@ export function online(slug, adapter) {
   // slug can carry a variant, like 'hex:9'; adapter.variant(v) sets it on the joining board
   const gameOf = () => (adapter.variant ? slug + ':' + adapter.variant() : slug);
   let api = null, room = null, data = null, seat = -1, applied = 0, stop = null, sending = false;
+  let problem = null; // { text, login, retry }: shown in the box, where the board's own status can't overwrite it
   const el = box();
 
   const link = () => location.origin + location.pathname + '?room=' + room + (FAKE ? '&fake=1' : '');
   function paint() {
+    if (!room && problem) {
+      el.innerHTML = '<h2>Online game</h2><p class="text-2">' + problem.text + '</p><div class="ol-row">' +
+        (problem.login ? '<button type="button" class="btn btn-gold raised" data-open-accounts="online">Sign up or log in</button>' : '') +
+        (problem.retry ? '<button type="button" class="btn btn-outline" id="ol-retry">Try again</button>' : '') +
+        '<button type="button" class="btn btn-outline" id="ol-close">Play here instead</button></div>';
+      const r = el.querySelector('#ol-retry');
+      if (r) r.onclick = () => { const id = problem.retry; problem = null; api = null; id === true ? startRoom() : join(id); };
+      el.querySelector('#ol-close').onclick = () => { problem = null; history.replaceState(null, '', location.pathname); paint(); };
+      return;
+    }
     if (!room) {
       el.innerHTML = '<h2>Play a friend online</h2><p class="text-2">Get a link to send to a friend. You’ll play on separate devices.</p><button type="button" class="btn btn-outline btn-block" id="ol-start">Create a game link</button>';
       el.querySelector('#ol-start').onclick = startRoom;
@@ -78,7 +89,7 @@ export function online(slug, adapter) {
     if (!data) { el.innerHTML = '<p class="text-2">Connecting…</p>'; return; }
     const them = data.n[1 - seat] || 'your friend';
     if (data.s === 'wait') {
-      el.innerHTML = '<h2>Waiting for your friend</h2><p class="text-2">Send this link. The game starts when they open it.</p>' +
+      el.innerHTML = '<h2>Waiting for your friend</h2><p class="text-2">Send this link. The game starts when they open it on their device (logged out, or with their own account, not yours).</p>' +
         '<input class="ol-link" readonly value="' + link() + '" aria-label="Game link"><div class="ol-row"><button type="button" class="btn btn-gold raised" id="ol-copy">Copy link</button><button type="button" class="btn btn-outline" id="ol-leave">Cancel</button></div>';
       el.querySelector('#ol-copy').onclick = share;
       el.querySelector('#ol-leave').onclick = leave;
@@ -107,23 +118,23 @@ export function online(slug, adapter) {
       await b.create(id, { g: gameOf(), p: [b.uid, ''], n: [b.name, ''], m: [], t: 0, s: 'wait' });
       history.replaceState(null, '', location.pathname + '?room=' + id + (FAKE ? '&fake=1' : ''));
       join(id);
-    } catch (e) { failed(e); }
+    } catch (e) { failed(e, true); }
   }
   async function join(id) {
     try {
       room = id; paint();
       const b = await backend();
       let d = await b.get(id);
-      if (!d || d.g.split(':')[0] !== slug) { setStatus('That game link isn’t valid any more', 'neutral'); room = null; return paint(); }
+      if (!d || d.g.split(':')[0] !== slug) { room = null; problem = { text: 'That game link isn’t valid any more. Ask your friend for a new one.' }; setStatus('That game link isn’t valid any more', 'neutral'); return paint(); }
       if (d.s === 'wait' && d.p[0] !== b.uid && !d.p[1]) {
         await b.update(id, { p: [d.p[0], b.uid], n: [d.n[0], b.name], s: 'play' });
-      } else if (!d.p.includes(b.uid)) { setStatus('This game already has two players', 'neutral'); room = null; return paint(); }
+      } else if (!d.p.includes(b.uid)) { room = null; problem = { text: 'This game already has two players.' }; setStatus('This game already has two players', 'neutral'); return paint(); }
       seat = -1; applied = 0;
       if (adapter.variant && d.g.includes(':')) adapter.variant(d.g.split(':')[1]);
       if (adapter.onlineChanged) adapter.onlineChanged(true);
       adapter.reset();
       stop = b.watch(id, onData);
-    } catch (e) { failed(e); }
+    } catch (e) { failed(e, id); }
   }
   function onData(d) {
     if (d === undefined) { setStatus('Lost the connection to the online game', 'neutral'); return; }
@@ -163,10 +174,16 @@ export function online(slug, adapter) {
     adapter.reset();
     paint();
   }
-  function failed(e) {
+  function failed(e, retry) {
     const code = (e && e.code) || '';
-    room = null; paint();
-    setStatus(code.includes('operation-not-allowed') || code.includes('admin-restricted') ? 'Please log in to play online' : 'Couldn’t start online play. Check your connection and try again', 'neutral');
+    const login = code.includes('operation-not-allowed') || code.includes('admin-restricted');
+    console.warn('[online]', code || e);
+    room = null; data = null; api = null;
+    problem = login
+      ? { text: 'Log in (it’s free) to play online, then tap Try again.', login: true, retry }
+      : { text: 'Couldn’t connect to the online game. Check your connection and try again.', retry };
+    paint();
+    setStatus(login ? 'Log in to play online' : 'Couldn’t connect to the online game', 'neutral');
   }
 
   paint();
