@@ -1,0 +1,109 @@
+<!-- title: Dame online kostenlos gegen Computer oder Freund | BoardGameSite -->
+<!-- description: Spiel kostenlos Dame im Browser: gegen den Computer in drei Stufen oder gegen einen Freund am selben Gerät. Schlagen ist Pflicht. Ohne Download. -->
+<!-- path: /de/spielen/dame -->
+<!-- out: de/spielen/dame.html -->
+<!-- alt: /play/checkers -->
+<!-- nav: play -->
+<!-- script: /assets/js/checkers.js -->
+<!-- kind: game -->
+<!-- game: checkers -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Alle Spiele
+  </a>
+
+  <div class="game-layout" data-max-root>
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Dame</h1>
+        <div class="head-right">
+          <p id="status" class="status" role="status" aria-live="polite">Du bist dran</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Ton" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="board-wrap">
+        <div id="board" class="grid8 ck" role="group" aria-label="Dame-Brett. Du spielst die goldenen Steine von unten."></div>
+      </div>
+      <p class="board-hint">Tippe auf einen deiner goldenen Steine und dann auf das Feld, auf das er ziehen soll.</p>
+    </section>
+
+    <aside class="panel">
+      <div class="players card">
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Du</b><small id="count-you">12 Steine</small></div>
+        <div id="row-cpu" class="player"><span class="dot" aria-hidden="true" style="background: #262A27; box-shadow: 0 0 0 2px #4C544E"></span><b data-name="p2">Computer</b><small id="count-cpu">12 Steine</small></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Deine Bilanz: <span id="record">Siege: 0 · Niederlagen: 0 · Unentschieden: 0</span></p>
+      </div>
+
+      <p class="seg-label">Gegner</p>
+      <div class="seg" role="group" aria-label="Gegner (startet ein neues Spiel)">
+        <button type="button" data-opponent="cpu">Computer</button>
+        <button type="button" data-opponent="friend">2 Spieler</button>
+      </div>
+
+      <p class="seg-label" data-cpu-only>Spielstärke des Computers</p>
+      <div class="seg" role="group" aria-label="Spielstärke des Computers" data-cpu-only>
+        <button type="button" data-level="easy">Leicht</button>
+        <button type="button" data-level="medium">Mittel</button>
+        <button type="button" data-level="hard">Schwer</button>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Neues Spiel</button>
+
+      <div class="panel-box card-dark">
+        <h2>So wird gespielt</h2>
+        <p>Zieh einen Stein diagonal nach vorn auf ein freies dunkles Feld. Spring über einen gegnerischen Stein, um ihn zu schlagen. Wenn du schlagen kannst, musst du schlagen, und du springst weiter, solange es geht. Erreichst du die letzte Reihe, wird dein Stein zur Dame, die auch rückwärts ziehen darf. Schlag oder blockier alle Steine des Computers, um zu gewinnen.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Erstelle ein kostenloses Konto, um deine Bilanz auf jedem Gerät zu speichern.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="checkers">Kostenlos registrieren</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Wie spielt man Dame?</h2>
+  <p>Dame wird auf den dunklen Feldern eines 8×8-Bretts gespielt. Du hast 12 goldene Steine unten, der Computer 12 oben. Du fängst an. Diese Version folgt den amerikanischen Regeln (Checkers): Die Dame zieht nur ein Feld weit und fliegt nicht über die ganze Diagonale, wie es bei vielen deutschen Hausregeln üblich ist.</p>
+  <ol>
+    <li><strong>Zieh diagonal nach vorn,</strong> ein Feld weit, auf ein freies dunkles Feld.</li>
+    <li><strong>Schlag durch Springen.</strong> Steht ein gegnerischer Stein schräg neben deinem und ist das Feld dahinter frei, spring darüber und schlag ihn.</li>
+    <li><strong>Schlagen ist Pflicht.</strong> Wenn du springen kannst, musst du springen. Kann derselbe Stein nach einem Sprung noch einmal springen, machst du im selben Zug weiter.</li>
+    <li><strong>Mach eine Dame,</strong> indem du die letzte Reihe erreichst. Damen ziehen ein Feld diagonal in jede Richtung, vorwärts oder rückwärts.</li>
+    <li><strong>Du gewinnst,</strong> wenn du alle Steine des Computers schlägst oder er keinen gültigen Zug mehr hat.</li>
+  </ol>
+  <p>Zum Ziehen tippst du einen deiner Steine an und dann das Zielfeld. Die möglichen Felder leuchten auf, damit du nicht aus Versehen einen ungültigen Zug machst.</p>
+
+  <h2>Tipps gegen den Computer</h2>
+  <ul>
+    <li><strong>Schütz deine hinterste Reihe.</strong> Die Steine auf deiner Grundreihe verhindern, dass der Computer Damen macht. Zieh sie zuletzt.</li>
+    <li><strong>Beherrsch die Mitte.</strong> Steine in der Mitte haben mehr Züge und sind schwerer einzufangen als Steine am Rand.</li>
+    <li><strong>Nutz den Schlagzwang.</strong> Weil Schlagen Pflicht ist, kannst du einen Stein opfern und den Computer in eine Stellung locken, in der du zwei schlägst.</li>
+    <li><strong>Tausch, wenn du vorn liegst.</strong> Eins gegen eins zu tauschen lässt deinen Vorsprung immer stärker ins Gewicht fallen.</li>
+  </ul>
+
+  <h2>Häufige Fragen zu Dame</h2>
+  <section class="faq">
+    <h3>Ist dieses Damespiel kostenlos?</h3>
+    <p>Ja. Spiel so viele Partien, wie du willst, kostenlos im Browser, am Handy, Tablet oder Computer. Du musst nichts herunterladen und brauchst kein Konto.</p>
+    <h3>Ist Schlagen bei Dame Pflicht?</h3>
+    <p>Ja. Nach unseren Regeln musst du schlagen, wenn einer deiner Steine schlagen kann. Führt ein Sprung direkt zum nächsten, springst du mit demselben Stein weiter.</p>
+    <h3>Darf die Dame rückwärts ziehen?</h3>
+    <p>Ja. Die Dame zieht und schlägt ein Feld diagonal in jede Richtung. Normale Steine ziehen und schlagen nur vorwärts.</p>
+    <h3>Worin unterscheidet sich das von der Dame, die ich kenne?</h3>
+    <p>In Deutschland wird oft mit „fliegenden“ Damen gespielt, die beliebig weit über die Diagonale ziehen, und normale Steine dürfen manchmal auch rückwärts schlagen. Hier gelten die amerikanischen Regeln: Die Dame zieht nur ein Feld, und Steine schlagen nur vorwärts.</p>
+    <h3>Wie endet eine Partie unentschieden?</h3>
+    <p>Hier endet die Partie unentschieden, wenn beide Spieler 40 Züge hintereinander nur mit Damen ziehen, ohne etwas zu schlagen.</p>
+    <h3>Mit welcher Stufe soll ich anfangen?</h3>
+    <p>Fang mit Leicht an, um Sprünge und Damen kennenzulernen. Mittel schaut ein paar Züge voraus und bestraft ungedeckte Steine. Schwer rechnet viel weiter und macht kaum Fehler, also musst du wirklich planen, um zu gewinnen.</p>
+  </section>
+</section>
+
+{{related:checkers}}

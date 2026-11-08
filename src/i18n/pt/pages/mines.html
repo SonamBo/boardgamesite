@@ -1,0 +1,106 @@
+<!-- title: Campo minado online grátis: 3 níveis | BoardGameSite -->
+<!-- description: Jogue campo minado grátis no navegador: três tamanhos de campo, bandeiras, abertura rápida ao redor dos números e primeiro toque sempre seguro. Sem download. -->
+<!-- path: /pt/jogar/campo-minado -->
+<!-- out: pt/jogar/campo-minado.html -->
+<!-- alt: /play/mines -->
+<!-- nav: play -->
+<!-- script: /assets/js/mines.js -->
+<!-- kind: game -->
+<!-- game: mines -->
+<div style="display: flex; flex-direction: column; gap: 20px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos os jogos
+  </a>
+
+  <div class="game-layout" data-max-root>
+    <section class="board-col" aria-labelledby="board-title">
+      <div class="board-head">
+        <h1 id="board-title">Campo minado</h1>
+        <div class="head-right">
+          <p id="status" class="status neutral" role="status" aria-live="polite">Limpe o campo</p>
+          <button type="button" class="icon-btn" data-sound-toggle aria-label="Som" aria-pressed="true"></button>
+        </div>
+      </div>
+      <div class="mines-bar">
+        <div class="seg" role="group" aria-label="O que um toque faz">
+          <button type="button" data-tool="dig"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4l6 6-9 9H5v-6z"/></svg>Abrir</button>
+          <button type="button" data-tool="flag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V4M7 4h10l-2.5 4L17 12H7"/></svg>Bandeira</button>
+        </div>
+        <p class="mines-count"><span>Minas</span><b id="left">10</b></p>
+        <p class="mines-count"><span>Tempo</span><b id="time">0:00</b></p>
+      </div>
+      <div class="mines-fit board-fit">
+        <div id="field" class="mines" role="grid" aria-label="Campo minado. Use as setas para se mover, Enter para abrir e F para pôr uma bandeira."></div>
+      </div>
+      <p class="board-hint">Toque para abrir. Segure, clique com o botão direito ou mude para Bandeira para marcar uma mina. Toque em um número para abrir ao redor dele. Seu histórico: <span id="record">0 de 0 partidas vencidas</span></p>
+    </section>
+
+    <aside class="panel">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <p class="seg-label">Tamanho do campo</p>
+        <div class="seg" role="group" aria-label="Tamanho do campo (começa uma nova partida)">
+          <button type="button" data-level="easy">Fácil</button>
+          <button type="button" data-level="medium">Médio</button>
+          <button type="button" data-level="hard">Difícil</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" hidden aria-live="polite">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big"></p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Jogar de novo</button>
+      </div>
+
+      <button id="new-game" type="button" class="btn btn-gold btn-lg raised btn-block">Nova partida</button>
+
+      <div class="panel-box card-dark">
+        <h2>Como se joga</h2>
+        <p>Abra todas as casas que não têm mina. Cada número diz quantas minas tocam aquela casa, contando as diagonais. Ponha uma bandeira nas casas que você sabe que são minas.</p>
+      </div>
+
+      <div class="panel-box card-dark">
+        <p>Crie uma conta grátis para salvar seu histórico em qualquer aparelho.</p>
+        <button type="button" class="btn btn-outline btn-block" data-open-accounts="game">Cadastre-se grátis</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Como jogar campo minado</h2>
+  <p>O campo minado é um jogo de lógica jogado em uma grade de casas fechadas. Algumas escondem minas. Para vencer, abra todas as casas seguras sem abrir nenhuma mina.</p>
+  <ol>
+    <li><strong>Toque em uma casa para abri-la.</strong> O primeiro toque é sempre seguro e abre uma área do campo.</li>
+    <li><strong>Leia os números.</strong> Um número diz quantas minas há nas oito casas ao redor: em cima, embaixo, dos lados e nas diagonais. Uma casa em branco não tem minas do lado.</li>
+    <li><strong>Marque as minas.</strong> Quando tiver certeza de que uma casa esconde uma mina, segure, clique com o botão direito ou mude para <strong>Bandeira</strong> e toque nela.</li>
+    <li><strong>Abra ao redor de um número.</strong> Quando um número já tem todas as suas minas marcadas, toque nele para abrir de uma vez as outras casas em volta.</li>
+    <li><strong>Você vence</strong> ao abrir todas as casas sem mina. Se abrir uma mina, a partida acaba.</li>
+  </ol>
+  <p>Há três tamanhos de campo. <strong>Fácil</strong> é 9×9 com 10 minas, <strong>Médio</strong> 16×16 com 40 e <strong>Difícil</strong> 30×16 com 99. No celular, o campo difícil gira para que todas as casas fiquem fáceis de tocar.</p>
+
+  <h2>Truques para limpar o campo</h2>
+  <ul>
+    <li><strong>Comece pelos 1.</strong> Um 1 com uma única casa fechada ao lado significa que essa casa é uma mina.</li>
+    <li><strong>Conte as bandeiras que já existem.</strong> Se um 2 já tem duas bandeiras em volta, o resto das casas ao redor é seguro.</li>
+    <li><strong>Compare números vizinhos.</strong> Dois números lado a lado dividem quase todas as casas vizinhas. Comparar os dois costuma mostrar quais casas são seguras.</li>
+    <li><strong>Chute só quando não tiver jeito.</strong> Às vezes os números não dizem nada, principalmente nas últimas casas. Aí é cara ou coroa.</li>
+  </ul>
+
+  <h2>Perguntas frequentes sobre campo minado</h2>
+  <section class="faq">
+    <h3>É o mesmo campo minado de sempre?</h3>
+    <p>Sim. Valem as mesmas regras do campo minado clássico: abra as casas seguras, use os números para achar as minas e marque-as com bandeiras.</p>
+    <h3>O primeiro toque é sempre seguro?</h3>
+    <p>Sim. As minas são colocadas depois do seu primeiro toque, nunca nessa casa nem nas vizinhas, então você sempre começa com uma área aberta.</p>
+    <h3>Como coloco uma bandeira no celular?</h3>
+    <p>Segure a casa por meio segundo, ou mude o controle Abrir / Bandeira para Bandeira e toque. Volte para Abrir para continuar abrindo.</p>
+    <h3>Dá para resolver todas as partidas sem chutar?</h3>
+    <p>Nem sempre. Como no jogo clássico, as minas são colocadas ao acaso, então de vez em quando você chega a um ponto em que os números não dizem qual casa é segura.</p>
+    <h3>É grátis?</h3>
+    <p>Sim. Jogue quantas partidas quiser no navegador, em qualquer aparelho, sem download e sem conta.</p>
+  </section>
+</section>
+
+{{related:mines}}

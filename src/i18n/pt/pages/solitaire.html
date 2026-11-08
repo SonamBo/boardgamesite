@@ -1,0 +1,96 @@
+<!-- title: Paciência online grátis: Klondike clássico | BoardGameSite -->
+<!-- description: Jogue paciência Klondike grátis no navegador. Vire 1 ou 3 cartas, mova tocando ou arrastando e desfaça sem limite. Sem download e sem cadastro. -->
+<!-- path: /pt/jogar/paciencia -->
+<!-- out: pt/jogar/paciencia.html -->
+<!-- alt: /play/solitaire -->
+<!-- nav: play -->
+<!-- script: /assets/js/solitaire.js -->
+<!-- kind: game -->
+<!-- game: solitaire -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <symbol id="suit-0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>
+  <symbol id="suit-1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>
+  <symbol id="suit-2" viewBox="0 0 24 24"><path d="M12 1.5l8.5 10.5L12 22.5 3.5 12z"/></symbol>
+  <symbol id="suit-3" viewBox="0 0 24 24"><path d="M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z"/></symbol>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 16px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Todos os jogos
+  </a>
+  <div class="sol-wrap" data-max-root>
+  <div class="board-head">
+    <h1 id="board-title">Paciência</h1>
+    <div class="head-right">
+      <p id="status" class="status" role="status" aria-live="polite">Monte cada naipe do Ás ao Rei</p>
+      <button type="button" class="icon-btn" data-sound-toggle aria-label="Som" aria-pressed="true"></button>
+    </div>
+  </div>
+
+  <div class="sol-bar">
+    <button id="new-game" type="button" class="btn btn-gold raised">Novo jogo</button>
+    <button id="undo" type="button" class="btn btn-outline" disabled>Desfazer</button>
+    <button id="finish" type="button" class="btn btn-green" hidden>Terminar</button>
+    <div class="seg" role="group" aria-label="Cartas viradas por vez (começa um novo jogo)" style="flex: 0 0 auto">
+      <button type="button" data-draw="1">Virar 1</button>
+      <button type="button" data-draw="3">Virar 3</button>
+    </div>
+    <p class="sol-stats"><span>Movimentos <b id="moves">0</b></span><span>Tempo <b id="time">0:00</b></span></p>
+  </div>
+
+  <div id="table" class="sol-table">
+    <div id="area" class="sol-area" aria-label="Mesa da paciência"></div>
+    <div id="sol-result" class="sol-result" hidden>
+      <div id="result" class="result">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big">Você venceu!</p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Jogar de novo</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <p class="board-hint">Toque em uma carta para mandá-la ao melhor lugar, ou arraste. Toque no monte para virar cartas. Seu histórico: <span id="record">0 de 0 partidas vencidas</span></p>
+
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Como jogar paciência</h2>
+  <p>Este é o Klondike, a versão mais popular da paciência (também chamada de solitário). O objetivo é levar as 52 cartas para as quatro fundações no canto superior direito, uma por naipe, em ordem do Ás ao Rei.</p>
+  <ol>
+    <li><strong>A distribuição.</strong> As cartas são distribuídas em sete colunas: a primeira tem uma carta, a segunda duas, e assim até sete. Só a última carta de cada coluna fica virada para cima. O resto do baralho forma o monte, virado para baixo, no canto superior esquerdo.</li>
+    <li><strong>Desça alternando as cores.</strong> Nas colunas, coloque uma carta sobre outra um número maior e da cor oposta: um 6 vermelho sobre um 7 preto, um Valete preto sobre uma Dama vermelha.</li>
+    <li><strong>Mova sequências inteiras.</strong> Você pode mover para outra coluna uma sequência completa de cartas viradas para cima em ordem. Quando uma carta virada para baixo fica livre, ela se vira.</li>
+    <li><strong>Só o Rei vai para coluna vazia.</strong> Uma coluna vazia só pode receber um Rei, ou uma sequência que comece com um Rei.</li>
+    <li><strong>Vire cartas quando travar.</strong> Toque no monte para virar cartas. Quando ele acabar, toque de novo para recomeçá-lo, quantas vezes quiser.</li>
+    <li><strong>Você vence</strong> quando os quatro naipes chegam até o Rei.</li>
+  </ol>
+  <p>Toque em uma carta para enviá-la automaticamente ao melhor lugar, ou arraste para onde quiser. Errou? Desfaça quantos lances quiser. Quando todas as cartas estão viradas para cima e o monte está vazio, o botão <strong>Terminar</strong> sobe o resto das cartas por você.</p>
+
+  <h2>Virar 1 ou virar 3?</h2>
+  <p>Com <strong>Virar 1</strong> você vira uma carta por vez, então todas as cartas do monte ficam sempre ao seu alcance. Dá para vencer com muito mais frequência e é ótimo para uma partida tranquila. <strong>Virar 3</strong> é a versão clássica e mais difícil: as cartas saem de três em três e só a de cima pode ser jogada, então algumas ficam escondidas até a próxima volta. Trocar de modo começa um novo jogo.</p>
+
+  <h2>Dicas para vencer mais vezes</h2>
+  <ul>
+    <li><strong>Revele primeiro as cartas viradas para baixo.</strong> Cada carta escondida que você descobre abre novas opções. Trabalhe nas colunas com mais cartas viradas para baixo.</li>
+    <li><strong>Suba os Ases e os Dois logo.</strong> Eles não servem para nada em outro lugar.</li>
+    <li><strong>Não esvazie uma coluna sem ter um Rei para ela.</strong> Uma coluna vazia que você não consegue preencher não ajuda em nada.</li>
+    <li><strong>Não tenha pressa com as fundações.</strong> Um 5 ou um 6 que fica nas colunas pode receber um 4 ou um 5 da outra cor.</li>
+  </ul>
+
+  <h2>Perguntas frequentes sobre paciência</h2>
+  <section class="faq">
+    <h3>Esta paciência é grátis?</h3>
+    <p>Sim. Jogue quantas partidas quiser no navegador, no celular, tablet ou computador. Não precisa baixar nada nem criar conta.</p>
+    <h3>Dá para vencer todas as partidas de paciência?</h3>
+    <p>Não. Algumas distribuições não têm solução, por melhor que você jogue, principalmente no Virar 3. Se travar de vez, comece outro jogo: não quer dizer que você jogou mal.</p>
+    <h3>Quantas vezes posso passar pelo monte?</h3>
+    <p>Quantas quiser. Quando o monte acabar, toque nele para virá-lo de novo.</p>
+    <h3>Tem limite para desfazer?</h3>
+    <p>Não. Você pode desfazer todos os lances até o começo do jogo.</p>
+    <h3>Qual a diferença entre Klondike e paciência?</h3>
+    <p>Paciência é o nome de qualquer jogo de cartas para uma pessoa só. O Klondike é a versão em que quase todo mundo pensa quando fala em paciência, e é a que você joga aqui.</p>
+  </section>
+</section>
+
+{{related:solitaire}}

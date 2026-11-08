@@ -255,9 +255,28 @@
     "Snakes and Ladders": "Serpientes y escaleras",
     ", move here": ", mover aquí",
     ", for a gammon (double win)": ", con gammon (victoria doble)",
-    ", for a backgammon (triple win)": ", con backgammon (victoria triple)"
+    ", for a backgammon (triple win)": ", con backgammon (victoria triple)",
+    "Send this link. The game starts when they open it on their device (logged out, or with their own account, not yours).": "Envía este enlace. La partida empieza cuando lo abra en su dispositivo (sin sesión iniciada o con su propia cuenta, no la tuya).",
+    "Log in to play online": "Inicia sesión para jugar online",
+    "Log in (it’s free) to play online, then tap Try again.": "Inicia sesión (es gratis) para jugar online y luego toca Reintentar.",
+    "Sign up or log in": "Regístrate o inicia sesión",
+    "Try again": "Reintentar",
+    "Play here instead": "Jugar aquí",
+    "Couldn’t connect to the online game": "No se ha podido conectar con la partida online",
+    "Couldn’t connect to the online game. Check your connection and try again.": "No se ha podido conectar con la partida online. Revisa tu conexión y vuelve a intentarlo.",
+    "That game link isn’t valid any more. Ask your friend for a new one.": "Ese enlace de partida ya no es válido. Pídele uno nuevo a tu amigo.",
+    "This game already has two players.": "Esta partida ya tiene dos jugadores.",
+    "Your last move didn’t reach your friend. Reload to get both boards back in step.": "Tu última jugada no le ha llegado a tu amigo. Recarga para que los dos tableros vuelvan a coincidir.",
+    "Reload": "Recargar",
+    "That move didn’t reach your friend": "La jugada no le ha llegado a tu amigo",
+    "Your friend joined. Your move": "Tu amigo se ha unido. Te toca",
+    "Your friend joined. Their move": "Tu amigo se ha unido. Le toca a él"
    },
    "patterns": [
+    [
+     "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
+     "{1} juegos gratis: cartas, estrategia, puzles y palabras. Sin registro."
+    ],
     [
      "Player (\\d)’s turn",
      "Turno del jugador {1}"

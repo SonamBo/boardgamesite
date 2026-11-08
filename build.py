@@ -82,6 +82,8 @@ LANGS = {
     "en": {"name": "English", "locale": "en_US", "home": "/"},
     "es": {"name": "Español", "locale": "es_ES", "home": "/es"},
     "fr": {"name": "Français", "locale": "fr_FR", "home": "/fr"},
+    "de": {"name": "Deutsch", "locale": "de_DE", "home": "/de"},
+    "pt": {"name": "Português", "locale": "pt_BR", "home": "/pt"},
 }
 I18N = {l: json.loads((SRC / "i18n" / f"{l}.json").read_text(encoding="utf-8")) for l in LANGS if l != "en"}
 MISSING = set()

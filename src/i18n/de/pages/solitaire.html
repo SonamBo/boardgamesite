@@ -1,0 +1,96 @@
+<!-- title: Solitär online kostenlos: klassisches Klondike | BoardGameSite -->
+<!-- description: Spiel kostenlos Solitär (Klondike) im Browser. Ziehe 1 oder 3 Karten, tippe oder ziehe Karten und mach Züge beliebig oft rückgängig. Ohne Download und Anmeldung. -->
+<!-- path: /de/spielen/solitaer -->
+<!-- out: de/spielen/solitaer.html -->
+<!-- alt: /play/solitaire -->
+<!-- nav: play -->
+<!-- script: /assets/js/solitaire.js -->
+<!-- kind: game -->
+<!-- game: solitaire -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <symbol id="suit-0" viewBox="0 0 24 24"><path d="M12 2C9 6 3 9.5 3 14a4.5 4.5 0 0 0 7.6 3.2c-.3 1.9-1 3.3-2.6 4.8h8c-1.6-1.5-2.3-2.9-2.6-4.8A4.5 4.5 0 0 0 21 14c0-4.5-6-8-9-12z"/></symbol>
+  <symbol id="suit-1" viewBox="0 0 24 24"><path d="M12 21.5s-7.6-4.8-9.7-9.4C.7 8.5 2.7 4 6.7 4c2.3 0 3.8 1.3 5.3 3.2C13.5 5.3 15 4 17.3 4c4 0 6 4.5 4.4 8.1-2.1 4.6-9.7 9.4-9.7 9.4z"/></symbol>
+  <symbol id="suit-2" viewBox="0 0 24 24"><path d="M12 1.5l8.5 10.5L12 22.5 3.5 12z"/></symbol>
+  <symbol id="suit-3" viewBox="0 0 24 24"><path d="M12 2.5a4.3 4.3 0 0 0-3.7 6.5A4.3 4.3 0 1 0 10.6 16c-.3 2.3-1.1 4-2.8 5.5h8.4c-1.7-1.5-2.5-3.2-2.8-5.5a4.3 4.3 0 1 0 2.3-7A4.3 4.3 0 0 0 12 2.5z"/></symbol>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 16px; margin-top: -16px">
+  <a class="back" href="/">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    Alle Spiele
+  </a>
+  <div class="sol-wrap" data-max-root>
+  <div class="board-head">
+    <h1 id="board-title">Solitär</h1>
+    <div class="head-right">
+      <p id="status" class="status" role="status" aria-live="polite">Leg jede Farbe vom Ass bis zum König ab</p>
+      <button type="button" class="icon-btn" data-sound-toggle aria-label="Ton" aria-pressed="true"></button>
+    </div>
+  </div>
+
+  <div class="sol-bar">
+    <button id="new-game" type="button" class="btn btn-gold raised">Neues Spiel</button>
+    <button id="undo" type="button" class="btn btn-outline" disabled>Rückgängig</button>
+    <button id="finish" type="button" class="btn btn-green" hidden>Fertig spielen</button>
+    <div class="seg" role="group" aria-label="Gezogene Karten (startet ein neues Spiel)" style="flex: 0 0 auto">
+      <button type="button" data-draw="1">1 ziehen</button>
+      <button type="button" data-draw="3">3 ziehen</button>
+    </div>
+    <p class="sol-stats"><span>Züge <b id="moves">0</b></span><span>Zeit <b id="time">0:00</b></span></p>
+  </div>
+
+  <div id="table" class="sol-table">
+    <div id="area" class="sol-area" aria-label="Solitär-Tisch"></div>
+    <div id="sol-result" class="sol-result" hidden>
+      <div id="result" class="result">
+        <img id="result-img" src="/assets/img/fox-trophy.webp" alt="" width="280" height="280">
+        <p id="result-text" class="big">Du hast gewonnen!</p>
+        <p id="result-sub" class="text-2" style="font-size: 15px"></p>
+        <button id="again" type="button" class="btn btn-gold raised">Nochmal spielen</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <p class="board-hint">Tippe auf eine Karte, um sie an den besten Platz zu legen, oder zieh sie. Tippe auf den Stapel, um Karten aufzudecken. Deine Bilanz: <span id="record">0 von 0 Spielen gewonnen</span></p>
+
+</div>
+
+<section class="page game-guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">Wie spielt man Solitär?</h2>
+  <p>Das ist Klondike, die beliebteste Form von Solitär (auch Patience genannt). Ziel ist, alle 52 Karten auf die vier Ablagestapel oben rechts zu bringen, einen pro Farbe, jeweils vom Ass bis zum König.</p>
+  <ol>
+    <li><strong>Das Auslegen.</strong> Die Karten werden in sieben Reihen ausgelegt: In der ersten liegt eine Karte, in der zweiten zwei und so weiter bis sieben. Nur die unterste Karte jeder Reihe liegt offen. Der Rest bildet verdeckt den Stapel oben links.</li>
+    <li><strong>Leg abwechselnd die Farben an.</strong> In den Reihen legst du eine Karte auf eine, die um eins höher ist und die andere Farbe hat: eine rote 6 auf eine schwarze 7, einen schwarzen Buben auf eine rote Dame.</li>
+    <li><strong>Verschieb ganze Folgen.</strong> Eine geordnete Folge offener Karten kannst du komplett in eine andere Reihe verschieben. Wird eine verdeckte Karte frei, dreht sie sich um.</li>
+    <li><strong>Nur Könige kommen auf leere Plätze.</strong> Eine leere Reihe darf nur ein König belegen, oder eine Folge, die mit einem König beginnt.</li>
+    <li><strong>Zieh, wenn du nicht weiterkommst.</strong> Tippe auf den Stapel, um Karten aufzudecken. Ist er leer, tippst du nochmal und fängst von vorn an, so oft du willst.</li>
+    <li><strong>Du gewinnst,</strong> wenn alle vier Farben bis zum König abgelegt sind.</li>
+  </ol>
+  <p>Tippe auf eine Karte, um sie automatisch an den besten Platz zu schicken, oder zieh sie, wohin du willst. Vertan? Nimm so viele Züge zurück, wie du möchtest. Sind alle Karten aufgedeckt und der Stapel leer, legt <strong>Fertig spielen</strong> den Rest für dich ab.</p>
+
+  <h2>1 Karte oder 3 Karten ziehen?</h2>
+  <p>Bei <strong>1 ziehen</strong> deckst du immer eine Karte auf, sodass du jede Karte im Stapel erreichen kannst. Du gewinnst viel öfter, ideal für eine entspannte Runde. <strong>3 ziehen</strong> ist die klassische, schwierigere Variante: Die Karten kommen zu dritt, und nur die oberste ist spielbar, also bleiben manche bis zum nächsten Durchgang verdeckt. Ein Wechsel startet ein neues Spiel.</p>
+
+  <h2>Tipps, um öfter zu gewinnen</h2>
+  <ul>
+    <li><strong>Deck zuerst verdeckte Karten auf.</strong> Jede aufgedeckte Karte bringt neue Möglichkeiten. Arbeite an den Reihen mit den meisten verdeckten Karten.</li>
+    <li><strong>Leg Asse und Zweien sofort ab.</strong> Woanders nützen sie dir nichts.</li>
+    <li><strong>Mach keine Reihe leer, wenn du keinen König dafür hast.</strong> Ein leerer Platz, den du nicht füllen kannst, bringt dir nichts.</li>
+    <li><strong>Leg nicht zu schnell ab.</strong> Eine 5 oder 6, die in den Reihen bleibt, kann noch eine 4 oder 5 der anderen Farbe aufnehmen.</li>
+  </ul>
+
+  <h2>Häufige Fragen zu Solitär</h2>
+  <section class="faq">
+    <h3>Ist dieses Solitär kostenlos?</h3>
+    <p>Ja. Spiel so viele Runden, wie du willst, im Browser, am Handy, Tablet oder Computer. Du musst nichts herunterladen und kein Konto anlegen.</p>
+    <h3>Kann man jedes Solitär gewinnen?</h3>
+    <p>Nein. Manche Verteilungen lassen sich auch mit perfektem Spiel nicht lösen, vor allem bei 3 ziehen. Wenn du wirklich feststeckst, starte ein neues Spiel: Das heißt nicht, dass du etwas falsch gemacht hast.</p>
+    <h3>Wie oft darf ich durch den Stapel gehen?</h3>
+    <p>So oft du willst. Ist der Stapel leer, tippst du darauf und drehst ihn wieder um.</p>
+    <h3>Gibt es ein Limit fürs Rückgängigmachen?</h3>
+    <p>Nein. Du kannst alle Züge bis zum Spielbeginn zurücknehmen.</p>
+    <h3>Was ist der Unterschied zwischen Klondike und Solitär?</h3>
+    <p>Solitär oder Patience ist der Oberbegriff für Kartenspiele, die man allein spielt. Klondike ist die Variante, an die fast jeder bei „Solitär“ denkt, und die kannst du hier spielen.</p>
+  </section>
+</section>
+
+{{related:solitaire}}

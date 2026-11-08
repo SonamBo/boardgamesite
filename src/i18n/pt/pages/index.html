@@ -1,0 +1,88 @@
+<!-- title: Jogos de tabuleiro grátis online | BoardGameSite -->
+<!-- description: Jogue grátis xadrez, damas, paciência, sudoku, Lig 4, campo minado, ludo e mais no navegador. Sem download e sem cadastro, no celular ou no computador. -->
+<!-- path: /pt -->
+<!-- out: pt.html -->
+<!-- alt: / -->
+<!-- nav: play -->
+<!-- kind: home -->
+<!-- script: /assets/js/home.js -->
+<section class="wb" id="welcome-back" hidden aria-labelledby="wb-h">
+  <div class="wb-head">
+    <img class="wb-fox" src="/assets/img/fox-wave.webp" alt="" width="280" height="280">
+    <div class="wb-hi"><h2 id="wb-h">Que bom te ver de novo</h2><p class="wb-streak text-2"></p>
+      <div class="wb-goal" hidden><span class="wb-goal-bar" aria-hidden="true"><span></span></span><select class="wb-goal-pick" aria-label="Meta diária"></select><small class="muted"></small></div></div>
+  </div>
+  <div class="wb-cards"></div>
+  <div class="wb-recent" hidden><h3>Seus jogos</h3><div class="wb-recent-row"></div></div>
+</section>
+
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Grátis · Sem download · No navegador</p>
+    <h1>Jogos de tabuleiro grátis, prontos quando você quiser.</h1>
+    <p class="hero-lede">Xadrez, damas, paciência, sudoku, jogos de dados e muito mais, a um clique. Jogue contra o computador ou passe o celular para um amigo.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold btn-lg raised" href="#games">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+        Jogar agora
+      </a>
+      <button type="button" class="btn btn-outline btn-lg" data-open-accounts="hero">Criar conta grátis</button>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="/assets/img/hero-fox.webp" alt="Nossa raposa de moletom vinho, ajoelhada ao lado de um tabuleiro de xadrez de nogueira com um rei, um cavalo, dados dourados, fichas e um leque de cartas" width="1200" height="896" fetchpriority="high">
+  </div>
+</section>
+
+<section id="games" style="display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 80px">
+  <h2 class="section-title">Escolha um jogo</h2>
+  <div class="shelf" aria-labelledby="shelf-strategy">
+    <div class="shelf-head"><h3 id="shelf-strategy">Jogos de estratégia</h3></div>
+{{cards:chess,checkers,four-in-a-row,reversi,mancala,dots-and-boxes}}
+  </div>
+  <div class="shelf" aria-labelledby="shelf-more">
+    <div class="shelf-head"><h3 id="shelf-more">Cartas, quebra-cabeças e dados</h3></div>
+{{cards:solitaire,sudoku,mines,backgammon,ludo,snakes-and-ladders}}
+  </div>
+  <article class="soon-card soon-wide">
+    <span class="bubble"><img src="/assets/img/fox-kneel.webp" alt="" width="280" height="280"></span>
+    <div>
+      <h3>Mais de 50 jogos em inglês</h3>
+      <p>Estamos traduzindo o resto dos jogos e guias para o português. Enquanto isso, você pode jogar todos eles na versão em inglês.</p>
+      <a class="link-green" href="https://boardgamesite.com/#games">Ver todos os jogos (em inglês)</a>
+    </div>
+  </article>
+</section>
+
+<section class="watch card-dark">
+  <div class="watch-copy">
+    <h2>Assista e aprenda</h2>
+    <p class="text-2">Soluções dos desafios diários, dicas e novidades no nosso canal do YouTube.</p>
+  </div>
+  <a class="yt-link" href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener">
+    <span class="yt-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
+    <span class="yt-text"><b>Pixel Art Games</b><small>Inscreva-se no YouTube</small></span>
+    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+</section>
+
+<section class="intro" aria-labelledby="intro-h">
+  <h2 id="intro-h">Jogos de tabuleiro grátis, sem download</h2>
+  <p>O BoardGameSite reúne os jogos de tabuleiro e de cartas de sempre para você jogar na hora no navegador, pelo celular, tablet ou computador. Não precisa instalar nada nem fazer cadastro. Jogue <a href="/play/chess">xadrez</a> ou <a href="/play/checkers">damas</a> contra o computador em três níveis, do fácil ao difícil; relaxe com uma <a href="/play/solitaire">paciência</a> ou um <a href="/play/sudoku">sudoku</a>; ou desafie um amigo no mesmo aparelho no <a href="/play/four-in-a-row">Lig 4</a>, no <a href="/play/ludo">ludo</a> ou em <a href="/play/snakes-and-ladders">cobras e escadas</a>.</p>
+  <p>Cada jogo vem com as regras explicadas de um jeito simples e algumas dicas para você vencer mais partidas.</p>
+</section>
+
+<section id="newsletter" class="newsletter">
+  <div class="newsletter-copy">
+    <h2>Seja o primeiro a testar os jogos novos</h2>
+    <p>Um e-mail curto quando lançarmos um jogo ou recurso novo. Sem spam.</p>
+  </div>
+  <form class="nl-form" data-newsletter="home-pt" novalidate>
+    <div class="nl-row">
+      <label class="visually-hidden" for="nl-email">E-mail</label>
+      <input id="nl-email" type="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" required>
+      <button type="submit" class="btn btn-gold" style="min-height: 50px">Avise-me</button>
+    </div>
+    <p class="form-msg" role="status"></p>
+  </form>
+</section>

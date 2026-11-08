@@ -255,9 +255,28 @@
     "Snakes and Ladders": "Serpents et échelles",
     ", move here": ", jouer ici",
     ", for a gammon (double win)": ", avec gammon (victoire double)",
-    ", for a backgammon (triple win)": ", avec backgammon (victoire triple)"
+    ", for a backgammon (triple win)": ", avec backgammon (victoire triple)",
+    "Send this link. The game starts when they open it on their device (logged out, or with their own account, not yours).": "Envoyez ce lien. La partie commence quand votre ami l’ouvre sur son appareil (déconnecté, ou avec son propre compte, pas le vôtre).",
+    "Log in to play online": "Connectez-vous pour jouer en ligne",
+    "Log in (it’s free) to play online, then tap Try again.": "Connectez-vous (c’est gratuit) pour jouer en ligne, puis touchez Réessayer.",
+    "Sign up or log in": "S’inscrire ou se connecter",
+    "Try again": "Réessayer",
+    "Play here instead": "Jouer ici",
+    "Couldn’t connect to the online game": "Impossible de se connecter à la partie en ligne",
+    "Couldn’t connect to the online game. Check your connection and try again.": "Impossible de se connecter à la partie en ligne. Vérifiez votre connexion et réessayez.",
+    "That game link isn’t valid any more. Ask your friend for a new one.": "Ce lien de partie n’est plus valide. Demandez-en un nouveau à votre ami.",
+    "This game already has two players.": "Cette partie a déjà deux joueurs.",
+    "Your last move didn’t reach your friend. Reload to get both boards back in step.": "Votre dernier coup n’est pas parvenu à votre ami. Rechargez pour remettre les deux plateaux d’accord.",
+    "Reload": "Recharger",
+    "That move didn’t reach your friend": "Ce coup n’est pas parvenu à votre ami",
+    "Your friend joined. Your move": "Votre ami est là. À vous de jouer",
+    "Your friend joined. Their move": "Votre ami est là. À lui de jouer"
    },
    "patterns": [
+    [
+     "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
+     "{1} jeux gratuits : cartes, stratégie, puzzles et mots. Sans inscription."
+    ],
     [
      "Player (\\d)’s turn",
      "Au tour du joueur {1}"

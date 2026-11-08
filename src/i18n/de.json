@@ -1,0 +1,1147 @@
+{
+ "ui": {
+  "Skip to content": "Zum Inhalt springen",
+  "Your streak and XP": "Deine Serie und deine XP",
+  "Day streak": "Tage in Folge",
+  "XP from lessons": "XP aus Lektionen",
+  "Switch to light theme": "Zum hellen Design wechseln",
+  "Light or dark": "Hell oder dunkel",
+  "Menu": "Menü",
+  "Main": "Hauptmenü",
+  "Play": "Spielen",
+  "Daily challenge": "Tagesrätsel",
+  "Learn": "Lernen",
+  "My progress": "Mein Fortschritt",
+  "Watch on YouTube": "Auf YouTube ansehen",
+  "(opens in a new tab)": "(öffnet in einem neuen Tab)",
+  "About": "Über uns",
+  "Sign up": "Registrieren",
+  "Log in": "Anmelden",
+  "Install app": "App installieren",
+  "Footer": "Fußzeile",
+  "How to play": "Spielregeln",
+  "Articles": "Artikel",
+  "Contact": "Kontakt",
+  "Privacy Policy": "Datenschutz",
+  "Terms": "Nutzungsbedingungen",
+  "Language": "Sprache",
+  "Quick links": "Schnellzugriff",
+  "Daily": "Täglich",
+  "Progress": "Fortschritt",
+  "Me": "Ich",
+  "Home": "Startseite",
+  "More games to play": "Weitere Spiele",
+  "Strategy": "Strategie",
+  "vs Computer": "Gegen den Computer",
+  "2 players": "2 Spieler",
+  "2–4 players": "2–4 Spieler",
+  "Cards": "Karten",
+  "Dice": "Würfel",
+  "Puzzle": "Rätsel",
+  "Single player": "Allein",
+  "3 min": "3 Min.",
+  "5 min": "5 Min.",
+  "10 min": "10 Min."
+ },
+ "games": {
+  "chess": {
+   "name": "Schach",
+   "full": "Schach",
+   "card": "Das große Strategiespiel mit allen Regeln. Spiel gegen den Computer in drei Stufen oder gegen einen Freund.",
+   "blurb": "Der Klassiker. Setz den König matt, um zu gewinnen."
+  },
+  "checkers": {
+   "name": "Dame",
+   "full": "Dame",
+   "card": "Überspringe gegnerische Steine, mach Damen und räum das Brett ab. Schlagen ist Pflicht.",
+   "blurb": "Steine überspringen, Damen machen, Brett abräumen."
+  },
+  "solitaire": {
+   "name": "Solitär",
+   "full": "Solitär (Klondike)",
+   "card": "Das klassische Klondike. Leg jede Farbe vom Ass bis zum König ab, ziehe 1 oder 3 Karten und mach Züge beliebig oft rückgängig.",
+   "blurb": "Klassisches Klondike mit 1 oder 3 Karten und unbegrenztem Rückgängig."
+  },
+  "sudoku": {
+   "name": "Sudoku",
+   "full": "Sudoku",
+   "card": "Füll jede Zeile, Spalte und jeden Block mit den Zahlen 1 bis 9. Drei Stufen, Notizen, Tipps und ein tägliches Sudoku.",
+   "blurb": "Füll das Gitter mit 1 bis 9. Drei Stufen und ein Tagesrätsel."
+  },
+  "four-in-a-row": {
+   "name": "Vier gewinnt",
+   "full": "Vier gewinnt",
+   "card": "Wirf deine Steine ein und bilde vor deinem Gegner eine Viererreihe: waagerecht, senkrecht oder diagonal.",
+   "blurb": "Steine einwerfen und vier in eine Reihe bringen."
+  },
+  "mancala": {
+   "name": "Mancala",
+   "full": "Mancala (Kalaha)",
+   "card": "Das uralte Bohnenspiel mit Kalaha-Regeln. Säe Bohnen aus, hol dir Extrazüge und erbeute die Bohnen deines Gegners.",
+   "blurb": "Bohnen säen, Extrazüge holen und Beute machen."
+  },
+  "backgammon": {
+   "name": "Backgammon",
+   "full": "Backgammon",
+   "card": "Das uralte Rennspiel. Schlag einzelne Steine, bau Punkte und würfle deine 15 Steine vor dem Computer oder einem Freund heraus.",
+   "blurb": "Bring deine Steine nach Hause und würfle sie zuerst heraus."
+  },
+  "reversi": {
+   "name": "Reversi",
+   "full": "Reversi (Othello)",
+   "card": "Schließ die Steine deines Gegners zwischen deinen ein, um sie umzudrehen. Wer bei vollem Brett mehr Steine hat, gewinnt.",
+   "blurb": "Steine einschließen und umdrehen."
+  },
+  "ludo": {
+   "name": "Ludo",
+   "full": "Ludo",
+   "card": "Der Cousin von Mensch ärgere Dich nicht. Bring deine vier Figuren ins Ziel, schick Gegner zurück und ruh dich auf den Sternfeldern aus.",
+   "blurb": "Vier Figuren ins Ziel bringen. Mit einer 6 geht es los."
+  },
+  "snakes-and-ladders": {
+   "name": "Leiterspiel",
+   "full": "Leiterspiel (Schlangen und Leitern)",
+   "card": "Das Familien-Wettrennen bis Feld 100. Klettere Leitern hoch und weich den Schlangen aus, mit bis zu vier Spielern.",
+   "blurb": "Leitern hoch, Schlangen meiden, Feld 100 erreichen."
+  },
+  "mines": {
+   "name": "Minesweeper",
+   "full": "Minesweeper",
+   "card": "Deck alle sicheren Felder mit Hilfe der Zahlen auf und markiere die versteckten Minen. Der erste Klick ist immer sicher.",
+   "blurb": "Räum das Feld mit den Zahlen frei. Keine Mine erwischen."
+  },
+  "dots-and-boxes": {
+   "name": "Käsekästchen",
+   "full": "Käsekästchen",
+   "card": "Verbindet abwechselnd Punkte. Zieh die vierte Seite eines Kästchens, um es zu bekommen, und zieh gleich nochmal. Wer mehr Kästchen hat, gewinnt.",
+   "blurb": "Punkte verbinden und Kästchen schließen."
+  }
+ },
+ "runtime": {
+  "common": {
+   "exact": {
+    "Your move": "Du bist dran",
+    "Your turn": "Du bist dran",
+    "Your turn again": "Du bist nochmal dran",
+    "You": "Du",
+    "Computer": "Computer",
+    "The computer": "Der Computer",
+    "Player": "Spieler",
+    "Player 1": "Spieler 1",
+    "Player 2": "Spieler 2",
+    "Player 3": "Spieler 3",
+    "Player 4": "Spieler 4",
+    "Computer 1": "Computer 1",
+    "Computer 2": "Computer 2",
+    "Computer 3": "Computer 3",
+    "You win!": "Du hast gewonnen!",
+    "You won!": "Du hast gewonnen!",
+    "Computer wins": "Der Computer gewinnt",
+    "The computer won": "Der Computer hat gewonnen",
+    "Your friend wins": "Dein Freund gewinnt",
+    "It’s a draw": "Unentschieden",
+    "Draw": "Unentschieden",
+    "You resigned": "Du hast aufgegeben",
+    "Good game.": "Gutes Spiel.",
+    "Nicely played.": "Gut gespielt.",
+    "Have another go?": "Noch eine Runde?",
+    "Computer is thinking…": "Der Computer überlegt…",
+    "Computer is thinking": "Der Computer überlegt",
+    "Waiting for your friend": "Warte auf deinen Freund",
+    "Welcome back. Your turn": "Willkommen zurück. Du bist dran",
+    "Play again": "Nochmal spielen",
+    "New game": "Neues Spiel",
+    "Undo": "Rückgängig",
+    "Full screen": "Vollbild",
+    "Exit full screen": "Vollbild beenden",
+    "Exit full screen (Esc)": "Vollbild beenden (Esc)",
+    "Sound": "Ton",
+    "Sound on": "Ton an",
+    "Sound off": "Ton aus",
+    "Switch to dark theme": "Zum dunklen Design wechseln",
+    "Switch to light theme": "Zum hellen Design wechseln",
+    "Start a streak today": "Starte heute eine Serie",
+    "Install app": "App installieren",
+    "Die": "Würfel",
+    "Keep": "Halten",
+    "Kept": "Gehalten",
+    "Face-down card": "Verdeckte Karte",
+    "Close": "Schließen",
+    "Easy": "Leicht",
+    "Medium": "Mittel",
+    "Hard": "Schwer",
+    "White": "Weiß",
+    "Black": "Schwarz",
+    "Gold": "Gold",
+    "Ivory": "Elfenbein",
+    "Red": "Rot",
+    "Green": "Grün",
+    "Yellow": "Gelb",
+    "Blue": "Blau",
+    "Play a friend online": "Online gegen einen Freund",
+    "Get a link to send to a friend. You’ll play on separate devices.": "Hol dir einen Link für einen Freund. Ihr spielt jeder auf seinem eigenen Gerät.",
+    "Create a game link": "Spiel-Link erstellen",
+    "Creating a game…": "Spiel wird erstellt…",
+    "Connecting…": "Verbinde…",
+    "Couldn’t start online play. Check your connection and try again": "Das Online-Spiel konnte nicht starten. Prüf deine Verbindung und versuch es nochmal",
+    "Copy link": "Link kopieren",
+    "Link copied. Send it to your friend": "Link kopiert. Schick ihn deinem Freund",
+    "Send this link. The game starts when they open it.": "Schick diesen Link. Das Spiel beginnt, sobald er ihn öffnet.",
+    "Send this link. The game starts when they open it on their device (logged out, or with their own account, not yours).": "Schick diesen Link. Das Spiel beginnt, sobald er ihn auf seinem Gerät öffnet (abgemeldet oder mit seinem eigenen Konto, nicht deinem).",
+    "Online game": "Online-Spiel",
+    "Resign": "Aufgeben",
+    "Leave": "Verlassen",
+    "Rematch": "Revanche",
+    "Their move": "Dein Gegner ist dran",
+    "Your friend": "Dein Freund",
+    "Lost the connection to the online game": "Verbindung zum Online-Spiel verloren",
+    "Please log in to play online": "Bitte melde dich an, um online zu spielen",
+    "Log in to play online": "Melde dich an, um online zu spielen",
+    "Log in (it’s free) to play online, then tap Try again.": "Melde dich an (kostenlos), um online zu spielen, und tippe dann auf Nochmal versuchen.",
+    "Sign up or log in": "Registrieren oder anmelden",
+    "Try again": "Nochmal versuchen",
+    "Play here instead": "Lieber hier spielen",
+    "Couldn’t connect to the online game": "Keine Verbindung zum Online-Spiel",
+    "Couldn’t connect to the online game. Check your connection and try again.": "Keine Verbindung zum Online-Spiel. Prüf deine Verbindung und versuch es nochmal.",
+    "That game link isn’t valid any more": "Dieser Spiel-Link ist nicht mehr gültig",
+    "That game link isn’t valid any more. Ask your friend for a new one.": "Dieser Spiel-Link ist nicht mehr gültig. Frag deinen Freund nach einem neuen.",
+    "This game already has two players": "Dieses Spiel hat schon zwei Spieler",
+    "This game already has two players.": "Dieses Spiel hat schon zwei Spieler.",
+    "Your last move didn’t reach your friend. Reload to get both boards back in step.": "Dein letzter Zug ist nicht bei deinem Freund angekommen. Lade neu, damit beide Bretter wieder gleich sind.",
+    "Reload": "Neu laden",
+    "That move didn’t reach your friend": "Der Zug ist nicht bei deinem Freund angekommen",
+    "Your friend joined. Your move": "Dein Freund ist da. Du bist dran",
+    "Your friend joined. Their move": "Dein Freund ist da. Er ist dran",
+    "Hi! Welcome to BoardGameSite.": "Hallo! Willkommen bei BoardGameSite.",
+    "Welcome to BoardGameSite": "Willkommen bei BoardGameSite",
+    "What would you like to do today?": "Worauf hast du heute Lust?",
+    "Play a game now": "Gleich spielen",
+    "Learn a game": "Ein Spiel lernen",
+    "Short hands-on lessons for Chess, Go, Sudoku, Solitaire and more.": "Kurze praktische Lektionen zu Schach, Go, Sudoku, Solitär und mehr (auf Englisch).",
+    "I just want to look around": "Ich schau mich nur um",
+    "Pick one to start. Every game is on the home page too.": "Such dir eins aus. Alle Spiele findest du auch auf der Startseite.",
+    "Let’s play!": "Los geht’s!",
+    "Skip": "Überspringen",
+    "Back": "Zurück",
+    "Cookie choice": "Cookies",
+    "We use analytics cookies to see which games people enjoy.": "Wir nutzen Analyse-Cookies, um zu sehen, welche Spiele gut ankommen.",
+    "Accept": "Akzeptieren",
+    "Decline": "Ablehnen",
+    "Create account": "Konto erstellen",
+    "Create your account": "Erstelle dein Konto",
+    "Create a free account": "Kostenloses Konto erstellen",
+    "Log in": "Anmelden",
+    "Log in to pick up your record and streaks.": "Melde dich an, um deine Bilanz und Serien zu übernehmen.",
+    "Free. Save your wins and streaks, and pick them up on any device.": "Kostenlos. Speichere deine Siege und Serien und nutze sie auf jedem Gerät.",
+    "Continue with Google": "Weiter mit Google",
+    "or": "oder",
+    "Email": "E-Mail",
+    "Email address": "E-Mail-Adresse",
+    "Password": "Passwort",
+    "Password (6+ characters)": "Passwort (mindestens 6 Zeichen)",
+    "Name shown on leaderboards": "Name in den Bestenlisten",
+    "Your name": "Dein Name",
+    "Forgot your password?": "Passwort vergessen?",
+    "Already have an account?": "Du hast schon ein Konto?",
+    "New here?": "Neu hier?",
+    "Welcome back": "Willkommen zurück",
+    "Your account": "Dein Konto",
+    "Please enter a valid email address.": "Bitte gib eine gültige E-Mail-Adresse ein.",
+    "Please use at least 6 characters for your password.": "Dein Passwort braucht mindestens 6 Zeichen.",
+    "Please choose a name. It’s what other players will see.": "Bitte wähl einen Namen. Den sehen die anderen Spieler.",
+    "Something went wrong. Please try again.": "Etwas ist schiefgegangen. Bitte versuch es nochmal.",
+    "That email and password don’t match. Check them, or reset your password.": "E-Mail und Passwort passen nicht zusammen. Prüf sie oder setz dein Passwort zurück.",
+    "There’s already an account with this email. Try logging in instead.": "Mit dieser E-Mail gibt es schon ein Konto. Melde dich stattdessen an.",
+    "There’s no account with this email yet. Sign up instead?": "Mit dieser E-Mail gibt es noch kein Konto. Möchtest du dich registrieren?",
+    "Too many tries. Please wait a few minutes and try again.": "Zu viele Versuche. Bitte warte ein paar Minuten und versuch es dann nochmal.",
+    "You seem to be offline. Check your connection and try again.": "Du scheinst offline zu sein. Prüf deine Verbindung und versuch es nochmal.",
+    "Ace": "Ass",
+    "Jack": "Bube",
+    "Queen": "Dame",
+    "King": "König",
+    "clubs": "Kreuz",
+    "diamonds": "Karo",
+    "hearts": "Herz",
+    "spades": "Pik",
+    "By continuing you agree to our": "Wenn du fortfährst, akzeptierst du unsere",
+    "and": "und",
+    "Terms": "Nutzungsbedingungen",
+    "Privacy Policy": "Datenschutzerklärung",
+    "Snakes and Ladders": "Leiterspiel",
+    ", move here": ", hierher ziehen",
+    ", for a gammon (double win)": ", mit Gammon (doppelter Sieg)",
+    ", for a backgammon (triple win)": ", mit Backgammon (dreifacher Sieg)"
+   },
+   "patterns": [
+    [
+     "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
+     "{1} kostenlose Spiele: Karten, Strategie, Rätsel und Wörter. Ohne Anmeldung."
+    ],
+    [
+     "Player (\\d)’s turn",
+     "Spieler {1} ist dran"
+    ],
+    [
+     "Player (\\d) wins!",
+     "Spieler {1} gewinnt!"
+    ],
+    [
+     "Player (\\d) won",
+     "Spieler {1} hat gewonnen"
+    ],
+    [
+     "(\\d+)-day streak, (\\d+) XP\\. Open your progress",
+     "{1} Tage in Folge, {2} XP. Fortschritt öffnen"
+    ],
+    [
+     "(\\d+) wins? · (\\d+) loss(?:es)? · (\\d+) draws?",
+     "Siege: {1} · Niederlagen: {2} · Unentschieden: {3}"
+    ],
+    [
+     "Welcome back\\. (.+)",
+     "Willkommen zurück. {1}"
+    ],
+    [
+     "Waiting for (.+)",
+     "Warte auf {1}"
+    ],
+    [
+     "(.+) wins!",
+     "{1} gewinnt!"
+    ],
+    [
+     "(.+) won",
+     "{1} hat gewonnen"
+    ],
+    [
+     "(.+) is thinking…?",
+     "{1} überlegt…"
+    ],
+    [
+     "Die showing (\\d)",
+     "Würfel zeigt {1}"
+    ],
+    [
+     "Ace of (\\w+)",
+     "{1}-Ass"
+    ],
+    [
+     "Jack of (\\w+)",
+     "{1}-Bube"
+    ],
+    [
+     "Queen of (\\w+)",
+     "{1}-Dame"
+    ],
+    [
+     "King of (\\w+)",
+     "{1}-König"
+    ],
+    [
+     "(\\d+) of (\\w+)",
+     "{2} {1}"
+    ],
+    [
+     "Signed in as (.+)",
+     "Angemeldet als {1}"
+    ],
+    [
+     "Step (\\d+) of (\\d+)",
+     "Schritt {1} von {2}"
+    ]
+   ]
+  },
+  "chess": {
+   "exact": {
+    "Check!": "Schach!",
+    "Checkmate": "Schachmatt",
+    "Checkmate!": "Schachmatt!",
+    "Checkmate! You won": "Schachmatt! Du hast gewonnen",
+    "Checkmate. You lost": "Schachmatt. Du hast verloren",
+    "That piece can’t move": "Diese Figur kann nicht ziehen",
+    "White to move": "Weiß am Zug",
+    "Black to move": "Schwarz am Zug",
+    "stalemate": "Patt",
+    "the 50-move rule": "die 50-Züge-Regel",
+    "not enough pieces to checkmate": "zu wenig Material zum Mattsetzen",
+    "threefold repetition": "dreifache Stellungswiederholung",
+    "Queen": "Dame",
+    "Rook": "Turm",
+    "Bishop": "Läufer",
+    "Knight": "Springer"
+   },
+   "patterns": [
+    [
+     "Checkmate\\. The computer won",
+     "Schachmatt. Der Computer hat gewonnen"
+    ],
+    [
+     "White wins by checkmate!",
+     "Weiß gewinnt durch Schachmatt!"
+    ],
+    [
+     "Black wins by checkmate!",
+     "Schwarz gewinnt durch Schachmatt!"
+    ],
+    [
+     "Draw by (.+)",
+     "Remis durch {1}"
+    ],
+    [
+     "By (.+)\\.",
+     "Durch {1}."
+    ],
+    [
+     "(\\d+) moves played\\.",
+     "{1} Züge gespielt."
+    ],
+    [
+     "Checkmate\\. (.+) won",
+     "Schachmatt. {1} hat gewonnen"
+    ],
+    [
+     "(.+) \\(White\\)",
+     "{1} (Weiß)"
+    ],
+    [
+     "(.+) \\(Black\\)",
+     "{1} (Schwarz)"
+    ],
+    [
+     "([a-h]\\d), white pawn(, move here)?",
+     "{1}, weißer Bauer{2}"
+    ],
+    [
+     "([a-h]\\d), white knight(, move here)?",
+     "{1}, weißer Springer{2}"
+    ],
+    [
+     "([a-h]\\d), white bishop(, move here)?",
+     "{1}, weißer Läufer{2}"
+    ],
+    [
+     "([a-h]\\d), white rook(, move here)?",
+     "{1}, weißer Turm{2}"
+    ],
+    [
+     "([a-h]\\d), white queen(, move here)?",
+     "{1}, weiße Dame{2}"
+    ],
+    [
+     "([a-h]\\d), white king(, move here)?",
+     "{1}, weißer König{2}"
+    ],
+    [
+     "([a-h]\\d), black pawn(, move here)?",
+     "{1}, schwarzer Bauer{2}"
+    ],
+    [
+     "([a-h]\\d), black knight(, move here)?",
+     "{1}, schwarzer Springer{2}"
+    ],
+    [
+     "([a-h]\\d), black bishop(, move here)?",
+     "{1}, schwarzer Läufer{2}"
+    ],
+    [
+     "([a-h]\\d), black rook(, move here)?",
+     "{1}, schwarzer Turm{2}"
+    ],
+    [
+     "([a-h]\\d), black queen(, move here)?",
+     "{1}, schwarze Dame{2}"
+    ],
+    [
+     "([a-h]\\d), black king(, move here)?",
+     "{1}, schwarzer König{2}"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, hierher ziehen"
+    ]
+   ]
+  },
+  "checkers": {
+   "exact": {
+    "Keep jumping": "Weiter springen",
+    "No captures for a long while.": "Schon lange wurde nichts geschlagen.",
+    "Nicely played. New game?": "Gut gespielt. Neues Spiel?",
+    ", move here": ", hierher ziehen"
+   },
+   "patterns": [
+    [
+     "1 piece",
+     "1 Stein"
+    ],
+    [
+     "(\\d+) pieces?",
+     "{1} Steine"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "{1} ist dran: Schlagen ist Pflicht"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "Du bist dran: Schlagen ist Pflicht"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, goldener Stein{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, schwarzer Stein{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, goldene Dame{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, schwarze Dame{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, leer"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, hierher ziehen"
+    ]
+   ]
+  },
+  "four-in-a-row": {
+   "exact": {
+    "The board is full.": "Das Brett ist voll.",
+    "Nicely played. Swap who goes first?": "Gut gespielt. Wer fängt diesmal an?",
+    "Find the winning move": "Finde den Gewinnzug",
+    "Solved!": "Gelöst!",
+    "Not this time": "Diesmal nicht",
+    "Not quite": "Knapp daneben",
+    "Daily challenge": "Tagesrätsel",
+    "Come back tomorrow for a new one.": "Komm morgen für ein neues wieder."
+   },
+   "patterns": [
+    [
+     "1 win",
+     "1 Sieg"
+    ],
+    [
+     "(\\d+) wins?",
+     "{1} Siege"
+    ],
+    [
+     "Column (\\d)",
+     "Spalte {1}"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "1 day",
+     "1 Tag"
+    ],
+    [
+     "(\\d+) days?",
+     "{1} Tage"
+    ]
+   ]
+  },
+  "reversi": {
+   "exact": {
+    "32 discs each.": "32 Steine pro Spieler.",
+    "Computer has no move.": "Der Computer kann nicht ziehen.",
+    "You have no move.": "Du kannst nicht ziehen.",
+    "Computer plays again": "Der Computer zieht nochmal"
+   },
+   "patterns": [
+    [
+     "(\\d+) discs?",
+     "{1} Steine"
+    ],
+    [
+     "You win (\\d+–\\d+)",
+     "Du gewinnst {1}"
+    ],
+    [
+     "Computer wins (\\d+–\\d+)",
+     "Der Computer gewinnt {1}"
+    ],
+    [
+     "Your friend wins (\\d+–\\d+)",
+     "Dein Freund gewinnt {1}"
+    ],
+    [
+     "(.+) wins (\\d+–\\d+)",
+     "{1} gewinnt {2}"
+    ],
+    [
+     "Final score (\\d+–\\d+) \\(Gold – Black\\)\\.",
+     "Endstand {1} (Gold – Schwarz)."
+    ],
+    [
+     "Final score (\\d+–\\d+)\\.",
+     "Endstand {1}."
+    ],
+    [
+     "(.+) has no move\\. Computer plays again",
+     "{1} kann nicht ziehen. Der Computer zieht nochmal"
+    ],
+    [
+     "(?:You|.+) ha(?:ve|s) no move\\. Your turn again",
+     "Kein Zug möglich. Du bist nochmal dran"
+    ],
+    [
+     "(.+) has no move\\. (.+) again",
+     "{1} kann nicht ziehen. {2} ist nochmal dran"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "([a-h]\\d), (?:gold|you)",
+     "{1}, goldener Stein"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black)",
+     "{1}, schwarzer Stein"
+    ],
+    [
+     "([a-h]\\d), you can play here",
+     "{1}, hier kannst du setzen"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, leer"
+    ]
+   ]
+  },
+  "dots-and-boxes": {
+   "exact": {
+    "Your turn: draw a line": "Du bist dran: zieh eine Linie"
+   },
+   "patterns": [
+    [
+     "You closed a box: go again",
+     "Kästchen geschlossen: du bist nochmal dran"
+    ],
+    [
+     "You closed two boxes: go again",
+     "Zwei Kästchen geschlossen: du bist nochmal dran"
+    ],
+    [
+     "The computer closed a box: go again",
+     "Der Computer schließt ein Kästchen und ist nochmal dran"
+    ],
+    [
+     "The computer closed two boxes: go again",
+     "Der Computer schließt zwei Kästchen und ist nochmal dran"
+    ],
+    [
+     "Player (\\d) closed a box: go again",
+     "Spieler {1} schließt ein Kästchen und ist nochmal dran"
+    ],
+    [
+     "Player (\\d) closed two boxes: go again",
+     "Spieler {1} schließt zwei Kästchen und ist nochmal dran"
+    ],
+    [
+     "Player (\\d)’s turn: draw a line",
+     "Spieler {1} ist dran: zieh eine Linie"
+    ],
+    [
+     "Computer’s turn",
+     "Der Computer ist dran"
+    ],
+    [
+     "Player (\\d)’s turn",
+     "Spieler {1} ist dran"
+    ],
+    [
+     "Game over: (\\d+) to (\\d+)",
+     "Spielende: {1} zu {2}"
+    ],
+    [
+     "Boxes: you (\\d+), computer (\\d+)\\.",
+     "Kästchen: du {1}, Computer {2}."
+    ],
+    [
+     "Boxes: (\\d+) to (\\d+)\\.",
+     "Kästchen: {1} zu {2}."
+    ],
+    [
+     "Line ([hv]):(\\d+):(\\d+)",
+     "Linie {1}:{2}:{3}"
+    ]
+   ]
+  },
+  "mancala": {
+   "exact": {
+    "Your turn: pick a pit": "Du bist dran: wähl eine Mulde",
+    "Computer’s turn": "Der Computer ist dran"
+   },
+   "patterns": [
+    [
+     "Computer’s store: 1 seed",
+     "Kalaha des Computers: 1 Bohne"
+    ],
+    [
+     "Computer’s store: (\\d+) seeds",
+     "Kalaha des Computers: {1} Bohnen"
+    ],
+    [
+     "Pit: 1 seed",
+     "Mulde: 1 Bohne"
+    ],
+    [
+     "(?:You’s|Your) store: 1 seed",
+     "Dein Kalaha: 1 Bohne"
+    ],
+    [
+     "You captured (\\d+) seeds!",
+     "Du erbeutest {1} Bohnen!"
+    ],
+    [
+     "(.+) captured (\\d+) seeds!",
+     "{1} erbeutet {2} Bohnen!"
+    ],
+    [
+     "You land in the store: go again!",
+     "Du landest im Kalaha: nochmal!"
+    ],
+    [
+     "(.+) lands in the store: go again!",
+     "{1} landet im Kalaha und ist nochmal dran!"
+    ],
+    [
+     "Player (\\d)’s turn(?:: pick a pit)?",
+     "Spieler {1} ist dran"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "Game over: (\\d+) to (\\d+)",
+     "Spielende: {1} zu {2}"
+    ],
+    [
+     "You (\\d+), computer (\\d+)\\.",
+     "Du {1}, Computer {2}."
+    ],
+    [
+     "You (\\d+), (.+) (\\d+)\\.",
+     "Du {1}, {2} {3}."
+    ],
+    [
+     "Player 1 (\\d+), Player 2 (\\d+)\\.",
+     "Spieler 1: {1}, Spieler 2: {2}."
+    ],
+    [
+     "You’s store: (\\d+) seeds?",
+     "Dein Kalaha: {1} Bohnen"
+    ],
+    [
+     "(.+)’s store: (\\d+) seeds?",
+     "Kalaha von {1}: {2} Bohnen"
+    ],
+    [
+     "Pit: (\\d+) seeds?",
+     "Mulde: {1} Bohnen"
+    ]
+   ]
+  },
+  "backgammon": {
+   "exact": {
+    "Computer’s turn": "Der Computer ist dran",
+    "Your turn: roll": "Du bist dran: würfle",
+    "All 15 checkers borne off.": "Alle 15 Steine herausgewürfelt."
+   },
+   "patterns": [
+    [
+     "Computer rolled (\\d) and (\\d): doubles, four moves!",
+     "Der Computer würfelt {1} und {2}: Pasch, vier Züge!"
+    ],
+    [
+     "Computer rolled (\\d) and (\\d): no legal moves",
+     "Der Computer würfelt {1} und {2}: kein Zug möglich"
+    ],
+    [
+     "Computer rolled (\\d) and (\\d)",
+     "Der Computer würfelt {1} und {2}"
+    ],
+    [
+     "You rolled (\\d) and (\\d): doubles, four moves!",
+     "Du würfelst {1} und {2}: Pasch, vier Züge!"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d): doubles, four moves!",
+     "{1} würfelt {2} und {3}: Pasch, vier Züge!"
+    ],
+    [
+     "You rolled (\\d) and (\\d)",
+     "Du würfelst {1} und {2}"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d): no legal moves",
+     "{1} würfelt {2} und {3}: kein Zug möglich"
+    ],
+    [
+     "(.+) rolled (\\d) and (\\d)",
+     "{1} würfelt {2} und {3}"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "{1} ist dran: würfle"
+    ],
+    [
+     "You win!",
+     "Du hast gewonnen!"
+    ],
+    [
+     "Pips (\\d+)",
+     "Augen {1}"
+    ],
+    [
+     "You bore off all 15 checkers first(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "Du hast als Erster alle 15 Steine herausgewürfelt{1}."
+    ],
+    [
+     "The computer bore off first(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "Der Computer hat zuerst alle Steine herausgewürfelt{1}."
+    ],
+    [
+     "All 15 checkers borne off(, for a gammon \\(double win\\)|, for a backgammon \\(triple win\\))?\\.",
+     "Alle 15 Steine herausgewürfelt{1}."
+    ]
+   ]
+  },
+  "ludo": {
+   "exact": {
+    "All four counters home.": "Alle vier Figuren im Ziel.",
+    "All four of your counters are home.": "Alle vier deiner Figuren sind im Ziel.",
+    "Your turn: roll. A 6 brings a counter out": "Du bist dran: würfle. Mit einer 6 kommt eine Figur raus",
+    "Your turn: roll": "Du bist dran: würfle",
+    "Your extra roll!": "Du darfst nochmal würfeln!"
+   },
+   "patterns": [
+    [
+     "You rolled (\\d)\\. Need a 6 to start",
+     "Du würfelst eine {1}. Du brauchst eine 6 zum Starten"
+    ],
+    [
+     "You rolled (\\d)\\. No move",
+     "Du würfelst eine {1}. Kein Zug möglich"
+    ],
+    [
+     "You rolled (\\d): pick a counter to move",
+     "Du würfelst eine {1}: wähl eine Figur"
+    ],
+    [
+     "You rolled three 6s in a row: turn over",
+     "Drei Sechsen hintereinander: dein Zug ist vorbei"
+    ],
+    [
+     "You sent a counter back to base!",
+     "Du hast eine Figur zurück ins Haus geschickt!"
+    ],
+    [
+     "You got a counter home!",
+     "Du hast eine Figur ins Ziel gebracht!"
+    ],
+    [
+     "(.+) rolled (\\d)\\. Need a 6 to start",
+     "{1} würfelt eine {2}. Braucht eine 6 zum Starten"
+    ],
+    [
+     "(.+) rolled (\\d)\\. No move",
+     "{1} würfelt eine {2}. Kein Zug möglich"
+    ],
+    [
+     "(.+) rolled (\\d): pick a counter to move",
+     "{1} würfelt eine {2}: Figur wählen"
+    ],
+    [
+     "(.+) rolled three 6s in a row: turn over",
+     "{1}: drei Sechsen hintereinander, Zug vorbei"
+    ],
+    [
+     "(.+) sent a counter back to base!",
+     "{1} schickt eine Figur zurück ins Haus!"
+    ],
+    [
+     "(.+) got a counter home!",
+     "{1} bringt eine Figur ins Ziel!"
+    ],
+    [
+     "(.+)’s turn: roll\\. A 6 brings a counter out",
+     "{1} ist dran: würfle. Mit einer 6 kommt eine Figur raus"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "{1} ist dran: würfle"
+    ],
+    [
+     "(.+)’s extra roll!",
+     "{1} darf nochmal würfeln!"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "You got (\\d) of 4 counters home\\.",
+     "Du hast {1} von 4 Figuren ins Ziel gebracht."
+    ],
+    [
+     "(\\d) / 4 home",
+     "{1} / 4 im Ziel"
+    ],
+    [
+     "(\\w+) counter (\\d)",
+     "Figur {2} ({1})"
+    ]
+   ]
+  },
+  "snakes-and-ladders": {
+   "exact": {
+    "First to square 100.": "Als Erster auf Feld 100.",
+    "Your turn: roll": "Du bist dran: würfle",
+    "You climbed a ladder!": "Du kletterst eine Leiter hoch!",
+    "Start": "Start"
+   },
+   "patterns": [
+    [
+     "Computer climbed a ladder!",
+     "Der Computer klettert eine Leiter hoch!"
+    ],
+    [
+     "Computer (\\d) climbed a ladder!",
+     "Computer {1} klettert eine Leiter hoch!"
+    ],
+    [
+     "Oh no! You slid down a snake",
+     "Oh nein! Du rutschst eine Schlange hinunter"
+    ],
+    [
+     "Oh no! (.+) slid down a snake",
+     "Oh nein! {1} rutscht eine Schlange hinunter"
+    ],
+    [
+     "(.+) climbed a ladder!",
+     "{1} klettert eine Leiter hoch!"
+    ],
+    [
+     "You rolled a 6: roll again!",
+     "Du würfelst eine 6: nochmal würfeln!"
+    ],
+    [
+     "(.+) rolled a 6: roll again!",
+     "{1} würfelt eine 6: nochmal würfeln!"
+    ],
+    [
+     "You rolled (\\d)",
+     "Du würfelst eine {1}"
+    ],
+    [
+     "(.+) rolled (\\d)",
+     "{1} würfelt eine {2}"
+    ],
+    [
+     "(.+)’s turn: roll",
+     "{1} ist dran: würfle"
+    ],
+    [
+     "You reached square (\\d+)\\.",
+     "Du hast Feld {1} erreicht."
+    ],
+    [
+     "Square (\\d+)",
+     "Feld {1}"
+    ]
+   ]
+  },
+  "solitaire": {
+   "exact": {
+    "Build each suit from Ace to King": "Leg jede Farbe vom Ass bis zum König ab",
+    "Draw from the deck": "Vom Stapel ziehen",
+    "Welcome back. Your game is where you left it": "Willkommen zurück. Dein Spiel ist noch da, wo du aufgehört hast"
+   },
+   "patterns": [
+    [
+     "You won in (\\d+:\\d\\d)!",
+     "Gewonnen in {1}!"
+    ],
+    [
+     "(\\d+) moves in (\\d+:\\d\\d)\\.",
+     "{1} Züge in {2}."
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "{1} von {2} Spielen gewonnen"
+    ],
+    [
+     "best time (\\d+:\\d\\d)",
+     "Bestzeit {1}"
+    ]
+   ]
+  },
+  "sudoku": {
+   "exact": {
+    "Pick a square first": "Wähl zuerst ein Feld",
+    "Every square is full, but something clashes": "Alle Felder sind voll, aber etwas passt nicht",
+    "Solved!": "Gelöst!",
+    "Puzzle solved!": "Sudoku gelöst!",
+    "Daily puzzle solved!": "Tages-Sudoku gelöst!",
+    "New puzzle": "Neues Sudoku",
+    "Play a classic puzzle": "Ein normales Sudoku spielen",
+    "Solved today. Come back tomorrow": "Heute gelöst. Komm morgen wieder",
+    "You’ve solved today’s puzzle": "Du hast das heutige Sudoku gelöst",
+    "A new daily puzzle arrives at midnight. Until then, try a classic puzzle.": "Um Mitternacht kommt ein neues Tages-Sudoku. Bis dahin probier ein normales.",
+    "Welcome back. Your puzzle is where you left it": "Willkommen zurück. Dein Sudoku ist noch da, wo du aufgehört hast",
+    "On": "An",
+    "Off": "Aus",
+    "Daily": "Täglich",
+    "Easy puzzle": "Leichtes Sudoku",
+    "Medium puzzle": "Mittleres Sudoku",
+    "Hard puzzle": "Schweres Sudoku",
+    "A new puzzle arrives at midnight.": "Um Mitternacht kommt ein neues."
+   },
+   "patterns": [
+    [
+     "Solved in (\\d+:\\d\\d) with (\\d+) hints?\\.",
+     "Gelöst in {1} mit {2} Tipps."
+    ],
+    [
+     "Solved in (\\d+:\\d\\d)\\.",
+     "Gelöst in {1}."
+    ],
+    [
+     "A new best time for (Easy|Medium|Hard)!",
+     "Neue Bestzeit ({1})!"
+    ],
+    [
+     "Streak: (\\d+) days?\\.",
+     "Serie: {1} Tage."
+    ],
+    [
+     "Hint: (\\d) goes in row (\\d), column (\\d)",
+     "Tipp: Die {1} gehört in Zeile {2}, Spalte {3}"
+    ],
+    [
+     "Easy puzzle",
+     "Leichtes Sudoku"
+    ],
+    [
+     "Medium puzzle",
+     "Mittleres Sudoku"
+    ],
+    [
+     "Hard puzzle",
+     "Schweres Sudoku"
+    ],
+    [
+     "Daily puzzle #(\\d+)",
+     "Tages-Sudoku Nr. {1}"
+    ],
+    [
+     "Enter (\\d)",
+     "{1} eintragen"
+    ],
+    [
+     "row (\\d), column (\\d): empty",
+     "Zeile {1}, Spalte {2}: leer"
+    ],
+    [
+     "row (\\d), column (\\d): (\\d), clashes",
+     "Zeile {1}, Spalte {2}: {3}, Konflikt"
+    ],
+    [
+     "row (\\d), column (\\d): (\\d)",
+     "Zeile {1}, Spalte {2}: {3}"
+    ],
+    [
+     "(\\d+) puzzles? solved",
+     "{1} Sudokus gelöst"
+    ],
+    [
+     "(Easy|Medium|Hard) best (\\d+:\\d\\d)",
+     "Bestzeit {1}: {2}"
+    ],
+    [
+     "1 day",
+     "1 Tag"
+    ],
+    [
+     "(\\d+) days?",
+     "{1} Tage"
+    ]
+   ]
+  },
+  "mines": {
+   "exact": {
+    "Boom! You hit a mine": "Bumm! Du hast eine Mine erwischt",
+    "You hit a mine": "Du hast eine Mine erwischt",
+    "Field cleared!": "Feld geräumt!",
+    "A new best time!": "Neue Bestzeit!"
+   },
+   "patterns": [
+    [
+     "(Easy|Medium|Hard): (\\d+) mines hidden",
+     "{1}: {2} versteckte Minen"
+    ],
+    [
+     "Cleared in (\\d+:\\d\\d)!",
+     "Geräumt in {1}!"
+    ],
+    [
+     "(Easy|Medium|Hard) in (\\d+:\\d\\d)\\.",
+     "{1} in {2}."
+    ],
+    [
+     "(\\d+) safe squares? (?:was|were) left to uncover\\.",
+     "{1} sichere Felder waren noch verdeckt."
+    ],
+    [
+     "Row (\\d+), column (\\d+): hidden",
+     "Zeile {1}, Spalte {2}: verdeckt"
+    ],
+    [
+     "Row (\\d+), column (\\d+): flag",
+     "Zeile {1}, Spalte {2}: Flagge"
+    ],
+    [
+     "Row (\\d+), column (\\d+): clear",
+     "Zeile {1}, Spalte {2}: leer"
+    ],
+    [
+     "Row (\\d+), column (\\d+): mine",
+     "Zeile {1}, Spalte {2}: Mine"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (\\d) mines? nearby",
+     "Zeile {1}, Spalte {2}: {3} Minen in der Nähe"
+    ],
+    [
+     "Row (\\d+), column (\\d+): (.+)",
+     "Zeile {1}, Spalte {2}: {3}"
+    ],
+    [
+     "(\\d+) of (\\d+) games? won",
+     "{1} von {2} Spielen gewonnen"
+    ],
+    [
+     "(Easy|Medium|Hard) best (\\d+:\\d\\d)",
+     "Bestzeit {1}: {2}"
+    ]
+   ]
+  }
+ }
+}
