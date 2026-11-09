@@ -61,12 +61,26 @@
             "value": "public, max-age=3600"
           }
         ]
+      },
+      {
+        "source": "/assets/**/*.@(txt|md)",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex"
+          }
+        ]
       }
     ],
     "redirects": [
       {
         "source": "/puzzles",
         "destination": "/daily",
+        "type": 301
+      },
+      {
+        "source": "/lander",
+        "destination": "/",
         "type": 301
       }
     ]
