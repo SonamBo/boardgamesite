@@ -204,7 +204,7 @@ def game_card(slug, g, lazy=True, lang="en"):
         chips = "".join(f'<span class="chip">{T(lang, c)}</span>' for c in g["chips"])
         loading = ' loading="lazy"' if lazy else ""
         return f"""    <article class="game-card card">
-      <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="" width="480" height="360"{loading}></a>
+      <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="{name}" width="480" height="360"{loading}></a>
       <div class="game-body">
         <h3>{name}</h3>
         <p>{card}</p>
@@ -216,7 +216,7 @@ def game_card(slug, g, lazy=True, lang="en"):
     learn = f'\n        <a class="learn-link" href="/learn/{slug}">How to play {g["name"]}</a>' if has_guide(slug) else ""
     loading = ' loading="lazy"' if lazy else ""
     return f"""    <article class="game-card card">
-      <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="" width="480" height="360"{loading}></a>
+      <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="{g["name"]} game" width="480" height="360"{loading}></a>
       <div class="game-body">
         <h3>{g["name"]}</h3>
         <p>{g["card"]}</p>
@@ -268,7 +268,7 @@ def learn_paths_html():
         n = sum(len(u["lessons"]) for u in c["units"])
         cards.append(
             f'  <a class="lpc card" href="/learn/{game}/path" data-path-card="{game}" data-total="{n}">\n'
-            f'    <img src="/assets/img/thumb/{game}.webp" alt="" width="480" height="360" loading="lazy">\n'
+            f'    <img src="/assets/img/thumb/{game}.webp" alt="{c["name"]} lessons" width="480" height="360" loading="lazy">\n'
             f'    <span class="lpc-body"><b>{c["name"]}</b><small>{n} lessons · {"rules to rated games" if c.get("ladder") else "rules to strategy"}</small>\n'
             f'    <span class="lpc-bar" aria-hidden="true"><span></span></span><span class="btn btn-gold lpc-btn">Start learning</span></span>\n'
             f'  </a>')
@@ -299,7 +299,7 @@ def learn_shelves_html():
             path = f' <span class="gt-path">Learning path</span>' if slug in COURSES else ""
             cards.append(
                 f'    <article class="gt card{more}">\n'
-                f'      <a class="gt-art" href="/learn/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="" width="480" height="360" loading="lazy">{path}</a>\n'
+                f'      <a class="gt-art" href="/learn/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="{g["name"]} guide" width="480" height="360" loading="lazy">{path}</a>\n'
                 f'      <div class="gt-body"><h3><a href="/learn/{slug}">How to play {g["name"]}</a></h3><p>{g.get("tip", g["blurb"])}</p>\n'
                 f'      <div class="gt-actions"><a class="btn btn-gold" href="/learn/{slug}" aria-label="Learn {g["name"]}">Learn</a><a class="btn btn-outline" href="/play/{slug}" aria-label="Play {g["name"]}">Play</a></div></div>\n'
                 f'    </article>')
