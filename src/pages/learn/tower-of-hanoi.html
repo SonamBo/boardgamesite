@@ -1,5 +1,5 @@
-<!-- title: Tower of Hanoi Solution in the Fewest Moves | BoardGameSite -->
-<!-- description: Learn how to solve the Tower of Hanoi in the fewest moves: the simple repeating pattern, why it works, and the formula for the minimum number of moves. -->
+<!-- title: Tower of Hanoi: Least Moves and Solution | BoardGameSite -->
+<!-- description: The least moves for the Tower of Hanoi is 2ⁿ − 1: 7 for 3 discs, 15 for 4, 31 for 5. A step-by-step 3-disc solution, the pattern for any size, and FAQs. -->
 <!-- path: /learn/tower-of-hanoi -->
 <!-- out: learn/tower-of-hanoi.html -->
 <!-- nav: learn -->
@@ -19,8 +19,36 @@
 <h2>The rules</h2>
   <p>There are three pegs and a tower of discs on the left peg, largest at the bottom. Move the whole tower to the right-hand peg. Only one disc moves at a time, only the top disc of a peg can move, and a disc can never go on top of a smaller one.</p>
 
-  <h2>The fewest moves</h2>
-  <p>With <strong>n</strong> discs, the fewest moves possible is <strong>2ⁿ − 1</strong>. That’s 7 moves for 3 discs, 15 for 4, 31 for 5, 63 for 6, 127 for 7 and 255 for 8. Each extra disc doubles the work, plus one.</p>
+  <h2>The least number of moves</h2>
+  <p>With <strong>n</strong> discs, the least number of moves possible is <strong>2ⁿ − 1</strong>. Each extra disc doubles the work, plus one.</p>
+  <table class="simple-table">
+    <thead><tr><th>Discs</th><th>Least moves</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>1</td></tr>
+      <tr><td>2</td><td>3</td></tr>
+      <tr><td>3</td><td>7</td></tr>
+      <tr><td>4</td><td>15</td></tr>
+      <tr><td>5</td><td>31</td></tr>
+      <tr><td>6</td><td>63</td></tr>
+      <tr><td>7</td><td>127</td></tr>
+      <tr><td>8</td><td>255</td></tr>
+      <tr><td>9</td><td>511</td></tr>
+      <tr><td>10</td><td>1,023</td></tr>
+    </tbody>
+  </table>
+
+  <h2>The 3-disc solution, step by step</h2>
+  <p>Call the pegs A (left), B (middle) and C (right). The discs start on A, and the goal is C.</p>
+  <ol>
+    <li>Small disc A → C</li>
+    <li>Middle disc A → B</li>
+    <li>Small disc C → B</li>
+    <li>Large disc A → C</li>
+    <li>Small disc B → A</li>
+    <li>Middle disc B → C</li>
+    <li>Small disc A → C</li>
+  </ol>
+  <p>Seven moves, the least possible. Notice the small disc moves on every other turn: that’s the pattern below in action.</p>
 
   <h2>The idea behind it</h2>
   <p>To move a tower of 4 discs, you have to move the biggest disc at some point. It can only move when the other 3 are all stacked on the third peg. So: move the top 3 out of the way, move the big disc, then move the 3 back on top of it. Moving 3 discs works the same way with 2, and so on down. That’s why the count doubles with every disc.</p>
@@ -35,6 +63,18 @@
 
   <h2>The legend</h2>
   <p>The puzzle was invented by the French mathematician Édouard Lucas in 1883. He sold it with a story about a temple where priests move 64 golden discs, and when they finish, the world will end. At one move per second, 64 discs would take about 585 billion years, so there’s no rush.</p>
+
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Tower of Hanoi questions</h2>
+    <h3>What is the least number of moves for the Tower of Hanoi?</h3>
+    <p>2ⁿ − 1, where n is the number of discs: 7 moves for 3 discs, 15 for 4, 31 for 5 and 63 for 6.</p>
+    <h3>How do you solve the Tower of Hanoi with 4 discs?</h3>
+    <p>Move the top 3 discs to the middle peg (7 moves), move the largest disc to the right peg (1 move), then move the 3 discs on top of it (7 moves). That’s 15 moves. With an even number of discs, the smallest disc cycles left → middle → right.</p>
+    <h3>Can the Tower of Hanoi be solved in fewer moves?</h3>
+    <p>No. The largest disc has to move at least once, and every smaller tower has to be moved out of its way and back, so 2ⁿ − 1 is the minimum.</p>
+    <h3>How long would 64 discs take?</h3>
+    <p>About 585 billion years at one move per second: 2⁶⁴ − 1 is more than 18 quintillion moves.</p>
+  </section>
 
   <div class="callout card">
     <p>Ready to try it?</p>

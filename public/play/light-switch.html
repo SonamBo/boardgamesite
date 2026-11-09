@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Light Switch – Free Lights Out Puzzle | BoardGameSite</title>
-<meta name="description" content="Every tap flips a light and its neighbours. Can you turn them all off? A free logic puzzle in 3×3, 5×5 and 7×7, with hints and the fewest moves shown.">
+<title>Lights Out Puzzle – Play Free Online | BoardGameSite</title>
+<meta name="description" content="Play the classic Lights Out puzzle free: every tap flips a light and its neighbours. Turn them all off on 3×3, 5×5 or 7×7 boards, with hints and a 5×5 solution chart.">
 <link rel="canonical" href="https://boardgamesite.com/play/light-switch">
 
 <meta name="theme-color" content="#FFF7EC">
@@ -13,16 +13,16 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="BoardGameSite">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="Light Switch – Free Lights Out Puzzle | BoardGameSite">
-<meta property="og:description" content="Every tap flips a light and its neighbours. Can you turn them all off? A free logic puzzle in 3×3, 5×5 and 7×7, with hints and the fewest moves shown.">
+<meta property="og:title" content="Lights Out Puzzle – Play Free Online | BoardGameSite">
+<meta property="og:description" content="Play the classic Lights Out puzzle free: every tap flips a light and its neighbours. Turn them all off on 3×3, 5×5 or 7×7 boards, with hints and a 5×5 solution chart.">
 <meta property="og:url" content="https://boardgamesite.com/play/light-switch">
 <meta property="og:image" content="https://boardgamesite.com/assets/img/og/light-switch.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Light Switch on BoardGameSite">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Light Switch – Free Lights Out Puzzle | BoardGameSite">
-<meta name="twitter:description" content="Every tap flips a light and its neighbours. Can you turn them all off? A free logic puzzle in 3×3, 5×5 and 7×7, with hints and the fewest moves shown.">
+<meta name="twitter:title" content="Lights Out Puzzle – Play Free Online | BoardGameSite">
+<meta name="twitter:description" content="Play the classic Lights Out puzzle free: every tap flips a light and its neighbours. Turn them all off on 3×3, 5×5 or 7×7 boards, with hints and a 5×5 solution chart.">
 <meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/light-switch.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -49,7 +49,7 @@
    "@id": "https://boardgamesite.com/play/light-switch#game",
    "name": "Light Switch (Lights Out)",
    "url": "https://boardgamesite.com/play/light-switch",
-   "description": "Every tap flips a light and its neighbours. Can you turn them all off? A free logic puzzle in 3×3, 5×5 and 7×7, with hints and the fewest moves shown.",
+   "description": "Play the classic Lights Out puzzle free: every tap flips a light and its neighbours. Turn them all off on 3×3, 5×5 or 7×7 boards, with hints and a 5×5 solution chart.",
    "image": "https://boardgamesite.com/assets/img/og/light-switch.jpg",
    "genre": [
     "Puzzle",
@@ -132,7 +132,15 @@
      "name": "Is this the same as Lights Out?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "It follows the same rules as the classic Lights Out puzzle: every press flips a light and its four neighbours."
+      "text": "Yes. It follows the same rules as the classic Lights Out handheld game: every press flips a light and its four neighbours. Light Switch is our name for it."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How do you solve Lights Out 5×5?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Chase the lights down row by row, look up the bottom row in the solution chart, tap those top-row lights, then chase down again."
      }
     },
     {
@@ -301,6 +309,21 @@
     <li><strong>Chase the lights down.</strong> Work row by row from the top: for each light still on, tap the light directly below it. When you reach the bottom, only the last row will be lit, and that pattern tells you which top-row lights to tap before chasing down again.</li>
   </ul>
 
+  <h2>Lights Out 5×5 solution chart</h2>
+  <p>On the 5×5 board, chase the lights down to the bottom row first: for each light still on, tap the light directly below it, working from the top row down. Then find the bottom row’s pattern below, tap the matching lights in the <strong>top</strong> row, and chase down once more. The board goes dark. (● = light on, or light to tap.)</p>
+  <table class="simple-table lo-chart">
+    <thead><tr><th>Bottom row lit</th><th>Tap in top row</th></tr></thead>
+    <tbody>
+      <tr><td>● ○ ○ ○ ●</td><td>○ ○ ○ ● ●</td></tr>
+      <tr><td>○ ● ○ ● ○</td><td>○ ● ○ ○ ●</td></tr>
+      <tr><td>● ● ● ○ ○</td><td>○ ● ○ ○ ○</td></tr>
+      <tr><td>○ ○ ● ● ●</td><td>○ ○ ○ ● ○</td></tr>
+      <tr><td>● ○ ● ● ○</td><td>○ ○ ○ ○ ●</td></tr>
+      <tr><td>○ ● ● ○ ●</td><td>● ○ ○ ○ ○</td></tr>
+      <tr><td>● ● ○ ● ●</td><td>○ ○ ● ○ ○</td></tr>
+    </tbody>
+  </table>
+
   <div class="callout card">
     <p>Learn the chase-the-lights method that solves any board.</p>
     <a class="btn btn-outline" href="/learn/light-switch">Read the Light Switch guide</a>
@@ -313,7 +336,9 @@
     <h3>What does Fewest mean?</h3>
     <p>It’s the smallest number of taps that solves the puzzle, worked out when the puzzle is made. Match it for a perfect solve.</p>
     <h3>Is this the same as Lights Out?</h3>
-    <p>It follows the same rules as the classic Lights Out puzzle: every press flips a light and its four neighbours.</p>
+    <p>Yes. It follows the same rules as the classic Lights Out handheld game: every press flips a light and its four neighbours. Light Switch is our name for it.</p>
+    <h3>How do you solve Lights Out 5×5?</h3>
+    <p>Chase the lights down row by row, look up the bottom row in the <a href="#guide-h">solution chart</a>, tap those top-row lights, then chase down again.</p>
     <h3>Do diagonal lights change?</h3>
     <p>No. Only the light you tap and the ones directly above, below, left and right of it.</p>
     <h3>Is Light Switch free?</h3>

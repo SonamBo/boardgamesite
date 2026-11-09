@@ -2401,3 +2401,12 @@ body.returning .hero { display: none; }
 .ttt-mark { display: inline-block; width: 22px; height: 22px; flex: none; }
 @keyframes ttt-in { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .ttt-cell svg { animation: none; } }
+
+/* ---------- Simple tables and lists in guides (scoring charts, move counts) ---------- */
+.simple-table { width: 100%; max-width: 560px; border-collapse: collapse; margin: 8px 0 20px; font-size: 15px; }
+.simple-table th, .simple-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.simple-table th { font-weight: 700; color: var(--accent-text); }
+.simple-table td:last-child { font-variant-numeric: tabular-nums; }
+.lo-chart td { font-size: 18px; letter-spacing: 2px; white-space: nowrap; }
+.page ol.peg-solution { display: block; columns: 4 7.5em; column-gap: 24px; font-variant-numeric: tabular-nums; }
+.page ol.peg-solution li { break-inside: avoid; margin-bottom: 6px; }
