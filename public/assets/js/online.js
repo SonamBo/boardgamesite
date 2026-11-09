@@ -1,6 +1,6 @@
 // Online play with a friend: one Firestore document per game (rooms/{id}), see docs/ONLINE.md.
 // A game page calls online(slug, adapter) and gets back helpers. Firestore loads only when used.
-import { firestore, ensureUser } from './firebase.js';
+import { firestore, ensureUser, track } from './firebase.js';
 import { setStatus } from './game-ui.js';
 import { play } from './sound.js';
 
@@ -121,6 +121,7 @@ export function online(slug, adapter) {
       const b = await backend();
       const id = newId();
       await b.create(id, { g: gameOf(), p: [b.uid, ''], n: [b.name, ''], m: [], t: 0, s: 'wait' });
+      track('online_create', { game: slug });
       history.replaceState(null, '', location.pathname + '?room=' + id + (FAKE ? '&fake=1' : ''));
       join(id);
     } catch (e) { failed(e, true); }
@@ -133,6 +134,7 @@ export function online(slug, adapter) {
       if (!d || d.g.split(':')[0] !== slug) { room = null; problem = { text: 'That game link isn’t valid any more. Ask your friend for a new one.' }; setStatus('That game link isn’t valid any more', 'neutral'); return paint(); }
       if (d.s === 'wait' && d.p[0] !== b.uid && !d.p[1]) {
         await b.update(id, { p: [d.p[0], b.uid], n: [d.n[0], b.name], s: 'play' });
+        track('online_join', { game: slug });
       } else if (!d.p.includes(b.uid)) { room = null; problem = { text: 'This game already has two players.' }; setStatus('This game already has two players', 'neutral'); return paint(); }
       seat = -1; applied = 0;
       if (adapter.variant && d.g.includes(':')) adapter.variant(d.g.split(':')[1]);
@@ -147,6 +149,8 @@ export function online(slug, adapter) {
     const was = data;
     data = d;
     if (seat < 0) { seat = d.p.indexOf(api.uid); if (adapter.onlineChanged) adapter.onlineChanged(true); }
+    // counted once per game: only the host's board reports the end
+    if (seat === 0 && d.s === 'done' && !(was && was.s === 'done')) track('online_end', { game: slug, moves: d.m.length, resigned: typeof d.x === 'number' });
     // play any moves we haven't shown yet
     while (applied < d.m.length) { adapter.apply(d.m[applied]); applied++; }
     if (was && was.s !== d.s && adapter.onlineChanged) adapter.onlineChanged(true);
@@ -168,6 +172,7 @@ export function online(slug, adapter) {
     await api.update(room, { s: 'done', x: seat });
   }
   async function rematch() {
+    track('online_rematch', { game: slug });
     const id = newId();
     await api.create(id, { g: gameOf(), p: [api.uid, ''], n: [api.name, ''], m: [], t: 0, s: 'wait' });
     await api.update(room, { s: 'done', r: id });
@@ -184,6 +189,7 @@ export function online(slug, adapter) {
     const code = (e && e.code) || '';
     const login = code.includes('operation-not-allowed') || code.includes('admin-restricted');
     console.warn('[online]', code || e);
+    track('online_error', { game: slug, code: String(code || 'unknown').slice(0, 40) });
     room = null; data = null; api = null;
     problem = login
       ? { text: 'Log in (it’s free) to play online, then tap Try again.', login: true, retry }
@@ -207,7 +213,7 @@ export function online(slug, adapter) {
       applied++;
       data = { ...data, m: data.m.concat([token]), t: nextSeat, s: finished ? 'done' : 'play' };
       try { await api.update(room, { m: data.m, t: nextSeat, s: data.s }); }
-      catch (e) { console.warn('[online] move not saved', e && e.code); lost = true; setStatus('That move didn’t reach your friend', 'neutral'); }
+      catch (e) { console.warn('[online] move not saved', e && e.code); track('online_error', { game: slug, code: 'move-' + String((e && e.code) || 'unknown').slice(0, 30) }); lost = true; setStatus('That move didn’t reach your friend', 'neutral'); }
       sending = false;
       paint();
     }

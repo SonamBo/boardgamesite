@@ -1,5 +1,5 @@
 // Shared behaviour for every page: menu, cookie consent, accounts, forms, daily streak.
-import { configured, startAnalytics, track, addEntry } from './firebase.js';
+import { configured, startAnalytics, track, addEntry, recordConsent } from './firebase.js';
 import { store } from './store.js';
 import { noteToday, todayProgress, dailyStreak } from './daily.js';
 import { streak, activeToday, totalXp } from './learn-progress.js';
@@ -129,11 +129,31 @@ function showConsent() {
     const choice = e.target.closest('button')?.dataset.c;
     if (!choice) return;
     store.set('bgs-consent', choice);
+    recordConsent(choice);
     if (choice === 'yes') startAnalytics();
     box.remove();
   });
   document.body.appendChild(box);
 }
+
+// ---------- Analytics: guide → game clicks, and script errors ----------
+// Which pages send people on to a game (the guides and lessons are where most search visits land).
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href]');
+  if (!a) return;
+  let u; try { u = new URL(a.href, location.href); } catch (err) { return; }
+  if (u.origin !== location.origin) return;
+  const m = u.pathname.replace(/^\/(es|fr|de|pt|ru)(?=\/)/, '').match(/^\/play\/([a-z0-9-]+)/);
+  if (m) track('play_link_click', { game: m[1], from_path: location.pathname.slice(0, 90) });
+});
+let errorsSent = 0;
+function reportError(msg, src) {
+  if (errorsSent >= 5) return; // a broken page can fire thousands; five is enough to see it
+  errorsSent++;
+  track('js_error', { message: String(msg || '').slice(0, 100), file: String(src || '').split('/').pop().split('?')[0].slice(0, 40), page: location.pathname.slice(0, 90) });
+}
+window.addEventListener('error', (e) => reportError(e.message, e.filename));
+window.addEventListener('unhandledrejection', (e) => reportError(e.reason && (e.reason.message || e.reason), 'promise'));
 
 // ---------- Accounts ----------
 // Buttons with data-open-accounts open the sign-up / log-in dialog (or the account page once signed in).

@@ -162,9 +162,22 @@ export function startAnalytics() {
     .catch(() => null);
 }
 
+// Every event carries the page language and the kind of page, so reports can be split by both.
+function pageKind() {
+  const p = location.pathname.replace(/^\/(es|fr|de|pt|ru)(?=\/|$)/, '');
+  if (p === '' || p === '/') return 'home';
+  const top = p.split('/')[1];
+  return ['play', 'learn', 'articles', 'daily', 'dashboard', 'account'].includes(top) ? top : 'other';
+}
 export function track(name, params) {
   if (!analyticsPromise) return;
-  analyticsPromise.then((x) => { if (x) x.m.logEvent(x.analytics, name, params || {}); });
+  const base = { lang: document.documentElement.lang || 'en', page_kind: pageKind() };
+  analyticsPromise.then((x) => { if (x) x.m.logEvent(x.analytics, name, { ...base, ...(params || {}) }); });
+}
+
+// Anonymous count of cookie-banner choices (no identifier): GA4 can't see people who decline.
+export async function recordConsent(choice) {
+  try { await addEntry('consent', { choice, lang: document.documentElement.lang || 'en' }); } catch (e) { /* best effort */ }
 }
 
 // ---- Firestore: add-only entries (newsletter, contact messages) ----
