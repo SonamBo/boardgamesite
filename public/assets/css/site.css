@@ -2410,3 +2410,11 @@ body.returning .hero { display: none; }
 .lo-chart td { font-size: 18px; letter-spacing: 2px; white-space: nowrap; }
 .page ol.peg-solution { display: block; columns: 4 7.5em; column-gap: 24px; font-variant-numeric: tabular-nums; }
 .page ol.peg-solution li { break-inside: avoid; margin-bottom: 6px; }
+.teach-table { max-width: none; }
+.teach-table td:first-child { white-space: nowrap; font-weight: 600; }
+@media (max-width: 640px) {
+  .teach-table thead { display: none; }
+  .teach-table tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .teach-table td { display: block; border: 0; padding: 2px 0; }
+  .teach-table td:first-child { white-space: normal; }
+}
