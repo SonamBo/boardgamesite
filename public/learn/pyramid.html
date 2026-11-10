@@ -49,7 +49,7 @@
    "description": "Learn how to play Pyramid solitaire and the strategy for clearing it: the pairs that make 13, which cards to free first and using the deck wisely.",
    "image": "https://boardgamesite.com/assets/img/og/pyramid.jpg",
    "datePublished": "2026-10-28",
-   "dateModified": "2026-10-29",
+   "dateModified": "2026-11-10",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -94,6 +94,35 @@
      "position": 3,
      "name": "How to play Pyramid",
      "item": "https://boardgamesite.com/learn/pyramid"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Can two cards from the deck be paired with each other?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Only the top card of the waste pile is in play, and it pairs with a free pyramid card. Turning the next card covers it."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What percentage of Pyramid games can be won?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Fewer than in Klondike. Many deals can’t be cleared whatever you do, so a win is something to enjoy."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why can’t I pick a card in the pyramid?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It’s still covered. A card is free only when both cards overlapping it from the row below have been removed."
+     }
     }
    ]
   }
@@ -169,35 +198,69 @@
 <article class="page">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Pyramid Solitaire</span></nav>
   <h1>How to play Pyramid: pairs that make 13</h1>
-  <p class="lede">Pyramid is a game of simple maths and careful choices. Knowing which pairs to take, and when, decides most games.</p>
+  <p class="lede">Pyramid is a solitaire game of adding to 13. This guide covers the layout and rules, the pairs to learn by heart, and the planning that turns a stuck pyramid into a cleared one.</p>
 
   <div class="callout card">
     <p>Try these ideas on a new pyramid.</p>
     <a class="btn btn-gold" href="/play/pyramid">Play Pyramid Solitaire free</a>
   </div>
 
-<h2>The rules</h2>
-  <p>28 cards form a pyramid of seven rows; the other 24 make the deck. Remove pairs of uncovered cards that add up to 13. Aces are 1, Jacks 11, Queens 12, and Kings (13) are removed alone. The top card of the waste pile can be used too. You can go through the deck three times. Clear the pyramid to win.</p>
+  <h2>The layout</h2>
+  <p>Pyramid uses one standard deck of 52 cards. <strong>28 cards</strong> are dealt face up in a pyramid of seven rows: one card at the top, two below it, and so on down to seven in the bottom row. Each card is partly covered by the two cards in the row below it. The other <strong>24 cards</strong> form the deck.</p>
 
-  <h2>The pairs</h2>
+  <h2>The rules</h2>
+  <ol>
+    <li><strong>Card values:</strong> Aces count 1, number cards their number, Jacks 11, Queens 12 and Kings 13.</li>
+    <li><strong>Remove pairs that add up to 13</strong>, like 6 and 7, or Ace and Queen. Kings are worth 13 on their own, so a free King is removed by itself.</li>
+    <li><strong>Only free cards can be used.</strong> A pyramid card is free when neither of the two cards below it is still there. At the start, only the bottom row is free.</li>
+    <li><strong>Turn over the deck</strong> one card at a time onto the waste pile. The top waste card can pair with a free pyramid card, or be removed by itself if it’s a King.</li>
+    <li><strong>Three passes:</strong> when the deck runs out you can turn the waste pile over and go through it again, three times in all.</li>
+    <li><strong>Clear all 28 pyramid cards to win.</strong> Cards left in the deck don’t matter.</li>
+  </ol>
+
+  <h2>The pairs to know</h2>
   <ul>
-    <li>Ace + Queen</li>
-    <li>2 + Jack</li>
-    <li>3 + 10</li>
-    <li>4 + 9</li>
-    <li>5 + 8</li>
-    <li>6 + 7</li>
-    <li>King alone</li>
+    <li><strong>Ace + Queen</strong> (1 + 12)</li>
+    <li><strong>2 + Jack</strong> (2 + 11)</li>
+    <li><strong>3 + 10</strong></li>
+    <li><strong>4 + 9</strong></li>
+    <li><strong>5 + 8</strong></li>
+    <li><strong>6 + 7</strong></li>
+    <li><strong>King alone</strong></li>
+  </ul>
+  <p>Once these are automatic, you’ll spot pairs at a glance instead of adding up.</p>
+
+  <h2>Strategy: open up the pyramid</h2>
+  <p><strong>Free the cards that block the most.</strong> The top card is covered by everything below it. Every pair you make should, ideally, uncover a new card higher up. A pair that clears two cards from the same side of the bottom row can open a whole diagonal.</p>
+  <p><strong>Work evenly from both sides.</strong> To reach the top you need both cards under it gone, which means clearing paths up both halves of the pyramid. Don’t clear one side completely while the other stays locked.</p>
+
+  <h2>Strategy: think before you pair</h2>
+  <p>Pairing two pyramid cards clears two at once, which is usually best. But sometimes a card has two possible partners: one in the pyramid and one coming from the deck. Before you use a pyramid card, ask whether its partner is buried somewhere you can’t reach. If so, save the free partner for that buried card.</p>
+  <p><strong>Watch out for same-value blocks.</strong> If a 4 sits on top of the only 9 that could clear it, that 4 needs a 9 from somewhere else. Spot these early.</p>
+
+  <h2>Strategy: count the cards</h2>
+  <p>There are four of each rank. Keep a rough count of what’s gone. If three 6s have been used, there is only one 6 left to pair with every remaining 7. If that 6 is at the top of the pyramid, the 7s below it have nowhere to go, and you need to plan the order carefully.</p>
+
+  <h2>Strategy: use your passes wisely</h2>
+  <p>On your first pass through the deck, take every safe pair, and notice which deck cards you couldn’t use. Turning a new card buries the one before it until the next pass, so look for a pair before every turn. On later passes you know which cards are coming: if a Queen is a few cards away, keep a free Ace in the pyramid ready for it.</p>
+
+  <h2>Common beginner mistakes</h2>
+  <ul>
+    <li>Pairing with deck cards when the same pyramid card could pair with another pyramid card.</li>
+    <li>Clearing one side of the bottom row and leaving the other blocked.</li>
+    <li>Forgetting that Kings are removed alone.</li>
+    <li>Rushing through the deck instead of looking for pairs before each new card.</li>
   </ul>
 
-  <h2>Free the cards that block the most</h2>
-  <p>Cards in the bottom rows hold up everything above them. Prefer pairs that open new cards higher up the pyramid.</p>
-
-  <h2>Pair pyramid cards with deck cards</h2>
-  <p>Pairing two pyramid cards clears two at once, which is great, but if a card could also be paired with a deck card later, think about which choice leaves more options.</p>
-
-  <h2>Count what’s gone</h2>
-  <p>There are four of each rank. If three 6s are gone, the last 7 only has one possible partner left. Keep that in mind before using a card.</p>
+  <h2>Pyramid Solitaire FAQ</h2>
+  <section class="faq">
+    <h3>Can two cards from the deck be paired with each other?</h3>
+    <p>No. Only the top card of the waste pile is in play, and it pairs with a free pyramid card. Turning the next card covers it.</p>
+    <h3>What percentage of Pyramid games can be won?</h3>
+    <p>Fewer than in Klondike. Many deals can’t be cleared whatever you do, so a win is something to enjoy.</p>
+    <h3>Why can’t I pick a card in the pyramid?</h3>
+    <p>It’s still covered. A card is free only when both cards overlapping it from the row below have been removed.</p>
+  </section>
 
   <div class="callout card">
     <p>Ready to try it?</p>

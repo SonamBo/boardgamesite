@@ -49,7 +49,7 @@
    "description": "Learn how to play TriPeaks solitaire and the strategy for clearing all three peaks: planning chains, choosing which card to play and when to draw.",
    "image": "https://boardgamesite.com/assets/img/og/tripeaks.jpg",
    "datePublished": "2026-10-28",
-   "dateModified": "2026-10-29",
+   "dateModified": "2026-11-10",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -94,6 +94,35 @@
      "position": 3,
      "name": "How to play TriPeaks",
      "item": "https://boardgamesite.com/learn/tripeaks"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Do suits matter in TriPeaks?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Only rank matters: any card one higher or one lower than the waste card can be played."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can every TriPeaks deal be won?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Many deals can be cleared with good play, but some can’t whatever you do."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why is it called TriPeaks?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Because the cards are laid out in three peaks, like mountains. The game is also called Three Peaks."
+     }
     }
    ]
   }
@@ -169,27 +198,58 @@
 <article class="page">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">TriPeaks</span></nav>
   <h1>How to play TriPeaks: building long chains</h1>
-  <p class="lede">TriPeaks is fast, but a moment’s thought before each play turns short runs into long chains and cleared peaks.</p>
+  <p class="lede">TriPeaks is fast and friendly: play cards one higher or one lower to clear three peaks. This guide covers the layout and rules, then how to plan long chains and keep every peak moving.</p>
 
   <div class="callout card">
     <p>Try planning your next chain.</p>
     <a class="btn btn-gold" href="/play/tripeaks">Play TriPeaks free</a>
   </div>
 
-<h2>The rules</h2>
-  <p>28 cards form three peaks; the bottom row is face up. Move a face-up card to the waste pile if it’s one rank higher or lower than the top waste card. Kings and Aces connect. Cards turn face up when nothing covers them. Draw from the deck when stuck. Clear all three peaks to win.</p>
+  <h2>The layout</h2>
+  <p>TriPeaks uses one deck of 52 cards. <strong>28 cards</strong> are dealt into three overlapping peaks, four rows deep. The ten cards of the bottom row are face up; the rest are face down and turn over as soon as no card covers them. The remaining cards form the deck, and one is turned over to start the waste pile.</p>
 
-  <h2>Plan the whole chain</h2>
-  <p>Before playing, trace the longest sequence you can make from the face-up cards: 5, 6, 7, 6, 5. A longer chain clears more cards per draw.</p>
+  <h2>The rules</h2>
+  <ol>
+    <li><strong>Play one up or one down.</strong> Move any face-up peak card onto the waste pile if it’s one rank higher or lower than the top waste card. Suits don’t matter: a 7 can go on a 6 or an 8.</li>
+    <li><strong>Kings and Aces connect.</strong> An Ace can go on a King and a King on an Ace, so a chain can wrap round: Q, K, A, 2.</li>
+    <li><strong>Draw when stuck.</strong> Tap the deck to turn a new card onto the waste pile. Each deck card is used once; there are no second passes.</li>
+    <li><strong>Clear all three peaks to win.</strong> When the deck is empty and no card fits, the game is over.</li>
+  </ol>
+  <p>A <strong>chain</strong> is the number of peak cards you play in a row without drawing. Your longest chain is saved.</p>
 
-  <h2>Choose the card that uncovers others</h2>
-  <p>When two cards both fit, play the one that turns over a new card. More face-up cards means more choices next time.</p>
+  <h2>Strategy: plan the whole chain</h2>
+  <p>Before you play anything, look at every face-up card and trace the longest sequence you can make. With a 6 on the waste and a 5, 7, 8 and 6 showing, going 7, 8 plays two cards, but 5, 6, 7, 8 plays four. Zig-zagging up and down (6, 7, 6, 5) is often longer than going one way.</p>
+  <p>Remember that playing a card can turn over a new one. Prefer chains that pass through cards which uncover others, because the newly turned card might extend the chain.</p>
 
-  <h2>Keep options for the next draw</h2>
-  <p>If you can end a chain on a card that leaves many matches showing, the next card from the deck is more likely to continue it.</p>
+  <h2>Strategy: uncover cards first</h2>
+  <p>When two cards both fit, play the one that turns a face-down card face up. Every new face-up card is another option for this chain and the next. A card that covers nothing can wait.</p>
 
-  <h2>Don’t neglect a peak</h2>
-  <p>The top of each peak is the last card to free. Work on all three, so you’re not left with one tall peak and an empty deck.</p>
+  <h2>Strategy: keep all three peaks moving</h2>
+  <p>The top card of each peak is covered by three layers and is the last to be freed. If you clear the bottoms of two peaks and ignore the third, you can end the game with an empty deck and one tall peak left. Spread your plays so each peak is opened early.</p>
+
+  <h2>Strategy: end chains well</h2>
+  <p>Sometimes you can choose which card ends a chain. End on a rank that matches several face-up cards, so the next draw has more chances to continue. Ending on a card whose neighbours (one up and one down) are already mostly played makes the next draw less likely to help.</p>
+
+  <h2>Strategy: count the deck</h2>
+  <p>With about 23 cards in the deck and 28 in the peaks, you can’t afford many wasted draws. Each draw that plays nothing from the peaks is a step towards losing. Use undo to compare two lines of play when you’re not sure.</p>
+
+  <h2>Common beginner mistakes</h2>
+  <ul>
+    <li>Playing the first card that fits instead of looking for the longest chain.</li>
+    <li>Leaving face-down cards covered when an uncovering move was available.</li>
+    <li>Forgetting that Kings and Aces connect.</li>
+    <li>Working only on the easiest peak.</li>
+  </ul>
+
+  <h2>TriPeaks FAQ</h2>
+  <section class="faq">
+    <h3>Do suits matter in TriPeaks?</h3>
+    <p>No. Only rank matters: any card one higher or one lower than the waste card can be played.</p>
+    <h3>Can every TriPeaks deal be won?</h3>
+    <p>No. Many deals can be cleared with good play, but some can’t whatever you do.</p>
+    <h3>Why is it called TriPeaks?</h3>
+    <p>Because the cards are laid out in three peaks, like mountains. The game is also called Three Peaks.</p>
+  </section>
 
   <div class="callout card">
     <p>Ready to try it?</p>
