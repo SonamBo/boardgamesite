@@ -35,7 +35,7 @@
         "Whoever is behind"
        ],
        "answer": 0,
-       "explain": "Gold moves first. Against the computer you always play gold."
+       "explain": "Gold moves first. Against the computer you choose whether that’s you."
       },
       {
        "type": "move",

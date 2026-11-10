@@ -152,7 +152,7 @@
      "name": "Who goes first?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "X always moves first, and players take turns being X from one game to the next."
+      "text": "X always moves first. Players take turns being X from one game to the next, unless you choose X or O under You play against the computer."
      }
     },
     {
@@ -261,7 +261,7 @@
         <div id="board" class="ttt" role="group" aria-label="Tic tac toe grid. Press 1 to 9 to play a square, counting from the top left."></div>
       </div>
       <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
-      <p class="board-hint">Tap a square to play your mark. Players take turns going first. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+      <p class="board-hint">Tap a square to play your mark. X goes first. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
     </section>
 
     <aside class="panel">
@@ -275,6 +275,12 @@
         <div class="seg" role="group" aria-label="Opponent (starts a new game)">
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
+        </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your mark (starts a new game)" data-cpu-only>
+          <button type="button" data-side="x">X</button>
+          <button type="button" data-side="o">O</button>
+          <button type="button" data-side="alt">Alternate</button>
         </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
@@ -314,7 +320,7 @@
     <li><strong>Get three in a row</strong> across, down or diagonally to win.</li>
     <li><strong>A full grid with no line of three is a draw</strong>, often called a cat’s game.</li>
   </ol>
-  <p>Here, players take turns going first from one game to the next. Tap a square to play, or press 1 to 9 on a keyboard, counting from the top left.</p>
+  <p>Here, players take turns going first from one game to the next. Against the computer you can choose <strong>You play: X</strong> (you always start), <strong>O</strong> (the computer always starts) or <strong>Alternate</strong>. Tap a square to play, or press 1 to 9 on a keyboard, counting from the top left.</p>
 
   <h2>Three ways to play</h2>
   <ul>
@@ -350,7 +356,7 @@
     <h3>Is it possible to beat the Hard computer?</h3>
     <p>No. Hard plays perfectly, so the best you can do is draw. Try Medium to practise forks and traps.</p>
     <h3>Who goes first?</h3>
-    <p>X always moves first, and players take turns being X from one game to the next.</p>
+    <p>X always moves first. Players take turns being X from one game to the next, unless you choose X or O under <strong>You play</strong> against the computer.</p>
     <h3>What’s the difference between tic tac toe and noughts and crosses?</h3>
     <p>Nothing but the name. Noughts and crosses is what it’s usually called in the UK, Ireland and Australia; tic tac toe is the American name.</p>
     <h3>How many different games of tic tac toe are there?</h3>

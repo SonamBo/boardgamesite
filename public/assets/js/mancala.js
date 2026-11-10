@@ -1,7 +1,7 @@
 // Mancala (Kalah rules): sow seeds round the board, land in your store for another turn, capture from empty pits.
 // pits[0..5] yours (left to right), [6] your store, [7..12] the opponent's (right to left along the top), [13] their store.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
 import { ladder } from './ladder.js';
 import { online, roomInLink } from './online.js';
 import { offerReview, hideReview } from './review.js';
@@ -28,6 +28,9 @@ const getOpp = L ? () => 'cpu' : opponentSwitch('mancala', () => newGame(), { yo
 let onlineOn = roomInLink && !L, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
 const mySide = () => (onlineOn ? ol.mySeat() : 0);   // the side whose pits are along the bottom
+// Against the computer you move first, second or either at random. Your pits stay along the bottom.
+const getSide = L ? () => 'first' : sideSwitch('mancala', ['first', 'second', 'random'], () => newGame());
+let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
 
 let B, turn, over, busy, started, lastPit;
 // positions before each move, for Undo (vs the computer it takes back your move and its replies)
@@ -82,7 +85,8 @@ async function moveFrom(i) {
   // animate the sowing seed by seed
   let n = B[i]; B[i] = 0; let j = i;
   const step = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 110;
-  while (n) { j = (j + 1) % 14; if (j === STORE[1 - p]) continue; B[j]++; n--; lastPit = j; if (step) { render(); play('select'); await wait(step); } }
+  const g = gameNo;
+  while (n) { j = (j + 1) % 14; if (j === STORE[1 - p]) continue; B[j]++; n--; lastPit = j; if (step) { render(); play('select'); await wait(step); if (g !== gameNo) return; } }
   // apply captures and the end of game using the rules function on the starting board
   const r = sow(prevBoard, p, i);
   B = r.b; lastPit = r.last;
@@ -116,8 +120,10 @@ function drain() { if (!busy && pending.length && !over) play0(pending.shift(), 
 const turnText = () => (onlineOn ? (ol.myTurn() ? 'Your turn: pick a pit' : 'Waiting for your friend') : vsCpu() ? (turn === 0 ? 'Your turn: pick a pit' : cpuName + '’s turn') : (turn === 0 ? 'Player 1' : 'Player 2') + '’s turn');
 
 async function cpuTurn() {
+  const g = gameNo;
   busy = true; render();
   await wait(700);
+  if (g !== gameNo) return;
   busy = false;
   if (over) return;
   play0(cpuPick(B, 1));
@@ -149,10 +155,12 @@ function finish(resigned = false) {
   track('game_end', { game: 'mancala', result: res });
 }
 
-function save() { if (started && !over && !L && !onlineOn) store.set(SAVE, { opp: getOpp(), B, turn }); }
+function save() { if (started && !over && !L && !onlineOn) store.set(SAVE, { opp: getOpp(), B, turn, side: getSide() }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (L || !g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== 14) return false;
+  // a game against the computer reopens only with the same First / Second / Random choice
+  if (vsCpu() && (g.side || 'first') !== getSide()) return false;
   B = g.B; turn = g.turn | 0; over = false; busy = false; started = true; lastPit = -1;
   render(); setStatus('Welcome back. ' + turnText(), '');
   if (vsCpu() && turn === 1) cpuTurn();
@@ -161,11 +169,14 @@ function resume() {
 function newGame() {
   L?.newGame();
   gameLog = []; history = []; pending.length = 0; hideReview();
+  gameNo++;
   B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1;
+  if (vsCpu() && !movesFirst(getSide())) turn = 1;   // the computer sows first
   $('result').hidden = true;
   store.set(SAVE, null);
   render();
-  setStatus(turnText(), '');
+  setStatus(turnText() + (vsCpu() && getSide() === 'random' && turn === 0 ? ' (you go first this time)' : ''), turn && vsCpu() ? 'cpu' : '');
+  if (vsCpu() && turn === 1) cpuTurn();
 }
 pitEls.forEach((el) => el.addEventListener('click', () => {
   const i = Number(el.dataset.i);

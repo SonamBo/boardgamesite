@@ -144,7 +144,7 @@
      "name": "Doesn’t the first player have an advantage?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Yes, a big one. Serious players use the swap rule to balance it: after the first stone, the second player may take it over instead of placing their own. Turn on Swap rule to play with it. Against the computer you always go first, and with the swap rule on, the computer swaps if your first stone is too strong."
+      "text": "Yes, a big one. Serious players use the swap rule to balance it: after the first stone, the second player may take it over instead of placing their own. Turn on Swap rule to play with it. Against the computer, choose You play: First (gold, top to bottom), Second (ivory, left to right) or Random. With the swap rule on, whoever goes second may swap: the computer swaps if your first stone is too strong."
      }
     },
     {
@@ -280,6 +280,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -343,7 +349,7 @@
     <h3>Can Hex end in a draw?</h3>
     <p>No. It’s mathematically impossible: when the board is full, exactly one player has a connecting chain.</p>
     <h3>Doesn’t the first player have an advantage?</h3>
-    <p>Yes, a big one. Serious players use the swap rule to balance it: after the first stone, the second player may take it over instead of placing their own. Turn on <strong>Swap rule</strong> to play with it. Against the computer you always go first, and with the swap rule on, the computer swaps if your first stone is too strong.</p>
+    <p>Yes, a big one. Serious players use the swap rule to balance it: after the first stone, the second player may take it over instead of placing their own. Turn on <strong>Swap rule</strong> to play with it. Against the computer, choose <strong>You play: First</strong> (gold, top to bottom), <strong>Second</strong> (ivory, left to right) or <strong>Random</strong>. With the swap rule on, whoever goes second may swap: the computer swaps if your first stone is too strong.</p>
     <h3>What board sizes can I play?</h3>
     <p>7×7 for a quick game, 9×9, or 11×11, the classic size.</p>
     <h3>Who invented Hex?</h3>

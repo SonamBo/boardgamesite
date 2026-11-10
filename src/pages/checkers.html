@@ -25,7 +25,7 @@
         <div id="board" class="grid8 ck" role="group" aria-label="Checkers board. You play gold from the bottom."></div>
       </div>
       <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
-      <p class="board-hint">Tap one of your gold pieces, then tap where to move it.</p>
+      <p class="board-hint">Tap one of your pieces, then tap where to move it.</p>
     </section>
 
     <aside class="panel">
@@ -39,6 +39,11 @@
       <div class="seg" role="group" aria-label="Opponent (starts a new game)">
         <button type="button" data-opponent="cpu">Computer</button>
         <button type="button" data-opponent="friend">2 players</button>
+      </div>
+      <p class="seg-label" data-cpu-only>You play</p>
+      <div class="seg" role="group" aria-label="Your colour (starts a new game)" data-cpu-only>
+        <button type="button" data-side="gold">Gold</button>
+        <button type="button" data-side="black">Black</button>
       </div>
 
       <p class="seg-label" data-cpu-only>Computer level</p>
@@ -71,7 +76,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Checkers</h2>
-  <p>Checkers (also called draughts) is played on the dark squares of an 8×8 board. You have 12 gold pieces at the bottom and the computer has 12 black pieces at the top. This version uses the standard American rules, so Black, the darker side, moves first.</p>
+  <p>Checkers (also called draughts) is played on the dark squares of an 8×8 board. Each side has 12 pieces, gold and black. This version uses the standard American rules, so Black, the darker side, moves first. Against the computer, choose <strong>You play: Gold</strong> or <strong>Black</strong>; your pieces always start at the bottom of the screen.</p>
   <ol>
     <li><strong>Move diagonally forward</strong> one square at a time onto an empty dark square.</li>
     <li><strong>Capture by jumping.</strong> If an opponent’s piece is diagonally next to yours with an empty square behind it, jump over it to remove it.</li>

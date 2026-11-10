@@ -45,6 +45,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -77,7 +83,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Mancala</h2>
-  <p>Mancala is a family of ancient counting games played with seeds or stones. This version uses the popular Kalah rules.</p>
+  <p>Mancala is a family of ancient counting games played with seeds or stones. This version uses the popular Kalah rules. Against the computer, choose <strong>You play: First</strong>, <strong>Second</strong> or <strong>Random</strong> to set who sows first; your pits are always along the bottom.</p>
   <ol>
     <li><strong>The board.</strong> Each player has six pits on their side, starting with four seeds each, and a store on their right.</li>
     <li><strong>Sow.</strong> Pick up all the seeds from one of your pits and drop them one at a time into the following pits, going anticlockwise. Drop one in your own store as you pass it, but skip your opponent’s store.</li>

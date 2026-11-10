@@ -2,7 +2,7 @@
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
 import { onProgressLoaded } from './store.js';
-import { levelSwitch, opponentSwitch, record } from './game-ui.js';
+import { levelSwitch, opponentSwitch, record, sideSwitch, movesFirst } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -76,7 +76,7 @@ function render() {
     buttons[i].disabled = over || busy || E.lowestRow(board, i % E.COLS) < 0;
   }
   lastDropped = -1;
-  undoBtn.disabled = mode !== 'classic' || busy || over || onlineOn || !history.length;
+  undoBtn.disabled = mode !== 'classic' || busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === E.YOU));
 }
 
 function setStatus(text, kind) {
@@ -103,6 +103,8 @@ function drop(c, p) {
 const getLevel = mode === 'classic' ? levelSwitch('c4') : () => 'medium';
 const getOpp = mode === 'classic' ? opponentSwitch('c4', () => newGame()) : () => 'cpu';
 const friend = () => getOpp() === 'friend';
+// Against the computer you drop first, second, or either at random. You always play gold.
+const getSide = mode === 'classic' ? sideSwitch('c4', ['first', 'second', 'random'], () => newGame()) : () => 'first';
 let turn = E.YOU;                       // whose disc drops next (2-player mode: Player 1 = gold, Player 2 = ivory)
 let cpuTimer = 0;
 let onlineOn = roomInLink && mode === 'classic', ol = null;
@@ -118,7 +120,7 @@ function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
   $('row-cpu').classList.toggle('turn-cpu', who === 'cpu');
 }
-const saveGame = (toMove) => onlineOn || store.set(SAVE, { board, toMove, mode: getOpp() });
+const saveGame = (toMove) => onlineOn || store.set(SAVE, { board, toMove, mode: getOpp(), side: getSide() });
 const clearGame = () => store.set(SAVE, null);
 
 function finishClassic(result) {
@@ -205,8 +207,9 @@ function newGame() {
   over = false; busy = false; highlight = []; started = false; turn = E.YOU;
   clearGame();
   $('result').hidden = true;
+  if (!friend() && !onlineOn && !movesFirst(getSide())) { startComputerTurn(); return; }   // the computer drops first
   setTurn('you');
-  setStatus(friend() ? 'Player 1’s turn' : 'Your turn');
+  setStatus(friend() ? 'Player 1’s turn' : 'Your turn' + (getSide() === 'random' && !onlineOn ? ': you go first this time' : ''));
   render();
 }
 // Pick up an unfinished game after a refresh or a return visit.
@@ -215,6 +218,8 @@ function resumeClassic() {
   if (!g || !Array.isArray(g.board) || g.board.length !== E.ROWS * E.COLS) return false;
   if (!g.board.some(Boolean) || E.findLine(g.board, E.YOU) || E.findLine(g.board, E.CPU) || E.isFull(g.board)) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
+  // a game against the computer reopens only with the same First / Second / Random choice
+  if (getOpp() === 'cpu' && (g.side || 'first') !== getSide()) return false;
   board = g.board;
   over = false; highlight = []; started = true;
   turn = g.toMove === E.CPU ? E.CPU : E.YOU;
@@ -303,6 +308,7 @@ if (mode === 'daily') {
     // vs the computer, take back your move and its reply
     let h = history.pop();
     while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
+    if (!friend() && h.turn !== E.YOU) { history.push(h); return; }   // only the computer's opening drop is left
     board = h.board; turn = h.turn; highlight = [];
     play('card');
     saveGame(turn);

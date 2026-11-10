@@ -1,6 +1,6 @@
 // Dots and Boxes: take turns drawing a line between two dots. Close a box to claim it and go again.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -15,6 +15,9 @@ const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Compu
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
 const humanTurn = () => !busy && !over && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
+// Against the computer you draw the first line, the second, or either at random. You are always player 1.
+const getSide = sideSwitch('dots', ['first', 'second', 'random'], () => newGame());
+let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
 const undoBtn = $('undo');
 const svg = $('db-board');
 
@@ -117,7 +120,13 @@ async function move(id, p, remote = false) {
   if (onlineOn) { setStatus(ol.myTurn() ? (closed && p === ol.mySeat() + 1 ? 'You closed a box: go again' : 'Your turn') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   const who = vsCpu() ? (turn === 1 ? 'Your' : 'Computer’s') : (turn === 1 ? 'Player 1’s' : 'Player 2’s');
   setStatus(closed ? (p === 1 && vsCpu() ? 'You closed ' : (vsCpu() ? 'The computer closed ' : 'Player ' + p + ' closed ')) + (closed === 1 ? 'a box' : 'two boxes') + ': go again' : who + ' turn', turn === 2 ? 'cpu' : '');
-  if (vsCpu() && turn === 2) { busy = true; render(); await wait(closed ? 350 : 600); busy = false; move(cpuPick(), 2); }
+  if (vsCpu() && turn === 2) cpuTurn(closed ? 350 : 600);
+}
+async function cpuTurn(ms) {
+  const g = gameNo;
+  busy = true; render(); await wait(ms);
+  if (g !== gameNo) return;
+  busy = false; move(cpuPick(), 2);
 }
 
 function finish() {
@@ -142,10 +151,13 @@ function finish() {
 }
 
 function newGame() {
+  gameNo++;
   lines = new Set(); owner = new Array(n * n).fill(0); turn = 1; history = []; scores = [0, 0, 0]; over = false; busy = false; started = false; lastLine = null;
+  if (vsCpu() && !movesFirst(getSide())) turn = 2;   // the computer draws first
   $('result').hidden = true;
   render();
   if (onlineOn) setStatus(ol.myTurn() ? 'Your turn: draw a line' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
+  else if (turn === 2) { setStatus('Computer’s turn', 'cpu'); cpuTurn(600); }
   else setStatus((vsCpu() ? 'Your' : 'Player 1’s') + ' turn: draw a line', '');
 }
 svg.addEventListener('click', (e) => {
@@ -157,7 +169,6 @@ svg.addEventListener('keydown', (e) => { const l = e.target.closest('.hit'); if 
 document.querySelectorAll('[data-dsize]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.dsize) === n));
   b.addEventListener('click', () => {
-    if (busy) return;
     n = Number(b.dataset.dsize); store.set(SIZE_KEY, n);
     document.querySelectorAll('[data-dsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.dsize) === n)));
     newGame();

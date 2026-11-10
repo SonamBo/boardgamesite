@@ -98,6 +98,30 @@ export function opponentSwitch(gameKey, onChange, names = {}) {
   return () => mode;
 }
 
+// ---------- Your side, or who moves first, against the computer ----------
+// Markup as on the Chess page: <div class="seg" data-cpu-only><button data-side="…">…</button>…</div>. Remembered
+// per game; changing it calls onChange, which starts a new game. `values` are the buttons' data-side values.
+// A page without the switch (the translated pages, until they get one) always plays the default.
+export function sideSwitch(gameKey, values, onChange, def = values[0]) {
+  const key = 'bgs-' + gameKey + '-side';
+  const buttons = [...document.querySelectorAll('[data-side]')];
+  if (!buttons.length) return () => def;
+  let side = store.get(key, def);
+  if (!values.includes(side)) side = def;
+  const paint = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.side === side)));
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    if (b.dataset.side === side) return;
+    side = b.dataset.side;
+    store.set(key, side);
+    paint();
+    if (onChange) onChange(side);
+  }));
+  paint();
+  return () => side;
+}
+// For a First / Second / Random switch: does the person move first in this game?
+export const movesFirst = (choice) => (choice === 'random' ? Math.random() < 0.5 : choice !== 'second');
+
 // ---------- Maximise: the board fills the screen ----------
 const MAX_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 const MIN_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';

@@ -258,7 +258,7 @@
         <div id="board" class="grid8 rv" role="group" aria-label="Reversi board. You play gold and move first."></div>
       </div>
       <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
-      <p class="board-hint">Tap a square with a gold dot. Every dark disc caught in a line between your discs flips to gold.</p>
+      <p class="board-hint">Tap a square with a dot. Every disc of the other colour caught in a line between your discs flips to your colour.</p>
     </section>
 
     <aside class="panel">
@@ -272,6 +272,12 @@
       <div class="seg" role="group" aria-label="Opponent (starts a new game)">
         <button type="button" data-opponent="cpu">Computer</button>
         <button type="button" data-opponent="friend">2 players</button>
+      </div>
+      <p class="seg-label" data-cpu-only>You play</p>
+      <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+        <button type="button" data-side="first">First</button>
+        <button type="button" data-side="second">Second</button>
+        <button type="button" data-side="random">Random</button>
       </div>
 
       <p class="seg-label" data-cpu-only>Computer level</p>
@@ -304,7 +310,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Reversi</h2>
-  <p>Reversi is played on an 8×8 board with discs that are a different colour on each side. The game starts with four discs in the centre, two of each colour. You play gold and move first.</p>
+  <p>Reversi is played on an 8×8 board with discs that are a different colour on each side. The game starts with four discs in the centre, two of each colour. Gold moves first. Against the computer, choose <strong>You play: First</strong> (gold), <strong>Second</strong> (black) or <strong>Random</strong>.</p>
   <ol>
     <li><strong>Place a disc</strong> so that one or more of the computer’s discs are trapped in a straight line between your new disc and another gold disc. Lines can run across, up and down, or diagonally.</li>
     <li><strong>Flip the trapped discs.</strong> Every computer disc caught in a line flips to gold, in every direction at once.</li>

@@ -1,7 +1,7 @@
 // Go (9×9): place stones to surround territory and capture. Two passes in a row end the game.
 import * as G from './go-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake, rng, seedFrom } from './solo.js';
@@ -13,6 +13,10 @@ const score = record('go', { draws: false });
 const getLevel = levelSwitch('go', () => {});
 const getOpp = opponentSwitch('go', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Black', p2: 'White' });
 const vsCpu = () => getOpp() === 'cpu';
+// Against the computer you play black (moves first) or white.
+const getSide = sideSwitch('go', ['black', 'white'], () => newGame());
+let me = 1;   // your colour against the computer in this game: 1 black, 2 white
+const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 const boardEl = $('go-board');
 
 let B, prev, turn, caps, passes, over, busy, started, last, history, final, onlineOn = roomInLink, ol = null;
@@ -27,7 +31,14 @@ for (let i = 0; i < N * N; i++) {
   boardEl.appendChild(b);
   pts.push(b);
 }
-const name = (c) => (vsCpu() ? (c === 1 ? 'You' : 'The computer') : c === 1 ? 'Black' : 'White');
+const name = (c) => (vsCpu() ? (c === me ? 'You' : 'The computer') : c === 1 ? 'Black' : 'White');
+const colour = (c) => (c === 1 ? 'Black' : 'White');
+// the players card: the black row and the white row, named for this game
+function paintSides() {
+  if (!vsCpu() || onlineOn) return;
+  document.querySelector('[data-name="p1"]').textContent = me === 1 ? 'You' : 'Computer';
+  document.querySelector('[data-name="p2"]').textContent = me === 2 ? 'You' : 'Computer';
+}
 
 function render() {
   pts.forEach((b, i) => {
@@ -44,13 +55,13 @@ function render() {
   $('caps-w').textContent = 'Captures ' + caps[2] + ' · komi 6.5';
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
-  $('pass').disabled = over || busy || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2);
+  $('pass').disabled = over || busy || (onlineOn ? !ol.myTurn() : cpuTurnNow());
   $('resign').disabled = over || busy;
-  $('undo').disabled = over || busy || !history.length;
+  $('undo').disabled = over || busy || !(vsCpu() ? history.some((h) => h.turn === me) : history.length);
 }
 
 function tap(i) {
-  if (over || busy || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2)) return;
+  if (over || busy || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
   const r = G.play(B, i, turn, prev);
   if (!r) { shake(pts[i], play); setStatus(B[i] ? 'That point is taken' : 'Not allowed there: it would be suicide or repeat the position (ko)', 'neutral'); return; }
   move(i, r);
@@ -65,33 +76,36 @@ function move(i, r, remote = false) {
   render(); save();
   if (onlineOn) { setStatus(r.captured ? name(3 - turn) + ' captured ' + r.captured : ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   if (r.captured) setStatus(name(3 - turn) + ' captured ' + r.captured + (r.captured === 1 ? ' stone' : ' stones'), '');
-  else setStatus(turnText(), turn === 2 ? 'cpu' : '');
-  if (vsCpu() && turn === 2) cpuTurn();
+  else setStatus(turnText(), cpuTurnNow() ? 'cpu' : '');
+  if (cpuTurnNow()) cpuTurn();
 }
 function pass(remote = false) {
   history.push({ B, prev, turn, caps: caps.slice(), last, passes });
   passes++;
-  setStatus(name(turn) + (turn === 1 && vsCpu() ? ' pass' : ' passes'), 'neutral');
+  setStatus(name(turn) + (turn === me && vsCpu() ? ' pass' : ' passes'), 'neutral');
   play('flip');
   prev = B; last = -1;
   turn = 3 - turn;
   if (onlineOn && !remote) ol.send('p', turn - 1, passes >= 2);
   if (passes >= 2) return finish();
   render(); save();
-  if (!onlineOn && vsCpu() && turn === 2) cpuTurn();
+  if (cpuTurnNow()) cpuTurn();
 }
-const turnText = () => (vsCpu() ? (turn === 1 ? 'Your turn (Black)' : 'Computer’s turn') : name(turn) + '’s turn');
+const turnText = () => (vsCpu() ? (turn === me ? 'Your turn (' + colour(me) + ')' : 'Computer’s turn') : name(turn) + '’s turn');
 
+let cpuTimer = 0;
 function cpuTurn() {
   busy = true; render();
   setStatus('Computer is thinking', 'cpu');
-  setTimeout(() => {
-    const m = G.bestMove(B, 2, prev, getLevel());
+  cpuTimer = setTimeout(() => {
+    const cpu = 3 - me;
+    const m = G.bestMove(B, cpu, prev, getLevel());
     busy = false;
     if (over) return;
     // pass when nothing useful is left, or when you passed and the computer is clearly ahead
-    if (m.pass || m.winrate < 0.02 || (passes === 1 && G.score(B).diff < 0 && m.winrate > 0.9)) return pass();
-    move(m.i, G.play(B, m.i, 2, prev));
+    const ahead = cpu === 2 ? G.score(B).diff < 0 : G.score(B).diff > 0;
+    if (m.pass || m.winrate < 0.02 || (passes === 1 && ahead && m.winrate > 0.9)) return pass();
+    move(m.i, G.play(B, m.i, cpu, prev));
   }, 60);
 }
 
@@ -114,36 +128,47 @@ function finish() {
       showResult(won ? 'win' : 'lose', won ? 'You won by ' + margin : 'Your friend won by ' + margin, sub);
       play(won ? 'win' : 'lose', 0.1);
     } else if (vsCpu()) {
-      score.add(blackWins ? 'win' : 'lose');
-      showResult(blackWins ? 'win' : 'lose', blackWins ? 'You won by ' + margin : 'The computer won by ' + margin, sub);
-      play(blackWins ? 'win' : 'lose', 0.1);
+      const won = blackWins === (me === 1);
+      score.add(won ? 'win' : 'lose');
+      showResult(won ? 'win' : 'lose', won ? 'You won by ' + margin : 'The computer won by ' + margin, sub);
+      play(won ? 'win' : 'lose', 0.1);
     } else { showResult('win', (blackWins ? 'Black' : 'White') + ' wins by ' + margin, sub); play('win', 0.1); }
-    setStatus((blackWins ? 'Black' : 'White') + ' wins by ' + margin, blackWins || !vsCpu() ? '' : 'cpu');
+    setStatus((blackWins ? 'Black' : 'White') + ' wins by ' + margin, !vsCpu() || blackWins === (me === 1) ? '' : 'cpu');
     track('game_end', { game: 'go', result: blackWins ? 'win' : 'lose', margin });
   }, 50);
 }
 
-function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), B, prev, turn, caps, last, passes }); }
+function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), me, B, prev, turn, caps, last, passes }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== N * N) return false;
+  // a game against the computer reopens only with the colour it was played with
+  if (vsCpu() && (g.me === 2 ? 'white' : 'black') !== getSide()) return false;
+  me = g.me === 2 ? 2 : 1;
   ({ B, prev, turn, caps, last, passes } = g); history = []; over = false; busy = false; started = true; final = null;
+  paintSides();
   render(); setStatus('Welcome back. ' + turnText(), '');
-  if (vsCpu() && turn === 2) cpuTurn();
+  if (cpuTurnNow()) cpuTurn();
   return true;
 }
 function newGame() {
+  clearTimeout(cpuTimer);
   B = new Array(N * N).fill(0); prev = null; turn = 1; caps = [0, 0, 0]; passes = 0; over = false; busy = false; started = false; last = -1; history = []; final = null;
+  me = getSide() === 'white' ? 2 : 1;
   $('result').hidden = true;
   store.set(SAVE, null);
+  paintSides();
   render();
+  if (cpuTurnNow()) return cpuTurn();
   setStatus(turnText() + ': place a stone on any point', '');
 }
-$('pass').addEventListener('click', () => { if (!over && !busy && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2))) pass(); });
+$('pass').addEventListener('click', () => { if (!over && !busy && (onlineOn ? ol.myTurn() : !cpuTurnNow())) pass(); });
 $('undo').addEventListener('click', () => {
   if (!history.length || busy || over) return;
+  // vs the computer, take back your move and its reply
   let h = history.pop();
-  if (vsCpu() && h.turn === 2 && history.length) h = history.pop();
+  while (vsCpu() && h.turn !== me && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== me) { history.push(h); return; }
   ({ B, prev, turn, caps, last, passes } = h);
   play('card'); render(); save(); setStatus(turnText(), '');
 });
@@ -152,7 +177,7 @@ $('resign').addEventListener('click', () => {
   over = true; store.set(SAVE, null); render();
   if (vsCpu()) { score.add('lose'); showResult('lose', 'You resigned', 'The computer wins this one.'); }
   else showResult('win', (turn === 1 ? 'White' : 'Black') + ' wins', name(turn) + ' resigned.');
-  setStatus(name(turn) + (turn === 1 && vsCpu() ? ' resigned' : ' resigns'), 'neutral');
+  setStatus(name(turn) + (turn === me && vsCpu() ? ' resigned' : ' resigns'), 'neutral');
 });
 $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
 ['new-game', 'undo', 'resign'].forEach((id) => $(id).classList.add('online-hide'));

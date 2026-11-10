@@ -2,7 +2,7 @@
 // lets you remove an opponent's piece. Reduce them to two pieces, or leave them no move, to win.
 // Draws: the same position three times with the same player to move, or 50 moves each with no piece removed.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -15,7 +15,17 @@ const getLevel = levelSwitch('morris', () => {});
 const getOpp = opponentSwitch('morris', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
-const humanTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
+// Against the computer you move first (gold), second (ivory) or either at random.
+const getSide = sideSwitch('morris', ['first', 'second', 'random'], () => newGame());
+let me = 1;   // your colour against the computer in this game
+let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
+const cpuTurnNow = () => vsCpu() && turn !== me;
+const humanTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : !cpuTurnNow());
+function paintSides() {
+  if (!vsCpu()) return;
+  document.querySelector('[data-name="p1"]').textContent = me === 1 ? 'You' : 'Computer';
+  document.querySelector('[data-name="p2"]').textContent = me === 2 ? 'You' : 'Computer';
+}
 const svg = $('nm-board');
 
 const XY = [[0,0],[3,0],[6,0],[1,1],[3,1],[5,1],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,5],[3,5],[5,5],[0,6],[3,6],[6,6]];
@@ -124,15 +134,15 @@ function render() {
   $('hand2').textContent = S.hand[2] ? S.hand[2] + ' to place' : onBoard(S, 2) + ' on board';
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
-  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === 1) : history.length);
+  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === me) : history.length);
 }
-const name = (p) => (onlineOn ? (p === ol.mySeat() + 1 ? 'You' : 'Your friend') : vsCpu() ? (p === 1 ? 'You' : 'The computer') : p === 1 ? 'Gold' : 'Ivory');
+const name = (p) => (onlineOn ? (p === ol.mySeat() + 1 ? 'You' : 'Your friend') : vsCpu() ? (p === me ? 'You' : 'The computer') : p === 1 ? 'Gold' : 'Ivory');
 function prompt() {
-  if (removing) return setStatus((vsCpu() && turn === 1 ? 'Mill! ' : '') + 'Pick a piece to remove', '');
+  if (removing) return setStatus((vsCpu() && turn === me ? 'Mill! ' : '') + 'Pick a piece to remove', '');
   const ph = phase(S, turn);
   if (onlineOn && !ol.myTurn()) return setStatus('Waiting for your friend', 'cpu');
-  const who = onlineOn ? 'Your turn' : vsCpu() ? (turn === 1 ? 'Your turn' : 'Computer’s turn') : name(turn) + '’s turn';
-  setStatus(who + ': ' + (ph === 'place' ? 'place a piece' : ph === 'fly' ? 'three left, fly anywhere' : 'move a piece along a line'), turn === 2 ? 'cpu' : '');
+  const who = onlineOn ? 'Your turn' : vsCpu() ? (turn === me ? 'Your turn' : 'Computer’s turn') : name(turn) + '’s turn';
+  setStatus(who + ': ' + (ph === 'place' ? 'place a piece' : ph === 'fly' ? 'three left, fly anywhere' : 'move a piece along a line'), (vsCpu() ? turn !== me : turn === 2) ? 'cpu' : '');
 }
 
 async function after(p, m, remote = false) {
@@ -151,13 +161,18 @@ async function after(p, m, remote = false) {
   if (end === 'repeat') return finishDraw('The same position came up three times.');
   if (end === 'quiet') return finishDraw('50 moves each with no piece removed.');
   render(); prompt();
-  if (vsCpu() && turn === 2) {
-    busy = true; render(); await wait(600); busy = false;
-    const cm = cpuMove(S, 2);
-    snapshot(); cur = cm;
-    S = apply(S, 2, cm);
-    after(2, cm);
-  }
+  if (cpuTurnNow()) cpuTurn();
+}
+async function cpuTurn() {
+  const g = gameNo;
+  busy = true; render(); await wait(600);
+  if (g !== gameNo) return;
+  busy = false;
+  const cpu = 3 - me;
+  const cm = cpuMove(S, cpu);
+  snapshot(); cur = cm;
+  S = apply(S, cpu, cm);
+  after(cpu, cm);
 }
 
 function tap(i) {
@@ -191,13 +206,13 @@ function finish(w) {
     return;
   }
   if (vsCpu()) {
-    const won = w === 1;
+    const won = w === me;
     score.add(won ? 'win' : 'lose');
     showResult(won ? 'win' : 'lose', won ? 'You won!' : 'The computer won', (won ? 'The computer ' : 'You ') + (won ? why : why.replace('is', 'are').replace('has', 'have')) + '.');
     play(won ? 'win' : 'lose', 0.1);
   } else { showResult('win', name(w) + ' wins!', name(3 - w) + ' ' + why + '.'); play('win', 0.1); }
-  setStatus(name(w) + (w === 1 && vsCpu() ? ' win!' : ' wins!'), w === 2 && vsCpu() ? 'cpu' : '');
-  track('game_end', { game: 'nine-mens-morris', result: w === 1 ? 'win' : 'lose' });
+  setStatus(name(w) + (w === me && vsCpu() ? ' win!' : ' wins!'), w !== me && vsCpu() ? 'cpu' : '');
+  track('game_end', { game: 'nine-mens-morris', result: w === (vsCpu() ? me : 1) ? 'win' : 'lose' });
 }
 
 function finishDraw(why) {
@@ -212,8 +227,12 @@ function finishDraw(why) {
 function newGame() {
   S = { b: new Array(24).fill(0), hand: [0, 9, 9] }; turn = 1; sel = null; removing = false; over = false; busy = false; started = false; last = -1;
   quiet = 0; seen = {}; history = []; cur = null;
+  gameNo++;
+  me = movesFirst(getSide()) ? 1 : 2;
   $('result').hidden = true;
+  paintSides();
   render(); prompt();
+  if (cpuTurnNow()) cpuTurn();
 }
 svg.addEventListener('click', (e) => { const g = e.target.closest('.pt'); if (g) tap(Number(g.dataset.i)); });
 svg.addEventListener('keydown', (e) => { const g = e.target.closest('.pt'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tap(Number(g.dataset.i)); } });
@@ -225,8 +244,8 @@ undoBtn.addEventListener('click', () => {
   if (busy || over || onlineOn || !history.length) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
-  while (vsCpu() && h.turn !== 1 && history.length) h = history.pop();
-  if (vsCpu() && h.turn !== 1) { history.push(h); return; }
+  while (vsCpu() && h.turn !== me && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== me) { history.push(h); return; }
   S = { b: h.b, hand: h.hand }; turn = h.turn; last = h.last; quiet = h.quiet; seen = h.seen;
   sel = null; removing = false; cur = null;
   play('card');
