@@ -15,6 +15,10 @@ export const LEARN_ICONS = [
   { game: 'hex', name: 'Hex', icon: 'hx' },
   { game: 'nine-mens-morris', name: 'Nine Men’s Morris', icon: 'nm' },
   { game: 'dots-and-boxes', name: 'Dots and Boxes', icon: 'db' },
+  { game: 'spades', name: 'Spades', icon: '♠' },
+  { game: 'hearts', name: 'Hearts', icon: '♥' },
+  { game: 'gin-rummy', name: 'Gin Rummy', icon: '♣' },
+  { game: 'freecell', name: 'FreeCell', icon: '♦' },
   { game: 'sudoku', name: 'Sudoku', icon: 'sdk' },
   { game: 'backgammon', name: 'Backgammon', icon: 'bgm' },
   { game: 'solitaire', name: 'Solitaire', icon: 'card' }

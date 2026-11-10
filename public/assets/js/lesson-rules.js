@@ -49,6 +49,21 @@
 //               or 'v:r:c' (r 0…n−1, c 0…n); a box is 'b:r:c' (for marks). Closing a box means you move again.
 //               Facts: box (closed at least one box), captured (how many), safe (no box now has three sides drawn),
 //               gift (some box now has three sides: your opponent can take it).
+//   Tricks      Spades and Hearts, one trick at a time: { game: 'spades' | 'hearts', hand: 'AS 10H 2C', trick: 'QH KH'
+//               (cards already played to this trick, in order, by the players before you), broken: true (spades or
+//               hearts have been played, so you may lead them), first: true (Hearts: the first trick, where no points
+//               may be played if you can help it) }. A move plays one card from your hand: '10H'.
+//               Facts: follow (followed the suit led), trump (Spades: a spade played on another suit), win (your card
+//               is winning the trick: certain when you play last), duck (a card lower than the one winning),
+//               points (Hearts: hearts and the Q♠ in the trick, if you win it), dump (Hearts: you played a heart or the
+//               Q♠ on a trick someone else is winning).
+//   Gin Rummy   { hand: '10 cards' }, or 11 after you've drawn: then a move discards one card: 'KH'. Facts: deadwood (the points
+//               left outside melds after the discard), best (no other discard leaves less), gin (0 deadwood),
+//               knock (10 or less).
+//   FreeCell    { tab: ['KS QH …' ×8, bottom card first], cells: 'QH 7C' (up to four), found: { S: 2, … } }. Moves:
+//               'QH-t5' (that card, and the ordered run on it, onto column 5, if there's room to move it), 'QH-c' (to
+//               a free cell), '7C-f' (to its foundation). Facts: found, empty (a column was emptied), cell (a card went
+//               to a free cell), freed (a card left a free cell).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -596,4 +611,184 @@ export const dots = {
   isSquare: (n) => /^(h|v|b):\d:\d$/.test(n)
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris, dots };
+
+// ---------- Card games: shared ----------
+const crank = (n) => K.rank(n);                    // 1 (Ace) … 13 (King)
+const csuit = (n) => K.suit(n);                    // 0 spades, 1 hearts, 2 diamonds, 3 clubs
+const highRank = (n) => (crank(n) === 1 ? 14 : crank(n));   // Aces high in trick games
+function cardsOnce(...lists) {
+  const seen = new Set(), out = [];
+  for (const l of lists) out.push(cardList(l).map((c) => { const n = cardNum(c); if (seen.has(n)) fail('card twice: ' + c); seen.add(n); return n; }));
+  return out;
+}
+
+// ---------- Spades and Hearts (one trick) ----------
+function trickWinner(cards, game) {
+  let w = 0;
+  for (let k = 1; k < cards.length; k++) {
+    const a = cards[w], b = cards[k];
+    const beats = csuit(b) === csuit(a) ? highRank(b) > highRank(a) : game === 'spades' && csuit(b) === 0 && csuit(a) !== 0;
+    if (beats) w = k;
+  }
+  return w;
+}
+const isPoint = (n) => csuit(n) === 1 || cardCode(n) === 'QS';
+export const tricks = {
+  kind: 'tricks',
+  cardCode,
+  load(p) {
+    if (!p || !['spades', 'hearts'].includes(p.game)) fail('Trick position needs game: spades or hearts');
+    const [hand, trick] = cardsOnce(p.hand, p.trick);
+    if (!hand.length) fail('the hand is empty');
+    if (trick.length > 3) fail('a trick has at most three cards before yours');
+    return { game: p.game, hand, trick, broken: !!p.broken, first: !!p.first, side: 0 };
+  },
+  list(s) {
+    let ok = s.hand;
+    if (s.trick.length) {
+      const led = csuit(s.trick[0]), follow = s.hand.filter((c) => csuit(c) === led);
+      if (follow.length) ok = follow;
+      else if (s.game === 'hearts' && s.first) { const clean = s.hand.filter((c) => !isPoint(c)); if (clean.length) ok = clean; }
+    } else {
+      const special = s.game === 'spades' ? 0 : 1;
+      if (!s.broken) { const other = s.hand.filter((c) => csuit(c) !== special); if (other.length) ok = other; }
+    }
+    return ok.map((c) => ({ name: cardCode(c), c }));
+  },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const cards = s.trick.concat(x.c), me = cards.length - 1;
+    const before = s.trick.length ? s.trick[trickWinner(s.trick, s.game)] : null;
+    const w = trickWinner(cards, s.game);
+    const led = cards[0];
+    const f = {
+      follow: !s.trick.length || csuit(x.c) === csuit(led),
+      trump: s.game === 'spades' && s.trick.length > 0 && csuit(x.c) === 0 && csuit(led) !== 0,
+      win: w === me,
+      duck: before != null && w !== me
+    };
+    if (s.game === 'hearts') {
+      f.points = w === me ? cards.filter(isPoint).reduce((n, c) => n + (cardCode(c) === 'QS' ? 13 : 1), 0) : 0;
+      f.dump = w !== me && isPoint(x.c);
+      f.clean = !f.points;
+    }
+    return { s: { ...s, hand: s.hand.filter((c) => c !== x.c), trick: cards }, f };
+  },
+  dests: () => [],
+  isSquare: (n) => /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(n)
+};
+
+// ---------- Gin Rummy (choosing a discard) ----------
+const ginValue = (n) => Math.min(10, crank(n));
+// lowest deadwood for a set of cards: try every way of making sets (same rank) and runs (same suit, in order)
+function ginBest(cards) {
+  const melds = [];
+  const byRank = {}, bySuit = {};
+  cards.forEach((c) => { (byRank[crank(c)] ||= []).push(c); (bySuit[csuit(c)] ||= []).push(c); });
+  Object.values(byRank).forEach((g) => {
+    if (g.length >= 3) { melds.push(g.slice()); if (g.length === 4) for (let k = 0; k < 4; k++) melds.push(g.filter((_, j) => j !== k)); }
+  });
+  Object.values(bySuit).forEach((g) => {
+    const sorted = g.slice().sort((a, b) => crank(a) - crank(b));
+    for (let i = 0; i < sorted.length; i++) for (let j = i + 2; j < sorted.length; j++) {
+      const run = sorted.slice(i, j + 1);
+      if (run.every((c, k) => !k || crank(c) === crank(run[k - 1]) + 1)) melds.push(run);
+    }
+  });
+  let best = { dead: cards.reduce((n, c) => n + ginValue(c), 0), melds: [] };
+  (function go(k, used, chosen) {
+    const dead = cards.filter((c) => !used.has(c)).reduce((n, c) => n + ginValue(c), 0);
+    if (dead < best.dead) best = { dead, melds: chosen.slice() };
+    for (let i = k; i < melds.length; i++) {
+      if (melds[i].some((c) => used.has(c))) continue;
+      melds[i].forEach((c) => used.add(c)); chosen.push(melds[i]);
+      go(i + 1, used, chosen);
+      melds[i].forEach((c) => used.delete(c)); chosen.pop();
+    }
+  })(0, new Set(), []);
+  return best;
+}
+export const gin = {
+  kind: 'gin',
+  cardCode,
+  deadwood: (codes) => ginBest(cardList(codes).map(cardNum)).dead,
+  load(p) {
+    const [hand] = cardsOnce(p && p.hand);
+    if (hand.length !== 10 && hand.length !== 11) fail('a Gin Rummy hand has 10 cards (11 after drawing, ready to discard)');
+    return { hand, side: 0 };
+  },
+  list(s) { return s.hand.length === 11 ? s.hand.map((c) => ({ name: cardCode(c), c })) : []; },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const after = s.hand.filter((c) => c !== x.c);
+    const dead = ginBest(after).dead;
+    const bestAll = Math.min(...s.hand.map((c) => ginBest(s.hand.filter((d) => d !== c)).dead));
+    return { s: { hand: after, side: 0 }, f: { deadwood: dead, best: dead === bestAll, gin: dead === 0, knock: dead <= 10 } };
+  },
+  melds: (s) => ginBest(s.hand).melds.map((m) => m.map(cardCode)),
+  dests: () => [],
+  isSquare: (n) => /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(n)
+};
+
+// ---------- FreeCell ----------
+const fcRed = (n) => csuit(n) === 1 || csuit(n) === 2;
+const fcFits = (c, onto) => crank(onto) === crank(c) + 1 && fcRed(onto) !== fcRed(c);
+export const freecell = {
+  kind: 'freecell',
+  cardCode,
+  load(p) {
+    if (!p || !Array.isArray(p.tab) || p.tab.length !== 8) fail('FreeCell position needs tab: 8 columns');
+    const seen = new Set();
+    const use = (code) => { const n = cardNum(code); if (seen.has(n)) fail('card twice: ' + code); seen.add(n); return n; };
+    const found = [0, 1, 2, 3].map((su) => (p.found || {})[SUITL[su]] || 0);
+    found.forEach((k, su) => { for (let r = 0; r < k; r++) use(K.RANKS[r] + SUITL[su]); });
+    const tab = p.tab.map((col) => cardList(col).map(use));
+    const cells = cardList(p.cells).map(use);
+    if (cells.length > 4) fail('only four free cells');
+    return { tab, cells: cells.concat(new Array(4 - cells.length).fill(null)), found, side: 0 };
+  },
+  // how many cards can move at once: (free cells + 1) × 2^(empty columns), not counting the target column
+  room(s, toEmpty) { const free = s.cells.filter((c) => c == null).length, empty = s.tab.filter((c) => !c.length).length - (toEmpty ? 1 : 0); return (free + 1) * 2 ** Math.max(0, empty); },
+  list(s) {
+    const out = [];
+    const toFound = (c) => s.found[csuit(c)] === crank(c) - 1;
+    s.cells.forEach((c) => {
+      if (c == null) return;
+      if (toFound(c)) out.push({ name: cardCode(c) + '-f', card: c, from: 'cell' });
+      s.tab.forEach((col, k) => { if (!col.length || fcFits(c, col[col.length - 1])) out.push({ name: cardCode(c) + '-t' + (k + 1), card: c, from: 'cell', to: k }); });
+    });
+    s.tab.forEach((col, i) => {
+      if (!col.length) return;
+      const top = col[col.length - 1];
+      if (toFound(top)) out.push({ name: cardCode(top) + '-f', card: top, from: i, n: 1 });
+      if (s.cells.some((c) => c == null)) out.push({ name: cardCode(top) + '-c', card: top, from: i, n: 1 });
+      // ordered runs ending at the top card
+      let start = col.length - 1;
+      while (start > 0 && fcFits(col[start], col[start - 1])) start--;
+      for (let k = start; k < col.length; k++) {
+        const card = col[k], n = col.length - k;
+        s.tab.forEach((dest, j) => {
+          if (j === i) return;
+          if (dest.length ? fcFits(card, dest[dest.length - 1]) && n <= this.room(s, false) : n <= this.room(s, true) && n < col.length) out.push({ name: cardCode(card) + '-t' + (j + 1), card, from: i, n, to: j });
+        });
+      }
+    });
+    return out;
+  },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const tab = s.tab.map((c) => c.slice()), cells = s.cells.slice(), found = s.found.slice();
+    let moving;
+    if (x.from === 'cell') { cells[cells.indexOf(x.card)] = null; moving = [x.card]; } else moving = tab[x.from].splice(tab[x.from].length - x.n, x.n);
+    const dest = x.name.split('-')[1];
+    if (dest === 'f') found[csuit(x.card)]++;
+    else if (dest === 'c') cells[cells.indexOf(null)] = x.card;
+    else tab[x.to].push(...moving);
+    const f = { found: dest === 'f', cell: dest === 'c', freed: x.from === 'cell', empty: x.from !== 'cell' && tab[x.from].length === 0 };
+    return { s: { tab, cells, found, side: 0 }, f };
+  },
+  dests: () => [],
+  isSquare: (n) => /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(n) || /^(t[1-8]|c[1-4]|f|cells)$/.test(n)
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris, dots, tricks, gin, freecell };
