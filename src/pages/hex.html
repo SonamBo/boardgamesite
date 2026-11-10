@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root style="--board-ratio: 1.35">
+  <div class="game-layout" data-max-root data-fit-height style="--board-ratio: 1.35; --fit-ratio: 1.62">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Hex</h1>
@@ -24,7 +24,8 @@
       <div class="board-fit hxw">
         <svg id="hx-board" class="hx-board" role="group" aria-label="Hex board. Tap an empty cell to place a stone."></svg>
       </div>
-      <p class="board-hint">Tap any empty cell. Gold edges are top and bottom; ivory edges are left and right. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button><button id="swap" type="button" class="tool-btn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3"/><path d="M17 17H6l3 3"/></svg>Swap</button></div>
+      <p class="board-hint">Tap any empty cell. Gold edges are top and bottom; ivory edges are left and right. Your record: <span id="record">0 wins · 0 losses</span></p>
     </section>
 
     <aside class="panel">
@@ -40,6 +41,11 @@
           <button type="button" data-hsize="7">7×7</button>
           <button type="button" data-hsize="9">9×9</button>
           <button type="button" data-hsize="11">11×11</button>
+        </div>
+        <p class="seg-label">Swap rule</p>
+        <div class="seg" role="group" aria-label="Swap rule (starts a new game)">
+          <button type="button" data-hswap="off">Off</button>
+          <button type="button" data-hswap="on">On</button>
         </div>
         <p class="seg-label">Opponent</p>
         <div class="seg" role="group" aria-label="Opponent (starts a new game)">
@@ -84,6 +90,7 @@
     <li><strong>Gold links top to bottom.</strong> Build an unbroken chain of gold cells joining the two gold edges.</li>
     <li><strong>Ivory links left to right.</strong> The same, between the two ivory edges.</li>
     <li><strong>There are no draws.</strong> A full board always has exactly one winning chain.</li>
+    <li><strong>Optional swap rule.</strong> With <strong>Swap rule</strong> on, after Gold’s first stone Ivory may tap <strong>Swap</strong> to take that stone over (it becomes an ivory stone on the mirror-image cell) instead of placing one.</li>
   </ol>
 
   <h2>Quick tips for winning</h2>
@@ -103,10 +110,12 @@
   <section class="faq">
     <h3>Is Hex free?</h3>
     <p>Yes. Play the computer or a friend as often as you like, free in your browser.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>Can Hex end in a draw?</h3>
     <p>No. It’s mathematically impossible: when the board is full, exactly one player has a connecting chain.</p>
     <h3>Doesn’t the first player have an advantage?</h3>
-    <p>Yes, a big one. Serious players use a swap rule to balance it. Against the computer here, you always go first.</p>
+    <p>Yes, a big one. Serious players use the swap rule to balance it: after the first stone, the second player may take it over instead of placing their own. Turn on <strong>Swap rule</strong> to play with it. Against the computer you always go first, and with the swap rule on, the computer swaps if your first stone is too strong.</p>
     <h3>What board sizes can I play?</h3>
     <p>7×7 for a quick game, 9×9, or 11×11, the classic size.</p>
     <h3>Who invented Hex?</h3>

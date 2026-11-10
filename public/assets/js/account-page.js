@@ -32,7 +32,7 @@ function paintStats() {
     if (g.record === 'wld') {
       const s = store.get(g.key, { w: 0, l: 0, d: 0 });
       cards.push({ played: (s.w || 0) + (s.l || 0) + (s.d || 0), el: statCard(g.name, '/play/' + g.slug,
-        [plural(s.w || 0, 'win', 'wins'), plural(s.l || 0, 'loss', 'losses') + ' · ' + plural(s.d || 0, 'draw', 'draws')]) });
+        [plural(s.w || 0, 'win', 'wins'), plural(s.l || 0, 'loss', 'losses') + (g.draws === false ? '' : ' · ' + plural(s.d || 0, 'draw', 'draws'))]) });
     } else {
       const s = store.get(g.key, { played: 0, won: 0, best: null });
       const extra = s.best ? ' · best ' + fmtTime(s.best) : s.top ? ' · top ' + s.top : '';

@@ -170,17 +170,32 @@ def has_guide(slug):
     return (SRC / "pages" / "learn" / f"{slug}.html").exists()
 
 
+def nearest(slugs, skip, k):
+    """Up to k of slugs, nearest first around skip's place in the list (next, previous, two after, two before…).
+    Each page then shows its own neighbours, so every game turns up in some "More games" strip."""
+    if skip not in slugs:
+        return [x for x in slugs if x != skip][:k]
+    i, n, out = slugs.index(skip), len(slugs), []
+    for d in range(1, n):
+        for j in ((i + d) % n, (i - d) % n):
+            if slugs[j] != skip and slugs[j] not in out:
+                out.append(slugs[j])
+    return out[:k]
+
+
 def related_html(skip, lang="en"):
     if lang != "en":
-        picks = [s for s in I18N[lang]["games"] if s != skip and s in TRANSLATED_GAMES[lang]][:6]
+        picks = nearest([s for s in I18N[lang]["games"] if s in TRANSLATED_GAMES[lang]], skip, 6)
         cards = "\n".join(f'    <a class="related-card card" href="/play/{s}">\n      <b>{gname(s, lang)}</b>\n      <span>{gname(s, lang, "blurb")}</span>\n    </a>' for s in picks)
         return ('<section class="related" aria-labelledby="related-h">\n'
                 f'  <h2 id="related-h">{T(lang, "More games to play")}</h2>\n'
                 '  <div class="related-grid">\n' + cards + "\n  </div>\n</section>")
     g0 = GAMES[skip]
-    same = [(s, g) for s, g in GAMES.items() if s != skip and g["cat"] == g0["cat"]]
-    other = [(s, g) for s, g in GAMES.items() if s != skip and g["cat"] != g0["cat"]]
-    picks = (same + other)[:6]
+    # games in the same category first, nearest to this one in the list; then the nearest games from other categories
+    order = list(GAMES)
+    same = nearest([x for x in order if GAMES[x]["cat"] == g0["cat"]], skip, 6)
+    other = [x for x in nearest(order, skip, len(order)) if GAMES[x]["cat"] != g0["cat"]]
+    picks = [(x, GAMES[x]) for x in (same + other)[:6]]
     cards = []
     for slug, g in picks:
         cards.append(
@@ -753,7 +768,7 @@ print(f"SEO check passed ({len(pages)} pages)")
 
 # The game list for the browser (account page, syncing records). Generated: edit games.py instead.
 games_js = [
-    {"slug": s, "name": g["name"], "cat": g["cat"], "record": g["record"], "key": g["key"]}
+    {"slug": s, "name": g["name"], "cat": g["cat"], "record": g["record"], "key": g["key"], **({"draws": False} if g.get("draws") is False else {})}
     for s, g in GAMES.items()
 ]
 (OUT / "assets" / "js" / "games-data.js").write_text(

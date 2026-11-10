@@ -125,6 +125,22 @@
     },
     {
      "@type": "Question",
+     "name": "Can I play Nine Men’s Morris online with a friend?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Tap Create a game link beside the board and send the link. Your friend opens it on their own phone, tablet or computer and you play the same game together. To play side by side instead, choose 2 players."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I take back a move?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games."
+     }
+    },
+    {
+     "@type": "Question",
      "name": "What is a mill?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -145,6 +161,14 @@
      "acceptedAnswer": {
       "@type": "Answer",
       "text": "When a player has only three pieces left, they can move a piece to any empty point, not just a neighbouring one."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can Nine Men’s Morris end in a draw?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Here a game is drawn if the same position comes up three times with the same player to move, or if 50 moves each go by without a piece being removed. That stops endgames, especially three against three with both sides flying, from going on for ever."
      }
     },
     {
@@ -232,7 +256,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root style="--board-ratio: 1">
+  <div class="game-layout" data-max-root data-fit-height style="--board-ratio: 1">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Nine Men’s Morris</h1>
@@ -244,6 +268,7 @@
       <div class="board-fit nm-wrap">
         <svg id="nm-board" class="nm-board" viewBox="-0.6 -0.6 7.2 7.2" role="group" aria-label="Nine Men’s Morris board"></svg>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap a point to place a piece. Later, tap one of your pieces and then an empty point next to it. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
     </section>
 
@@ -278,7 +303,7 @@
 
       <div class="panel-box card-dark">
         <h2>How to play</h2>
-        <p>Place your nine pieces, then move them along the lines. Three in a row is a mill, and lets you remove an opponent’s piece. Win by leaving them with two pieces or no moves.</p>
+        <p>Place your nine pieces, then move them along the lines. Three in a row is a mill, and lets you remove an opponent’s piece. Win by leaving them with two pieces or no moves. A position repeated three times, or 50 moves each with nothing removed, is a draw.</p>
       </div>
 
       <div class="panel-box card-dark">
@@ -298,6 +323,7 @@
     <li><strong>Make a mill.</strong> Three of your pieces in a straight line along a line of the board is a mill. Each time you make one, remove one of your opponent’s pieces. Pieces in a mill can’t be taken unless all their pieces are in mills.</li>
     <li><strong>Fly.</strong> When a player is down to three pieces, they can move a piece to any empty point.</li>
     <li><strong>Win</strong> by reducing your opponent to two pieces, or leaving them with no legal move.</li>
+    <li><strong>Draw</strong> if the same position comes up three times with the same player to move, or if both players make 50 moves each without removing a piece.</li>
   </ol>
 
   <h2>Quick tips for winning</h2>
@@ -317,12 +343,18 @@
   <section class="faq">
     <h3>Is Nine Men’s Morris free?</h3>
     <p>Yes. Play the computer or a friend as often as you like, free in your browser.</p>
+    <h3>Can I play Nine Men’s Morris online with a friend?</h3>
+    <p>Yes. Tap <strong>Create a game link</strong> beside the board and send the link. Your friend opens it on their own phone, tablet or computer and you play the same game together. To play side by side instead, choose 2 players.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>What is a mill?</h3>
     <p>Three of your pieces in a row along one of the board’s lines. Making a mill lets you remove an opponent’s piece.</p>
     <h3>Can I remove a piece that’s in a mill?</h3>
     <p>Only if every one of your opponent’s pieces is in a mill.</p>
     <h3>What is flying?</h3>
     <p>When a player has only three pieces left, they can move a piece to any empty point, not just a neighbouring one.</p>
+    <h3>Can Nine Men’s Morris end in a draw?</h3>
+    <p>Yes. Here a game is drawn if the same position comes up three times with the same player to move, or if 50 moves each go by without a piece being removed. That stops endgames, especially three against three with both sides flying, from going on for ever.</p>
     <h3>How old is the game?</h3>
     <p>Very old: boards have been found carved into ancient Roman buildings, and it was popular across medieval Europe.</p>
   </section>
@@ -331,29 +363,29 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">More games to play</h2>
   <div class="related-grid">
+    <a class="related-card card" href="/play/dots-and-boxes">
+      <b>Dots and Boxes</b>
+      <span>Join the dots and close boxes to claim them.</span>
+    </a>
+    <a class="related-card card" href="/play/five-in-a-row">
+      <b>Five in a Row</b>
+      <span>Get five stones in a line before your opponent.</span>
+    </a>
+    <a class="related-card card" href="/play/hex">
+      <b>Hex</b>
+      <span>Join your two sides of the board. No draws.</span>
+    </a>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
+    </a>
     <a class="related-card card" href="/play/chess">
       <b>Chess</b>
       <span>The classic. Checkmate the king to win.</span>
     </a>
-    <a class="related-card card" href="/play/checkers">
-      <b>Checkers</b>
-      <span>Jump pieces, crown kings and clear the board.</span>
-    </a>
-    <a class="related-card card" href="/play/russian-checkers">
-      <b>Russian Checkers</b>
-      <span>Checkers with flying kings and backward captures.</span>
-    </a>
-    <a class="related-card card" href="/play/go">
-      <b>Go</b>
-      <span>Surround territory and capture stones. 9×9 board.</span>
-    </a>
-    <a class="related-card card" href="/play/reversi">
-      <b>Reversi</b>
-      <span>Trap discs between yours to flip them to your colour.</span>
-    </a>
-    <a class="related-card card" href="/play/four-in-a-row">
-      <b>Four in a Row</b>
-      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    <a class="related-card card" href="/play/tic-tac-toe">
+      <b>Tic Tac Toe</b>
+      <span>Three in a row. Play the computer, a friend, or online by link.</span>
     </a>
   </div>
   <a class="link-green" href="/games/strategy">All strategy games</a>

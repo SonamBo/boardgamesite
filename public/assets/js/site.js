@@ -61,6 +61,7 @@ function paintStats() {
       if (!g) { g = document.createElement('span'); g.className = 'sc sc-gems'; g.title = 'Gems'; chip.appendChild(g); }
       g.innerHTML = '💎 <b>' + gems + '</b>';
     }
+    chip.classList.add('ready');
     chip.setAttribute('aria-label', days + '-day streak, ' + xp + ' XP' + (typeof gems === 'number' ? ', ' + gems + ' gems' : '') + '. Open your progress');
   });
 }

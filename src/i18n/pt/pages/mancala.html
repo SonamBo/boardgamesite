@@ -13,7 +13,7 @@
     Todos os jogos
   </a>
 
-  <div class="game-layout" data-max-root style="--board-ratio: 1.6">
+  <div class="game-layout" data-max-root data-fit-height style="--board-ratio: 1.6">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Mancala</h1>
@@ -30,6 +30,7 @@
           <div class="mc-pit store" data-i="6"><span class="seeds"></span><b>0</b></div>
         </div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button></div>
       <p class="board-hint">Toque em uma das suas covas de baixo. As sementes andam no sentido anti-horário; seu depósito fica à direita. Seu histórico: <span id="record">Vitórias: 0 · Derrotas: 0 · Empates: 0</span></p>
     </section>
 

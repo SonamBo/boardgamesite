@@ -2,13 +2,16 @@
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
 import { onProgressLoaded } from './store.js';
-import { levelSwitch, opponentSwitch } from './game-ui.js';
+import { levelSwitch, opponentSwitch, record } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const boardEl = $('board');
+// positions before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
+const undoBtn = $('undo');
 const statusEl = $('status');
 const mode = (new URLSearchParams(location.search).get('mode') === 'daily' || location.hash === '#daily') ? 'daily' : 'classic';
 window.addEventListener('hashchange', () => location.reload());
@@ -53,8 +56,9 @@ boardEl.addEventListener('mouseover', (e) => {
   buttons.forEach((b) => b.classList.toggle('col-hover', b.dataset.col === c));
 });
 boardEl.addEventListener('mouseleave', () => buttons.forEach((b) => b.classList.remove('col-hover')));
-// Keyboard: number keys 1–7 drop into that column while focus is on the board
-boardEl.addEventListener('keydown', (e) => {
+// Keyboard: number keys 1–7 drop into that column, anywhere on the page except while typing in a field
+document.addEventListener('keydown', (e) => {
+  if (e.target.closest?.('input, textarea, select, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   const n = Number(e.key);
   if (n >= 1 && n <= 7) { e.preventDefault(); onColumn(n - 1); }
 });
@@ -72,6 +76,7 @@ function render() {
     buttons[i].disabled = over || busy || E.lowestRow(board, i % E.COLS) < 0;
   }
   lastDropped = -1;
+  undoBtn.disabled = mode !== 'classic' || busy || over || onlineOn || !history.length;
 }
 
 function setStatus(text, kind) {
@@ -96,27 +101,18 @@ function drop(c, p) {
 
 // ---------- Classic: vs computer ----------
 const getLevel = mode === 'classic' ? levelSwitch('c4') : () => 'medium';
-const getOpp = mode === 'classic' ? opponentSwitch('c4', () => { renderScore(); newGame(); }) : () => 'cpu';
+const getOpp = mode === 'classic' ? opponentSwitch('c4', () => newGame()) : () => 'cpu';
 const friend = () => getOpp() === 'friend';
 let turn = E.YOU;                       // whose disc drops next (2-player mode: Player 1 = gold, Player 2 = ivory)
 let cpuTimer = 0;
 let onlineOn = roomInLink && mode === 'classic', ol = null;
-const score = store.get('bgs-c4-score', { w: 0, l: 0, d: 0 });
-const tally = { w: 0, l: 0, d: 0 };     // 2-player games this visit (not saved)
-function renderScore() {
-  const s = friend() ? tally : score;
-  $('score-you').textContent = s.w + (s.w === 1 ? ' win' : ' wins');
-  $('score-cpu').textContent = s.l + (s.l === 1 ? ' win' : ' wins');
-  $('score-draws').textContent = String(s.d);
-}
-// An account's saved progress arrived after sign-in: show it.
+// Win / loss / draw record against the computer (bgs-c4-score), in the same format as the other games
+const rec = mode === 'classic' ? record('c4') : null;
+// An account's saved progress arrived after sign-in: show the daily streak (the record updates itself).
 onProgressLoaded(() => {
-  Object.assign(score, { w: 0, l: 0, d: 0 }, store.get('bgs-c4-score', {}));
-  if (mode === 'classic') renderScore();
-  else {
-    const d = store.get('bgs-daily', null);
-    renderStreak(d && (d.lastSolved === today || d.lastSolved === yesterdayKey()) ? d : null);
-  }
+  if (mode === 'classic') return;
+  const d = store.get('bgs-daily', null);
+  renderStreak(d && (d.lastSolved === today || d.lastSolved === yesterdayKey()) ? d : null);
 });
 function setTurn(who) {
   $('row-you').classList.toggle('turn-you', who === 'you');
@@ -139,7 +135,6 @@ function finishClassic(result) {
   }
   if (friend()) {
     // result is from Player 1's side
-    tally[result === 'win' ? 'w' : result === 'lose' ? 'l' : 'd']++;
     if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
     else {
       const winner = result === 'win' ? 'Player 1' : 'Player 2';
@@ -147,16 +142,14 @@ function finishClassic(result) {
       showResult('win', winner + ' wins!', 'Nicely played. Swap who goes first?');
     }
     play(result === 'draw' ? 'draw' : 'win');
-    renderScore();
     track('game_end', { game: 'four_in_a_row', result, mode: 'friend' });
     return;
   }
-  if (result === 'win') { score.w++; setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
-  if (result === 'lose') { score.l++; setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
-  if (result === 'draw') { score.d++; setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
+  if (result === 'win') { setStatus('You win!'); showResult('win', 'You win!', 'Nicely played.'); }
+  if (result === 'lose') { setStatus('Computer wins', 'cpu'); showResult('lose', 'Computer wins', 'Have another go?'); }
+  if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'The board is full.'); }
   play(result);
-  store.set('bgs-c4-score', score);
-  renderScore();
+  rec.add(result);
   track('game_end', { game: 'four_in_a_row', result, level: getLevel() });
 }
 function startComputerTurn() {
@@ -168,6 +161,7 @@ function startComputerTurn() {
   cpuTimer = setTimeout(computerMove, 550);
 }
 function computerMove() {
+  history.push({ board: board.slice(), turn: E.CPU });
   drop(E.pickComputerMove(board, getLevel()), E.CPU);
   busy = false;
   const cpuLine = E.findLine(board, E.CPU);
@@ -180,6 +174,7 @@ const nameOf = (p) => (p === E.YOU ? 'Player 1' : 'Player 2');
 function classicMove(c, remote = false) {
   if (!started) { started = true; track('game_start', { game: 'four_in_a_row', mode: 'classic', level: friend() ? 'friend' : getLevel() }); }
   const me = friend() || onlineOn ? turn : E.YOU;
+  history.push({ board: board.slice(), turn: me });
   drop(c, me);
   const line = E.findLine(board, me);
   if (onlineOn && !remote) ol.send(String(c), me === E.YOU ? 1 : 0, !!line || E.isFull(board));
@@ -206,6 +201,7 @@ function classicMove(c, remote = false) {
 function newGame() {
   clearTimeout(cpuTimer);
   board = E.emptyBoard();
+  history = [];
   over = false; busy = false; highlight = []; started = false; turn = E.YOU;
   clearGame();
   $('result').hidden = true;
@@ -292,6 +288,7 @@ if (mode === 'daily') {
   $('level-box').hidden = true;
   $('daily-panel').hidden = false;
   $('new-game').hidden = true;
+  undoBtn.closest('.peg-tools').hidden = true;
   $('board-title').textContent = 'Daily challenge';
   $('board-hint').textContent = 'Gold to move. One move wins — you get one try.';
   board = puzzle.board.slice();
@@ -300,8 +297,20 @@ if (mode === 'daily') {
   if (saved && saved.date === today) dailyMove(saved.col, true);
   else { setStatus('Find the winning move'); render(); }
 } else {
-  renderScore();
   $('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+  undoBtn.addEventListener('click', () => {
+    if (busy || over || onlineOn || !history.length) return;
+    // vs the computer, take back your move and its reply
+    let h = history.pop();
+    while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
+    board = h.board; turn = h.turn; highlight = [];
+    play('card');
+    saveGame(turn);
+    setTurn(turn === E.YOU ? 'you' : 'cpu');
+    setStatus(friend() ? nameOf(turn) + '’s turn' : 'Your turn', friend() && turn === E.CPU ? 'cpu' : '');
+    render();
+  });
+  undoBtn.classList.add('online-hide');
   $('new-game').classList.add('online-hide');
   ol = online('four-in-a-row', {
     reset: () => newGame(),

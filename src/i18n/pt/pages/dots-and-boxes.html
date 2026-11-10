@@ -13,7 +13,7 @@
     Todos os jogos
   </a>
 
-  <div class="game-layout" data-max-root style="--board-ratio: 1">
+  <div class="game-layout" data-max-root data-fit-height style="--board-ratio: 1">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Pontinhos</h1>
@@ -25,6 +25,7 @@
       <div class="board-fit db-wrap">
         <svg id="db-board" class="db-board" viewBox="0 0 100 100" role="group" aria-label="Grade do jogo dos pontinhos. Toque entre dois pontos para traçar uma linha."></svg>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button></div>
       <p class="board-hint">Toque entre dois pontos vizinhos para traçar uma linha. Seu histórico: <span id="record">Vitórias: 0 · Derrotas: 0 · Empates: 0</span></p>
     </section>
 

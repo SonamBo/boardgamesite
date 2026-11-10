@@ -51,7 +51,7 @@
         "a1": "target",
         "h8": "target"
        },
-       "text": "<p>Each player has a <strong>dark square in the bottom-left corner</strong>. The two middle rows start empty.</p><p>On BoardGameSite you play gold and move first. (In tournaments the darker side moves first.)</p>"
+       "text": "<p>Each player has a <strong>dark square in the bottom-left corner</strong>. The two middle rows start empty.</p><p>On BoardGameSite you play gold. As in tournament play, Black, the darker side, makes the first move of a game. In these lessons it’s always your turn.</p>"
       },
       {
        "type": "choice",

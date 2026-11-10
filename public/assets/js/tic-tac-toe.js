@@ -12,6 +12,9 @@ const score = record('ttt');
 const getLevel = levelSwitch('ttt', () => {});
 const getOpp = opponentSwitch('ttt', () => { if (!onlineOn) newGame(); });
 const boardEl = $('board');
+const undoBtn = $('undo');
+// grids before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
 
 let board, turn, over, busy, youAre = X, firstThisGame = O, onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
@@ -78,6 +81,7 @@ function render(line = []) {
     c.disabled = over || !!board[i] || busy;
     c.setAttribute('aria-label', 'Row ' + (Math.floor(i / 3) + 1) + ', column ' + (i % 3 + 1) + ': ' + (board[i] === X ? 'X' : board[i] === O ? 'O' : 'empty'));
   });
+  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === youAre) : history.length);
 }
 const nameOf = (p) => (onlineOn ? (p === seatMark() ? 'You' : 'Your friend') : vsCpu() ? (p === youAre ? 'You' : 'Computer') : p === X ? 'Player X' : 'Player O');
 const seatMark = () => (ol && ol.mySeat() === 1 ? O : X);
@@ -89,6 +93,7 @@ function turnText() {
 
 function place(i, remote = false) {
   if (over || board[i]) return;
+  history.push({ board: board.slice(), turn });
   board[i] = turn;
   play(turn === X ? 'place' : 'drop');
   const w = winner(board);
@@ -135,7 +140,7 @@ function finish(w) {
 }
 
 function newGame() {
-  board = Array(9).fill(0); over = false; busy = false;
+  board = Array(9).fill(0); over = false; busy = false; history = [];
   hideResult();
   if (onlineOn) { turn = X; youAre = X; }
   else {
@@ -157,8 +162,21 @@ $('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
 $('new-game').classList.add('online-hide');
 $('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
 $('again').classList.add('online-hide');
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your move and its reply
+  let h = history.pop();
+  while (vsCpu() && h.turn !== youAre && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== youAre) { history.push(h); return; }
+  board = h.board; turn = h.turn;
+  play('card');
+  render();
+  setTurn(vsCpu() || turn === X ? 'you' : 'cpu');
+  setStatus(turnText(), '');
+});
+undoBtn.classList.add('online-hide');
 document.addEventListener('keydown', (e) => {
-  if (e.target.closest?.('input, textarea') || e.metaKey || e.ctrlKey) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   const n = Number(e.key);
   if (n >= 1 && n <= 9) { e.preventDefault(); human(n - 1); }
 });

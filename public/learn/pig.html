@@ -49,7 +49,7 @@
    "description": "Learn how to play Pig, the push-your-luck dice game, and the hold-at-20 rule that wins more often, plus when to break it.",
    "image": "https://boardgamesite.com/assets/img/og/pig.jpg",
    "datePublished": "2026-10-28",
-   "dateModified": "2026-10-28",
+   "dateModified": "2026-11-10",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -94,6 +94,43 @@
      "position": 3,
      "name": "How to play Pig",
      "item": "https://boardgamesite.com/learn/pig"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "What is the best strategy in Pig?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Holding when your turn total reaches about 20 is the best simple rule. The perfect strategy, worked out by computer, holds earlier when you’re ahead and later when you’re behind, and always rolls on when your opponent is about to win."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does the first player have an advantage?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, a small one, because they may reach 100 before the second player has had the same number of turns."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What are the odds of rolling five times without a 1?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "About 40%: (5/6) multiplied by itself five times is 0.40. The chance falls to about 16% for ten rolls in a row."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How does the computer play?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Easy holds early, Medium holds at about 20, and Hard changes its plan depending on the score, much like the advice above."
+     }
     }
    ]
   }
@@ -169,28 +206,61 @@
 <article class="page">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Pig</span></nav>
   <h1>How to play Pig: the hold-at-20 rule</h1>
-  <p class="lede">Pig has one decision: roll again, or hold. Making that decision well is the whole game.</p>
+  <p class="lede">Pig has one decision, made over and over: roll again, or hold. This guide explains the rules, why holding at 20 works, and when the score says you should break that rule.</p>
 
   <div class="callout card">
     <p>Try the rule against the computer.</p>
     <a class="btn btn-gold" href="/play/pig">Play Pig free</a>
   </div>
 
-<h2>The rules</h2>
-  <p>On your turn, roll one die as often as you like, adding up the numbers. Roll a 1 and you lose everything from that turn. Hold to bank your turn total and pass the die. First to 100 wins.</p>
+  <h2>The rules</h2>
+  <p>Pig is played with a single die. Players take turns, and on your turn you roll as many times as you like, adding each number to your <strong>turn total</strong>.</p>
+  <ol>
+    <li><strong>Roll a 2 to 6</strong> and it’s added to your turn total. Then choose: roll again, or hold.</li>
+    <li><strong>Hold</strong> to add your turn total to your score. Points in your score are safe for the rest of the game.</li>
+    <li><strong>Roll a 1</strong> and your turn total is wiped out. Your banked score stays, but the die passes to your opponent.</li>
+    <li><strong>The first player to reach 100 wins.</strong></li>
+  </ol>
+  <p>On BoardGameSite you can play the computer at three levels or a friend on one device. Press R or Space to roll and H to hold.</p>
 
-  <h2>Hold at 20</h2>
-  <p>Each roll has a 1 in 6 chance of a 1, which costs your whole turn total. The average gain from a good roll is 4 points. When your turn total reaches about 20, the expected loss (20 × 1/6, about 3.3) starts to match the expected gain (4 × 5/6, about 3.3). So holding at around 20 is a strong simple strategy.</p>
+  <h2>Why “hold at 20” works</h2>
+  <p>Every roll is a small bet. One time in six you roll a 1 and lose your whole turn total. The other five times you gain 2, 3, 4, 5 or 6, which averages 4 points.</p>
+  <p>So each roll gains about 4 × 5/6 ≈ 3.3 points on average and risks losing your turn total one time in six. With a turn total of 20, that risk is 20 × 1/6 ≈ 3.3 points: exactly the same. Below 20, rolling again gains more than it risks on average. Above 20, it risks more than it gains. That’s why <strong>holding at about 20</strong> is the classic simple strategy.</p>
 
-  <h2>When to break the rule</h2>
+  <h2>Strategy: when to break the rule</h2>
+  <p>Hold-at-20 maximises your points per turn, but you don’t win Pig by scoring the most per turn. You win by reaching 100 first. So the score matters:</p>
   <ul>
-    <li><strong>Close to 100:</strong> if a smaller amount wins the game, hold as soon as you reach 100.</li>
-    <li><strong>Way behind:</strong> if your opponent is near 100, banking 20 won’t be enough. Keep rolling for a big turn.</li>
-    <li><strong>Way ahead:</strong> you can hold a little earlier and play safe.</li>
+    <li><strong>Close to 100:</strong> if 12 more points wins the game, hold as soon as you have 12. There’s no prize for extra.</li>
+    <li><strong>Far behind:</strong> if your opponent is in the 80s and you’re in the 40s, banking 20 at a time won’t catch them. Keep rolling for one big turn.</li>
+    <li><strong>Well ahead:</strong> you can hold a little earlier, say at 15, and make your opponent take the risks.</li>
+    <li><strong>Your opponent is one turn from winning:</strong> they’ll probably win on their next turn, so this may be your last chance. Keep rolling until you reach 100.</li>
+  </ul>
+
+  <h2>Strategy: count in turns, not points</h2>
+  <p>A good way to plan is to ask how many turns each player needs. At about 8 points per turn on average (hold-at-20 scores a little over 8 once you count the turns lost to a 1), a player on 60 needs about five more turns, and a player on 85 needs about two. If your opponent needs fewer turns than you, you need to take more risk to win the race.</p>
+
+  <h2>Common beginner mistakes</h2>
+  <ul>
+    <li>Holding on 6 or 8 because the last roll felt lucky. Small holds add up too slowly.</li>
+    <li>Rolling on and on with 40 or 50 on the table when the game isn’t close.</li>
+    <li>Forgetting to hold once you’ve passed 100: points above 100 don’t count.</li>
+    <li>Playing the same way when far behind as when far ahead.</li>
   </ul>
 
   <h2>A game for learning</h2>
-  <p>Pig is often used in classrooms to teach probability. Try playing a few games holding at 10, then 20, then 30, and see which wins most.</p>
+  <p>Pig is often used in classrooms to teach probability and expected value. Try a few games holding at 10, then 20, then 30, and keep track of which wins most. Then try changing your target depending on the score, and see if it beats a fixed number.</p>
+
+  <h2>Pig FAQ</h2>
+  <section class="faq">
+    <h3>What is the best strategy in Pig?</h3>
+    <p>Holding when your turn total reaches about 20 is the best simple rule. The perfect strategy, worked out by computer, holds earlier when you’re ahead and later when you’re behind, and always rolls on when your opponent is about to win.</p>
+    <h3>Does the first player have an advantage?</h3>
+    <p>Yes, a small one, because they may reach 100 before the second player has had the same number of turns.</p>
+    <h3>What are the odds of rolling five times without a 1?</h3>
+    <p>About 40%: (5/6) multiplied by itself five times is 0.40. The chance falls to about 16% for ten rolls in a row.</p>
+    <h3>How does the computer play?</h3>
+    <p>Easy holds early, Medium holds at about 20, and Hard changes its plan depending on the score, much like the advice above.</p>
+  </section>
 
   <div class="callout card">
     <p>Ready to try it?</p>
@@ -201,25 +271,25 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">More games to play</h2>
   <div class="related-grid">
+    <a class="related-card card" href="/play/ship-captain-crew">
+      <b>Ship, Captain and Crew</b>
+      <span>Roll a 6, 5 and 4 in order, then load the most cargo.</span>
+    </a>
+    <a class="related-card card" href="/play/shut-the-box">
+      <b>Shut the Box</b>
+      <span>Roll the dice and shut tiles that add up. Shut all nine.</span>
+    </a>
     <a class="related-card card" href="/play/five-dice">
       <b>Five Dice</b>
       <span>Roll five dice three times a turn and fill your scorecard.</span>
     </a>
+    <a class="related-card card" href="/play/dice-poker">
+      <b>Dice Poker</b>
+      <span>Make the best poker hand with five dice. First to three.</span>
+    </a>
     <a class="related-card card" href="/play/backgammon">
       <b>Backgammon</b>
       <span>Race your checkers home and bear them off first.</span>
-    </a>
-    <a class="related-card card" href="/play/ludo">
-      <b>Ludo</b>
-      <span>Race four counters home. Roll a 6 to start.</span>
-    </a>
-    <a class="related-card card" href="/play/hot-dice">
-      <b>Hot Dice</b>
-      <span>Push your luck with six dice. Bank before you farkle.</span>
-    </a>
-    <a class="related-card card" href="/play/snakes-and-ladders">
-      <b>Snakes and Ladders</b>
-      <span>Climb the ladders, dodge the snakes, race to 100.</span>
     </a>
     <a class="related-card card" href="/play/liars-dice">
       <b>Liar’s Dice</b>

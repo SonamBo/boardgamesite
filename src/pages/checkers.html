@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root>
+  <div class="game-layout" data-max-root data-fit-height>
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Checkers</h1>
@@ -24,6 +24,7 @@
       <div class="board-wrap">
         <div id="board" class="grid8 ck" role="group" aria-label="Checkers board. You play gold from the bottom."></div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap one of your gold pieces, then tap where to move it.</p>
     </section>
 
@@ -70,7 +71,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Checkers</h2>
-  <p>Checkers (also called draughts) is played on the dark squares of an 8×8 board. You have 12 gold pieces at the bottom and the computer has 12 at the top. You move first. This version uses the standard American rules.</p>
+  <p>Checkers (also called draughts) is played on the dark squares of an 8×8 board. You have 12 gold pieces at the bottom and the computer has 12 black pieces at the top. This version uses the standard American rules, so Black, the darker side, moves first.</p>
   <ol>
     <li><strong>Move diagonally forward</strong> one square at a time onto an empty dark square.</li>
     <li><strong>Capture by jumping.</strong> If an opponent’s piece is diagonally next to yours with an empty square behind it, jump over it to remove it.</li>
@@ -97,6 +98,8 @@
   <section class="faq">
     <h3>Is this Checkers game free?</h3>
     <p>Yes. You can play as many games as you like for free in your browser, on a phone, tablet or computer. There’s nothing to download and you don’t need an account.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>Do I have to take a jump in Checkers?</h3>
     <p>Yes. Under the standard rules used here, if any of your pieces can capture, you must make a capture. If one jump leads straight into another, you must keep jumping with the same piece.</p>
     <h3>Can a king move backwards?</h3>

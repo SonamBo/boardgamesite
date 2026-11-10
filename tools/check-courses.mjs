@@ -87,7 +87,7 @@ const mancala = {
 };
 // Go, Reversi and Four in a Row: the lesson boards' own rules, so the two can't disagree
 const wrap = (A) => ({ ...A, load(p, where) { try { return A.load(p); } catch (e) { err(where, e.message); return null; } } });
-const ADAPTERS = { chess, checkers, 'russian-checkers': checkersWith(RK), mancala, go: wrap(RULES.go), reversi: wrap(RULES.reversi), c4: wrap(RULES.c4), sudoku: wrap(RULES.sudoku), backgammon: wrap(RULES.backgammon), solitaire: wrap(RULES.solitaire) };
+const ADAPTERS = { chess, checkers, 'russian-checkers': checkersWith(RK), mancala, go: wrap(RULES.go), reversi: wrap(RULES.reversi), c4: wrap(RULES.c4), gomoku: wrap(RULES.gomoku), sudoku: wrap(RULES.sudoku), backgammon: wrap(RULES.backgammon), solitaire: wrap(RULES.solitaire) };
 
 function checkCourse(file) {
   const course = JSON.parse(readFileSync(join(dir, file), 'utf8'));
@@ -147,7 +147,7 @@ function checkCourse(file) {
         }
         if (s.type === 'move') {
           if (!s.accept && !s.goal && !s.line) return err(W, 'move needs accept, goal or line');
-          if (s.goal && !['check', 'mate', 'capture', 'castle', 'promote', 'king', 'again', 'any', 'win', 'atari', 'saved', 'corner', 'threat', 'double', 'block', 'hit', 'entered', 'safe', 'point', 'off', 'single', 'hidden', 'found', 'reveal', 'empty'].includes(s.goal)) err(W, 'unknown goal ' + s.goal);
+          if (s.goal && !['check', 'mate', 'capture', 'castle', 'promote', 'king', 'again', 'any', 'win', 'atari', 'saved', 'corner', 'threat', 'double', 'block', 'three', 'hit', 'entered', 'safe', 'point', 'off', 'single', 'hidden', 'found', 'reveal', 'empty'].includes(s.goal)) err(W, 'unknown goal ' + s.goal);
           const before = state;
           if (s.line) {
             if (s.line.length % 2 !== 1) err(W, 'a line ends on the person’s move (odd length)');

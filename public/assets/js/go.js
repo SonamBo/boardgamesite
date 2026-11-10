@@ -9,7 +9,7 @@ import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const N = G.N, SAVE = 'bgs-go-game';
-const score = record('go');
+const score = record('go', { draws: false });
 const getLevel = levelSwitch('go', () => {});
 const getOpp = opponentSwitch('go', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Black', p2: 'White' });
 const vsCpu = () => getOpp() === 'cpu';

@@ -13,7 +13,7 @@
     Todos los juegos
   </a>
 
-  <div class="game-layout" data-max-root>
+  <div class="game-layout" data-max-root data-fit-height style="--fit-ratio: 1.167">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">4 en raya</h1>
@@ -23,6 +23,7 @@
         </div>
       </div>
       <div id="board" class="board" role="group" aria-label="Tablero de 7 columnas. Pulsa del 1 al 7 para soltar una ficha."></div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Deshacer</button></div>
       <p id="board-hint" class="board-hint">Toca una columna, o pulsa del 1 al 7, para soltar tu ficha.</p>
     </section>
 
@@ -33,9 +34,9 @@
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Tú</b><small id="score-you">0 victorias</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Máquina</b><small id="score-cpu">0 victorias</small></div>
-        <p class="muted" style="font-size: 14px">Empates: <span id="score-draws">0</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Tú</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Máquina</b></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Tu historial: <span id="record">Victorias: 0 · Derrotas: 0 · Empates: 0</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">

@@ -10,7 +10,7 @@ Read this file first when resuming. It is the whole plan and the current state; 
 - Fields (short names on purpose): `g` game slug, `p` [uid0, uid1 or ''], `n` [name0, name1],
   `m` list of move tokens (append-only), `t` seat to move (0/1), `s` 'wait' | 'play' | 'done',
   `x` seat that resigned (optional), `r` rematch room id (optional), `c` created, `u` updated.
-- Seat 0 always moves first (White in Chess, Black in Go, Gold elsewhere). The room creator is seat 0.
+- Seat 0 always moves first (White in Chess, Black in Go and Checkers, Gold elsewhere). The room creator is seat 0.
 - Cost per game: 1 write to create, 1 to join, 1 per move, 1 to finish/resign; every write is read
   by the two open boards. A chess game ≈ 100 writes + 200 reads. No presence, no heartbeats, no polling.
 - Firestore is only loaded when a player chooses online play or opens a room link.
@@ -29,7 +29,7 @@ Read this file first when resuming. It is the whole plan and the current state; 
 - [x] online.js, rooms rules, firebase.js helpers
 - [x] Chess (live; tested between two tabs with &fake=1)
 - [x] Five in a Row, Hex (board size stored in the room as `hex:9`), Go (end-of-game scoring is seeded so both boards agree)
-- [x] Checkers (moves sent as one character per square; board turned round for seat 1), Reversi (passes handled by the page), Four in a Row (classic mode only, not the daily puzzle)
+- [x] Checkers (moves sent as one character per square; Black moves first, so Black is seat 0 and its board is turned round), Reversi (passes handled by the page), Four in a Row (classic mode only, not the daily puzzle)
 - [x] Tic Tac Toe (cell 0–8 as the token)
 - [x] Russian Checkers (same tokens and seats as Checkers; draws by repetition or 15 king-only moves each are decided on both boards)
 - [x] Crazy Eights, 2 players: both boards deal from the same deck, seeded by the room id, and replay the same moves ('d' draw, 'x' pass, 'p<card>[:<suit>]' play). Hands are hidden on screen but not secret from someone reading the page's memory; fine for friends, not for stakes.

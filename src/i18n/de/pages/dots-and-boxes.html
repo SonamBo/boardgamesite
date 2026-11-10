@@ -13,7 +13,7 @@
     Alle Spiele
   </a>
 
-  <div class="game-layout" data-max-root style="--board-ratio: 1">
+  <div class="game-layout" data-max-root data-fit-height style="--board-ratio: 1">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Käsekästchen</h1>
@@ -25,6 +25,7 @@
       <div class="board-fit db-wrap">
         <svg id="db-board" class="db-board" viewBox="0 0 100 100" role="group" aria-label="Käsekästchen-Gitter. Tippe zwischen zwei Punkte, um eine Linie zu ziehen."></svg>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Rückgängig</button></div>
       <p class="board-hint">Tippe zwischen zwei benachbarte Punkte, um eine Linie zu ziehen. Deine Bilanz: <span id="record">Siege: 0 · Niederlagen: 0 · Unentschieden: 0</span></p>
     </section>
 

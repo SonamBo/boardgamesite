@@ -487,8 +487,8 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .hint-dot { width: 30%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--you) 80%, transparent); }
 .must .piece.you { box-shadow: inset 0 -5px 0 var(--you-lo), 0 0 0 4px #fff; }
 
-.rv { background: var(--felt); gap: 2px; padding: 2px; box-shadow: 0 0 0 10px var(--felt-dark), 0 18px 40px rgba(0,0,0,.45); }
-.rv button { background: var(--felt); outline: 1px solid var(--felt-dark); }
+.rv { --rv-line: color-mix(in srgb, var(--felt) 55%, #E8C9A0); background: var(--rv-line); gap: 2px; padding: 2px; box-shadow: 0 0 0 10px var(--felt-dark), 0 18px 40px rgba(0,0,0,.45); }
+.rv button, .rv button:disabled { background: var(--felt); opacity: 1; }
 .rv button.last::after { content: ""; position: absolute; width: 14%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 0 0 2px rgba(0,0,0,.35); }
 .rv .disc { width: 80%; aspect-ratio: 1; border-radius: 50%; transition: background .25s, box-shadow .25s; }
 .rv .disc.you { background: var(--you); box-shadow: inset 0 -5px 0 var(--you-lo); }
@@ -694,6 +694,18 @@ body.maxed .sol-wrap > * { width: min(100%, calc((100dvh - 150px) * 1.3)); margi
   .players { padding: 12px; }
   .panel-box { padding: 14px; }
 }
+
+/* ---------- Boards that fit the screen height ----------
+   Pages with data-fit-height on .game-layout: the board (the element after the board head) is no taller than the
+   space left under the header and status line, so the status and the computer's reply stay in view without scrolling.
+   game-ui.js measures that space into --fit-h (the calc is a fallback); --fit-ratio is the board's width ÷ height. */
+[data-fit-height] { --board-chrome: 200px; }
+[data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { width: min(100%, max(240px, calc(var(--fit-h, 100dvh - var(--board-chrome)) * var(--fit-ratio, 1)))); }
+@media (max-width: 900px) {
+  [data-fit-height] { --board-chrome: calc(272px + env(safe-area-inset-bottom)); }
+  [data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { margin-inline: auto; }
+}
+body.maxed [data-fit-height] .board-col > .board-head + *, body.maxed [data-fit-height] .board-col > .board-head + * + .peg-tools { width: 100%; }
 
 /* ---------- Single-player game panels ---------- */
 .solo-stats { flex-direction: row; justify-content: space-around; text-align: center; }
@@ -1519,8 +1531,8 @@ body.maxed .dice-wrap { max-width: none; }
 .cs.sel { box-shadow: inset 0 0 0 4px var(--brand); }
 .cs.chk { background: radial-gradient(circle, #E85D5D 0%, #C0392B 45%, transparent 75%), #B78A5E; }
 .cs::before, .cs::after { position: absolute; font: 700 clamp(8px, 1.6vw, 11px)/1 var(--body); color: rgba(60,40,30,.6); pointer-events: none; }
-.cs::before { content: attr(data-rank); left: 3px; top: 3px; }
-.cs::after { content: attr(data-file); right: 3px; bottom: 3px; }
+.cs.edge-rank::before { content: attr(data-rank); left: 3px; top: 3px; }
+.cs.edge-file::after { content: attr(data-file); right: 3px; bottom: 3px; }
 .cs .pz { width: 86%; height: 86%; pointer-events: none; }
 .pz.w { fill: #FBF6EA; stroke: #2A1D20; stroke-width: 1.4; stroke-linejoin: round; }
 .pz.b { fill: #2A1D20; stroke: #FBF6EA; stroke-width: .9; stroke-linejoin: round; }
@@ -1816,6 +1828,9 @@ body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .
 .dch { display: flex; flex-direction: column; gap: 16px; }
 .pz-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .pz-tabs button[aria-selected="true"] { background: var(--surface-2); color: var(--text); }
+/* long game names ("Russian Checkers") wrap inside their tab instead of pushing the page sideways on phones */
+.pz-tabs { max-width: 100%; }
+.pz-tabs button { min-width: 0; white-space: normal; line-height: 1.15; }
 .pz-tick { color: var(--good); font-weight: 700; }
 .pz-count { font-size: 14px; }
 .pz-share-text { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--side); border: 1px solid var(--border); font: 500 15px/1.5 var(--body); white-space: pre-wrap; color: var(--text); }
@@ -2044,6 +2059,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; z-inde
 .stats-chip:hover { background: var(--surface-2); color: var(--text); }
 .stats-chip .sc { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; white-space: nowrap; }
 .stats-chip .sc + .sc { border-left: 1px solid var(--border-strong); }
+/* the numbers stay hidden until site.js has filled in the real values, so a stored streak never flashes as 0 */
+.stats-chip:not(.ready) .sc b { visibility: hidden; }
 .stats-chip .sc-streak:not(.lit) { filter: grayscale(1); opacity: .7; }
 .stats-chip .sc-streak.lit b { color: var(--brand); }
 @media (max-width: 900px) {
@@ -2263,10 +2280,18 @@ body.returning .hero { display: none; }
 .ni-go i:first-child { left: 0; top: 0; background: #1A1416; box-shadow: inset 0 -2px 0 rgba(255,255,255,.15); }
 .ni-go i:last-child { right: 0; bottom: 0; background: #FFF; box-shadow: 0 0 0 1.5px #1A1416; }
 .ni-rv { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, var(--you) 50%, #262A27 50%); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.ni-gm { display: flex; align-items: center; gap: 2px; }
+.ni-gm i { width: 10px; height: 10px; border-radius: 50%; background: var(--you); box-shadow: inset 0 -2px 0 var(--you-lo); }
+.ni-gm i:nth-child(2) { background: #EFE6D8; box-shadow: 0 0 0 1.5px #8E7E6C; }
 .ni-c4 { display: grid; grid-template-columns: repeat(2, 12px); gap: 3px; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* lesson boards for Five in a Row: marks are rings and dots, so the grid lines (::before/::after) stay */
+.lp-board.gm-board { width: 100%; max-width: 560px; margin: 0 auto; }
+.gm-board .gm[data-mark="good"], .gm-board .gm[data-mark="bad"], .gm-board .gm[data-mark="target"] { border-radius: 50%; }
+.gm-board .gm[data-mark="hint"] { background: radial-gradient(circle, color-mix(in srgb, var(--accent-text) 75%, transparent) 26%, transparent 30%); }
+.gm-board .gm[data-mark="hint"]::before { content: ""; inset: auto; left: 0; right: 0; top: 50%; height: 1px; border-radius: 0; background: rgba(60,40,20,.55); z-index: 0; }
 /* lesson boards for Four in a Row */
 .lp-board.board.c4-lesson { max-width: 560px; margin: 0 auto; }
 .lp-board.go-board { width: 100%; max-width: 520px; margin: 0 auto; }

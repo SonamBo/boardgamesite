@@ -15,6 +15,7 @@ function placeSound(flips) {
 }
 
 const boardEl = document.getElementById('board');
+const undoBtn = document.getElementById('undo');
 const FILES = 'abcdefgh';
 const getLevel = levelSwitch('rv');
 const rec = record('rv');
@@ -24,6 +25,9 @@ const friend = () => getOpp() === 'friend';
 // turn: E.YOU (gold, moves first) or E.CPU (black). In 2-player mode these are Player 1 and Player 2.
 let board, over, busy, last, started, turn;
 let cpuTimer = 0;
+// positions before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
+const snapshot = () => history.push({ board: board.slice(), turn, last });
 let onlineOn = roomInLink, ol = null;
 const friendish = () => friend() || onlineOn; // no computer turns
 const nameOf = (side) => (side === E.YOU ? 'Player 1' : 'Player 2');
@@ -60,6 +64,7 @@ function render() {
     const dark = friend() ? 'black' : 'computer';
     btn.setAttribute('aria-label', squareName(i) + ', ' + (v === E.YOU ? 'gold' : v === E.CPU ? dark : moves.has(i) ? 'you can play here' : 'empty'));
   }
+  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === E.YOU));
   const c = E.count(board);
   document.getElementById('count-you').textContent = c.you + (c.you === 1 ? ' disc' : ' discs');
   document.getElementById('count-cpu').textContent = c.cpu + (c.cpu === 1 ? ' disc' : ' discs');
@@ -104,6 +109,7 @@ function finish() {
 function onSquare(i, remote = false) {
   if ((!remote && !humanToMove()) || !E.flipsFor(board, i, turn).length) return;
   if (!started) { started = true; track('game_start', { game: 'reversi', level: friend() ? 'friend' : getLevel() }); }
+  snapshot();
   const r = E.play(board, i, turn);
   placeSound(r.flips);
   board = r.board;
@@ -156,6 +162,7 @@ function computerMove() {
   const m = E.pickComputerMove(board, getLevel());
   busy = false;
   if (m < 0) return afterMove(E.YOU);
+  snapshot();
   const r = E.play(board, m, E.CPU);
   placeSound(r.flips);
   board = r.board;
@@ -166,6 +173,7 @@ function computerMove() {
 function newGame() {
   clearTimeout(cpuTimer);
   board = E.startBoard();
+  history = [];
   over = false; busy = false; last = -1; started = false; turn = E.YOU;
   clearGame();
   hideResult();
@@ -191,6 +199,20 @@ function resume() {
 }
 
 document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your move and its reply
+  let h = history.pop();
+  while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
+  if (!friend() && h.turn !== E.YOU) { history.push(h); return; }
+  board = h.board; turn = h.turn; last = h.last;
+  play('card');
+  saveGame();
+  setTurn(turn === E.YOU ? 'you' : 'cpu');
+  setStatus(friend() ? nameOf(turn) + '’s turn' : 'Your turn', friend() && turn === E.CPU ? 'cpu' : '');
+  render();
+});
+undoBtn.classList.add('online-hide');
 document.getElementById('new-game').classList.add('online-hide');
 ol = online('reversi', {
   reset: () => newGame(),

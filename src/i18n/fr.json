@@ -305,6 +305,10 @@
      "Victoires : {1} · Défaites : {2} · Nuls : {3}"
     ],
     [
+     "(\\d+) wins? · (\\d+) loss(?:es)?",
+     "Victoires : {1} · Défaites : {2}"
+    ],
+    [
      "Welcome back\\. (.+)",
      "Bon retour. {1}"
     ],

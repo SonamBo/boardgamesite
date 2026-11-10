@@ -3,6 +3,7 @@
 import { store } from './site.js';
 import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
 import { ladder } from './ladder.js';
+import { online, roomInLink } from './online.js';
 import { offerReview, hideReview } from './review.js';
 
 // every move this game, for the post-game review (pits '1'–'6' along the bottom, 't1'–'t6' along the top)
@@ -16,6 +17,7 @@ import { STORE, own, sow, moves, ended, pick } from './mancala-rules.js';
 export { sow };
 
 const $ = (id) => document.getElementById(id);
+const undoBtn = $('undo');
 const SAVE = 'bgs-mancala-game';
 const score = record('mancala');
 // Rated practice-ladder game (?bot=…): fixed level. Null for an ordinary game.
@@ -23,9 +25,15 @@ const L = ladder('mancala', { resign: () => { if (!over && started) finish(true)
 const cpuName = L ? L.bot.name : 'Computer';
 const getLevel = L ? () => L.level : levelSwitch('mancala', () => {});
 const getOpp = L ? () => 'cpu' : opponentSwitch('mancala', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
-const vsCpu = () => getOpp() === 'cpu';
+let onlineOn = roomInLink && !L, ol = null;
+const vsCpu = () => !onlineOn && getOpp() === 'cpu';
+const mySide = () => (onlineOn ? ol.mySeat() : 0);   // the side whose pits are along the bottom
 
 let B, turn, over, busy, started, lastPit;
+// positions before each move, for Undo (vs the computer it takes back your move and its replies)
+let history = [];
+// online: moves from your friend wait here while a move is still being sown
+const pending = [];
 function cpuPick(b, p) { return pick(b, p, getLevel()); }
 
 // ---------- Drawing ----------
@@ -39,20 +47,29 @@ function seedsHtml(n) {
   }
   return h;
 }
+// Whose pits and store these are, for screen readers: "Your pit 3", "Computer’s store" (pits count from each owner's left)
+function owners() {
+  if (onlineOn) return mySide() === 0 ? ['Your', 'Your friend’s'] : ['Your friend’s', 'Your'];
+  return vsCpu() ? ['Your', cpuName + '’s'] : ['Player 1’s', 'Player 2’s'];
+}
+const humanCanMove = () => !over && !busy && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 1));
 function render() {
-  const names = vsCpu() ? ['You', cpuName] : ['Player 1', 'Player 2'];
+  const names = owners();
   pitEls.forEach((el) => {
     const i = Number(el.dataset.i);
     el.querySelector('.seeds').innerHTML = seedsHtml(B[i]);
     el.querySelector('b').textContent = String(B[i]);
-    const mine = own(turn, i) && B[i] > 0 && !over && !busy && !(vsCpu() && turn === 1);
+    const mine = own(turn, i) && B[i] > 0 && humanCanMove();
     el.classList.toggle('can', mine);
     el.classList.toggle('last', i === lastPit);
     if (el.tagName === 'BUTTON') el.disabled = !mine;
-    el.setAttribute('aria-label', (STORE.includes(i) ? (i === 6 ? names[0] : names[1]) + '’s store' : 'Pit') + ': ' + B[i] + (B[i] === 1 ? ' seed' : ' seeds'));
+    const owner = names[i <= 6 ? 0 : 1];
+    const what = STORE.includes(i) ? owner + ' store' : owner + ' pit ' + (i <= 5 ? i + 1 : i - 6);
+    el.setAttribute('aria-label', what + ', ' + B[i] + (B[i] === 1 ? ' seed' : ' seeds'));
   });
-  $('score-you').textContent = String(B[6]);
-  $('score-cpu').textContent = String(B[13]);
+  undoBtn.disabled = busy || over || onlineOn || !!L || !(vsCpu() ? history.some((h) => h.turn === 0) : history.length);
+  $('score-you').textContent = String(B[STORE[mySide()]]);
+  $('score-cpu').textContent = String(B[STORE[1 - mySide()]]);
   $('row-you').classList.toggle('turn-you', turn === 0 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 1 && !over);
 }
@@ -70,7 +87,7 @@ async function moveFrom(i) {
   const r = sow(prevBoard, p, i);
   B = r.b; lastPit = r.last;
   busy = false;
-  const who = p === 0 && vsCpu() ? 'You' : (vsCpu() ? 'The computer' : p === 0 ? 'Player 1' : 'Player 2');
+  const who = onlineOn ? (p === mySide() ? 'You' : 'Your friend') : p === 0 && vsCpu() ? 'You' : (vsCpu() ? 'The computer' : p === 0 ? 'Player 1' : 'Player 2');
   if (r.captured) { play('capture'); setStatus(who + ' captured ' + r.captured + ' seeds!', p && vsCpu() ? 'cpu' : ''); }
   else play('place');
   if (ended(B)) return finish();
@@ -78,11 +95,25 @@ async function moveFrom(i) {
   else { turn = 1 - p; if (!r.captured) setStatus(turnText(), turn && vsCpu() ? 'cpu' : ''); }
   render();
   save();
+  if (onlineOn && !over && !r.captured && !r.again) setStatus(ol.myTurn() ? 'Your turn: pick a pit' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
   if (vsCpu() && turn === 1) cpuTurn();
+  drain();
 }
 let prevBoard = null;
-function play0(i) { prevBoard = B.slice(); gameLog.push({ position: B.slice(), side: turn, move: i <= 5 ? String(i + 1) : 't' + (13 - i) }); moveFrom(i); }
-const turnText = () => (vsCpu() ? (turn === 0 ? 'Your turn: pick a pit' : cpuName + '’s turn') : (turn === 0 ? 'Player 1' : 'Player 2') + '’s turn');
+function play0(i, remote = false) {
+  history.push({ B: B.slice(), turn, lastPit, log: gameLog.length });
+  prevBoard = B.slice();
+  gameLog.push({ position: B.slice(), side: turn, move: i <= 5 ? String(i + 1) : 't' + (13 - i) });
+  if (onlineOn && !remote) {
+    // tell the other board straight away: who moves next, and whether this move ends the game
+    const r = sow(B, turn, i);
+    ol.send(String(i), r.again ? turn : 1 - turn, ended(r.b));
+  }
+  moveFrom(i);
+}
+// play your friend's moves one at a time, once the last one has finished sowing
+function drain() { if (!busy && pending.length && !over) play0(pending.shift(), true); }
+const turnText = () => (onlineOn ? (ol.myTurn() ? 'Your turn: pick a pit' : 'Waiting for your friend') : vsCpu() ? (turn === 0 ? 'Your turn: pick a pit' : cpuName + '’s turn') : (turn === 0 ? 'Player 1' : 'Player 2') + '’s turn');
 
 async function cpuTurn() {
   busy = true; render();
@@ -94,6 +125,15 @@ async function cpuTurn() {
 
 function finish(resigned = false) {
   over = true;
+  if (onlineOn) {
+    const [mine, theirs] = [B[STORE[mySide()]], B[STORE[1 - mySide()]]];
+    const res = mine > theirs ? 'win' : mine < theirs ? 'lose' : 'draw';
+    showResult(res, res === 'win' ? 'You win!' : res === 'lose' ? 'Your friend wins' : 'It’s a draw', 'You ' + mine + ', your friend ' + theirs + '.');
+    setStatus('Game over: ' + mine + ' to ' + theirs, res === 'lose' ? 'cpu' : '');
+    play(res === 'lose' ? 'lose' : 'win', 0.1);
+    track('game_end', { game: 'mancala', result: res, mode: 'online' });
+    return;
+  }
   if (vsCpu()) offerReview(() => ({ game: 'mancala', board: 'mancala', plies: gameLog, me: 0, final: B.slice() }));
   render();
   store.set(SAVE, null);
@@ -109,7 +149,7 @@ function finish(resigned = false) {
   track('game_end', { game: 'mancala', result: res });
 }
 
-function save() { if (started && !over && !L) store.set(SAVE, { opp: getOpp(), B, turn }); }
+function save() { if (started && !over && !L && !onlineOn) store.set(SAVE, { opp: getOpp(), B, turn }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (L || !g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== 14) return false;
@@ -120,7 +160,7 @@ function resume() {
 }
 function newGame() {
   L?.newGame();
-  gameLog = []; hideReview();
+  gameLog = []; history = []; pending.length = 0; hideReview();
   B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1;
   $('result').hidden = true;
   store.set(SAVE, null);
@@ -129,11 +169,43 @@ function newGame() {
 }
 pitEls.forEach((el) => el.addEventListener('click', () => {
   const i = Number(el.dataset.i);
-  if (busy || over || (vsCpu() && turn === 1)) return;
+  if (!humanCanMove()) return;
   if (!own(turn, i) || !B[i]) { shake(el, play); return; }
   play0(i);
 }));
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
-$('again').addEventListener('click', newGame);
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+$('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
+$('new-game').classList.add('online-hide');
+$('again').classList.add('online-hide');
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || L || !history.length) return;
+  // vs the computer, take back your move and the computer's replies
+  let h = history.pop();
+  while (vsCpu() && h.turn !== 0 && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== 0) { history.push(h); return; }
+  B = h.B; turn = h.turn; lastPit = h.lastPit; gameLog.length = h.log;
+  play('card');
+  save();
+  render();
+  setStatus(turnText(), turn && vsCpu() ? 'cpu' : '');
+});
+undoBtn.classList.add('online-hide');
+// Online: the second player sees the board from their side (their pits along the bottom)
+function orient() {
+  const flip = onlineOn && ol && ol.mySeat() === 1;
+  pitEls.forEach((el) => { const home = Number(el.dataset.home ?? (el.dataset.home = el.dataset.i)); el.dataset.i = String(flip ? (home + 7) % 14 : home); });
+}
+ol = online('mancala', {
+  reset: () => newGame(),
+  apply: (t) => { pending.push(Number(t)); drain(); },
+  seatName: (s) => (s === 0 ? 'Gold (first)' : 'Ivory'),
+  over: () => over,
+  onlineChanged: (on) => {
+    onlineOn = on && !L;
+    document.body.classList.toggle('online', onlineOn);
+    orient();
+    render();
+  }
+});
 window.addEventListener('pagehide', save);
-if (!resume()) newGame();
+if (roomInLink || !resume()) newGame();

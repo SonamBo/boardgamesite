@@ -46,14 +46,14 @@ export function levelSwitch(gameKey, onChange) {
   return () => level;
 }
 
-// Win / loss / draw record, remembered per game.
-export function record(gameKey) {
+// Win / loss / draw record, remembered per game. { draws: false } for games that can't end in a draw (Go, Hex…).
+export function record(gameKey, { draws = true } = {}) {
   const key = 'bgs-' + gameKey + '-score';
   const score = store.get(key, { w: 0, l: 0, d: 0 });
   const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
   const paint = () => {
     const el = $('record');
-    if (el) el.textContent = plural(score.w, 'win', 'wins') + ' · ' + plural(score.l, 'loss', 'losses') + ' · ' + plural(score.d, 'draw', 'draws');
+    if (el) el.textContent = plural(score.w, 'win', 'wins') + ' · ' + plural(score.l, 'loss', 'losses') + (draws ? ' · ' + plural(score.d, 'draw', 'draws') : '');
   };
   paint();
   // An account's saved record arrived after sign-in: show it.
@@ -135,3 +135,23 @@ function setupMaximise() {
   right.insertBefore(btn, right.querySelector('[data-sound-toggle]'));
 }
 setupMaximise();
+
+// ---------- Boards that fit the screen height (pages with data-fit-height, see site.css) ----------
+// Works out how much height is left for the board under the header and status line (and above the phone tab bar),
+// so the board never runs off the bottom of the screen and the status and the computer's reply stay in view.
+function setupFitHeight() {
+  const root = document.querySelector('[data-fit-height]');
+  const el = root && root.querySelector('.board-col > .board-head + *');
+  if (!el) return;
+  const fit = () => {
+    if (document.body.classList.contains('maxed')) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const bar = document.querySelector('.tabbar');
+    const below = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().height : 0;
+    root.style.setProperty('--fit-h', Math.max(0, Math.floor(window.innerHeight - top - below - 12)) + 'px');
+  };
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+}
+setupFitHeight();

@@ -15,6 +15,7 @@ const GAMES = [
   { id: 'go', name: 'Go', blurb: 'Simple rules, endless depth. Learn on 9×9.' },
   { id: 'reversi', name: 'Reversi', blurb: 'Flip discs to your colour and grab the corners.' },
   { id: 'four-in-a-row', name: 'Four in a Row', blurb: 'Block, then build double threats.' },
+  { id: 'five-in-a-row', name: 'Five in a Row', blurb: 'Fours, open threes and the winning four-three.' },
   { id: 'sudoku', name: 'Sudoku', blurb: 'From the rules to pairs and pointing pairs.' },
   { id: 'backgammon', name: 'Backgammon', blurb: 'Dice, hitting, bearing off and opening moves.' },
   { id: 'solitaire', name: 'Solitaire', blurb: 'Win more Klondike games with a few habits.' }

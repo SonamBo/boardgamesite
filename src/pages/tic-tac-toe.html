@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root>
+  <div class="game-layout" data-max-root data-fit-height>
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Tic Tac Toe</h1>
@@ -24,6 +24,7 @@
       <div class="board-fit ttt-wrap">
         <div id="board" class="ttt" role="group" aria-label="Tic tac toe grid. Press 1 to 9 to play a square, counting from the top left."></div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap a square to play your mark. Players take turns going first. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
     </section>
 
@@ -97,10 +98,17 @@
   <h2>Can you beat a perfect player?</h2>
   <p>No. Tic tac toe is a solved game: if both players make the best move every time, it always ends in a draw. That’s why the Hard computer never loses. The real game is spotting your opponent’s mistakes and setting traps, which is exactly what Easy and Medium let you practise.</p>
 
+  <div class="callout card">
+    <p>Want to learn forks, how to block them and the best first move?</p>
+    <a class="btn btn-outline" href="/learn/tic-tac-toe">Read the Tic Tac Toe guide</a>
+  </div>
+
   <h2>Tic Tac Toe FAQ</h2>
   <section class="faq">
     <h3>Is this tic tac toe game free?</h3>
     <p>Yes. Play as many games as you like against the computer or friends, free in your browser on a phone, tablet or computer. No download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>How do I play tic tac toe with a friend online?</h3>
     <p>Tap Create a game link and send the link to your friend. When they open it, the game starts on both devices. To play side by side instead, choose 2 players.</p>
     <h3>Is it possible to beat the Hard computer?</h3>

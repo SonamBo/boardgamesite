@@ -8,7 +8,7 @@ import { shake } from './solo.js';
 import { makeDie, paintDie, wait, d6 } from './dice-ui.js';
 
 const $ = (id) => document.getElementById(id);
-const score = record('liars');
+const score = record('liars', { draws: false });
 const getLevel = levelSwitch('liars', () => newGame());
 const SEATS_KEY = 'bgs-liars-seats';
 const NAMES = ['You', 'Rosa', 'Otto', 'Mei'];

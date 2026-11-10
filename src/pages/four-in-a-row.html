@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root>
+  <div class="game-layout" data-max-root data-fit-height style="--fit-ratio: 1.167">
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Four in a Row</h1>
@@ -22,6 +22,7 @@
         </div>
       </div>
       <div id="board" class="board" role="group" aria-label="Game board, 7 columns. Press 1 to 7 to drop a disc."></div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p id="board-hint" class="board-hint">Click a column, or press 1–7, to drop your disc.</p>
     </section>
 
@@ -32,9 +33,9 @@
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b><small id="score-you">0 wins</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b><small id="score-cpu">0 wins</small></div>
-        <p class="muted" style="font-size: 14px">Draws: <span id="score-draws">0</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
@@ -113,7 +114,11 @@
   <h2>Four in a Row FAQ</h2>
   <section class="faq">
     <h3>Is this Four in a Row game free?</h3>
-    <p>Yes. Play the computer as often as you like and try the daily challenge every day, free in your browser. No download and no account needed.</p>
+    <p>Yes. Play the computer, a friend on the same device, or a friend online by sending a link, as often as you like. The daily challenge is free too. Everything runs in your browser, with no download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
+    <h3>Can I play Four in a Row with a friend?</h3>
+    <p>Yes. Choose 2 players to take turns on one phone, tablet or computer, or tap Create a game link and send it so your friend can play on their own device.</p>
     <h3>Can the first player always win Four in a Row?</h3>
     <p>On the standard 7×6 board, yes, in theory. The game was solved in 1988: with perfect play, the first player can always force a win by starting in the centre column. In practice nobody plays perfectly, so there’s plenty to play for.</p>
     <h3>When does the daily challenge change?</h3>

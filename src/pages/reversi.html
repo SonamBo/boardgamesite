@@ -12,7 +12,7 @@
     All games
   </a>
 
-  <div class="game-layout" data-max-root>
+  <div class="game-layout" data-max-root data-fit-height>
     <section class="board-col" aria-labelledby="board-title">
       <div class="board-head">
         <h1 id="board-title">Reversi</h1>
@@ -24,6 +24,7 @@
       <div class="board-wrap">
         <div id="board" class="grid8 rv" role="group" aria-label="Reversi board. You play gold and move first."></div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap a square with a gold dot. Every dark disc caught in a line between your discs flips to gold.</p>
     </section>
 
@@ -96,6 +97,8 @@
   <section class="faq">
     <h3>Is this Reversi game free?</h3>
     <p>Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s no download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>What happens if I can’t make a move?</h3>
     <p>Your turn is skipped and the computer moves again. You get your turn back as soon as you have a move that flips at least one disc.</p>
     <h3>Can a game of Reversi end in a draw?</h3>
