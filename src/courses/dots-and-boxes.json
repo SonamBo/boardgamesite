@@ -1,0 +1,459 @@
+{
+ "game": "dots-and-boxes",
+ "name": "Dots and Boxes",
+ "board": "dots",
+ "play": "/play/dots-and-boxes",
+ "intro": "Learn Dots and Boxes from scratch: drawing lines, closing boxes and taking extra turns, then safe moves, chains, the double-cross and counting.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Dots and Boxes works",
+   "blurb": "Drawing lines, closing boxes, extra turns and how you win.",
+   "lessons": [
+    {
+     "slug": "dots-and-boxes-board",
+     "title": "The Dots and Boxes board",
+     "summary": "Dots and Boxes starts with a grid of dots. Players take turns joining two neighbouring dots with a line. Learn the board and your first move.",
+     "wrap": "That’s the board. Next: closing a box.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "",
+        "you": "",
+        "them": ""
+       },
+       "text": "<p>Dots and Boxes starts with a square grid of dots and no lines. The lessons use a small board of 3×3 boxes.</p><p>Players take turns drawing <strong>one line</strong> between two dots that are next to each other, across or down. Player 1 goes first.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "What do you do on your turn?",
+       "options": [
+        "Draw one line between two neighbouring dots",
+        "Draw a whole box",
+        "Draw any diagonal line"
+       ],
+       "answer": 0,
+       "explain": "One line, across or down, between two dots that are next to each other."
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "",
+        "you": "",
+        "them": ""
+       },
+       "goal": "any",
+       "text": "<p>Your turn. Tap between two dots to draw a line.</p>",
+       "prompt": "Draw your first line.",
+       "done": "Your first line. Now it’s your opponent’s turn."
+      }
+     ],
+     "icon": "★"
+    },
+    {
+     "slug": "closing-a-box",
+     "title": "Closing a box and going again",
+     "summary": "Draw the fourth side of a box and it’s yours, and you go again. Learn to take boxes, and to keep going when one box leads to the next.",
+     "wrap": "Close a box, take another turn. Next: how to win.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 v:0:0 h:1:0",
+        "you": "",
+        "them": ""
+       },
+       "marks": {
+        "b:0:0": "hint"
+       },
+       "text": "<p>The box in the corner has three sides drawn. Whoever draws its <strong>fourth side</strong> claims it.</p><p>And closing a box earns you <strong>another turn</strong> straight away.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 v:0:0 h:1:0",
+        "you": "",
+        "them": ""
+       },
+       "goal": "box",
+       "text": "<p>Tap the missing side.</p>",
+       "prompt": "Close the box.",
+       "wrong": "Find the one side the corner box is missing.",
+       "done": "Your box! And it’s your turn again."
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:1:0 v:0:0 h:0:1 h:1:1",
+        "you": "",
+        "them": ""
+       },
+       "accept": [
+        "v:0:1"
+       ],
+       "text": "<p>Two boxes side by side. The first has three sides.</p>",
+       "prompt": "Close the first box.",
+       "wrong": "The first box is in the top left corner. Draw its missing side.",
+       "done": "One box, and the line you drew gave the next box its third side."
+      },
+      {
+       "type": "move",
+       "accept": [
+        "v:0:2"
+       ],
+       "text": "<p>You closed a box, so it’s still your turn.</p>",
+       "prompt": "Take the next box too.",
+       "wrong": "The box next to it now has three sides. Draw its last one.",
+       "done": "Two boxes in one turn."
+      }
+     ],
+     "icon": "□"
+    },
+    {
+     "slug": "how-to-win-dots-and-boxes",
+     "title": "How to win at Dots and Boxes",
+     "summary": "When every line is drawn, the player with more boxes wins. Learn the end of the game, and why giving away boxes is sometimes right.",
+     "wrap": "You know all the rules. Test yourself in the rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 v:0:0 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:2:2 h:3:0 h:3:1 h:3:2 v:1:0 v:1:1 v:1:2 v:1:3 v:2:0 v:2:1 v:2:2 v:2:3",
+        "you": "1:0 1:1 1:2",
+        "them": "2:0 2:1 2:2"
+       },
+       "text": "<p>The game ends when every line has been drawn. The player with <strong>more boxes</strong> wins. On boards with an even number of boxes, an equal split is a draw.</p><p>Here you have three boxes and your opponent has three. The top row decides it.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "Who wins Dots and Boxes?",
+       "options": [
+        "Whoever draws the last line",
+        "Whoever has more boxes at the end",
+        "Whoever closes the first box"
+       ],
+       "answer": 1,
+       "explain": "More boxes at the end wins."
+      }
+     ],
+     "icon": "🏁"
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock chains and the double-cross.",
+   "lessons": [
+    {
+     "slug": "dots-and-boxes-rules-check",
+     "xp": 40,
+     "title": "Dots and Boxes rules check",
+     "summary": "Test your Dots and Boxes rules: drawing lines, closing boxes, extra turns, safe moves and how the game is won.",
+     "wrap": "Rules check passed. Now for safe moves, chains and the double-cross.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "n": 3,
+        "lines": "",
+        "you": "",
+        "them": ""
+       },
+       "text": "<p>Question 1.</p>",
+       "prompt": "You close a box. What happens next?",
+       "options": [
+        "Your turn ends",
+        "You take another turn"
+       ],
+       "answer": 1,
+       "explain": "You take another turn."
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 v:0:0 h:1:0",
+        "you": "",
+        "them": ""
+       },
+       "goal": "box",
+       "text": "<p>Question 2.</p>",
+       "prompt": "Close a box.",
+       "wrong": "Find the box with three sides and draw its fourth.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "You draw the third side of a box. What happens?",
+       "options": [
+        "Nothing yet",
+        "Your opponent can take the box"
+       ],
+       "answer": 1,
+       "explain": "Your opponent can draw the fourth side and take it."
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:1:0 h:1:2 h:2:1 h:3:0 h:3:1 h:3:2 v:0:2 v:1:2 v:2:0 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "goal": "safe",
+       "text": "<p>Question 4.</p>",
+       "prompt": "Draw a line that doesn’t give your opponent a box.",
+       "wrong": "That gives a box a third side. Find the one safe line.",
+       "done": "The only safe line."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "When is the game over?",
+       "options": [
+        "When one player has five boxes",
+        "When every line has been drawn"
+       ],
+       "answer": 1,
+       "explain": "When every line has been drawn. Then the most boxes wins."
+      }
+     ],
+     "icon": "🏆"
+    }
+   ]
+  },
+  {
+   "id": "chains",
+   "stage": "strategy",
+   "name": "Safe moves and chains",
+   "blurb": "Safe lines, taking chains, giving away the least and the double-cross.",
+   "lessons": [
+    {
+     "slug": "safe-moves-dots-and-boxes",
+     "title": "Safe moves",
+     "summary": "A safe line doesn’t draw the third side of any box. Learn to find safe lines and why they matter so much early in the game.",
+     "wrap": "Use safe lines while they last. When they run out, the chains begin.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:1:1 h:2:0 h:2:1 h:2:2 h:3:0 h:3:1 v:0:0 v:0:2 v:0:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "text": "<p>Any line that draws the <strong>third side</strong> of a box gives that box away. A line that doesn’t is <strong>safe</strong>.</p><p>Early in the game, there are plenty of safe lines. Use them, and make your opponent run out first.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:1:1 h:2:0 h:2:1 h:2:2 h:3:0 h:3:1 v:0:0 v:0:2 v:0:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "goal": "safe",
+       "text": "<p>Most lines here would give a box away.</p>",
+       "prompt": "Draw a safe line.",
+       "wrong": "That line makes a third side. Look for a line next to boxes with only one side drawn (or none).",
+       "done": "Safe. No box has three sides."
+      }
+     ],
+     "icon": "✓"
+    },
+    {
+     "slug": "chains-dots-and-boxes",
+     "title": "Chains: take every box you’re given",
+     "summary": "Late in the game the board splits into chains, where taking one box sets up the next. Learn to take a whole chain in one turn.",
+     "wrap": "Take every box in a chain, unless the double-cross is better. That’s next.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 v:0:0 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:2:2 h:3:0 h:3:1 h:3:2 v:1:0 v:1:1 v:1:2 v:1:3 v:2:0 v:2:1 v:2:2 v:2:3",
+        "you": "1:0 1:1 1:2",
+        "them": "2:0 2:1 2:2"
+       },
+       "marks": {
+        "b:0:0": "hint",
+        "b:0:1": "hint",
+        "b:0:2": "hint"
+       },
+       "text": "<p>A <strong>chain</strong> is a row of boxes where closing one gives the next one its third side. Once a chain is opened, one player can take every box in it, one after another.</p><p>Your opponent has just opened the top row.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 v:0:0 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:2:2 h:3:0 h:3:1 h:3:2 v:1:0 v:1:1 v:1:2 v:1:3 v:2:0 v:2:1 v:2:2 v:2:3",
+        "you": "1:0 1:1 1:2",
+        "them": "2:0 2:1 2:2"
+       },
+       "accept": [
+        "v:0:1"
+       ],
+       "text": "<p>Start at the open end.</p>",
+       "prompt": "Take the first box.",
+       "wrong": "Start with the box that has three sides.",
+       "done": "One."
+      },
+      {
+       "type": "move",
+       "accept": [
+        "v:0:2"
+       ],
+       "text": "<p>Keep going: you closed a box, so it’s your turn again.</p>",
+       "prompt": "Take the next box.",
+       "wrong": "Close the next box in the row.",
+       "done": "Two."
+      },
+      {
+       "type": "move",
+       "accept": [
+        "v:0:3"
+       ],
+       "text": "<p>One more.</p>",
+       "prompt": "Take the last box.",
+       "wrong": "Draw the last side of the last box.",
+       "done": "The whole chain: you win 6 to 3."
+      }
+     ],
+     "icon": "⛓"
+    },
+    {
+     "slug": "open-the-shortest-chain",
+     "title": "When you must give boxes away, give the fewest",
+     "summary": "When there are no safe lines left, every move gives something away. Learn to open the shortest chain so your opponent gains as little as possible.",
+     "wrap": "No safe lines? Open the shortest chain.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:3:0 h:3:1 h:3:2 v:1:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "marks": {
+        "b:0:0": "hint",
+        "b:0:1": "hint",
+        "b:0:2": "hint"
+       },
+       "text": "<p>There are no safe lines left. The board has split into two chains: three boxes along the top, and six winding through the bottom two rows.</p><p>Whatever you draw opens one of them for your opponent.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:3:0 h:3:1 h:3:2 v:1:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "accept": [
+        "v:0:0",
+        "v:0:1",
+        "v:0:2",
+        "v:0:3"
+       ],
+       "text": "<p>Choose which chain to give away.</p>",
+       "prompt": "Open the shorter chain.",
+       "wrong": "That opens the six-box chain. Give away the three along the top instead.",
+       "done": "Your opponent can take three boxes, not six."
+      }
+     ],
+     "icon": "✂"
+    },
+    {
+     "slug": "double-cross-dots-and-boxes",
+     "title": "The double-cross",
+     "summary": "Taking every box in a chain can lose the game. Learn the double-cross: decline the last two boxes so your opponent has to open the next long chain.",
+     "wrap": "Two boxes given away can win you the whole next chain.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 h:1:0 h:1:1 h:1:2 v:0:0 h:2:0 h:2:1 h:3:0 h:3:1 h:3:2 v:1:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "text": "<p>Your opponent opened the three-box chain along the top. If you take all three, it’s your move again and you must open the six-box chain: your opponent takes six and wins.</p><p>The <strong>double-cross</strong>: take one box, then give back the last two.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 h:1:0 h:1:1 h:1:2 v:0:0 h:2:0 h:2:1 h:3:0 h:3:1 h:3:2 v:1:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "accept": [
+        "v:0:1"
+       ],
+       "text": "<p>First, take the box that’s already been given to you.</p>",
+       "prompt": "Take the first box.",
+       "wrong": "Close the box with three sides.",
+       "done": "One box. Now don’t take the next one."
+      },
+      {
+       "type": "move",
+       "accept": [
+        "v:0:3"
+       ],
+       "text": "<p>Two boxes are left in the chain. Instead of taking them, draw the line at the far end of the row. That leaves both boxes for your opponent, joined by one line.</p>",
+       "prompt": "Hand the last two boxes over.",
+       "wrong": "Don’t take the next box. Draw the line at the far end of the row instead.",
+       "done": "Your opponent takes two, but then must open the six-box chain, and you take all six."
+      }
+     ],
+     "icon": "×2"
+    },
+    {
+     "slug": "count-the-chains",
+     "title": "Count the chains",
+     "summary": "Near the end of Dots and Boxes, the number of long chains decides who gets them. Learn the idea strong players use to plan ahead.",
+     "wrap": "Count the long chains before the safe lines run out.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "n": 3,
+        "lines": "h:0:0 h:0:1 h:0:2 h:1:0 h:1:1 h:1:2 h:2:0 h:2:1 h:3:0 h:3:1 h:3:2 v:1:3 v:2:3",
+        "you": "",
+        "them": ""
+       },
+       "text": "<p>With the double-cross, the player who is <strong>not</strong> forced to open the long chains usually wins. That player is said to have <strong>control</strong>.</p><p>Who gets control depends on how many long chains (three boxes or more) there are when the safe lines run out, so strong players count them early and steer the board towards the number they want.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Think it through.</p>",
+       "prompt": "When should you start counting chains?",
+       "options": [
+        "After all the lines are drawn",
+        "While there are still safe lines left",
+        "Only on the biggest boards"
+       ],
+       "answer": 1,
+       "explain": "While safe lines are left: that’s when you can still change the number of chains. Once they run out, it’s too late."
+      }
+     ],
+     "icon": "#"
+    }
+   ]
+  }
+ ]
+}
