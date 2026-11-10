@@ -487,8 +487,8 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .hint-dot { width: 30%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--you) 80%, transparent); }
 .must .piece.you { box-shadow: inset 0 -5px 0 var(--you-lo), 0 0 0 4px #fff; }
 
-.rv { background: var(--felt); gap: 2px; padding: 2px; box-shadow: 0 0 0 10px var(--felt-dark), 0 18px 40px rgba(0,0,0,.45); }
-.rv button { background: var(--felt); outline: 1px solid var(--felt-dark); }
+.rv { --rv-line: color-mix(in srgb, var(--felt) 55%, #E8C9A0); background: var(--rv-line); gap: 2px; padding: 2px; box-shadow: 0 0 0 10px var(--felt-dark), 0 18px 40px rgba(0,0,0,.45); }
+.rv button, .rv button:disabled { background: var(--felt); opacity: 1; }
 .rv button.last::after { content: ""; position: absolute; width: 14%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 0 0 2px rgba(0,0,0,.35); }
 .rv .disc { width: 80%; aspect-ratio: 1; border-radius: 50%; transition: background .25s, box-shadow .25s; }
 .rv .disc.you { background: var(--you); box-shadow: inset 0 -5px 0 var(--you-lo); }
@@ -1531,8 +1531,8 @@ body.maxed .dice-wrap { max-width: none; }
 .cs.sel { box-shadow: inset 0 0 0 4px var(--brand); }
 .cs.chk { background: radial-gradient(circle, #E85D5D 0%, #C0392B 45%, transparent 75%), #B78A5E; }
 .cs::before, .cs::after { position: absolute; font: 700 clamp(8px, 1.6vw, 11px)/1 var(--body); color: rgba(60,40,30,.6); pointer-events: none; }
-.cs::before { content: attr(data-rank); left: 3px; top: 3px; }
-.cs::after { content: attr(data-file); right: 3px; bottom: 3px; }
+.cs.edge-rank::before { content: attr(data-rank); left: 3px; top: 3px; }
+.cs.edge-file::after { content: attr(data-file); right: 3px; bottom: 3px; }
 .cs .pz { width: 86%; height: 86%; pointer-events: none; }
 .pz.w { fill: #FBF6EA; stroke: #2A1D20; stroke-width: 1.4; stroke-linejoin: round; }
 .pz.b { fill: #2A1D20; stroke: #FBF6EA; stroke-width: .9; stroke-linejoin: round; }
@@ -2056,6 +2056,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; z-inde
 .stats-chip:hover { background: var(--surface-2); color: var(--text); }
 .stats-chip .sc { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; white-space: nowrap; }
 .stats-chip .sc + .sc { border-left: 1px solid var(--border-strong); }
+/* the numbers stay hidden until site.js has filled in the real values, so a stored streak never flashes as 0 */
+.stats-chip:not(.ready) .sc b { visibility: hidden; }
 .stats-chip .sc-streak:not(.lit) { filter: grayscale(1); opacity: .7; }
 .stats-chip .sc-streak.lit b { color: var(--brand); }
 @media (max-width: 900px) {

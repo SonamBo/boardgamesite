@@ -26,15 +26,21 @@ let mySide = L ? L.side : store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
 let gameLog = [];   // every move this game, for the post-game review
 let S, sel, legalNow, last, sans, keys, history, over, busy, started, promo, onlineOn = roomInLink && !L, ol = null;
 
-const sqEls = [];
-for (let i = 0; i < 64; i++) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'cs ' + ((Math.floor(i / 8) + i) % 2 ? 'dk' : 'lt');
-  b.addEventListener('click', () => tap(viewToSq(i)));
-  boardEl.appendChild(b);
-  sqEls.push(b);
+// The page already has the 64 squares with the starting position drawn in (so the board shows before this script
+// loads); reuse them, or make them if they're missing.
+const sqEls = [...boardEl.querySelectorAll(':scope > .cs')];
+if (sqEls.length !== 64) {
+  boardEl.textContent = '';
+  sqEls.length = 0;
+  for (let i = 0; i < 64; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cs ' + ((Math.floor(i / 8) + i) % 2 ? 'dk' : 'lt');
+    boardEl.appendChild(b);
+    sqEls.push(b);
+  }
 }
+sqEls.forEach((b, i) => b.addEventListener('click', () => tap(viewToSq(i))));
 const flipped = () => (onlineOn ? ol.mySeat() === 1 : vsCpu() && mySide === 'b');
 const viewToSq = (v) => (flipped() ? 63 - v : v);
 const sqToView = (s) => (flipped() ? 63 - s : s);
@@ -50,8 +56,11 @@ function render() {
     b.classList.toggle('last', !!last && (i === last.from || i === last.to));
     b.classList.toggle('chk', i === check);
     const f = v % 8, r = Math.floor(v / 8);
-    b.dataset.file = r === 7 ? 'abcdefgh'[flipped() ? 7 - f : f] : '';
-    b.dataset.rank = f === 0 ? String(flipped() ? r + 1 : 8 - r) : '';
+    // every square knows its file and rank; only the bottom row and left column show them as labels
+    b.dataset.file = 'abcdefgh'[flipped() ? 7 - f : f];
+    b.dataset.rank = String(flipped() ? r + 1 : 8 - r);
+    b.classList.toggle('edge-file', r === 7);
+    b.classList.toggle('edge-rank', f === 0);
     b.setAttribute('aria-label', C.sqName(i) + (p ? ', ' + (p === p.toUpperCase() ? 'white ' : 'black ') + PIECE_NAME[p.toLowerCase()] : '') + (dests.includes(i) ? ', move here' : ''));
   }
   // move list

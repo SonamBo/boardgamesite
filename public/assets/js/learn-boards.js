@@ -42,8 +42,10 @@ function chessBoard(el) {
     btn.type = 'button';
     btn.className = 'cs ' + ((Math.floor(i / 8) + i) % 2 ? 'dk' : 'lt');
     btn.addEventListener('click', () => tap(i));
-    if (i % 8 === 0) btn.dataset.rank = String(8 - Math.floor(i / 8));
-    if (i >= 56) btn.dataset.file = FILES[i % 8];
+    btn.dataset.rank = String(8 - Math.floor(i / 8));
+    btn.dataset.file = FILES[i % 8];
+    if (i % 8 === 0) btn.classList.add('edge-rank');
+    if (i >= 56) btn.classList.add('edge-file');
     el.appendChild(btn);
     cells.push(btn);
   }
