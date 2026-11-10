@@ -1626,9 +1626,11 @@ svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6
 .mh-at { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- Mancala ---------- */
-.mc-wrap { max-width: 760px; }
+/* Mancala fills the board column like the other games: the fit-height rule sizes it, the board being about
+   3.7 times as wide as it's tall; seed counts grow with it (container units) */
+.mc-wrap { max-width: none; --fit-ratio: 3.7; }
 .mc-board { display: grid; grid-template-columns: 1.1fr repeat(6, 1fr) 1.1fr; grid-template-rows: 1fr 1fr; gap: clamp(4px, 1.4vw, 10px); padding: clamp(8px, 2vw, 16px); border-radius: 999px / 40%;
-  background: linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24); box-shadow: inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 4px #3A2818, 0 18px 40px rgba(0,0,0,.45); }
+  background: linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24); box-shadow: inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 4px #3A2818, 0 18px 40px rgba(0,0,0,.45); container-type: inline-size; }
 .mc-row { display: contents; }
 .mc-pit { position: relative; aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.12); cursor: default; }
 .mc-pit.store { grid-row: 1 / span 2; aspect-ratio: auto; border-radius: 999px; }
@@ -1640,10 +1642,10 @@ svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6
 .mc-pit.store .seeds i { width: 24%; }
 /* a seed on its way from pit to pit (mancala.js) */
 .mc-board { position: relative; }
-.mc-fly { position: absolute; width: clamp(8px, 2.4vw, 15px); aspect-ratio: 1; margin: calc(clamp(8px, 2.4vw, 15px) / -2) 0 0 calc(clamp(8px, 2.4vw, 15px) / -2); border-radius: 50%; pointer-events: none; z-index: 5;
+.mc-fly { position: absolute; width: clamp(8px, 2.6cqw, 28px); aspect-ratio: 1; margin: calc(clamp(8px, 2.6cqw, 28px) / -2) 0 0 calc(clamp(8px, 2.6cqw, 28px) / -2); border-radius: 50%; pointer-events: none; z-index: 5;
   background: radial-gradient(circle at 35% 30%, hsl(calc(var(--h) * 1deg) 35% 85%), hsl(calc(var(--h) * 1deg) 30% 55%)); box-shadow: 0 2px 4px rgba(0,0,0,.55); }
-.mc-pit b { position: absolute; left: 50%; bottom: -2px; transform: translate(-50%, 50%); font: 700 13px/1 var(--body); color: var(--text); background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 99px; z-index: 1; }
-.mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: 16px; }
+.mc-pit b { position: absolute; left: 50%; bottom: -2px; transform: translate(-50%, 50%); font: 700 clamp(13px, 2.2cqw, 24px)/1 var(--body); color: var(--text); background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 99px; z-index: 1; }
+.mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: clamp(16px, 2.7cqw, 30px); }
 .mc-pit.can { cursor: pointer; box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--you); }
 .mc-pit.last { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--text-hi); }
 .mc-pit.sown { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px transparent; outline: 2px dashed var(--text-hi); outline-offset: 1px; }
