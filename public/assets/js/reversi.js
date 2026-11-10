@@ -158,7 +158,7 @@ function afterMove(next) {
     saveGame();
     const passer = friend() ? nameOf(next) + ' has no move.' : next !== me ? 'Computer has no move.' : 'You have no move.';
     if (!friendish() && mover !== me) {
-      setStatus(passer + ' Computer plays again', 'cpu');
+      setStatus(passer + ' It plays again', 'cpu');
       busy = true;
       setTurn(rowOf(mover));
       render();

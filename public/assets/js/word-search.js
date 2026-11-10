@@ -146,7 +146,7 @@ function finish(s) {
   const a = drag.a;
   drag.el.remove();
   drag = null;
-  if (!s.len) { setStatus('Drag across a word, or tap its first and last letters', 'neutral'); return; }
+  if (!s.len) { setStatus('Drag across a word, or tap both ends', 'neutral'); return; }
   let w = '';
   for (let k = 0; k <= s.len; k++) w += grid[(a.r + s.dr * k) * N + a.c + s.dc * k];
   const rev = [...w].reverse().join('');
@@ -198,7 +198,7 @@ function resume() {
   started = true; done = false;
   build(); render();
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. ' + (placed.length - found.length) + ' words to go', 'neutral');
+  setStatus((placed.length - found.length) + ' words to go', 'neutral');
   return true;
 }
 window.addEventListener('pagehide', save);

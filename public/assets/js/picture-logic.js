@@ -188,7 +188,7 @@ function resume() {
   P = g.P; state = g.state; history = []; started = true; done = false;
   build();
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your picture is where you left it', 'neutral');
+  setStatus('Your picture is where you left it', 'neutral');
   render();
   return true;
 }

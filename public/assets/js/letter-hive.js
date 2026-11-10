@@ -143,7 +143,7 @@ function load() {
   outer = shuffled([...P.letters].filter((ch) => ch !== P.centre));
   typed = '';
   $('result').hidden = true;
-  setStatus(mode === 'daily' ? 'Daily hive #' + dayNumber(DATE) + (found.length ? ': welcome back' : '') : found.length ? 'Welcome back' : 'Make words with the centre letter', 'neutral');
+  setStatus(mode === 'daily' ? 'Daily hive #' + dayNumber(DATE) : 'Make words with the centre letter', 'neutral');
   render();
 }
 function newPractice() {

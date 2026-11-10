@@ -23,7 +23,7 @@ cardGame({
     const S = g.S, i = S.cols.findIndex((c) => c[c.length - 1] === id);
     if (i < 0) return;
     const top = S.waste[S.waste.length - 1];
-    if (!ok(id, top, g.rank)) { g.shake(id); g.status(g.rank(top) === 13 ? 'Nothing can go on a King. Draw a card' : 'Play a card one higher or one lower than the waste card', 'neutral'); return; }
+    if (!ok(id, top, g.rank)) { g.shake(id); g.status(g.rank(top) === 13 ? 'Nothing can go on a King. Draw a card' : 'Play a card one above or below the waste', 'neutral'); return; }
     g.push(); g.start();
     S.cols[i].pop(); S.waste.push(id);
     g.play('found');

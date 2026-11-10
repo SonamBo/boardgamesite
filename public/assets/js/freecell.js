@@ -159,7 +159,7 @@ function locate(id) {
 function tryMove(src, dst) {
   if (!legalTo(src, dst)) {
     const cs = cardsOf(src);
-    if (dst.type === 'col' && cs.length > maxMove(!S.cols[dst.i].length)) setStatus('Not enough free cells to move ' + cs.length + ' cards at once', 'neutral');
+    if (dst.type === 'col' && cs.length > maxMove(!S.cols[dst.i].length)) setStatus('Not enough free cells to move ' + cs.length + ' cards', 'neutral');
     return false;
   }
   doMove(src, dst);
@@ -191,7 +191,7 @@ area.addEventListener('click', (e) => {
   if (id == null) { sel = null; render(); return; }
   const at = locate(id);
   if (!at) return;
-  if (at.type === 'col' && !runFrom(S.cols[at.i], at.k)) { shake(T.els.get(id), play); setStatus('Only an ordered run of cards can move together', 'neutral'); return; }
+  if (at.type === 'col' && !runFrom(S.cols[at.i], at.k)) { shake(T.els.get(id), play); setStatus('Only an ordered run can move together', 'neutral'); return; }
   const src = at.type === 'col' ? { type: 'col', i: at.i, k: at.k } : { type: 'cell', i: at.i };
   const opts = bestDest(src);
   if (!opts.length) { shake(T.els.get(id), play); setStatus('That card has nowhere to go', 'neutral'); sel = null; render(); return; }
@@ -199,7 +199,7 @@ area.addEventListener('click', (e) => {
   if (opts.length === 1 || opts[0].type === 'found') { tryMove(src, opts[0]); return; }
   sel = src;
   play('select');
-  setStatus('Tap where it should go, or tap it again for the best spot', 'neutral');
+  setStatus('Tap where it goes, or tap it again', 'neutral');
   render();
 });
 area.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('.pc')) { e.preventDefault(); e.target.click(); } });
@@ -207,7 +207,7 @@ area.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' 
 function after() {
   render();
   if (S.found.every((n) => n === 13)) return win();
-  setStatus('Deal #' + dealNo + ': build each suit from Ace to King', 'neutral');
+  setStatus('Deal #' + dealNo + ': build each suit Ace to King', 'neutral');
   save();
 }
 function win() {
@@ -236,7 +236,7 @@ function newGame(n) {
   T.hideAll();
   store.set(SAVE, null);
   render();
-  setStatus('Deal #' + dealNo + ': build each suit from Ace to King', 'neutral');
+  setStatus('Deal #' + dealNo + ': build each suit Ace to King', 'neutral');
 }
 function save() { if (started && !done) store.set(SAVE, { dealNo, S, moves, elapsed: timer.elapsed() }); }
 function resume() {
@@ -245,7 +245,7 @@ function resume() {
   dealNo = g.dealNo; S = g.S; moves = g.moves | 0; history = []; sel = null; started = true; done = false;
   timer.start(Number(g.elapsed) || 0);
   render();
-  setStatus('Welcome back to deal #' + dealNo, 'neutral');
+  setStatus('Deal #' + dealNo, 'neutral');
   return true;
 }
 window.addEventListener('pagehide', save);

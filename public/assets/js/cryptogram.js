@@ -152,7 +152,7 @@ function set(p) {
 function check() {
   const ok = [...text.toLowerCase()].every((ch) => !A.includes(ch) || guess[code[ch]] === ch);
   if (ok) win();
-  else if ([...document.querySelectorAll('.cg-cell')].every((b) => guess[b.dataset.c])) setStatus('Every letter is filled, but something’s not right', 'neutral');
+  else if ([...document.querySelectorAll('.cg-cell')].every((b) => guess[b.dataset.c])) setStatus('All filled, but something’s not right', 'neutral');
 }
 
 function win() {
@@ -203,7 +203,7 @@ function resume() {
   given = new Set(g.given || []); sel = null; started = true; done = false;
   build();
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your code is where you left it', 'neutral');
+  setStatus('Your code is where you left it', 'neutral');
   render();
   return true;
 }

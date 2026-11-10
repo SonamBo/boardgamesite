@@ -256,7 +256,7 @@ function start() {
     guesses = d.date === DATE && Array.isArray(d.guesses) ? d.guesses.filter((g) => typeof g === 'string' && g.length === 5).slice(0, 6) : [];
     paintAll();
     if (d.date === DATE && d.done) return finish(guesses[guesses.length - 1] === answer, true);
-    setStatus(guesses.length ? 'Welcome back. ' + (6 - guesses.length) + ' guesses left' : 'Daily word #' + DAY + ': six guesses', 'neutral');
+    setStatus(guesses.length ? (6 - guesses.length) + ' guesses left' : 'Daily word #' + DAY + ': six guesses', 'neutral');
   } else {
     const p = store.get(PRACTICE, null);
     if (p && answers.includes(p.answer) && Array.isArray(p.guesses) && p.guesses.length < 6) {
@@ -266,7 +266,7 @@ function start() {
       guesses = [];
     }
     paintAll();
-    setStatus(guesses.length ? 'Welcome back. ' + (6 - guesses.length) + ' guesses left' : 'Find the five-letter word', 'neutral');
+    setStatus(guesses.length ? (6 - guesses.length) + ' guesses left' : 'Find the five-letter word', 'neutral');
   }
   paintStats();
 }

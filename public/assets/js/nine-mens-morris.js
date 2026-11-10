@@ -221,7 +221,7 @@ function tap(i) {
   if (!humanTurn()) return;
   if (!started) { started = true; track('game_start', { game: 'nine-mens-morris', opponent: getOpp() }); }
   if (removing) {
-    if (!removable(S.b, turn).includes(i)) { setStatus('You can’t take a piece in a mill unless they’re all in mills', 'neutral'); return; }
+    if (!removable(S.b, turn).includes(i)) { setStatus('Take a piece that isn’t in a mill', 'neutral'); return; }
     return Q.run(() => fadeOut(pieceAt(i), 230), () => {
       S.b[i] = 0;
       after(turn, { to: last, take: i });
