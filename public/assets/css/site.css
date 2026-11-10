@@ -2317,6 +2317,9 @@ body.returning .hero { display: none; }
 .ni-go i:first-child { left: 0; top: 0; background: #1A1416; box-shadow: inset 0 -2px 0 rgba(255,255,255,.15); }
 .ni-go i:last-child { right: 0; bottom: 0; background: #FFF; box-shadow: 0 0 0 1.5px #1A1416; }
 .ni-rv { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, var(--you) 50%, #262A27 50%); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.ni-hx { display: flex; align-items: center; gap: 2px; }
+.ni-hx i { width: 14px; height: 16px; background: var(--you); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.ni-hx i:nth-child(2) { background: #EFE6D8; }
 .ni-gm { display: flex; align-items: center; gap: 2px; }
 .ni-gm i { width: 10px; height: 10px; border-radius: 50%; background: var(--you); box-shadow: inset 0 -2px 0 var(--you-lo); }
 .ni-gm i:nth-child(2) { background: #EFE6D8; box-shadow: 0 0 0 1.5px #8E7E6C; }
@@ -2324,6 +2327,14 @@ body.returning .hero { display: none; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* lesson boards for Hex: marks are outlines and dots on the cells */
+.lp-board.hx-lesson { width: 100%; max-width: 640px; margin: 0 auto; }
+.hx-lesson .hx { cursor: default; }
+.hx-lesson .hx.can { cursor: pointer; }
+.hx-lesson .hx[data-mark="good"] { stroke: #5FA36B; stroke-width: .18; }
+.hx-lesson .hx[data-mark="bad"] { stroke: #D2564B; stroke-width: .18; }
+.hx-lesson .hx[data-mark="target"] { stroke: var(--accent-text); stroke-width: .18; }
+.hx-lesson .hx-hint { fill: color-mix(in srgb, var(--accent-text) 75%, transparent); pointer-events: none; }
 /* lesson boards for Five in a Row: marks are rings and dots, so the grid lines (::before/::after) stay */
 .lp-board.gm-board { width: 100%; max-width: 560px; margin: 0 auto; }
 .gm-board .gm[data-mark="good"], .gm-board .gm[data-mark="bad"], .gm-board .gm[data-mark="target"] { border-radius: 50%; }

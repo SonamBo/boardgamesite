@@ -33,6 +33,12 @@
 //               line), threat (this move made a new point where you'd make five next turn: a four), three (this move
 //               made a new open three: a move that would make an open four), double (the opponent can't stop you: whatever they play, you win or make two
 //               threats next), block (the opponent had a five or an open four to make next turn, and now hasn't).
+//   Hex         n rows of n (7×7 in the lessons), top row first: '.' empty, 'g' gold (you, joins top to bottom,
+//               moves first), 'b' ivory (joins left to right). Cells are named column a… then row 1… from the top ('d4').
+//               Facts: win (a chain joins your two edges), block (the opponent could have won next turn and now can't),
+//               bridge (the stone forms a bridge with one of yours: not touching, with two shared empty neighbours),
+//               connect (it joins two of your groups that weren't touching), shorter (it cuts how many more stones you
+//               need), longer (it adds to how many more stones the opponent needs).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -380,4 +386,74 @@ export const gomoku = {
   isSquare: (n) => /^[a-o](1[0-5]|[1-9])$/.test(n)
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku };
+
+// ---------- Hex ----------
+const HXF = 'abcdefghijk';
+const HXNB = [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0]];
+function hexGeo(n) {
+  const nbs = (i) => { const r = Math.floor(i / n), c = i % n; return HXNB.map(([dr, dc]) => [r + dr, c + dc]).filter(([a, b]) => a >= 0 && b >= 0 && a < n && b < n).map(([a, b]) => a * n + b); };
+  const start = (p, i) => (p === 1 ? Math.floor(i / n) === 0 : i % n === 0);
+  const end = (p, i) => (p === 1 ? Math.floor(i / n) === n - 1 : i % n === n - 1);
+  function chain(b, p) {
+    const seen = new Set(), q = [], prev = new Map();
+    for (let i = 0; i < n * n; i++) if (b[i] === p && start(p, i)) { q.push(i); seen.add(i); }
+    while (q.length) {
+      const i = q.shift();
+      if (end(p, i)) { const path = []; for (let x = i; x != null; x = prev.get(x)) path.push(x); return path; }
+      for (const j of nbs(i)) if (!seen.has(j) && b[j] === p) { seen.add(j); prev.set(j, i); q.push(j); }
+    }
+    return null;
+  }
+  // fewest empty cells p still needs to connect
+  function need(b, p) {
+    const dist = new Array(n * n).fill(Infinity), todo = [];
+    for (let i = 0; i < n * n; i++) if (start(p, i) && b[i] !== 3 - p) { dist[i] = b[i] === p ? 0 : 1; todo.push(i); }
+    while (todo.length) {
+      let k = 0; for (let t = 1; t < todo.length; t++) if (dist[todo[t]] < dist[todo[k]]) k = t;
+      const i = todo.splice(k, 1)[0];
+      for (const j of nbs(i)) { if (b[j] === 3 - p) continue; const d = dist[i] + (b[j] === p ? 0 : 1); if (d < dist[j]) { dist[j] = d; todo.push(j); } }
+    }
+    let best = 99; for (let i = 0; i < n * n; i++) if (end(p, i)) best = Math.min(best, dist[i]);
+    return best;
+  }
+  const group = (b, i) => { const p = b[i], seen = new Set([i]), q = [i]; while (q.length) { const x = q.pop(); for (const j of nbs(x)) if (!seen.has(j) && b[j] === p) { seen.add(j); q.push(j); } } return seen; };
+  return { nbs, chain, need, group };
+}
+export const hex = {
+  kind: 'hex',
+  load(p) {
+    const rows = String(p).split('/'), n = rows.length;
+    if (n < 3 || n > 11 || rows.some((r) => r.length !== n || /[^.gb]/.test(r))) fail('Hex position needs n rows of n (3–11) from . g b: ' + p);
+    const b = rows.join('').split('').map((ch) => (ch === 'g' ? 1 : ch === 'b' ? 2 : 0));
+    const G = hexGeo(n);
+    if (G.chain(b, 1) || G.chain(b, 2)) fail('the position already has a winning chain');
+    return { b, n, side: 1 };
+  },
+  name: (i, n = 7) => HXF[i % n] + (Math.floor(i / n) + 1),
+  index: (name, n = 7) => (Number(name.slice(1)) - 1) * n + HXF.indexOf(name[0]),
+  list(s) { return s.b.map((v, i) => (v ? null : { name: hex.name(i, s.n), i })).filter(Boolean); },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const G = hexGeo(s.n), me = s.side, opp = 3 - me, before = s.b;
+    const oppCould = G.need(before, opp) <= 1;
+    const meNeed = G.need(before, me), oppNeed = G.need(before, opp);
+    const b = before.slice(); b[x.i] = me;
+    const line = G.chain(b, me);
+    const f = { win: !!line };
+    // bridge: an own stone two steps away, not touching, with both shared neighbours empty
+    const mine = new Set(G.nbs(x.i));
+    f.bridge = b.some((v, j) => v === me && j !== x.i && !mine.has(j) && G.nbs(j).filter((k) => mine.has(k) && !b[k]).length === 2);
+    const touching = G.nbs(x.i).filter((j) => b[j] === me);
+    const groups = new Set(); const tmp = before.slice();
+    for (const j of touching) { const g = G.group(tmp, j); groups.add(Math.min(...g)); }
+    f.connect = groups.size >= 2;
+    f.block = oppCould && G.need(b, opp) > 1;
+    f.shorter = G.need(b, me) < meNeed;
+    f.longer = G.need(b, opp) > oppNeed;
+    return { s: { b, n: s.n, side: opp }, f, line };
+  },
+  dests: () => [],
+  isSquare: (n) => /^[a-k](1[01]|[1-9])$/.test(n)
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex };
