@@ -64,6 +64,15 @@
 //               'QH-t5' (that card, and the ordered run on it, onto column 5, if there's room to move it), 'QH-c' (to
 //               a free cell), '7C-f' (to its foundation). Facts: found, empty (a column was emptied), cell (a card went
 //               to a free cell), freed (a card left a free cell).
+//   Spider      { tab: ['#KS #9H 5S 4S' ×10, bottom card first, '#' = face down], deals: 3 (rows left to deal), done: 0 }.
+//               Moves: '5S-t4' (that card and the same-suit run on it onto column 4: one rank higher in any suit, or
+//               empty), 'deal'. A complete King-to-Ace run of one suit is cleared at once. Facts: insuit (moved onto
+//               the same suit), reveal (a face-down card was turned over), empty, complete, deal.
+//   Dice, Mines, Picture Logic, Cryptogram  Boards for looking and tapping (info, choice and tap steps; no moves).
+//               Dice: { dice: [3, 3, 5, 1, 6], label: 'Your roll', kept: [6, 5] } (tap names 'd1'…'d5').
+//               Mines: rows top first, '.' hidden, 'F' flag, '0'–'8' open (tap names 'r1c1', top left).
+//               Picture Logic: { rows: ['1 1', '3', …], cols: […], grid: ['..#', 'x..', …] } with '#' filled, 'x' crossed
+//               (tap names 'r1c1'). Cryptogram: { text: 'XLI UYMGO …', key: { X: 'T' } } (tap names: the cipher letter).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -791,4 +800,82 @@ export const freecell = {
   isSquare: (n) => /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(n) || /^(t[1-8]|c[1-4]|f|cells)$/.test(n)
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris, dots, tricks, gin, freecell };
+
+// ---------- Boards for looking and tapping ----------
+const noMoves = (kind, load, isSquare) => ({ kind, load, list: () => [], find: () => undefined, apply: () => fail('no moves on this board'), dests: () => [], isSquare });
+export const dice = noMoves('dice', (p) => {
+  if (!p || !Array.isArray(p.dice) || !p.dice.length || p.dice.length > 6 || p.dice.some((d) => !(d >= 1 && d <= 6))) fail('Dice position needs dice: 1–6 numbers from 1 to 6');
+  return { dice: p.dice.slice(), kept: (p.kept || []).slice(), label: p.label || '', side: 0 };
+}, (n) => /^d[1-6]$/.test(n));
+export const mines = noMoves('mines', (p) => {
+  const rows = Array.isArray(p) ? p : String(p).split('/');
+  if (!rows.length || rows.some((r) => r.length !== rows[0].length || /[^.F0-8]/.test(r))) fail('Mines position needs equal rows of . F 0–8');
+  return { rows, side: 0 };
+}, (n) => /^r\d+c\d+$/.test(n));
+export const nonogram = noMoves('nonogram', (p) => {
+  if (!p || !Array.isArray(p.rows) || !Array.isArray(p.cols) || !Array.isArray(p.grid)) fail('Picture Logic position needs rows, cols and grid');
+  if (p.grid.length !== p.rows.length || p.grid.some((r) => r.length !== p.cols.length || /[^.#x]/.test(r))) fail('the grid must match the clues');
+  return { rows: p.rows.map(String), cols: p.cols.map(String), grid: p.grid.slice(), side: 0 };
+}, (n) => /^r\d+c\d+$/.test(n));
+export const cryptogram = noMoves('cryptogram', (p) => {
+  if (!p || typeof p.text !== 'string' || /[^A-Z ,.'’!?-]/.test(p.text)) fail('Cryptogram position needs text in capitals');
+  return { text: p.text, key: { ...(p.key || {}) }, side: 0 };
+}, (n) => /^[A-Z]$/.test(n));
+
+
+// ---------- Spider ----------
+export const spider = {
+  kind: 'spider',
+  cardCode,
+  load(p) {
+    if (!p || !Array.isArray(p.tab) || p.tab.length !== 10) fail('Spider position needs tab: 10 columns');
+    const tab = p.tab.map((col) => cardList(col).map((t) => ({ c: cardNum(t.replace('#', '')), up: !t.startsWith('#') })));
+    tab.forEach((col, i) => { if (col.length && !col[col.length - 1].up) fail('column ' + (i + 1) + ' ends with a face-down card'); });
+    return { tab, deals: p.deals || 0, done: p.done || 0, side: 0 };
+  },
+  list(s) {
+    const out = [];
+    s.tab.forEach((col, i) => {
+      if (!col.length) return;
+      let start = col.length - 1;
+      while (start > 0 && col[start - 1].up && csuit(col[start - 1].c) === csuit(col[start].c) && crank(col[start - 1].c) === crank(col[start].c) + 1) start--;
+      for (let k = start; k < col.length; k++) {
+        const card = col[k].c;
+        s.tab.forEach((dest, j) => {
+          if (j === i) return;
+          const top = dest[dest.length - 1];
+          if (dest.length ? crank(top.c) === crank(card) + 1 : k > 0) out.push({ name: cardCode(card) + '-t' + (j + 1), from: i, k, to: j });
+        });
+      }
+    });
+    if (s.deals > 0 && s.tab.every((c) => c.length)) out.push({ name: 'deal', deal: true });
+    return out;
+  },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const tab = s.tab.map((c) => c.map((y) => ({ ...y })));
+    const f = { insuit: false, reveal: false, empty: false, complete: false, deal: !!x.deal };
+    if (x.deal) return { s: { ...s, tab, deals: s.deals - 1 }, f };   // the dealt cards aren't known in a lesson
+    const moving = tab[x.from].splice(x.k);
+    const dest = tab[x.to];
+    f.insuit = dest.length > 0 && csuit(dest[dest.length - 1].c) === csuit(moving[0].c);
+    dest.push(...moving);
+    const src = tab[x.from];
+    if (src.length && !src[src.length - 1].up) { src[src.length - 1].up = true; f.reveal = true; }
+    f.empty = src.length === 0;
+    let done = s.done;
+    const t = dest;
+    if (t.length >= 13) {
+      const run = t.slice(-13);
+      if (run.every((y, k) => y.up && csuit(y.c) === csuit(run[0].c) && crank(y.c) === 13 - k)) {
+        t.splice(-13); done++; f.complete = true;
+        if (t.length && !t[t.length - 1].up) { t[t.length - 1].up = true; f.reveal = true; }
+      }
+    }
+    return { s: { tab, deals: s.deals, done, side: 0 }, f };
+  },
+  dests: () => [],
+  isSquare: (n) => /^(A|[2-9]|10|J|Q|K)[SHDC]$/.test(n) || /^(t([1-9]|10)|deal)$/.test(n)
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris, dots, tricks, gin, freecell, spider, dice, mines, nonogram, cryptogram };

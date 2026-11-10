@@ -37,7 +37,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <script type="module" src="/assets/js/site.js"></script>
 
-
+<script type="module" src="/assets/js/learn-path.js"></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -49,7 +49,7 @@
    "description": "Learn the rules of Minesweeper: what the numbers mean, flags and chording, and the patterns like 1-2-1 and 1-2-2-1 that clear the field without guessing.",
    "image": "https://boardgamesite.com/assets/img/og/mines.jpg",
    "datePublished": "2026-10-28",
-   "dateModified": "2026-11-07",
+   "dateModified": "2026-11-10",
    "inLanguage": "en",
    "author": {
     "@id": "https://boardgamesite.com/#org"
@@ -220,6 +220,32 @@
     <p>Try the patterns on an easy field first.</p>
     <a class="btn btn-gold" href="/play/mines">Play Mines free</a>
   </div>
+
+<section class="path" id="path" data-path="mines" aria-labelledby="path-h">
+  <h2 id="path-h">Learn Mines step by step</h2>
+  <p class="text-2">A short path through Mines: what the numbers mean and how to use flags, then the 1-2-1 and 1-1 patterns and what to do when you have to guess.</p>
+  <div class="path-cta card"><img class="path-cta-fox" src="/assets/img/fox-point.webp" alt="" width="280" height="280"><div><b>Learn Mines step by step</b><span class="text-2">5 hands-on lessons, unlock as you go.</span></div><a class="btn btn-gold btn-lg" href="/learn/mines/path" data-path-cta>Start the Mines path</a></div>
+  <div class="path-meter"><div class="lp-bar" aria-hidden="true"><span></span></div><span class="path-count muted">5 lessons</span></div>
+  <details class="path-all"><summary>See all 5 lessons</summary>
+  <div class="path-unit"><h3>Rules: How Mines works</h3><p>The numbers, flags and safe squares.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mines/minesweeper-numbers" data-lesson="minesweeper-numbers"><span class="n">1</span><span class="t">Reading the numbers</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Rules check</h3><p>Five questions on the rules. Pass to unlock the patterns.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mines/mines-rules-check" data-lesson="mines-rules-check"><span class="n">2</span><span class="t">Mines rules check</span></a></li>
+    </ol>
+  </div>
+  <div class="path-unit"><h3>Strategy: Patterns and guessing</h3><p>The 1-2-1, the 1-1, and what to do when the numbers can’t decide.</p>
+    <ol class="path-list">
+      <li><a href="/learn/mines/the-1-2-1-pattern" data-lesson="the-1-2-1-pattern"><span class="n">3</span><span class="t">The 1-2-1 pattern</span></a></li>
+      <li><a href="/learn/mines/the-1-1-pattern" data-lesson="the-1-1-pattern"><span class="n">4</span><span class="t">The 1-1 pattern</span></a></li>
+      <li><a href="/learn/mines/when-to-guess-in-mines" data-lesson="when-to-guess-in-mines"><span class="n">5</span><span class="t">When to guess</span></a></li>
+    </ol>
+  </div>
+</details></section>
+
 
 <h2>The rules</h2>
   <p>The field is a grid of covered squares, and some hide mines. Uncover a square and it shows a number: how many of its eight neighbours, including diagonals, are mines. A blank square has none, and the game opens all the squares around it for you. Uncover every safe square to win. Uncover a mine and the game is over.</p>

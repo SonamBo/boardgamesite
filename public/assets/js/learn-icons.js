@@ -19,6 +19,13 @@ export const LEARN_ICONS = [
   { game: 'hearts', name: 'Hearts', icon: '♥' },
   { game: 'gin-rummy', name: 'Gin Rummy', icon: '♣' },
   { game: 'freecell', name: 'FreeCell', icon: '♦' },
+  { game: 'mines', name: 'Mines', icon: 'mn' },
+  { game: 'picture-logic', name: 'Picture Logic', icon: 'pic' },
+  { game: 'liars-dice', name: 'Liar’s Dice', icon: 'die:1' },
+  { game: 'spider', name: 'Spider Solitaire', icon: 'K♠' },
+  { game: 'hot-dice', name: 'Hot Dice', icon: 'die:5' },
+  { game: 'dice-poker', name: 'Dice Poker', icon: 'die:6' },
+  { game: 'cryptogram', name: 'Cryptogram', icon: 'A?' },
   { game: 'sudoku', name: 'Sudoku', icon: 'sdk' },
   { game: 'backgammon', name: 'Backgammon', icon: 'bgm' },
   { game: 'solitaire', name: 'Solitaire', icon: 'card' }
@@ -39,6 +46,9 @@ export function iconHtml(icon) {
   if (icon === 'sdk') return '<span class="ni ni-sdk"><i></i><i></i><i></i><i></i></span>';
   if (icon === 'bgm') return '<span class="ni ni-bgm"><i></i><i></i></span>';
   if (icon === 'card') return '<span class="ni ni-card">A</span>';
+  if (icon === 'mn') return '<span class="ni ni-mn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/><circle cx="12" cy="12" r="6"/></svg></span>';
+  if (icon === 'pic') return '<span class="ni ni-pic">' + [1, 0, 1, 1, 1, 1, 0, 1, 0].map((on) => '<i' + (on ? ' class="on"' : '') + '></i>').join('') + '</span>';
+  if (icon.startsWith('die:')) { const at = { 1: [4], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] }[icon.slice(4)] || [4]; return '<span class="ni ni-die">' + Array.from({ length: 9 }, (_, k) => '<i' + (at.includes(k) ? ' class="on"' : '') + '></i>').join('') + '</span>'; }
   if (icon === 'seeds') return '<span class="ni ni-seeds"><i></i><i></i><i></i></span>';
   return '<span class="ni ni-text' + ([...icon].length > 2 ? ' small' : '') + '">' + esc(icon) + '</span>';
 }

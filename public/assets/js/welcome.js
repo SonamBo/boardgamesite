@@ -23,6 +23,13 @@ const GAMES = [
   { id: 'hearts', name: 'Hearts', blurb: 'Ducking, the queen of spades and the moon.' },
   { id: 'gin-rummy', name: 'Gin Rummy', blurb: 'Melds, deadwood, knocking and gin.' },
   { id: 'freecell', name: 'FreeCell', blurb: 'Free cells, empty columns and planning.' },
+  { id: 'mines', name: 'Mines', blurb: 'Read the numbers and clear fields with patterns.' },
+  { id: 'picture-logic', name: 'Picture Logic', blurb: 'Solve nonograms with the overlap and edge methods.' },
+  { id: 'liars-dice', name: 'Liar’s Dice', blurb: 'Judge bids with the one-in-three rule.' },
+  { id: 'spider', name: 'Spider Solitaire', blurb: 'Build in suit and win empty columns.' },
+  { id: 'hot-dice', name: 'Hot Dice', blurb: 'Score every combo and know when to stop.' },
+  { id: 'dice-poker', name: 'Dice Poker', blurb: 'Keep the right dice and know when to stand.' },
+  { id: 'cryptogram', name: 'Cryptogram', blurb: 'Crack codes with common words and letter counts.' },
   { id: 'sudoku', name: 'Sudoku', blurb: 'From the rules to pairs and pointing pairs.' },
   { id: 'backgammon', name: 'Backgammon', blurb: 'Dice, hitting, bearing off and opening moves.' },
   { id: 'solitaire', name: 'Solitaire', blurb: 'Win more Klondike games with a few habits.' }
