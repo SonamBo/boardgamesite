@@ -370,23 +370,23 @@
         "f5": "target",
         "g5": "target"
        },
-       "text": "<p>Late in the game, players often have threats that neither side can reach yet, like the one in the last lesson. Then the board fills up column by column.</p><p>When the board fills evenly, the <strong>first player (gold)</strong> tends to get the spaces on <strong>odd rows</strong>: 1, 3 and 5, counting from the bottom. The second player gets <strong>even rows</strong>: 2, 4 and 6.</p>"
+       "text": "<p>Late in the game, players often have threats that neither side can reach yet, like the one in the last lesson. Then the board fills up column by column.</p><p>When the board fills evenly, the <strong>first player</strong> tends to get the spaces on <strong>odd rows</strong>: 1, 3 and 5, counting from the bottom. The second player gets <strong>even rows</strong>: 2, 4 and 6.</p>"
       },
       {
        "type": "choice",
        "text": "<p>So a waiting threat is worth most to the right player.</p>",
-       "prompt": "You play gold and moved first. Where is a waiting threat strongest for you?",
+       "prompt": "You moved first. Where is a waiting threat strongest for you?",
        "options": [
         "On an odd row (1, 3 or 5)",
         "On an even row (2, 4 or 6)",
         "It doesn’t matter"
        ],
        "answer": 0,
-       "explain": "Odd rows. When the columns fill up, those spaces tend to fall to gold."
+       "explain": "Odd rows. When the columns fill up, those spaces tend to fall to the first player."
       },
       {
        "type": "choice",
-       "text": "<p>And when you play ivory, second…</p>",
+       "text": "<p>And when you go second…</p>",
        "prompt": "Playing second, which rows should your waiting threats be on?",
        "options": [
         "Odd rows",

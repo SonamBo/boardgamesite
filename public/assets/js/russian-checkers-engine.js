@@ -170,13 +170,14 @@ function negamax(b, side, depth, alpha, beta) {
 
 export const LEVELS = { easy: { depth: 2, noise: 60 }, medium: { depth: 4, noise: 12 }, hard: { depth: 7, noise: 0 } };
 
-export function pickComputerMove(b, level = 'medium', rnd = Math.random) {
+// `side`: the side the computer plays (black at the top unless the person chose to play black).
+export function pickComputerMove(b, level = 'medium', rnd = Math.random, side = CPU) {
   const { depth, noise } = LEVELS[level] || LEVELS.medium;
-  const moves = legalMoves(b, CPU);
+  const moves = legalMoves(b, side);
   if (moves.length <= 1) return moves[0] || null;
   let best = null, bestScore = -Infinity;
   for (const m of moves) {
-    const v = -negamax(applyMove(b, m), YOU, depth - 1, -Infinity, Infinity) + (noise ? (rnd() - 0.5) * noise * 2 : 0);
+    const v = -negamax(applyMove(b, m), -side, depth - 1, -Infinity, Infinity) + (noise ? (rnd() - 0.5) * noise * 2 : 0);
     if (v > bestScore) { bestScore = v; best = m; }
   }
   return best;

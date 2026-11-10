@@ -1,13 +1,13 @@
 // Reversi page: against the computer, or two players taking turns on one device.
 import * as E from './reversi-engine.js';
 import { online, roomInLink } from './online.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, movesFirst } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
 
 const SAVE = 'bgs-rv-game';
-const saveGame = () => onlineOn || store.set(SAVE, { board, last, toMove: turn, mode: getOpp() });
+const saveGame = () => onlineOn || store.set(SAVE, { board, last, toMove: turn, mode: getOpp(), me, side: getSide() });
 const clearGame = () => store.set(SAVE, null);
 function placeSound(flips) {
   play('place');
@@ -21,8 +21,12 @@ const getLevel = levelSwitch('rv');
 const rec = record('rv');
 const getOpp = opponentSwitch('rv', () => newGame());
 const friend = () => getOpp() === 'friend';
+// Against the computer you move first (gold), second (black) or either at random.
+const getSide = sideSwitch('rv', ['first', 'second', 'random'], () => newGame());
+let me = E.YOU;   // your colour against the computer in this game: gold moves first
 
 // turn: E.YOU (gold, moves first) or E.CPU (black). In 2-player mode these are Player 1 and Player 2.
+// Against the computer, `me` is your colour and the computer plays -me.
 let board, over, busy, last, started, turn;
 let cpuTimer = 0;
 // positions before each move, for Undo (vs the computer it takes back your move and its reply)
@@ -31,7 +35,15 @@ const snapshot = () => history.push({ board: board.slice(), turn, last });
 let onlineOn = roomInLink, ol = null;
 const friendish = () => friend() || onlineOn; // no computer turns
 const nameOf = (side) => (side === E.YOU ? 'Player 1' : 'Player 2');
-const humanToMove = () => !over && !busy && (onlineOn ? ol.myTurn() : friend() || turn === E.YOU);
+const humanToMove = () => !over && !busy && (onlineOn ? ol.myTurn() : friend() || turn === me);
+const rowOf = (side) => (side === E.YOU ? 'you' : 'cpu');   // the players card has a gold row and a black row
+// Name the gold and black rows for this game.
+function paintSides() {
+  if (friendish()) return;
+  document.querySelector('[data-name="p1"]').textContent = me === E.YOU ? 'You' : 'Computer';
+  document.querySelector('[data-name="p2"]').textContent = me === E.YOU ? 'Computer' : 'You';
+  boardEl.setAttribute('aria-label', 'Reversi board. You play ' + (me === E.YOU ? 'gold and move first.' : 'black and move second.'));
+}
 
 const cells = [];
 for (let i = 0; i < 64; i++) {
@@ -51,7 +63,7 @@ const squareName = (i) => FILES[i & 7] + ((i >> 3) + 1);
 
 function render() {
   const moves = new Set(humanToMove() ? E.legalMoves(board, turn) : []);
-  const dotClass = 'move-dot' + (friend() && turn === E.CPU ? ' p2' : '');
+  const dotClass = 'move-dot' + (turn === E.CPU ? ' p2' : '');
   for (let i = 0; i < 64; i++) {
     const v = board[i];
     const btn = cells[i];
@@ -61,10 +73,9 @@ function render() {
     btn.classList.toggle('last', i === last);
     btn.classList.toggle('can', moves.has(i));
     btn.disabled = !moves.has(i);
-    const dark = friend() ? 'black' : 'computer';
-    btn.setAttribute('aria-label', squareName(i) + ', ' + (v === E.YOU ? 'gold' : v === E.CPU ? dark : moves.has(i) ? 'you can play here' : 'empty'));
+    btn.setAttribute('aria-label', squareName(i) + ', ' + (v === E.YOU ? 'gold' : v === E.CPU ? 'black' : moves.has(i) ? 'you can play here' : 'empty'));
   }
-  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === E.YOU));
+  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === me));
   const c = E.count(board);
   document.getElementById('count-you').textContent = c.you + (c.you === 1 ? ' disc' : ' discs');
   document.getElementById('count-cpu').textContent = c.cpu + (c.cpu === 1 ? ' disc' : ' discs');
@@ -97,12 +108,15 @@ function finish() {
     render();
     return;
   }
-  play(result, 0.4);
-  if (result === 'win') { setStatus('You win ' + line); showResult('win', 'You win!', 'Final score ' + line + '.'); }
-  if (result === 'lose') { setStatus('Computer wins ' + line, 'cpu'); showResult('lose', 'Computer wins', 'Final score ' + line + '. Have another go?'); }
-  if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', '32 discs each.'); }
-  rec.add(result);
-  track('game_end', { game: 'reversi', result, level: getLevel() });
+  // against the computer: your discs first
+  const mine = me === E.YOU ? result : result === 'win' ? 'lose' : result === 'lose' ? 'win' : 'draw';
+  const myLine = me === E.YOU ? line : c.cpu + ' – ' + c.you;
+  play(mine, 0.4);
+  if (mine === 'win') { setStatus('You win ' + myLine); showResult('win', 'You win!', 'Final score ' + myLine + '.'); }
+  if (mine === 'lose') { setStatus('Computer wins ' + myLine, 'cpu'); showResult('lose', 'Computer wins', 'Final score ' + myLine + '. Have another go?'); }
+  if (mine === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', '32 discs each.'); }
+  rec.add(mine);
+  track('game_end', { game: 'reversi', result: mine, level: getLevel() });
   render();
 }
 
@@ -127,58 +141,66 @@ function afterMove(next) {
     const mover = -next;
     turn = mover;
     saveGame();
-    const passer = friend() ? nameOf(next) + ' has no move.' : next === E.CPU ? 'Computer has no move.' : 'You have no move.';
-    if (!friendish() && mover === E.CPU) {
+    const passer = friend() ? nameOf(next) + ' has no move.' : next !== me ? 'Computer has no move.' : 'You have no move.';
+    if (!friendish() && mover !== me) {
       setStatus(passer + ' Computer plays again', 'cpu');
       busy = true;
-      setTurn('cpu');
+      setTurn(rowOf(mover));
       render();
       cpuTimer = setTimeout(computerMove, 900);
       return;
     }
     busy = false;
-    setTurn(mover === E.YOU ? 'you' : 'cpu');
+    setTurn(rowOf(mover));
     setStatus(passer + ' ' + (friend() ? nameOf(mover) + ' again' : 'Your turn again'), friend() && mover === E.CPU ? 'cpu' : '');
     render();
     return;
   }
   turn = next;
   saveGame();
-  if (!friendish() && turn === E.CPU) {
+  if (!friendish() && turn !== me) {
     busy = true;
-    setTurn('cpu');
+    setTurn(rowOf(turn));
     setStatus('Computer is thinking…', 'cpu');
     render();
     cpuTimer = setTimeout(computerMove, 500);
     return;
   }
   busy = false;
-  setTurn(turn === E.YOU ? 'you' : 'cpu');
+  setTurn(rowOf(turn));
   setStatus(friend() ? nameOf(turn) + '’s turn' : 'Your turn', friend() && turn === E.CPU ? 'cpu' : '');
   render();
 }
 
 function computerMove() {
-  const m = E.pickComputerMove(board, getLevel());
+  const m = E.pickComputerMove(board, getLevel(), Math.random, -me);
   busy = false;
-  if (m < 0) return afterMove(E.YOU);
+  if (m < 0) return afterMove(me);
   snapshot();
-  const r = E.play(board, m, E.CPU);
+  const r = E.play(board, m, -me);
   placeSound(r.flips);
   board = r.board;
   last = m;
-  afterMove(E.YOU);
+  afterMove(me);
 }
 
 function newGame() {
   clearTimeout(cpuTimer);
   board = E.startBoard();
   history = [];
-  over = false; busy = false; last = -1; started = false; turn = E.YOU;
+  over = false; busy = false; last = -1; started = false; turn = E.YOU;   // gold moves first
+  me = movesFirst(getSide()) ? E.YOU : E.CPU;
   clearGame();
   hideResult();
+  paintSides();
+  if (!friendish() && me !== E.YOU) {
+    // the computer opens
+    busy = true; setTurn('you'); setStatus('Computer is thinking…', 'cpu'); render();
+    cpuTimer = setTimeout(computerMove, 500);
+    return;
+  }
   setTurn('you');
-  setStatus(friend() ? 'Player 1’s turn' : 'Your turn');
+  setStatus(friend() ? 'Player 1’s turn' : 'Your turn' + (getSide() === 'random' && !onlineOn ? ': you move first this time' : ''));
   render();
 }
 
@@ -187,6 +209,10 @@ function resume() {
   const g = store.get(SAVE, null);
   if (!g || !Array.isArray(g.board) || g.board.length !== 64 || E.isOver(g.board)) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
+  // a game against the computer reopens only with the same First / Second / Random choice
+  if (getOpp() === 'cpu' && (g.side || 'first') !== getSide()) return false;
+  me = g.me === E.CPU ? E.CPU : E.YOU;
+  paintSides();
   board = g.board;
   last = typeof g.last === 'number' ? g.last : -1;
   over = false; busy = false; started = true;
@@ -194,7 +220,7 @@ function resume() {
   const next = g.toMove === E.CPU ? E.CPU : E.YOU;
   // afterMove(next) hands the turn to `next` (or handles a pass).
   afterMove(next);
-  if (!friend() && turn === E.YOU && !busy) setStatus('Welcome back. Your turn');
+  if (!friend() && turn === me && !busy) setStatus('Welcome back. Your turn');
   return true;
 }
 
@@ -203,12 +229,12 @@ undoBtn.addEventListener('click', () => {
   if (busy || over || onlineOn || !history.length) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
-  while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
-  if (!friend() && h.turn !== E.YOU) { history.push(h); return; }
+  while (!friend() && h.turn !== me && history.length) h = history.pop();
+  if (!friend() && h.turn !== me) { history.push(h); return; }
   board = h.board; turn = h.turn; last = h.last;
   play('card');
   saveGame();
-  setTurn(turn === E.YOU ? 'you' : 'cpu');
+  setTurn(rowOf(turn));
   setStatus(friend() ? nameOf(turn) + '’s turn' : 'Your turn', friend() && turn === E.CPU ? 'cpu' : '');
   render();
 });

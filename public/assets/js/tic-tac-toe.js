@@ -1,6 +1,6 @@
 // Tic-tac-toe: three in a row on a 3×3 grid. Against the computer (Easy / Medium / Hard),
 // two players on one device, or online with a friend by link (online.js; the token is the cell 0–8).
-import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn } from './game-ui.js';
+import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn, sideSwitch } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -11,6 +11,9 @@ const X = 1, O = 2;
 const score = record('ttt');
 const getLevel = levelSwitch('ttt', () => {});
 const getOpp = opponentSwitch('ttt', () => { if (!onlineOn) newGame(); });
+// Against the computer you play X (first), O, or take turns going first (Alternate).
+const getSide = sideSwitch('ttt', ['x', 'o', 'alt'], () => { if (!onlineOn) newGame(); }, 'alt');
+let cpuTimer = 0;
 const boardEl = $('board');
 const undoBtn = $('undo');
 // grids before each move, for Undo (vs the computer it takes back your move and its reply)
@@ -106,7 +109,7 @@ function place(i, remote = false) {
   setStatus(turnText(), (onlineOn && turn !== seatMark()) || (vsCpu() && turn !== youAre) ? 'cpu' : '');
   if (vsCpu() && turn !== youAre) {
     busy = true; render();
-    setTimeout(() => { busy = false; place(cpuMove()); }, 450);
+    cpuTimer = setTimeout(() => { busy = false; place(cpuMove()); }, 450);
   }
   return mover;
 }
@@ -140,6 +143,7 @@ function finish(w) {
 }
 
 function newGame() {
+  clearTimeout(cpuTimer);
   board = Array(9).fill(0); over = false; busy = false; history = [];
   hideResult();
   if (onlineOn) { turn = X; youAre = X; }
@@ -147,7 +151,8 @@ function newGame() {
     // players take turns going first; against the computer you play X when you start, O when it does
     firstThisGame = firstThisGame === X ? O : X;
     turn = X;
-    youAre = vsCpu() ? (firstThisGame === X ? X : O) : X;
+    const side = getSide();
+    youAre = !vsCpu() ? X : side === 'x' ? X : side === 'o' ? O : firstThisGame === X ? X : O;
   }
   $('mark-you').innerHTML = MARK[onlineOn ? seatMark() : youAre];
   $('mark-cpu').innerHTML = MARK[(onlineOn ? seatMark() : youAre) === X ? O : X];
@@ -155,7 +160,7 @@ function newGame() {
   setTurn(turn === (onlineOn ? seatMark() : youAre) || (!vsCpu() && !onlineOn) ? 'you' : 'cpu');
   setStatus(turnText(), '');
   track('game_start', { game: 'tic-tac-toe', mode: onlineOn ? 'online' : getOpp() });
-  if (vsCpu() && turn !== youAre) { busy = true; render(); setTimeout(() => { busy = false; place(cpuMove()); }, 500); }
+  if (vsCpu() && turn !== youAre) { busy = true; render(); cpuTimer = setTimeout(() => { busy = false; place(cpuMove()); }, 500); }
 }
 
 $('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });

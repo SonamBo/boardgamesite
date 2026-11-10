@@ -286,6 +286,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -328,7 +334,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Four in a Row</h2>
-  <p>Four in a Row is played on an upright board with 7 columns and 6 rows. You play gold and drop your disc first; the computer plays ivory.</p>
+  <p>Four in a Row is played on an upright board with 7 columns and 6 rows. You play gold and the computer plays ivory. Choose <strong>You play: First</strong>, <strong>Second</strong> or <strong>Random</strong> to set who drops the first disc.</p>
   <ol>
     <li><strong>Pick a column.</strong> Your disc falls to the lowest empty space in that column.</li>
     <li><strong>Take turns.</strong> You and the computer drop one disc at a time.</li>

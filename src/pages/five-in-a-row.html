@@ -40,6 +40,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -102,7 +108,7 @@
     <h3>Does six in a row count?</h3>
     <p>Yes. Under freestyle rules, any line of five or more wins.</p>
     <h3>Who goes first?</h3>
-    <p>Gold always goes first. Against the computer, that’s you.</p>
+    <p>Gold always goes first. Against the computer, choose <strong>You play: First</strong> to be gold, <strong>Second</strong> to be ivory, or <strong>Random</strong>.</p>
     <h3>How good is the computer?</h3>
     <p>Easy misses threats. Medium blocks most of them. Hard plays sharp attacking and defensive moves.</p>
   </section>
