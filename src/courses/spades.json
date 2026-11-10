@@ -1,0 +1,425 @@
+{
+ "game": "spades",
+ "name": "Spades",
+ "board": "tricks",
+ "play": "/play/spades",
+ "intro": "Learn Spades from scratch: partners and tricks, following suit, trumps, breaking spades, bidding, bags and nil, then the plays that win more tricks.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Spades works",
+   "blurb": "Partners, following suit, trumps, bidding, bags and nil.",
+   "lessons": [
+    {
+     "slug": "spades-partners-and-tricks",
+     "title": "Spades: partners and tricks",
+     "summary": "Spades is played by four players in two partnerships. Learn how a trick works, who your partner is and how the highest card wins.",
+     "wrap": "That’s a trick. Next: following suit and trumps.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "AH 9H 4H KD 7D 2C",
+        "trick": "6H JH 10H"
+       },
+       "text": "<p>Spades is played by four players. You sit opposite your <strong>partner</strong> (North); the other two are a team too. Each player gets 13 cards.</p><p>In each <strong>trick</strong>, every player plays one card, starting with the leader and going round to the left. The highest card of the suit that was led wins the trick, unless a spade is played.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "Who is your partner?",
+       "options": [
+        "The player on your left",
+        "The player opposite you",
+        "The player on your right"
+       ],
+       "answer": 1,
+       "explain": "The player opposite. Your tricks count together."
+      },
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "AH 9H 4H KD 7D 2C",
+        "trick": "6H JH 10H"
+       },
+       "goal": "win",
+       "text": "<p>Hearts were led. The jack of hearts is winning so far.</p>",
+       "prompt": "Win this trick.",
+       "wrong": "Play a higher heart than the jack.",
+       "done": "Your ace takes the trick."
+      }
+     ],
+     "icon": "★"
+    },
+    {
+     "slug": "following-suit-and-trumps",
+     "title": "Following suit and trumping with spades",
+     "summary": "In Spades you must follow the suit led if you can. If you can’t, a spade wins the trick. Learn when you can trump and how it works.",
+     "wrap": "Follow suit if you can; if not, a spade wins. Next: leading spades.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "game": "spades",
+        "hand": "QH 8H 3H AS 5S KC 9D",
+        "trick": "JH"
+       },
+       "targets": [
+        "QH",
+        "8H",
+        "3H"
+       ],
+       "text": "<p>You must <strong>follow suit</strong>: if you have a card of the suit led, you have to play one.</p>",
+       "prompt": "Hearts were led. Tap every card you’re allowed to play.",
+       "wrong": "You have hearts, so you must play a heart.",
+       "done": "Only your hearts."
+      },
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "AS 5S KC 9D 4D",
+        "trick": "KH AH 7H"
+       },
+       "text": "<p>If you have <strong>no cards</strong> of the suit led, you can play anything. Spades are <strong>trumps</strong>: any spade beats every card of another suit.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "AS 5S KC 9D 4D",
+        "trick": "KH AH 7H"
+       },
+       "goal": "trump",
+       "text": "<p>You have no hearts. The ace of hearts is winning.</p>",
+       "prompt": "Win the trick with a trump.",
+       "wrong": "Play a spade: it beats any heart.",
+       "done": "Trumped. Even a small spade beats the ace of hearts."
+      }
+     ],
+     "icon": "♠"
+    },
+    {
+     "slug": "breaking-spades",
+     "title": "Leading spades and breaking spades",
+     "summary": "You can’t lead a spade until spades have been broken by someone trumping. Learn which cards you can lead, and when.",
+     "wrap": "Spades open up once someone has trumped. Next: bidding.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "KS 9S 4S AH 7D 3C",
+        "trick": ""
+       },
+       "text": "<p>When you <strong>lead</strong> a trick, you can’t start with a spade until spades are <strong>broken</strong>: someone has played a spade on another suit. (If you have nothing but spades, you may lead one.)</p>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "game": "spades",
+        "hand": "KS 9S 4S AH 7D 3C",
+        "trick": ""
+       },
+       "targets": [
+        "AH",
+        "7D",
+        "3C"
+       ],
+       "text": "<p>You’re leading, and spades aren’t broken yet.</p>",
+       "prompt": "Tap every card you may lead.",
+       "wrong": "Spades aren’t broken, so you can’t lead one yet.",
+       "done": "Any card except a spade."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "game": "spades",
+        "hand": "KS 9S 4S AH 7D 3C",
+        "trick": "",
+        "broken": true
+       },
+       "targets": [
+        "KS",
+        "9S",
+        "4S",
+        "AH",
+        "7D",
+        "3C"
+       ],
+       "text": "<p>Now spades have been broken.</p>",
+       "prompt": "Tap every card you may lead.",
+       "wrong": "Once spades are broken, you can lead anything.",
+       "done": "Any card at all."
+      }
+     ],
+     "icon": "🔒"
+    },
+    {
+     "slug": "bidding-in-spades",
+     "title": "Bidding: counting your tricks",
+     "summary": "Before play, each player bids how many tricks they’ll win, and partners add their bids together. Learn to count the tricks in a hand.",
+     "wrap": "Count sure tricks, then a little for long spades. Next: scoring and bags.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "AS KS 8S 4S AH QH 6H 2H KD 9D 5D 7C 3C",
+        "trick": ""
+       },
+       "text": "<p>Before the first trick, everyone <strong>bids</strong> how many tricks they expect to win. You and your partner add your bids together: that’s your team’s contract.</p><p>To bid, count your likely tricks: aces, kings that are protected by the ace or by other cards, and high spades. Extra spades beyond three or four often win tricks too, by trumping.</p>"
+      },
+      {
+       "type": "choice",
+       "position": {
+        "game": "spades",
+        "hand": "AS KS 8S 4S AH QH 6H 2H KD 9D 5D 7C 3C",
+        "trick": ""
+       },
+       "text": "<p>Count this hand: the ace and king of spades, the ace of hearts, and the king of diamonds (it might lose to the ace).</p>",
+       "prompt": "What’s a sensible bid?",
+       "options": [
+        "1",
+        "3 or 4",
+        "8"
+       ],
+       "answer": 1,
+       "explain": "About 3 or 4: three solid tricks, and the king of diamonds or a small spade might add one."
+      }
+     ],
+     "icon": "🗣"
+    },
+    {
+     "slug": "scoring-bags-and-nil",
+     "title": "Scoring, bags and nil",
+     "summary": "Make your bid and you score 10 points a trick; extra tricks are bags, and ten bags cost 100. Learn the scoring and the nil bid.",
+     "wrap": "You know every rule. Test yourself in the rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "AS KS 8S 4S AH QH 6H 2H KD 9D 5D 7C 3C",
+        "trick": ""
+       },
+       "text": "<p>If your team makes its bid, you score <strong>10 points per trick bid</strong>, plus 1 for each extra trick. Fall short and you <strong>lose</strong> 10 points per trick bid.</p><p>Extra tricks are <strong>bags</strong>. Every 10 bags cost your team 100 points, so overbidding is bad, but so is winning far more than you bid.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Your team bid 5 and won 7 tricks.</p>",
+       "prompt": "What do you score?",
+       "options": [
+        "70",
+        "52, and 2 bags",
+        "50"
+       ],
+       "answer": 1,
+       "explain": "50 for the bid plus 2 for the extra tricks, and those 2 tricks count as bags."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Many players also allow a bid of <strong>nil</strong>: you promise to win no tricks at all. It usually scores 100 if you make it and loses 100 if you win even one, and your partner’s bid counts separately. (BoardGameSite’s game doesn’t use nil, but you’ll meet it at most tables.)</p>",
+       "prompt": "Which hand is better for nil?",
+       "options": [
+        "Lots of low cards and few spades",
+        "Two aces and long spades"
+       ],
+       "answer": 0,
+       "explain": "Low cards and few spades: you want to be able to play under everyone."
+      }
+     ],
+     "icon": "🎒"
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "spades-rules-check",
+     "xp": 40,
+     "title": "Spades rules check",
+     "summary": "Test your Spades rules: following suit, trumping, breaking spades, bidding with a partner, bags and nil.",
+     "wrap": "Rules check passed. Now for winning more tricks.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "game": "spades",
+        "hand": "KD 6D 2D AS 9C",
+        "trick": "10D"
+       },
+       "targets": [
+        "KD",
+        "6D",
+        "2D"
+       ],
+       "text": "<p>Question 1.</p>",
+       "prompt": "Diamonds were led. Tap every card you may play.",
+       "wrong": "You have diamonds, so you must follow suit.",
+       "done": "Correct."
+      },
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "7S AH QD 4D",
+        "trick": "KC AC 3C"
+       },
+       "goal": "trump",
+       "text": "<p>Question 2.</p>",
+       "prompt": "You have no clubs. Win the trick.",
+       "wrong": "Trump it with a spade.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "Spades aren’t broken and you have other suits. Can you lead a spade?",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "answer": 1,
+       "explain": "No, not until spades are broken."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 4.</p>",
+       "prompt": "You bid 3 and your partner bid 4. How many tricks must your team win?",
+       "options": [
+        "4",
+        "7",
+        "3 each"
+       ],
+       "answer": 1,
+       "explain": "7: partners add their bids together."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "What happens when your team collects ten bags?",
+       "options": [
+        "You win the game",
+        "You lose 100 points"
+       ],
+       "answer": 1,
+       "explain": "You lose 100 points, so don’t take too many extra tricks."
+      }
+     ],
+     "icon": "🏆"
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Winning tricks",
+   "blurb": "Second hand low, don’t beat your partner, and saving trumps.",
+   "lessons": [
+    {
+     "slug": "second-hand-low-spades",
+     "title": "Second hand low",
+     "summary": "When you play second to a trick, a low card is usually best: your partner still plays after you. Learn this classic rule with a puzzle.",
+     "wrap": "Second to play? Play low and let your partner do the work.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "game": "spades",
+        "hand": "KH 9H 3H QD 8C",
+        "trick": "5H"
+       },
+       "text": "<p>East has led a low heart, and you play second. Your partner, North, still plays after you, and so does West.</p><p>Playing your king now wastes it if West has the ace. A low card keeps your king for later and lets your partner try to win.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "KH 9H 3H QD 8C",
+        "trick": "5H"
+       },
+       "accept": [
+        "3H"
+       ],
+       "text": "<p>You’re second to play.</p>",
+       "prompt": "Play the classic second-hand card.",
+       "wrong": "Second hand low: play your smallest heart.",
+       "done": "Low. Your king is safe for later."
+      }
+     ],
+     "icon": "2↓"
+    },
+    {
+     "slug": "dont-beat-your-partner-spades",
+     "title": "Don’t beat your partner",
+     "summary": "When your partner is already winning the trick, don’t waste a high card on it. Learn to play low and save your winners.",
+     "wrap": "If your partner is winning, keep your high cards.",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "AH 10H 4H KC 2D",
+        "trick": "KH 6H"
+       },
+       "goal": "duck",
+       "text": "<p>Your partner led the king of hearts and it’s still winning. East played low. You play last.</p>",
+       "prompt": "Help your team without wasting a winner.",
+       "wrong": "Your partner’s king is already winning. Play a low heart and keep your ace.",
+       "done": "Your team wins the trick anyway, and your ace is still in your hand."
+      }
+     ],
+     "icon": "🤝"
+    },
+    {
+     "slug": "save-your-trumps-spades",
+     "title": "Trump low, and only when it counts",
+     "summary": "Spades are your most valuable cards. Learn to trump with your smallest spade, and not to trump a trick your partner is winning.",
+     "wrap": "Trump cheaply, and only when your team needs the trick.",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "KS 8S 3S QD 7C",
+        "trick": "AH 4H 9H"
+       },
+       "accept": [
+        "3S"
+       ],
+       "text": "<p>West led the ace of hearts. You have no hearts, and you’re last to play.</p>",
+       "prompt": "Win the trick as cheaply as you can.",
+       "wrong": "Any spade wins here. Use your smallest one.",
+       "done": "Your 3 of spades wins it. Keep the king for later."
+      },
+      {
+       "type": "move",
+       "position": {
+        "game": "spades",
+        "hand": "KS 8S 3S QD 7C",
+        "trick": "AH 4H"
+       },
+       "accept": [
+        "QD",
+        "7C"
+       ],
+       "text": "<p>This time your partner, North, led the ace of hearts and is winning. You have no hearts.</p>",
+       "prompt": "What should you play?",
+       "wrong": "Your partner’s ace is winning the trick. Don’t waste a spade on it: throw away a card from another suit.",
+       "done": "Your partner wins, and you keep all three spades."
+      }
+     ],
+     "icon": "♠↺"
+    }
+   ]
+  }
+ ]
+}

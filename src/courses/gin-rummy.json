@@ -1,0 +1,376 @@
+{
+ "game": "gin-rummy",
+ "name": "Gin Rummy",
+ "board": "gin",
+ "play": "/play/gin-rummy",
+ "intro": "Learn Gin Rummy from scratch: drawing and discarding, sets and runs, deadwood, knocking, gin and laying off, then the strategy that wins more hands.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Gin Rummy works",
+   "blurb": "Drawing and discarding, melds, deadwood, knocking, gin and laying off.",
+   "lessons": [
+    {
+     "slug": "gin-rummy-deal-and-turns",
+     "title": "Gin Rummy: the deal and a turn",
+     "summary": "Gin Rummy is a two-player card game. Each player gets 10 cards; on your turn you draw one and discard one. Learn how a turn works.",
+     "wrap": "Draw one, discard one. Next: melds.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "text": "<p>Gin Rummy is played by two players with one deck. Each player gets <strong>10 cards</strong>; the rest form the stock, and one card is turned up to start the discard pile.</p><p>On your turn you <strong>draw one card</strong>, either the top of the stock or the top of the discard pile, then <strong>discard one card</strong> face up.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "How many cards do you hold between turns?",
+       "options": [
+        "7",
+        "10",
+        "13"
+       ],
+       "answer": 1,
+       "explain": "Ten. You hold 11 for a moment after drawing, then discard back to 10."
+      }
+     ],
+     "icon": "★"
+    },
+    {
+     "slug": "melds-sets-and-runs",
+     "title": "Melds: sets and runs",
+     "summary": "A meld is a set of three or four cards of the same rank, or a run of three or more in the same suit. Learn to spot both in your hand.",
+     "wrap": "Sets and runs are melds. Next: deadwood.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "text": "<p>You want to arrange your cards into <strong>melds</strong>:</p><ul><li>a <strong>set</strong>: three or four cards of the same rank, like three 7s;</li><li>a <strong>run</strong>: three or more cards in a row in the same suit, like 4, 5, 6 of hearts. Aces are low: A, 2, 3 is a run, but Q, K, A isn’t.</li></ul>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "targets": [
+        "7S",
+        "7D",
+        "7C"
+       ],
+       "text": "<p>Find the set.</p>",
+       "prompt": "Tap the three cards that make a set.",
+       "wrong": "A set is three cards of the same rank.",
+       "done": "Three 7s."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "targets": [
+        "9C",
+        "10C",
+        "JC"
+       ],
+       "text": "<p>There are two runs in this hand. One is in hearts.</p>",
+       "prompt": "Tap the cards of the other run.",
+       "wrong": "A run is three or more cards in a row, all the same suit.",
+       "done": "9, 10, jack of clubs."
+      }
+     ],
+     "icon": "≡"
+    },
+    {
+     "slug": "deadwood-in-gin-rummy",
+     "title": "Deadwood",
+     "summary": "Cards that aren’t in a meld are deadwood, counted in points: aces 1, number cards their value, face cards 10. Learn to count it.",
+     "wrap": "Less deadwood is better. Next: what to discard.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "text": "<p>Any card that isn’t part of a meld is <strong>deadwood</strong>. Deadwood is counted in points: aces 1, number cards their number, and jacks, queens and kings 10 each.</p><p>This hand has three melds and one king left over: 10 points of deadwood.</p>"
+      },
+      {
+       "type": "choice",
+       "position": {
+        "hand": "3H 3S 9D 9C KH QH 2C 5S 8D AS"
+       },
+       "text": "<p>This hand has no melds at all.</p>",
+       "prompt": "Which cards add the most deadwood?",
+       "options": [
+        "The ace and the 2",
+        "The king and the queen",
+        "The 3s"
+       ],
+       "answer": 1,
+       "explain": "The king and queen: 10 points each. High cards are expensive deadwood."
+      }
+     ],
+     "icon": "#"
+    },
+    {
+     "slug": "choosing-a-discard",
+     "title": "Choosing a discard",
+     "summary": "After drawing, discard the card that leaves you the least deadwood. Practise with real hands, and learn why high loose cards go first.",
+     "wrap": "Discard the card that leaves you the least deadwood.",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD 2S"
+       },
+       "goal": "best",
+       "text": "<p>You’ve drawn the 2 of spades. You have 11 cards; discard one.</p>",
+       "prompt": "Discard the card that leaves the least deadwood.",
+       "wrong": "That leaves more deadwood than you need. Which loose card is worth the most?",
+       "done": "Just the 2 left as deadwood."
+      },
+      {
+       "type": "move",
+       "position": {
+        "hand": "QH QS QD 3C 4C 5C 6C 9D KS 2H 8S"
+       },
+       "goal": "best",
+       "text": "<p>You have a set of queens and a run of clubs.</p>",
+       "prompt": "Discard the card that leaves the least deadwood.",
+       "wrong": "Keep your melds together and throw your most expensive loose card.",
+       "done": "The loose king goes."
+      }
+     ],
+     "icon": "🗑"
+    },
+    {
+     "slug": "knocking-and-gin",
+     "title": "Knocking, gin and laying off",
+     "summary": "Knock when your deadwood is 10 or less, or go gin with none. Learn how a hand ends, how it’s scored and how laying off works.",
+     "wrap": "You know every rule. Test yourself in the rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "text": "<p>When your deadwood is <strong>10 or less</strong> after discarding, you may <strong>knock</strong> to end the hand. Both players show their melds, and the other player may <strong>lay off</strong>: add their loose cards to your melds (a fourth 7 on your three 7s, the 7 of hearts on your 4-5-6).</p><p>You score the difference in deadwood. But if the other player ends up with deadwood equal to or less than yours, they <strong>undercut</strong> you and score the difference plus 25.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "hand": "5S 6S 7S 8S KH KD KC 2D 3D 4D QC"
+       },
+       "goal": "gin",
+       "text": "<p>With <strong>no deadwood at all</strong> you go <strong>gin</strong>: 25 bonus points plus your opponent’s deadwood, and they can’t lay off.</p>",
+       "prompt": "Discard and go gin.",
+       "wrong": "Find the one card that isn’t part of a meld.",
+       "done": "Gin! Every card is in a meld."
+      },
+      {
+       "type": "choice",
+       "text": "<p>You knocked with three 7s and the 4-5-6 of hearts showing.</p>",
+       "prompt": "Which of your opponent’s loose cards can they lay off?",
+       "options": [
+        "The 7 of hearts",
+        "The 9 of spades"
+       ],
+       "answer": 0,
+       "explain": "The 7 of hearts extends your run of hearts (it could also be the fourth 7). The 9 of spades fits nothing."
+      }
+     ],
+     "icon": "✊"
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "gin-rummy-rules-check",
+     "xp": 40,
+     "title": "Gin Rummy rules check",
+     "summary": "Test your Gin Rummy rules: melds, deadwood, discarding, knocking, gin, laying off and the undercut.",
+     "wrap": "Rules check passed. Now for the strategy.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "hand": "AH 2H 3H 8S 8D 8C KD QS 5C 6D"
+       },
+       "targets": [
+        "AH",
+        "2H",
+        "3H"
+       ],
+       "text": "<p>Question 1.</p>",
+       "prompt": "Tap the cards of the run.",
+       "wrong": "A run is three in a row in one suit. Aces are low.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 2.</p>",
+       "prompt": "How much is a jack worth as deadwood?",
+       "options": [
+        "1",
+        "10",
+        "11"
+       ],
+       "answer": 1,
+       "explain": "10, like every face card."
+      },
+      {
+       "type": "move",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC 2D 3D"
+       },
+       "goal": "best",
+       "text": "<p>Question 3.</p>",
+       "prompt": "Discard the card that leaves the least deadwood.",
+       "wrong": "Keep the melds; drop the loose card worth the most.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 4.</p>",
+       "prompt": "When may you knock?",
+       "options": [
+        "Any time",
+        "When your deadwood is 10 or less",
+        "Only with gin"
+       ],
+       "answer": 1,
+       "explain": "10 or less."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "You knock with 6 deadwood; after laying off, your opponent has 4. What happens?",
+       "options": [
+        "You score 2",
+        "They undercut you and score 2 + 25"
+       ],
+       "answer": 1,
+       "explain": "An undercut: they score the difference plus 25."
+      }
+     ],
+     "icon": "🏆"
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Strategy",
+   "blurb": "Dump high cards, read the discards, and know when to knock.",
+   "lessons": [
+    {
+     "slug": "dump-high-cards-gin",
+     "title": "Get rid of high cards early",
+     "summary": "High loose cards are expensive if your opponent knocks. Learn why discarding kings and queens early usually beats waiting for a meld.",
+     "wrap": "Early on, throw loose high cards; keep low cards and near-melds.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "hand": "KS QD 9H 8H 4C 4D 2S AC 6S 10D JC"
+       },
+       "text": "<p>Your opponent could knock at any time. If they do, every loose king or queen in your hand costs you 10 points.</p><p>So early in the hand, discard <strong>high cards that aren’t close to a meld</strong>. Keep low cards and <strong>near-melds</strong> (pairs like 4♣ 4♦, or 8♥ 9♥) that one more card would complete.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "hand": "KS QD 9H 8H 4C 4D 2S AC 6S 10D JC"
+       },
+       "accept": [
+        "KS",
+        "QD"
+       ],
+       "text": "<p>No melds yet.</p>",
+       "prompt": "Discard a card a good player would throw first.",
+       "wrong": "Keep your pairs and connected cards. Throw a high card that’s on its own.",
+       "done": "A loose high card gone."
+      }
+     ],
+     "icon": "⬇"
+    },
+    {
+     "slug": "read-the-discards-gin",
+     "title": "Watch what your opponent picks up",
+     "summary": "Cards your opponent takes from the discard pile tell you what they’re collecting. Learn to avoid feeding their melds.",
+     "wrap": "Don’t discard what your opponent is collecting.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "hand": "KS 9S 9C 4H 5H 6H 2C 3C JD JH"
+       },
+       "text": "<p>Your opponent just picked up the 8 of spades from the discard pile, instead of drawing from the stock. They must want it for a meld.</p>",
+       "prompt": "Which discard is riskier?",
+       "options": [
+        "The 9 of spades",
+        "The jack of diamonds"
+       ],
+       "answer": 0,
+       "explain": "The 9 of spades sits right next to the 8 they took and could complete a run of spades for them. The jack of diamonds is nowhere near it."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Cards your opponent throws away tell you what they <em>don’t</em> want.</p>",
+       "prompt": "They just discarded the 6 of diamonds. Is the 6 of clubs fairly safe for you to discard?",
+       "options": [
+        "Yes, fairly: they didn’t want 6s",
+        "No, never"
+       ],
+       "answer": 0,
+       "explain": "Fairly safe: if they were collecting 6s, they wouldn’t have thrown one away."
+      }
+     ],
+     "icon": "👀"
+    },
+    {
+     "slug": "when-to-knock-gin",
+     "title": "Knock early or wait for gin?",
+     "summary": "Knocking early wins many small hands; waiting for gin risks an undercut and a big loss. Learn when each makes sense.",
+     "wrap": "Knock early and often; go for gin only when it’s close and safe.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "hand": "7S 7D 7C 4H 5H 6H 9C 10C JC KD"
+       },
+       "text": "<p>You can knock with 10 deadwood (the king). It’s early in the hand.</p>",
+       "prompt": "What do strong players usually do?",
+       "options": [
+        "Knock now",
+        "Wait several turns for gin"
+       ],
+       "answer": 0,
+       "explain": "Knock. Early in the hand your opponent probably has lots of deadwood, so you score well and they have little time to improve."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Late in the hand you have 9 deadwood, and your opponent has been picking up cards and discarding low ones.</p>",
+       "prompt": "What’s the risk of knocking now?",
+       "options": [
+        "None",
+        "They may have very little deadwood and undercut you"
+       ],
+       "answer": 1,
+       "explain": "An undercut. Late in the hand, a low knock is safer, or wait for gin."
+      }
+     ],
+     "icon": "⏱"
+    }
+   ]
+  }
+ ]
+}

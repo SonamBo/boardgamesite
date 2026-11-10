@@ -19,6 +19,10 @@ const GAMES = [
   { id: 'hex', name: 'Hex', blurb: 'Bridges, edge templates and the swap rule.' },
   { id: 'nine-mens-morris', name: 'Nine Men’s Morris', blurb: 'Mills, running mills and the flying endgame.' },
   { id: 'dots-and-boxes', name: 'Dots and Boxes', blurb: 'Safe lines, chains and the double-cross.' },
+  { id: 'spades', name: 'Spades', blurb: 'Bidding, trumps, bags and teamwork.' },
+  { id: 'hearts', name: 'Hearts', blurb: 'Ducking, the queen of spades and the moon.' },
+  { id: 'gin-rummy', name: 'Gin Rummy', blurb: 'Melds, deadwood, knocking and gin.' },
+  { id: 'freecell', name: 'FreeCell', blurb: 'Free cells, empty columns and planning.' },
   { id: 'sudoku', name: 'Sudoku', blurb: 'From the rules to pairs and pointing pairs.' },
   { id: 'backgammon', name: 'Backgammon', blurb: 'Dice, hitting, bearing off and opening moves.' },
   { id: 'solitaire', name: 'Solitaire', blurb: 'Win more Klondike games with a few habits.' }

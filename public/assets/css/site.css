@@ -2295,6 +2295,26 @@ body.returning .hero { display: none; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* card lessons: a trick (Spades, Hearts) or a hand (Gin Rummy) on the felt */
+.lp-board.card-lesson { container-type: inline-size; width: 100%; max-width: 680px; margin: 0 auto; padding: 14px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%); box-shadow: inset 0 0 0 1px var(--felt-dark); user-select: none; -webkit-user-select: none; --cw: min(76px, calc((100cqw - 40px) / 7)); }
+.card-lesson .pc { position: relative; display: block; width: var(--cw); height: calc(var(--cw) * 1.4); padding: 0; font: inherit; cursor: default; flex: none; }
+.card-lesson button.pc.can { cursor: pointer; }
+.card-lesson .pc.dim { filter: brightness(.7); }
+.card-lesson .pc.moved { box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 70%, transparent); }
+.cl-note { color: rgba(233,239,230,.75); font-size: 14px; margin: 0; }
+.cl-trick { display: flex; gap: 10px; justify-content: center; min-height: calc(var(--cw) * 1.4 + 20px); align-items: flex-end; }
+.cl-play { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cl-play small { color: rgba(233,239,230,.7); font-size: 12px; }
+.cl-empty { color: rgba(233,239,230,.6); margin: auto 0; }
+.cl-hand { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 2px; }
+.cl-hand .pc + .pc { margin-left: calc(var(--cw) * -0.38); }
+.cl-hand .pc.can:hover { transform: translateY(-4px); }
+.card-lesson [data-mark="good"], .card-lesson [data-mark="bad"], .card-lesson [data-mark="target"] { border-radius: 8px; }
+.card-lesson [data-mark="hint"] { box-shadow: 0 0 0 3px var(--accent-text); }
+.card-lesson [data-mark="hint"]::before { display: none; }
+.sol-lesson.fc-lesson .sl-top, .sol-lesson.fc-lesson .sl-tab { grid-template-columns: repeat(8, var(--cw)); }
+.sol-lesson.fc-lesson > * { --cw: min(80px, calc((100cqw - 48px) / 8)); }
 /* lesson boards for Dots and Boxes */
 .lp-board.db-lesson { width: 100%; max-width: 480px; margin: 0 auto; }
 .db-lesson .db-mark { fill: none; stroke-width: 1.4; pointer-events: none; }

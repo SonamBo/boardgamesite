@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Nine Men’s Morris, Dots and Boxes, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Nine Men’s Morris, Dots and Boxes, Spades, Hearts, Gin Rummy, FreeCell, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -835,8 +835,156 @@ function dotsBoard(el) {
   });
 }
 
+
+// ---------- Card tables: Spades and Hearts tricks, Gin Rummy hands, FreeCell ----------
+const CARD_R = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+function cardFace(n, code, b, extra = '', tag = 'button') {
+  const r = CARD_R[n % 13], su = Math.floor(n / 13);
+  return '<' + tag + (tag === 'button' ? ' type="button"' : '') + ' class="pc face' + (su === 1 || su === 2 ? ' red' : '') + extra + '" data-at="' + code + '" data-mark="' + (b.marks[code] || '') + '" aria-label="' + code + '">' +
+    '<span class="ix"><span>' + r + '</span>' + suitIcon(su) + '</span>' + suitIcon(su, 'pip') + '</' + tag + '>';
+}
+const SEATS = ['West', 'North', 'East'];
+function tricksBoard(el) {
+  const b = base(el);
+  const A = RULES.tricks;
+  let S, played = null;
+  el.className = 'card-lesson lp-board';
+  function render() {
+    const legal = new Set(b.live ? A.list(S).map((x) => x.name) : []);
+    // the players before you, in order, finishing with the one on your right
+    const seats = SEATS.slice(3 - (S.trick.length - (played != null ? 1 : 0)));
+    let trick = '';
+    S.trick.forEach((c, k) => {
+      const mine = played != null && k === S.trick.length - 1;
+      trick += '<div class="cl-play"><small>' + (mine ? 'You' : seats[k] || '') + '</small>' + cardFace(c, A.cardCode(c), b, mine ? ' moved' : '', 'span') + '</div>';
+    });
+    const note = S.game === 'spades' ? 'Spades are trumps' + (S.broken ? ' · spades broken' : '') : 'Hearts' + (S.broken ? ' · hearts broken' : '') + (S.first ? ' · first trick' : '');
+    el.innerHTML = '<p class="cl-note">' + note + '</p><div class="cl-trick">' + (trick || '<p class="cl-empty">You lead this trick</p>') + '</div>' +
+      '<div class="cl-hand">' + S.hand.slice().sort((x, y) => Math.floor(x / 13) - Math.floor(y / 13) || ((y % 13 || 13) - (x % 13 || 13))).map((c) => { const code = A.cardCode(c); return cardFace(c, code, b, legal.has(code) ? ' can' : b.live ? ' dim' : ''); }).join('') + '</div>';
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, played };
+    const r = A.apply(S, x);
+    S = r.s; played = x.c;
+    sound('card');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, played } = prev); render(); }, 650);
+    return r.f;
+  }
+  el.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-at]'); if (!t) return;
+    if (b.tapFn) return b.tapFn(t.dataset.at);
+    if (!b.live) return;
+    const x = A.find(S, t.dataset.at);
+    if (x) doMove(x, true);
+  });
+  return Object.assign(b, {
+    set(p) { S = A.load(p); played = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; render(); },
+    side: () => 0
+  });
+}
+function ginBoard(el) {
+  const b = base(el);
+  const A = RULES.gin;
+  let S, discarded = null;
+  el.className = 'card-lesson lp-board';
+  function render() {
+    const order = S.hand.slice().sort((x, y) => Math.floor(x / 13) - Math.floor(y / 13) || (x % 13) - (y % 13));
+    const dead = A.deadwood(S.hand.map(A.cardCode).join(' '));
+    el.innerHTML = '<p class="cl-note">' + (S.hand.length === 11 ? 'Your hand after drawing: discard one card' : 'Your hand · deadwood ' + dead) + '</p>' +
+      (discarded != null ? '<div class="cl-trick"><div class="cl-play"><small>Discard</small>' + cardFace(discarded, A.cardCode(discarded), b, ' moved', 'span') + '</div></div>' : '') +
+      '<div class="cl-hand">' + order.map((c) => cardFace(c, A.cardCode(c), b, b.live || b.tapFn ? ' can' : '')).join('') + '</div>';
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, discarded };
+    const r = A.apply(S, x);
+    S = r.s; discarded = x.c;
+    sound('card');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, discarded } = prev); render(); }, 650);
+    return r.f;
+  }
+  el.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-at]'); if (!t) return;
+    if (b.tapFn) return b.tapFn(t.dataset.at);
+    if (!b.live) return;
+    const x = A.find(S, t.dataset.at);
+    if (x) doMove(x, true);
+  });
+  return Object.assign(b, {
+    set(p) { S = A.load(p); discarded = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; render(); },
+    side: () => 0
+  });
+}
+function freecellBoard(el) {
+  const b = base(el);
+  const A = RULES.freecell;
+  let S, sel = null, lastCard = null;
+  el.className = 'sol-lesson fc-lesson lp-board';
+  el.innerHTML = '<div class="sl-top"></div><div class="sl-tab"></div>';
+  const slot = (at, inner, label) => '<button type="button" class="sl-slot" data-at="' + at + '" data-mark="' + (b.marks[at] || '') + '" aria-label="' + label + '">' + (inner || '') + '</button>';
+  const face = (n) => { const code = A.cardCode(n); return cardFace(n, code, b, (sel === code ? ' sel' : '') + (lastCard === code ? ' moved' : '')); };
+  function render() {
+    let h = '';
+    S.cells.forEach((c, k) => { h += '<div class="sl-pile">' + (c != null ? face(c) : slot('c' + (k + 1), '', 'Free cell, empty')) + '</div>'; });
+    S.found.forEach((k, su) => { h += '<div class="sl-pile sl-found">' + (k ? cardFace(su * 13 + k - 1, A.cardCode(su * 13 + k - 1), b, '', 'span') : slot('f', suitIcon(su), 'Foundation')) + '</div>'; });
+    el.querySelector('.sl-top').innerHTML = h;
+    el.querySelector('.sl-tab').innerHTML = S.tab.map((pile, col) => {
+      let cards = '';
+      pile.forEach((c, k) => { cards += '<div class="sl-card" style="top:calc(var(--cw) * ' + (k * 0.38).toFixed(2) + ')">' + face(c) + '</div>'; });
+      return '<div class="sl-col" style="height:calc(var(--cw) * ' + (Math.max(0, pile.length - 1) * 0.38 + 1.4).toFixed(2) + ')">' + slot('t' + (col + 1), '', 'Column ' + (col + 1) + (pile.length ? '' : ', empty')) + cards + '</div>';
+    }).join('');
+  }
+  function destFor(at) {
+    if (at === 'f' || S.found.some((k, su) => k && A.cardCode(su * 13 + k - 1) === at)) return 'f';
+    if (/^c[1-4]$/.test(at) || S.cells.some((c) => c != null && A.cardCode(c) === at)) return 'c';
+    if (/^t[1-8]$/.test(at)) return at;
+    const col = S.tab.findIndex((p) => p.some((c) => A.cardCode(c) === at));
+    return col >= 0 ? 't' + (col + 1) : null;
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, lastCard };
+    const r = A.apply(S, x);
+    S = r.s; sel = null; lastCard = x.name.split('-')[0];
+    sound(r.f.found ? 'found' : 'card');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, lastCard } = prev); render(); }, 650);
+    return r.f;
+  }
+  function tap(at) {
+    if (b.tapFn) return b.tapFn(at);
+    if (!b.live) return;
+    const all = A.list(S);
+    if (sel) {
+      const dest = destFor(at);
+      const m = dest && all.find((x) => x.name === sel + '-' + dest);
+      if (m) return doMove(m, true);
+    }
+    sel = all.some((x) => x.name.startsWith(at + '-')) && sel !== at ? at : null;
+    if (sel) sound('select');
+    render();
+  }
+  el.addEventListener('click', (e) => { const t = e.target.closest('[data-at]'); if (t) tap(t.dataset.at); });
+  return Object.assign(b, {
+    set(p) { S = A.load(p); sel = null; lastCard = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; if (!on) sel = null; render(); },
+    side: () => 0
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'tricks' ? tricksBoard(el) : kind === 'gin' ? ginBoard(el) : kind === 'freecell' ? freecellBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;
