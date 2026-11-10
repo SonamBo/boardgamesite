@@ -1812,6 +1812,10 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 .lesson-crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; color: var(--muted); }
 .lesson-crumbs a { color: var(--text-2); }
 .lesson-read { max-width: 760px; }
+/* the lesson as text (build.py): open without JavaScript, folded away by lesson.js */
+.lesson-text { max-width: 760px; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+.lesson-text > summary { cursor: pointer; font-weight: 600; color: var(--accent-text); padding: 6px 0; width: fit-content; }
+.lesson-text[open] > summary { margin-bottom: 8px; }
 .lesson-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .path { display: flex; flex-direction: column; gap: 22px; }
 .path-unit h3 { margin: 0 0 4px; font: 600 26px/1.2 var(--display); }
