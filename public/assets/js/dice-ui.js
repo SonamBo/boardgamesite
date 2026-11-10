@@ -4,7 +4,7 @@ import { play } from './sound.js';
 const PIPS = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 export const d6 = () => 1 + Math.floor(Math.random() * 6);
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.anim === 'off';
 
 // A die button. `keep` shows a Keep/Kept label underneath for games where you hold dice.
 export function makeDie(parent, { keep = false, onClick } = {}) {

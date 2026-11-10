@@ -1,6 +1,6 @@
 // Hex: Gold joins top to bottom, Ivory joins left to right. Take turns placing stones; there are no draws.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -18,6 +18,8 @@ const getSide = sideSwitch('hex', ['first', 'second', 'random'], () => newGame()
 let me = 1;   // your colour against the computer in this game
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
+animationSwitch();
+const cellEl = (i) => svg.querySelector('.hx[data-i="' + i + '"]');
 const goal = (p) => (p === 1 ? 'join top to bottom' : 'join left to right');
 function paintSides() {
   if (!vsCpu() || onlineOn) return;
@@ -35,7 +37,7 @@ let history = [];
 const undoBtn = $('undo'), swapBtn = $('swap');
 const stones = () => B.filter(Boolean).length;
 const canSwap = () => swapRule && !over && turn === 2 && stones() === 1 && B.indexOf(1) >= 0;
-const humanTurn = () => !busy && !over && (onlineOn ? ol.myTurn() : !cpuTurnNow());
+const humanTurn = () => !busy && !over && !animating() && (onlineOn ? ol.myTurn() : !cpuTurnNow());
 
 const NB = [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0]];
 const nbs = (i) => { const r = Math.floor(i / n), c = i % n; return NB.map(([dr, dc]) => [r + dr, c + dc]).filter(([a, b]) => a >= 0 && b >= 0 && a < n && b < n).map(([a, b]) => a * n + b); };
@@ -123,9 +125,16 @@ async function put(i, remote = false) {
   play('place');
   const path = connected(B, turn);
   if (onlineOn && !remote) ol.send(String(i), 2 - turn, !!path);
-  if (path) { winPath = path; return finish(turn); }
+  if (path) {
+    winPath = path;
+    finish(turn);
+    // light up the winning chain from one edge to the other
+    lightUp(path.slice().reverse().map(cellEl), 80);
+    return;
+  }
   turn = 3 - turn;
   render();
+  popIn(cellEl(i), 200);
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn: join ' + (ol.mySeat() === 0 ? 'top to bottom' : 'left to right') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   setStatus(statusText(), (vsCpu() ? turn !== me : turn === 2) ? 'cpu' : '');
   if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap to take over Gold’s stone', vsCpu() ? '' : 'cpu');
@@ -180,6 +189,7 @@ function finish(w) {
 }
 function newGame() {
   gameNo++;
+  stopAnimations();
   B = new Array(n * n).fill(0); turn = 1; history = []; over = false; busy = false; started = false; last = -1; winPath = null;
   me = movesFirst(getSide()) ? 1 : 2;
   $('result').hidden = true;

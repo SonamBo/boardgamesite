@@ -1,6 +1,6 @@
 // Five in a Row (Gomoku): take turns placing stones. First to make five in a row, in any direction, wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
@@ -15,6 +15,7 @@ const vsCpu = () => getOpp() === 'cpu';
 const getSide = sideSwitch('gomoku', ['first', 'second', 'random'], () => newGame());
 let me = 1;   // your colour against the computer in this game: 1 gold (first), 2 ivory
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
+animationSwitch();
 // your stones so far (gold plays the even moves of the history)
 const myStones = () => (me === 1 ? Math.ceil(history.length / 2) : Math.floor(history.length / 2));
 function paintSides() {
@@ -101,7 +102,7 @@ function render() {
 }
 
 function place(i) {
-  if (over || busy || B[i] || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
+  if (over || busy || animating() || B[i] || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
   put(i);
 }
 function put(i, remote = false) {
@@ -112,10 +113,17 @@ function put(i, remote = false) {
   const line = lineAt(B, i, turn);
   const full = B.every((x) => x);
   if (onlineOn && !remote) ol.send(String(i), 2 - turn, !!line || full);
-  if (line) { winLine = line; return finish(turn); }
+  if (line) {
+    winLine = line;
+    finish(turn);
+    // light up the five, from one end to the other
+    lightUp(line.slice().sort((a, b) => a - b).map((k) => cells[k]), 90);
+    return;
+  }
   if (full) return finish(0);
   turn = 3 - turn;
   render();
+  popIn(cells[i], 200);
   save();
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   if (cpuTurnNow()) cpuTurn();
@@ -155,6 +163,7 @@ function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getO
 // moves: a game to pick up (after Undo or a return visit), played with your colour `side`
 function newGame(moves = [], side = 0) {
   clearTimeout(cpuTimer);
+  stopAnimations();
   B = new Array(N * N).fill(0); turn = 1; over = false; busy = false; started = false; last = -1; winLine = null; history = [];
   me = side || (movesFirst(getSide()) ? 1 : 2);
   $('result').hidden = true;

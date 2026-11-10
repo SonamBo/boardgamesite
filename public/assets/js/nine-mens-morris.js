@@ -2,7 +2,7 @@
 // lets you remove an opponent's piece. Reduce them to two pieces, or leave them no move, to win.
 // Draws: the same position three times with the same player to move, or 50 moves each with no piece removed.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, moveQueue, slide, fadeOut, popIn } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -20,7 +20,9 @@ const getSide = sideSwitch('morris', ['first', 'second', 'random'], () => newGam
 let me = 1;   // your colour against the computer in this game
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
 const cpuTurnNow = () => vsCpu() && turn !== me;
-const humanTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : !cpuTurnNow());
+animationSwitch();
+const Q = moveQueue();   // moves animate one at a time
+const humanTurn = () => !over && !busy && !Q.busy() && (onlineOn ? ol.myTurn() : !cpuTurnNow());
 function paintSides() {
   if (!vsCpu()) return;
   document.querySelector('[data-name="p1"]').textContent = me === 1 ? 'You' : 'Computer';
@@ -136,6 +138,24 @@ function render() {
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
   undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === me) : history.length);
 }
+// ---------- Showing moves ----------
+const pieceAt = (i) => svg.querySelector('.pt[data-i="' + i + '"] .pc1, .pt[data-i="' + i + '"] .pc2');
+const spotAt = (i) => svg.querySelector('.pt[data-i="' + i + '"] .spot');
+// Show a whole move by player p on the board as drawn: slide a moving or flying piece (further takes
+// longer), or pop in a placed one, then fade the piece it removes. S is the same afterwards.
+async function showMove(m, p, live) {
+  if (m.from != null) {
+    const [x1, y1] = XY[m.from], [x2, y2] = XY[m.to];
+    await slide(pieceAt(m.from), [spotAt(m.to)], 150 + 45 * Math.hypot(x2 - x1, y2 - y1));
+  }
+  if (m.take == null || !live()) return;
+  const keep = S;
+  S = apply(S, p, m.from != null ? { from: m.from, to: m.to } : { to: m.to });
+  render();
+  if (m.from == null) popIn(pieceAt(m.to), 220);
+  await fadeOut(pieceAt(m.take), 230, 160);
+  S = keep;
+}
 const name = (p) => (onlineOn ? (p === ol.mySeat() + 1 ? 'You' : 'Your friend') : vsCpu() ? (p === me ? 'You' : 'The computer') : p === 1 ? 'Gold' : 'Ivory');
 function prompt() {
   if (removing) return setStatus((vsCpu() && turn === me ? 'Mill! ' : '') + 'Pick a piece to remove', '');
@@ -167,12 +187,15 @@ async function cpuTurn() {
   const g = gameNo;
   busy = true; render(); await wait(600);
   if (g !== gameNo) return;
-  busy = false;
   const cpu = 3 - me;
   const cm = cpuMove(S, cpu);
-  snapshot(); cur = cm;
-  S = apply(S, cpu, cm);
-  after(cpu, cm);
+  Q.run((live) => showMove(cm, cpu, live), () => {
+    busy = false;
+    snapshot(); cur = cm;
+    S = apply(S, cpu, cm);
+    after(cpu, cm);
+    if (cm.from == null && cm.take == null) popIn(pieceAt(cm.to), 220);
+  });
 }
 
 function tap(i) {
@@ -180,18 +203,29 @@ function tap(i) {
   if (!started) { started = true; track('game_start', { game: 'nine-mens-morris', opponent: getOpp() }); }
   if (removing) {
     if (!removable(S.b, turn).includes(i)) { setStatus('You can’t take a piece in a mill unless they’re all in mills', 'neutral'); return; }
-    S.b[i] = 0;
-    return after(turn, { to: last, take: i });
+    return Q.run(() => fadeOut(pieceAt(i), 230), () => {
+      S.b[i] = 0;
+      after(turn, { to: last, take: i });
+    });
   }
   const ms = moves(S, turn);
   if (phase(S, turn) === 'place') {
     if (S.b[i]) return;
     snapshot(); cur = { to: i };
     S = apply(S, turn, { to: i });
-    return after(turn, { to: i });
+    after(turn, { to: i });
+    popIn(pieceAt(i), 220);
+    return;
   }
   if (S.b[i] === turn) { sel = ms.some((m) => m.from === i) ? i : null; if (sel == null) shake(svg, play); else play('select'); return render(); }
-  if (sel != null && ms.some((m) => m.from === sel && m.to === i)) { const m = { from: sel, to: i }; snapshot(); cur = m; S = apply(S, turn, m); sel = null; return after(turn, m); }
+  if (sel != null && ms.some((m) => m.from === sel && m.to === i)) {
+    const m = { from: sel, to: i }, p = turn;
+    sel = null;
+    Q.run((live) => showMove(m, p, live), () => {
+      snapshot(); cur = m; S = apply(S, p, m);
+      after(p, m);
+    });
+  }
 }
 
 function finish(w) {
@@ -228,6 +262,7 @@ function newGame() {
   S = { b: new Array(24).fill(0), hand: [0, 9, 9] }; turn = 1; sel = null; removing = false; over = false; busy = false; started = false; last = -1;
   quiet = 0; seen = {}; history = []; cur = null;
   gameNo++;
+  Q.reset();
   me = movesFirst(getSide()) ? 1 : 2;
   $('result').hidden = true;
   paintSides();
@@ -241,7 +276,8 @@ $('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
 $('new-game').classList.add('online-hide');
 $('again').classList.add('online-hide');
 undoBtn.addEventListener('click', () => {
-  if (busy || over || onlineOn || !history.length) return;
+  if (busy || over || onlineOn || !history.length || Q.busy()) return;
+  Q.reset();
   // vs the computer, take back your move and its reply
   let h = history.pop();
   while (vsCpu() && h.turn !== me && history.length) h = history.pop();
@@ -261,9 +297,14 @@ ol = online('nine-mens-morris', {
     const mv = { from: m[1] != null ? Number(m[1]) : null, to: Number(m[2]), take: m[3] != null ? Number(m[3]) : null };
     if (mv.from == null) delete mv.from;
     if (mv.take == null) delete mv.take;
-    snapshot(); cur = mv;
-    S = apply(S, turn, mv);
-    after(turn, mv, true);
+    // it waits for any move still animating
+    let p;
+    Q.run((live) => { p = turn; return showMove(mv, p, live); }, () => {
+      snapshot(); cur = mv;
+      S = apply(S, p, mv);
+      after(p, mv, true);
+      if (mv.from == null && mv.take == null) popIn(pieceAt(mv.to), 220);
+    });
   },
   seatName: (s) => (s === 0 ? 'Gold (first)' : 'Ivory'),
   over: () => over,

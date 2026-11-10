@@ -1,7 +1,7 @@
 // Backgammon page: roll, then move your checkers by tapping a checker and then where it goes.
 import * as B from './backgammon-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -15,6 +15,8 @@ const vsCpu = () => getOpp() === 'cpu';
 const names = () => (vsCpu() ? ['You', 'Computer'] : ['Gold', 'Ivory']);
 const dieEls = [makeDie($('bg-dice')), makeDie($('bg-dice'))];
 const svg = $('bg-board');
+animationSwitch();
+const Q = moveQueue();   // moves animate one at a time
 
 let st, turn, dice, used, legal, made, history, sel, over, busy, started;
 
@@ -35,7 +37,8 @@ function drawStatic() {
 }
 function drawCheckers() {
   let h = '';
-  const disc = (x, y, side, cls = '', label = '') => '<g class="ck s' + side + ' ' + cls + '"><circle cx="' + x + '" cy="' + y + '" r="8.6"/><circle cx="' + x + '" cy="' + y + '" r="5.4" class="ring"/>' + (label ? '<text x="' + x + '" y="' + (y + 2.6) + '" class="cnt">' + label + '</text>' : '') + '</g>';
+  // at: the point (or 'bar') a checker is on; the top checker of each stack is marked, for animations
+  const disc = (x, y, side, cls = '', label = '', at = '') => '<g class="ck s' + side + ' ' + cls + '"' + (at !== '' ? ' data-at="' + at + '"' : '') + '><circle cx="' + x + '" cy="' + y + '" r="8.6"/><circle cx="' + x + '" cy="' + y + '" r="5.4" class="ring"/>' + (label ? '<text x="' + x + '" y="' + (y + 2.6) + '" class="cnt">' + label + '</text>' : '') + '</g>';
   for (let i = 0; i < 24; i++) {
     const n = Math.abs(st.pts[i]);
     if (!n) continue;
@@ -44,14 +47,14 @@ function drawCheckers() {
     const shown = Math.min(n, 5);
     for (let k = 0; k < shown; k++) {
       const y = top ? 17 + k * 17 : 203 - k * 17;
-      h += disc(x, y, side, sel === i && k === shown - 1 ? 'sel' : '', k === shown - 1 && n > 5 ? String(n) : '');
+      h += disc(x, y, side, sel === i && k === shown - 1 ? 'sel' : '', k === shown - 1 && n > 5 ? String(n) : '', k === shown - 1 ? i : '');
     }
   }
   // bar: yours in the top half (you re-enter at the top right), computer's in the bottom half
   [0, 1].forEach((side) => {
     for (let k = 0; k < Math.min(st.bar[side], 3); k++) {
       const y = side === 0 ? 70 - k * 17 : 150 + k * 17;
-      h += disc(140, y, side, sel === 'bar' && side === turn && k === 0 ? 'sel' : '', k === 0 && st.bar[side] > 3 ? String(st.bar[side]) : '');
+      h += disc(140, y, side, sel === 'bar' && side === turn && k === 0 ? 'sel' : '', k === 0 && st.bar[side] > 3 ? String(st.bar[side]) : '', k === 0 ? 'bar' + side : '');
     }
   });
   // borne off: thin stacks in the tray
@@ -79,7 +82,7 @@ function drawCheckers() {
   }
   $('bg-hl').innerHTML = hl;
 }
-const canAct = () => !over && !busy && dice && legal.length && !(vsCpu() && turn === 1);
+const canAct = () => !over && !busy && !Q.busy() && dice && legal.length && !(vsCpu() && turn === 1);
 
 function render() {
   drawCheckers();
@@ -125,7 +128,30 @@ async function roll() {
   render();
 }
 
+// ---------- Showing moves ----------
+// a board position (in the SVG's units) on the screen
+const toScreen = (x, y) => { const c = svg.getScreenCTM(); return { x: c.a * x + c.e, y: c.d * y + c.f }; };
+// where the next checker arriving on point i (or the bar, or borne off) is drawn
+function landing(to, side, s, hit = false) {
+  if (to === 'off') return toScreen(284, side === 0 ? 206 - s.off[side] * 6 : 14 + s.off[side] * 6);
+  if (to === 'bar') return toScreen(140, side === 0 ? 70 - Math.min(s.bar[side], 2) * 17 : 150 + Math.min(s.bar[side], 2) * 17);
+  const { col, top } = spot(to), k = hit ? 0 : Math.min(Math.abs(s.pts[to]), 4);   // a stack shows five at most
+  return toScreen(colX(col) + 10, top ? 17 + k * 17 : 203 - k * 17);
+}
+// Slide the checker to its new point (or off the board); a hit checker then slides to the bar.
+async function showMove(m, side) {
+  const from = m.from === 'bar' ? 'bar' + side : m.from;
+  const el = svg.querySelector('.ck[data-at="' + from + '"]');
+  const dist = m.from === 'bar' || m.to === 'off' ? 6 : Math.abs(m.to - m.from);
+  await slide(el, [landing(m.to, side, st, !!m.hit)], 170 + 22 * Math.min(dist, 12));
+  if (m.hit) await slide(svg.querySelector('.ck[data-at="' + m.to + '"]'), [landing('bar', 1 - side, st)], 260);
+}
 function doMove(m) {
+  sel = null;
+  const side = turn;
+  return Q.run(() => showMove(m, side), () => makeMove(m));
+}
+function makeMove(m) {
   st = B.apply(st, turn, { ...m });
   made.push(m); used.push(m.d);
   play(m.hit ? 'capture' : m.to === 'off' ? 'king' : 'place');
@@ -153,9 +179,9 @@ async function cpuTurn() {
   if (!dice) return;
   const seq = B.choose(st, 1, dice, getLevel());
   for (const m of seq) {
-    await wait(550);
+    await wait(450);
     if (over) return;
-    doMove(m);
+    await doMove(m);
   }
 }
 
@@ -214,6 +240,7 @@ svg.addEventListener('dblclick', (e) => {
 
 function save() { if (!over && started) store.set(SAVE, { opp: getOpp(), st, turn }); }
 function resume() {
+  Q.reset();
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || !g.st || !Array.isArray(g.st.pts)) return false;
   st = g.st; turn = g.turn | 0; dice = null; legal = []; made = []; used = []; sel = null; over = false; busy = false; started = true;
@@ -222,6 +249,7 @@ function resume() {
   return true;
 }
 function newGame() {
+  Q.reset();
   st = B.start(); turn = 0; dice = null; legal = []; made = []; used = []; history = []; sel = null; over = false; busy = false; started = false;
   $('result').hidden = true;
   store.set(SAVE, null);
@@ -231,7 +259,7 @@ function newGame() {
 window.addEventListener('pagehide', save);
 $('roll').addEventListener('click', () => { if (!(vsCpu() && turn === 1)) roll(); });
 $('undo').addEventListener('click', () => {
-  if (!made.length || busy) return;
+  if (!made.length || busy || Q.busy()) return;
   made = []; used = []; st = history[0]; sel = null; legal = computeLegal(); play('card'); render();
 });
 $('new-game').addEventListener('click', () => { if (!busy && !(vsCpu() && turn === 1 && dice)) newGame(); });
