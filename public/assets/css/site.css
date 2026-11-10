@@ -62,10 +62,20 @@
   --felt-deep: #2C0A16;
   --felt-hover: #451122;
   --felt-art: #24121A;
+  /* Checkers boards (both themes use the same wood board; see .ck below). Contrast with the dark square is at least 3:1
+     for both pieces: black pieces by their fill and light rim, gold pieces by their dark rim. */
   --ck-light: #EFE6D8;
-  --ck-dark: #5E1A31;
-  --ck-last: #6E213B;
-  --ck-sel: #822B48;
+  --ck-dark: #A0704A;
+  --ck-dim: #946642;
+  --ck-last: #C9A256;
+  --ck-sel: #B58252;
+  --ck-ring: #FFF4D6;
+  --ck-black: #1E1E1E;
+  --ck-black-hi: #343434;
+  --ck-black-rim: #EFE6D8;
+  --ck-gold-rim: #2B1C0E;
+  --ck-crown-on-gold: #3A2406;
+  --ck-crown-on-black: #E6C88A;
   --wood: #1A120D;
   /* Your pieces in every game */
   --you: #CFAA62;
@@ -90,6 +100,19 @@
 /* Light theme: warm cream, the same fox orange and maroon */
 :root[data-theme="light"] {
   color-scheme: light;
+  /* Checkers boards: the same wood board as the dark theme */
+  --ck-light: #EFE6D8;
+  --ck-dark: #A0704A;
+  --ck-dim: #946642;
+  --ck-last: #C9A256;
+  --ck-sel: #B58252;
+  --ck-ring: #FFF4D6;
+  --ck-black: #1E1E1E;
+  --ck-black-hi: #343434;
+  --ck-black-rim: #EFE6D8;
+  --ck-gold-rim: #2B1C0E;
+  --ck-crown-on-gold: #3A2406;
+  --ck-crown-on-black: #E6C88A;
   --bg: #FFF7EC;
   --side: #FFF0DF;
   --surface: #FFFFFF;
@@ -472,20 +495,24 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .grid8 button.can { cursor: pointer; }
 .ck .light { background: var(--ck-light); }
 .ck .dark { background: var(--ck-dark); }
-.ck .dark.last { background: var(--ck-last); }
-.ck .dark.sel { background: var(--ck-sel); }
+/* squares you can't use right now look a little dimmer, but only the square: never fade the piece on it */
+.ck button:disabled { opacity: 1; }
+.ck .dark:disabled { background: var(--ck-dim); }
+.ck .dark.last, .ck .dark.last:disabled { background: var(--ck-last); }
+.ck .dark.sel { background: var(--ck-sel); box-shadow: inset 0 0 0 4px var(--ck-ring); }
 .piece {
   width: 78%; aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   transition: transform .15s;
 }
-.piece.you { background: radial-gradient(circle at 50% 42%, var(--you-hi) 0 46%, var(--you) 47% 100%); box-shadow: inset 0 -5px 0 var(--you-lo), 0 4px 6px rgba(0,0,0,.35); }
-.piece.cpu { background: radial-gradient(circle at 50% 42%, #3A403C 0 46%, #262A27 47% 100%); box-shadow: inset 0 -5px 0 #141714, 0 0 0 2px #4C544E, 0 4px 6px rgba(0,0,0,.35); }
-.piece svg { width: 52%; height: 52%; }
-.piece.you svg { fill: var(--on-you); opacity: .6; }
-.piece.cpu svg { fill: var(--you); }
+.piece.you { background: radial-gradient(circle at 50% 42%, var(--you-hi) 0 46%, var(--you) 47% 100%); box-shadow: inset 0 -5px 0 var(--you-lo), 0 0 0 2px var(--ck-gold-rim), 0 4px 6px rgba(0,0,0,.35); }
+.piece.cpu { background: radial-gradient(circle at 50% 42%, var(--ck-black-hi) 0 46%, var(--ck-black) 47% 100%); box-shadow: inset 0 -5px 0 #0A0A0A, 0 0 0 2px var(--ck-black-rim), 0 4px 6px rgba(0,0,0,.35); }
+.piece svg { width: 56%; height: 56%; }
+.piece.you svg { fill: var(--ck-crown-on-gold); }
+.piece.cpu svg { fill: var(--ck-crown-on-black); }
 .ck button.sel .piece { transform: scale(1.08); }
-.hint-dot { width: 30%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--you) 80%, transparent); }
-.must .piece.you { box-shadow: inset 0 -5px 0 var(--you-lo), 0 0 0 4px #fff; }
+.hint-dot { width: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--ck-ring); box-shadow: 0 0 0 3px var(--ck-gold-rim); }
+.must .piece.you { box-shadow: inset 0 -5px 0 var(--you-lo), 0 0 0 2px var(--ck-gold-rim), 0 0 0 5px var(--ck-ring); }
+.must .piece.cpu { box-shadow: inset 0 -5px 0 #0A0A0A, 0 0 0 2px var(--ck-black-rim), 0 0 0 5px var(--ck-gold-rim); }
 
 .rv { --rv-line: color-mix(in srgb, var(--felt) 55%, #E8C9A0); background: var(--rv-line); gap: 2px; padding: 2px; box-shadow: 0 0 0 10px var(--felt-dark), 0 18px 40px rgba(0,0,0,.45); }
 .rv button, .rv button:disabled { background: var(--felt); opacity: 1; }
