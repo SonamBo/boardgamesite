@@ -29,6 +29,8 @@ function applyTheme(light) {
   });
 }
 applyTheme(document.documentElement.dataset.theme === 'light');
+// Animation speed (game-ui.js): Off also turns off the boards' CSS animations (see [data-anim="off"] in site.css)
+document.documentElement.dataset.anim = store.get('bgs-anim', 'normal');
 document.querySelectorAll('[data-theme-toggle]').forEach((b) => b.addEventListener('click', () => {
   const light = document.documentElement.dataset.theme !== 'light';
   applyTheme(light);

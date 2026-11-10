@@ -1,7 +1,7 @@
 // Russian Checkers page. Same board and controls as the Checkers page (checkers.js), with the shashki rules
 // from russian-checkers-engine.js: flying kings, men capturing backwards, and the Russian draw rules.
 import * as E from './russian-checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -37,6 +37,8 @@ const friend = () => getOpp() === 'friend';
 // Against the computer you play white (gold, moves first) or black. Playing black turns the board round.
 const getSide = L ? () => 'white' : sideSwitch('rck', ['white', 'black'], () => newGame());
 let me = E.YOU;   // the side the person plays against the computer in this game
+animationSwitch();
+const Q = moveQueue();   // moves animate one at a time
 
 // turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top; in 2-player mode, Player 1 and Player 2)
 // seen: how often each position has come up since the last capture or man move (for the repetition draw)
@@ -81,7 +83,7 @@ const squareName = (i) => FILES[i & 7] + (8 - (i >> 3));
 
 // Moves the person at the screen can make right now.
 function playerMoves() {
-  if (over || busy) return [];
+  if (over || busy || Q.busy()) return [];
   if (onlineOn) return ol.myTurn() ? E.legalMoves(board, turn) : [];
   if (!friend() && turn !== me) return [];
   return E.legalMoves(board, turn);
@@ -206,7 +208,21 @@ function finish(result, resigned = false) {
   render();
 }
 
+// Slide the piece hop by hop, longer hops (a flying king) taking longer, and fade the captured pieces.
+function showMove(m) {
+  const step = 190;
+  const weights = m.path.slice(1).map((to, k) => 0.55 + 0.45 * Math.abs((to >> 3) - (m.path[k] >> 3)));
+  const total = weights.reduce((a, b) => a + b, 0);
+  const jobs = [slide(cells[m.path[0]].querySelector('.piece'), m.path.slice(1).map((i) => cells[i]), step, weights)];
+  // Turkish strike: the captured pieces come off together at the end of the move
+  m.caps.forEach((c) => jobs.push(fadeOut(cells[c].querySelector('.piece'), 220, step * total)));
+  return Promise.all(jobs);
+}
 function playerMove(m, remote = false) {
+  partial = [];
+  Q.run(() => showMove(m), () => makePlayerMove(m, remote));
+}
+function makePlayerMove(m, remote) {
   snapshot();
   logMove(board, turn, m);
   if (!started) { started = true; track('game_start', { game: GAME, level: friend() ? 'friend' : getLevel() }); L?.start(); }
@@ -240,8 +256,10 @@ function startComputerTurn() {
 
 function computerMove() {
   const m = E.pickComputerMove(board, getLevel(), Math.random, -me);
-  busy = false;
-  if (!m) return finish('win');
+  if (!m) { busy = false; return finish('win'); }
+  Q.run(() => showMove(m), () => { busy = false; makeComputerMove(m); });
+}
+function makeComputerMove(m) {
   snapshot();
   logMove(board, -me, m);
   noteQuiet(m);
@@ -257,6 +275,7 @@ function computerMove() {
 }
 
 function newGame() {
+  Q.reset();
   L?.newGame();
   gameLog = []; history = []; hideReview();
   board = E.startBoard();
@@ -273,6 +292,7 @@ function newGame() {
 
 // Pick up an unfinished game after a refresh or a return visit.
 function resume() {
+  Q.reset();
   const g = store.get(SAVE, null);
   if (L || !g || !Array.isArray(g.board) || g.board.length !== 64) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
@@ -298,7 +318,7 @@ function resume() {
 
 document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
 undoBtn.addEventListener('click', () => {
-  if (busy || over || onlineOn || !history.length) return;
+  if (busy || over || onlineOn || !history.length || Q.busy()) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   while (!friend() && h.turn !== me && history.length) h = history.pop();
@@ -315,7 +335,8 @@ undoBtn.classList.add('online-hide');
 document.getElementById('new-game').classList.add('online-hide');
 ol = online(GAME, {
   reset: () => newGame(),
-  apply: (t) => { const m = E.legalMoves(board, turn).find((x) => token(x) === t); if (m) playerMove(m, true); },
+  // an online move waits for any move still animating, then is found on the board as it is then
+  apply: (t) => Q.run(async () => { const m = E.legalMoves(board, turn).find((x) => token(x) === t); if (!m) return false; await showMove(m); return m; }, (m) => makePlayerMove(m, true)),
   seatName: (s) => (s === 0 ? 'Gold (bottom, first)' : 'Black'),
   over: () => over,
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); paintSides(); render(); }

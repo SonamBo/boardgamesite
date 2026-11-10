@@ -122,6 +122,155 @@ export function sideSwitch(gameKey, values, onChange, def = values[0]) {
 // For a First / Second / Random switch: does the person move first in this game?
 export const movesFirst = (choice) => (choice === 'random' ? Math.random() < 0.5 : choice !== 'second');
 
+// ---------- Move animations ----------
+// Sitewide Animation speed (Off / Normal / Fast), remembered between visits. site.js copies it to <html data-anim>,
+// which turns off the boards' CSS animations too. Off, or the system's reduced-motion setting, skips them.
+const ANIM_KEY = 'bgs-anim';
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+export const animSpeed = () => { const s = store.get(ANIM_KEY, 'normal'); return ['off', 'fast'].includes(s) ? s : 'normal'; };
+// How long one animation step takes now, in ms (0: don't animate)
+export function animMs(ms) {
+  const s = animSpeed();
+  if (s === 'off' || reducedMotion.matches) return 0;
+  return s === 'fast' ? Math.round(ms * 0.5) : ms;
+}
+const running = new Set();
+function follow(a) {
+  running.add(a);
+  return a.finished.catch(() => {}).then(() => { running.delete(a); });
+}
+// Stop every move animation at once (New game, Undo): elements jump to where they're drawn.
+export function stopAnimations() { [...running].forEach((a) => a.cancel()); running.clear(); }
+export const animating = () => running.size > 0;
+const centre = (x) => {
+  if (x && typeof x.getBoundingClientRect === 'function') { const r = x.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+  return x;
+};
+// SVG shapes grow and shrink about their own centre
+const prep = (el) => { if (el && el.ownerSVGElement) { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; } return el; };
+// screen pixels → the element's own units (SVG pieces are moved in the board's coordinates)
+const unit = (el) => (el instanceof SVGElement && el.ownerSVGElement ? el.ownerSVGElement.getScreenCTM().a || 1 : 1);
+// Slide `el` from where it is now through `points` (cells or {x, y} screen points), `step` ms per leg.
+// `weights` (one per leg) makes some legs longer, e.g. a king flying several squares.
+// The element stays at the last point (the caller then redraws the board with the move made).
+export function slide(el, points, step = 220, weights = null) {
+  const ms = animMs(step);
+  if (!ms || !el || !points.length) return Promise.resolve();
+  const c0 = centre(el), k = unit(el);
+  const w = weights || points.map(() => 1), total = w.reduce((a, b) => a + b, 0);
+  let done = 0;
+  const frames = [{ transform: 'translate(0, 0)', offset: 0 }].concat(points.map((pt, n) => {
+    const c = centre(pt);
+    done += w[n];
+    return { transform: 'translate(' + ((c.x - c0.x) / k).toFixed(2) + 'px, ' + ((c.y - c0.y) / k).toFixed(2) + 'px)', offset: done / total };
+  }));
+  // draw it above the rest of the board: inside an SVG board, move it to the end; otherwise raise it and its cell
+  const raised = el.ownerSVGElement ? [] : [el, el.parentElement].filter(Boolean);
+  if (el.ownerSVGElement) el.parentNode.appendChild(el);
+  const prev = raised.map((x) => [x.style.zIndex, x.style.position]);
+  raised.forEach((x) => { x.style.zIndex = '5'; if (getComputedStyle(x).position === 'static') x.style.position = 'relative'; });
+  const a = el.animate(frames, { duration: ms * total, easing: points.length > 1 ? 'linear' : 'ease-in-out', fill: 'forwards' });
+  return follow(a).then(() => raised.forEach((x, k) => { [x.style.zIndex, x.style.position] = prev[k]; }));
+}
+// Slide `el` (already drawn at its new place) in from `from` (a cell, or a list of cells it passed through):
+// for boards that redraw first, like the lesson boards.
+export function slideIn(el, from, step = 220) {
+  const ms = animMs(step);
+  const path = Array.isArray(from) ? from : [from];
+  if (!ms || !el || !path.length || !path[0]) return Promise.resolve();
+  const c0 = centre(el), k = unit(el);
+  const at = (x) => { const c = centre(x); return { transform: 'translate(' + ((c.x - c0.x) / k).toFixed(2) + 'px, ' + ((c.y - c0.y) / k).toFixed(2) + 'px)' }; };
+  const a = el.animate(path.map(at).concat({ transform: 'translate(0, 0)' }), { duration: ms * path.length, easing: path.length > 1 ? 'linear' : 'ease-in-out' });
+  return follow(a);
+}
+// Fade an element out (a captured piece), leaving it invisible until the board is redrawn.
+export function fadeOut(el, step = 200, after = 0) {
+  const ms = animMs(step);
+  if (!ms || !el) return Promise.resolve();
+  prep(el);
+  return follow(el.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.6)' }], { duration: ms, delay: animMs(after), easing: 'ease-in', fill: 'forwards' }));
+}
+// A piece or stone appearing where it was placed.
+export function popIn(el, step = 200) {
+  const ms = animMs(step);
+  if (!ms || !el) return Promise.resolve();
+  prep(el);
+  return follow(el.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 1, transform: 'scale(1.08)', offset: 0.7 }, { opacity: 1, transform: 'scale(1)' }], { duration: ms, easing: 'ease-out' }));
+}
+// Light up `els` one after another (a winning line): each gets a short pulse, `step` ms apart.
+export function lightUp(els, step = 90) {
+  const ms = animMs(step);
+  if (!ms) return Promise.resolve();
+  return Promise.all(els.map((el, k) => el && follow(prep(el).animate([{ transform: 'scale(1)' }, { transform: 'scale(1.25)', filter: 'brightness(1.35)' }, { transform: 'scale(1)' }], { duration: Math.max(ms * 3, 240), delay: k * ms, easing: 'ease-out' }))));
+}
+// Draw an SVG line in (Dots and Boxes) and fade a shape in (a claimed box).
+export function drawIn(el, step = 200) {
+  const ms = animMs(step);
+  if (!ms || !el || !el.getTotalLength) return Promise.resolve();
+  const len = el.getTotalLength();
+  return follow(el.animate([{ strokeDasharray: len + ' ' + len, strokeDashoffset: len }, { strokeDasharray: len + ' ' + len, strokeDashoffset: 0 }], { duration: ms, easing: 'ease-out' }));
+}
+export function fadeIn(el, step = 220) {
+  const ms = animMs(step);
+  if (!ms || !el) return Promise.resolve();
+  return follow(el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ms, easing: 'ease-out' }));
+}
+export const pause = (ms) => new Promise((r) => setTimeout(r, animMs(ms)));
+// Drop the animations on these elements (a board that reuses its cells, once the move is drawn)
+export function settle(els) { els.forEach((el) => el && el.getAnimations().forEach((x) => x.cancel())); }
+// Moves play one after another, so one that arrives mid-animation (an online move, the computer's reply)
+// waits its turn. run(show, make): once earlier moves are done, show(live) animates the move on the board as
+// drawn (return false to drop it), then make(result) makes it, with busy() already false so the board it
+// draws lets the next player move. live() turns false when reset() is called (New game, Undo): a move cut
+// short isn't made. reset() also stops the animations.
+export function moveQueue() {
+  let chain = Promise.resolve(), gen = 0, waiting = 0;
+  return {
+    run(show, make) {
+      const g = gen, live = () => g === gen;
+      waiting++;
+      let counted = true;
+      const done = () => { if (counted) { counted = false; waiting--; } };
+      chain = chain.then(async () => {
+        if (!live()) return done();
+        const v = await show(live);
+        done();
+        if (live() && v !== false && make) make(v);
+      }).catch((e) => { done(); console.error(e); });
+      return chain;
+    },
+    reset() { gen++; stopAnimations(); },
+    busy: () => waiting > 0
+  };
+}
+
+// The Animation speed switch, added under the other controls on game pages that use these animations.
+export function animationSwitch() {
+  const panel = document.querySelector('[data-max-root] .panel');
+  if (!panel || panel.querySelector('[data-anim]')) return;
+  const segs = panel.querySelectorAll(':scope > .seg, :scope > div > .seg');
+  const after = segs.length ? segs[segs.length - 1] : null;
+  const label = document.createElement('p');
+  label.className = 'seg-label';
+  label.textContent = 'Animation speed';
+  const seg = document.createElement('div');
+  seg.className = 'seg';
+  seg.setAttribute('role', 'group');
+  seg.setAttribute('aria-label', 'Animation speed');
+  seg.innerHTML = '<button type="button" data-anim="off">Off</button><button type="button" data-anim="normal">Normal</button><button type="button" data-anim="fast">Fast</button>';
+  const paint = () => seg.querySelectorAll('[data-anim]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.anim === animSpeed())));
+  seg.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-anim]');
+    if (!b) return;
+    store.set(ANIM_KEY, b.dataset.anim);
+    document.documentElement.dataset.anim = b.dataset.anim;
+    if (b.dataset.anim === 'off') stopAnimations();
+    paint();
+  });
+  paint();
+  if (after) { after.after(seg); after.after(label); } else { const ng = panel.querySelector('#new-game'); panel.insertBefore(label, ng); panel.insertBefore(seg, ng); }
+}
+
 // ---------- Maximise: the board fills the screen ----------
 const MAX_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 const MIN_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';

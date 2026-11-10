@@ -2,7 +2,7 @@
 import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, fadeOut, popIn } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -21,6 +21,8 @@ const getOpp = L ? () => 'cpu' : opponentSwitch('chess', () => newGame(), { you:
 const cpuName = L ? L.bot.name : 'Computer';
 const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('chess-board');
+animationSwitch();
+const Q = moveQueue();   // moves animate one at a time
 
 let mySide = L ? L.side : store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
 let gameLog = [];   // every move this game, for the post-game review
@@ -44,7 +46,7 @@ sqEls.forEach((b, i) => b.addEventListener('click', () => tap(viewToSq(i))));
 const flipped = () => (onlineOn ? ol.mySeat() === 1 : vsCpu() && mySide === 'b');
 const viewToSq = (v) => (flipped() ? 63 - v : v);
 const sqToView = (s) => (flipped() ? 63 - s : s);
-const myTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : (!vsCpu() || S.turn === mySide));
+const myTurn = () => !over && !busy && !Q.busy() && (onlineOn ? ol.myTurn() : (!vsCpu() || S.turn === mySide));
 
 function render() {
   const dests = sel != null ? legalNow.filter((m) => m.from === sel).map((m) => m.to) : [];
@@ -108,7 +110,23 @@ function tap(i) {
   render();
 }
 
+// Slide the piece (and the rook when castling) on the board as drawn; fade a captured piece, also en passant.
+function showMove(m) {
+  const at = (i) => sqEls[sqToView(i)].querySelector('svg');
+  const cell = (i) => sqEls[sqToView(i)];
+  const jobs = [slide(at(m.from), [cell(m.to)], 240)];
+  if (m.captured) jobs.push(fadeOut(at(m.ep ? m.to + (S.turn === 'w' ? 8 : -8) : m.to), 240));
+  if (m.castle) {
+    const row = m.from >> 3, [rf, rt] = m.castle === 'k' ? [row * 8 + 7, row * 8 + 5] : [row * 8, row * 8 + 3];
+    jobs.push(slide(at(rf), [cell(rt)], 240));
+  }
+  return Promise.all(jobs);
+}
 function doMove(m, remote = false) {
+  sel = null; promo = null; $('promo').hidden = true;
+  Q.run(() => showMove(m), () => makeMove(m, remote));
+}
+function makeMove(m, remote) {
   gameLog.push({ position: C.toFen(S), side: S.turn, move: C.sqName(m.from) + C.sqName(m.to) + (m.promo ? m.promo.toLowerCase() : '') });
   if (!started) { started = true; track('game_start', { game: 'chess', opponent: onlineOn ? 'online' : getOpp(), level: getLevel() }); L?.start(); }
   history.push({ S, last, sans: sans.slice(), keys: keys.slice() });
@@ -121,6 +139,7 @@ function doMove(m, remote = false) {
   const st = C.status(S, keys);
   if (onlineOn && !remote) ol.send(C.sqName(m.from) + C.sqName(m.to) + (m.promo ? m.promo.toLowerCase() : ''), S.turn === 'w' ? 0 : 1, st.over);
   render();
+  if (m.promo) popIn(sqEls[sqToView(m.to)].querySelector('svg'), 260);
   if (st.over) return finish(st);
   if (onlineOn) { if (C.inCheck(S)) { setStatus('Check!', 'neutral'); play('error'); } return; }
   if (C.inCheck(S)) { setStatus('Check!', 'neutral'); play('error'); }
@@ -179,6 +198,7 @@ function finish(st) {
 function resign() { if (!over && started) finish({ over: true, result: mySide === 'w' ? 'b' : 'w', reason: 'resignation' }); }
 function save() { if (started && !over && !onlineOn && !L) store.set(SAVE, { opp: getOpp(), side: mySide, fen: C.toFen(S), sans, keys, last }); }
 function resume() {
+  Q.reset();
   const g = store.get(SAVE, null);
   if (L || !g || g.opp !== getOpp() || (vsCpu() && g.side !== mySide) || typeof g.fen !== 'string') return false;
   gameLog = [];   // moves before a refresh are not kept, so a review covers the moves from here on
@@ -190,6 +210,7 @@ function resume() {
   return true;
 }
 function newGame() {
+  Q.reset();
   if (L) { L.newGame(); mySide = L.side; }
   gameLog = []; hideReview();
   S = C.fromFen(C.START); sel = null; last = null; sans = []; keys = [C.key(S)]; history = []; over = false; busy = false; started = false; promo = null;
@@ -207,7 +228,7 @@ document.querySelectorAll('[data-promo]').forEach((b) => b.addEventListener('cli
   if (m) doMove(m);
 }));
 $('undo').addEventListener('click', () => {
-  if (!history.length || busy || over || L) return;
+  if (!history.length || busy || over || L || Q.busy()) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   if (vsCpu() && h.S.turn !== mySide && history.length) h = history.pop();
@@ -232,10 +253,13 @@ $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(
 $('new-game').classList.add('online-hide');
 ol = online('chess', {
   reset: () => { newGame(); },
-  apply: (t) => {
+  // an online move waits for any move still animating, then is found on the board as it is then
+  apply: (t) => Q.run(async () => {
     const m = legalNow.find((x) => C.sqName(x.from) + C.sqName(x.to) + (x.promo ? x.promo.toLowerCase() : '') === t);
-    if (m) doMove(m, true);
-  },
+    if (!m) return false;
+    await showMove(m);
+    return m;
+  }, (m) => makeMove(m, true)),
   seatName: (s) => (s === 0 ? 'White' : 'Black'),
   over: () => over,
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }

@@ -1,7 +1,7 @@
 // Mancala (Kalah rules): sow seeds round the board, land in your store for another turn, capture from empty pits.
 // pits[0..5] yours (left to right), [6] your store, [7..12] the opponent's (right to left along the top), [13] their store.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, animMs, slide, stopAnimations } from './game-ui.js';
 import { ladder } from './ladder.js';
 import { online, roomInLink } from './online.js';
 import { offerReview, hideReview } from './review.js';
@@ -31,6 +31,7 @@ const mySide = () => (onlineOn ? ol.mySeat() : 0);   // the side whose pits are 
 // Against the computer you move first, second or either at random. Your pits stay along the bottom.
 const getSide = L ? () => 'first' : sideSwitch('mancala', ['first', 'second', 'random'], () => newGame());
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
+animationSwitch();
 
 let B, turn, over, busy, started, lastPit;
 // positions before each move, for Undo (vs the computer it takes back your move and its replies)
@@ -77,18 +78,59 @@ function render() {
   $('row-cpu').classList.toggle('turn-cpu', turn === 1 && !over);
 }
 
+// ---------- Seeds on the move ----------
+const boardEl = document.querySelector('.mc-board');
+const pitEl = (i) => pitEls.find((el) => Number(el.dataset.i) === i);
+// `n` seeds fly from one pit (or store) to another, a few at most, then disappear into it.
+async function fly(from, to, n, ms) {
+  const box = boardEl.getBoundingClientRect(), a = pitEl(from).getBoundingClientRect();
+  const ghosts = Array.from({ length: Math.min(n, 8) }, (_, k) => {
+    const g = document.createElement('i');
+    g.className = 'mc-fly';
+    g.style.setProperty('--h', String((from * 53 + k * 47) % 360));
+    g.style.left = (a.left - box.left + a.width / 2 + (k % 3 - 1) * a.width * 0.12) + 'px';
+    g.style.top = (a.top - box.top + a.height / 2 + (Math.floor(k / 3) - 1) * a.height * 0.12) + 'px';
+    boardEl.appendChild(g);
+    return g;
+  });
+  await Promise.all(ghosts.map((g) => slide(g, [pitEl(to)], ms)));
+  ghosts.forEach((g) => g.remove());
+}
+const clearFlying = () => boardEl.querySelectorAll('.mc-fly').forEach((g) => g.remove());
+
 async function moveFrom(i) {
   if (over || busy) return;
   if (!started) { started = true; track('game_start', { game: 'mancala', opponent: getOpp() }); L?.start(); }
   busy = true;
   const p = turn;
-  // animate the sowing seed by seed
+  // sow seed by seed: each one hops from pit to pit and drops in
   let n = B[i]; B[i] = 0; let j = i;
-  const step = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 110;
+  const step = animMs(150);
   const g = gameNo;
-  while (n) { j = (j + 1) % 14; if (j === STORE[1 - p]) continue; B[j]++; n--; lastPit = j; if (step) { render(); play('select'); await wait(step); if (g !== gameNo) return; } }
+  if (step) render();
+  while (n) {
+    const from = j;
+    j = (j + 1) % 14;
+    if (j === STORE[1 - p]) continue;
+    if (step) { await fly(from, j, 1, 150); if (g !== gameNo) return; }
+    B[j]++; n--; lastPit = j;
+    if (step) { render(); play('select'); }
+  }
   // apply captures and the end of game using the rules function on the starting board
   const r = sow(prevBoard, p, i);
+  if (step) {
+    // a capture (the last seed and the seeds opposite) and the end-of-game sweep: the seeds fly to their store
+    const trips = [];
+    B.forEach((v, k) => { if (!STORE.includes(k) && r.b[k] < v) trips.push([k, v - r.b[k], r.captured && (k === r.last || k === 12 - r.last) ? STORE[p] : STORE[k <= 5 ? 0 : 1]]); });
+    if (trips.length) {
+      await new Promise((ok) => setTimeout(ok, step));
+      if (g !== gameNo) return;
+      trips.forEach(([k]) => { B[k] = r.b[k]; });
+      render();
+      await Promise.all(trips.map(([k, cnt, to]) => fly(k, to, cnt, 380)));
+      if (g !== gameNo) return;
+    }
+  }
   B = r.b; lastPit = r.last;
   busy = false;
   const who = onlineOn ? (p === mySide() ? 'You' : 'Your friend') : p === 0 && vsCpu() ? 'You' : (vsCpu() ? 'The computer' : p === 0 ? 'Player 1' : 'Player 2');
@@ -170,6 +212,7 @@ function newGame() {
   L?.newGame();
   gameLog = []; history = []; pending.length = 0; hideReview();
   gameNo++;
+  stopAnimations(); clearFlying();
   B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1;
   if (vsCpu() && !movesFirst(getSide())) turn = 1;   // the computer sows first
   $('result').hidden = true;

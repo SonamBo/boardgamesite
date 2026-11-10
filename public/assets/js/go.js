@@ -1,7 +1,7 @@
 // Go (9×9): place stones to surround territory and capture. Two passes in a row end the game.
 import * as G from './go-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, animationSwitch, moveQueue, popIn, fadeOut, settle } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake, rng, seedFrom } from './solo.js';
@@ -17,6 +17,8 @@ const vsCpu = () => getOpp() === 'cpu';
 const getSide = sideSwitch('go', ['black', 'white'], () => newGame());
 let me = 1;   // your colour against the computer in this game: 1 black, 2 white
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
+animationSwitch();
+const Q = moveQueue();   // moves animate one at a time
 const boardEl = $('go-board');
 
 let B, prev, turn, caps, passes, over, busy, started, last, history, final, onlineOn = roomInLink, ol = null;
@@ -61,12 +63,29 @@ function render() {
 }
 
 function tap(i) {
-  if (over || busy || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
+  if (over || busy || Q.busy() || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
   const r = G.play(B, i, turn, prev);
   if (!r) { shake(pts[i], play); setStatus(B[i] ? 'That point is taken' : 'Not allowed there: it would be suicide or repeat the position (ko)', 'neutral'); return; }
   move(i, r);
 }
+// Show the stone arriving, then any stones it captures fading away; then make the move.
 function move(i, r, remote = false) {
+  Q.run(async (live) => {
+    const col = turn;
+    r = r || G.play(B, i, col, prev);   // an online move is checked against the board as it is by now
+    if (!r) return false;
+    const gone = [];
+    B.forEach((v, k) => { if (v && !r.b[k]) gone.push(k); });
+    const keep = B;
+    B = B.slice(); B[i] = col;   // drawn with the new stone, before the captures come off
+    render();
+    B = keep;
+    await popIn(pts[i], 200);
+    if (gone.length && live()) await Promise.all(gone.map((k) => fadeOut(pts[k], 240)));
+    return gone;
+  }, (gone) => { settle(gone.map((k) => pts[k])); makeMove(i, r, remote); });
+}
+function makeMove(i, r, remote) {
   if (!started) { started = true; track('game_start', { game: 'go', opponent: getOpp() }); }
   history.push({ B, prev, turn, caps: caps.slice(), last, passes });
   prev = B; B = r.b; caps[turn] += r.captured; last = i; passes = 0;
@@ -140,6 +159,7 @@ function finish() {
 
 function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), me, B, prev, turn, caps, last, passes }); }
 function resume() {
+  Q.reset();
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== N * N) return false;
   // a game against the computer reopens only with the colour it was played with
@@ -153,6 +173,7 @@ function resume() {
 }
 function newGame() {
   clearTimeout(cpuTimer);
+  Q.reset();
   B = new Array(N * N).fill(0); prev = null; turn = 1; caps = [0, 0, 0]; passes = 0; over = false; busy = false; started = false; last = -1; history = []; final = null;
   me = getSide() === 'white' ? 2 : 1;
   $('result').hidden = true;
@@ -162,9 +183,9 @@ function newGame() {
   if (cpuTurnNow()) return cpuTurn();
   setStatus(turnText() + ': place a stone on any point', '');
 }
-$('pass').addEventListener('click', () => { if (!over && !busy && (onlineOn ? ol.myTurn() : !cpuTurnNow())) pass(); });
+$('pass').addEventListener('click', () => { if (!over && !busy && !Q.busy() && (onlineOn ? ol.myTurn() : !cpuTurnNow())) pass(); });
 $('undo').addEventListener('click', () => {
-  if (!history.length || busy || over) return;
+  if (!history.length || busy || over || Q.busy()) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   while (vsCpu() && h.turn !== me && history.length) h = history.pop();
@@ -174,6 +195,7 @@ $('undo').addEventListener('click', () => {
 });
 $('resign').addEventListener('click', () => {
   if (over || busy) return;
+  Q.reset();
   over = true; store.set(SAVE, null); render();
   if (vsCpu()) { score.add('lose'); showResult('lose', 'You resigned', 'The computer wins this one.'); }
   else showResult('win', (turn === 1 ? 'White' : 'Black') + ' wins', name(turn) + ' resigned.');
@@ -184,9 +206,8 @@ $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(
 ol = online('go', {
   reset: () => newGame(),
   apply: (t) => {
-    if (t === 'p') return pass(true);
-    const i = Number(t), r = G.play(B, i, turn, prev);
-    if (r) move(i, r, true);
+    if (t === 'p') return Q.run(() => true, () => pass(true));
+    move(Number(t), null, true);
   },
   seatName: (s) => (s === 0 ? 'Black (first)' : 'White'),
   over: () => over,

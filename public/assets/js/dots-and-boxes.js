@@ -1,6 +1,6 @@
 // Dots and Boxes: take turns drawing a line between two dots. Close a box to claim it and go again.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, drawIn, fadeIn, animating, stopAnimations } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -14,7 +14,8 @@ const getLevel = levelSwitch('dots', () => {});
 const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
-const humanTurn = () => !busy && !over && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
+animationSwitch();
+const humanTurn = () => !busy && !over && !animating() && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
 // Against the computer you draw the first line, the second, or either at random. You are always player 1.
 const getSide = sideSwitch('dots', ['first', 'second', 'random'], () => newGame());
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
@@ -88,7 +89,7 @@ function render() {
   let h = '';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
     const o = owner[r * n + c];
-    if (o) h += '<rect x="' + (X(c) + 1) + '" y="' + (Y(r) + 1) + '" width="' + (g - 2) + '" height="' + (g - 2) + '" rx="2" class="bx p' + o + '"/><text x="' + (X(c) + g / 2) + '" y="' + (Y(r) + g / 2 + 2.4) + '" class="bxl">' + (onlineOn ? (o === ol.mySeat() + 1 ? 'You' : 'Them') : vsCpu() ? (o === 1 ? 'You' : 'CPU') : 'P' + o) + '</text>';
+    if (o) h += '<rect x="' + (X(c) + 1) + '" y="' + (Y(r) + 1) + '" width="' + (g - 2) + '" height="' + (g - 2) + '" rx="2" class="bx p' + o + '" data-b="' + (r * n + c) + '"/><text x="' + (X(c) + g / 2) + '" y="' + (Y(r) + g / 2 + 2.4) + '" class="bxl">' + (onlineOn ? (o === ol.mySeat() + 1 ? 'You' : 'Them') : vsCpu() ? (o === 1 ? 'You' : 'CPU') : 'P' + o) + '</text>';
   }
   for (const id of allLines()) {
     const [t, r, c] = [id[0], +id.split(':')[1], +id.split(':')[2]];
@@ -110,13 +111,20 @@ function render() {
 async function move(id, p, remote = false) {
   history.push({ lines: new Set(lines), owner: owner.slice(), turn, scores: scores.slice(), lastLine });
   if (!started) { started = true; track('game_start', { game: 'dots-and-boxes', opponent: getOpp(), size: n }); }
+  const before = owner.slice();
   const closed = draw(id, p);
   scores[p] += closed;
   play(closed ? 'found' : 'place');
   if (onlineOn && !remote) ol.send(id, (closed ? p : 3 - p) - 1, lines.size === allLines().length);
-  if (lines.size === allLines().length) { render(); return finish(); }
+  // draw the new line in, then colour any boxes it closed
+  const show = () => {
+    drawIn(svg.querySelector('.ln.last'), 200);
+    owner.forEach((o, k) => { if (o && !before[k]) fadeIn(svg.querySelector('.bx[data-b="' + k + '"]'), 260); });
+  };
+  if (lines.size === allLines().length) { render(); show(); return finish(); }
   if (!closed) turn = 3 - p;
   render();
+  show();
   if (onlineOn) { setStatus(ol.myTurn() ? (closed && p === ol.mySeat() + 1 ? 'You closed a box: go again' : 'Your turn') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   const who = vsCpu() ? (turn === 1 ? 'Your' : 'Computer’s') : (turn === 1 ? 'Player 1’s' : 'Player 2’s');
   setStatus(closed ? (p === 1 && vsCpu() ? 'You closed ' : (vsCpu() ? 'The computer closed ' : 'Player ' + p + ' closed ')) + (closed === 1 ? 'a box' : 'two boxes') + ': go again' : who + ' turn', turn === 2 ? 'cpu' : '');
@@ -152,6 +160,7 @@ function finish() {
 
 function newGame() {
   gameNo++;
+  stopAnimations();
   lines = new Set(); owner = new Array(n * n).fill(0); turn = 1; history = []; scores = [0, 0, 0]; over = false; busy = false; started = false; lastLine = null;
   if (vsCpu() && !movesFirst(getSide())) turn = 2;   // the computer draws first
   $('result').hidden = true;
