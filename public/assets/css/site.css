@@ -1828,6 +1828,9 @@ body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .
 .dch { display: flex; flex-direction: column; gap: 16px; }
 .pz-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .pz-tabs button[aria-selected="true"] { background: var(--surface-2); color: var(--text); }
+/* long game names ("Russian Checkers") wrap inside their tab instead of pushing the page sideways on phones */
+.pz-tabs { max-width: 100%; }
+.pz-tabs button { min-width: 0; white-space: normal; line-height: 1.15; }
 .pz-tick { color: var(--good); font-weight: 700; }
 .pz-count { font-size: 14px; }
 .pz-share-text { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--side); border: 1px solid var(--border); font: 500 15px/1.5 var(--body); white-space: pre-wrap; color: var(--text); }
