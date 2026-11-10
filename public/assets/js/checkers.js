@@ -322,7 +322,8 @@ function resume() {
 
 document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
 undoBtn.addEventListener('click', () => {
-  if (busy || over || onlineOn || !history.length || Q.busy()) return;
+  // a rated (ladder) game has no take-backs: Undo is hidden there, and does nothing if reached anyway
+  if (busy || over || onlineOn || L || !history.length || Q.busy()) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   while (!friend() && h.turn !== me && history.length) h = history.pop();
