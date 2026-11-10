@@ -1,7 +1,7 @@
 // Mancala (Kalah rules): sow seeds round the board, land in your store for another turn, capture from empty pits.
 // pits[0..5] yours (left to right), [6] your store, [7..12] the opponent's (right to left along the top), [13] their store.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, animMs, slide, stopAnimations } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, animMs, slide, stopAnimations, hintButton, askResume, modeName } from './game-ui.js';
 import { ladder } from './ladder.js';
 import { online, roomInLink } from './online.js';
 import { offerReview, hideReview } from './review.js';
@@ -32,8 +32,17 @@ const mySide = () => (onlineOn ? ol.mySeat() : 0);   // the side whose pits are 
 const getSide = L ? () => 'first' : sideSwitch('mancala', ['first', 'second', 'random'], () => newGame());
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
 animationSwitch();
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => !L && vsCpu() && getLevel() === 'easy',
+  find: () => {
+    if (!humanCanMove()) return null;
+    return [pitEls.find((el) => Number(el.dataset.i) === pick(B, 0, 'hard'))];
+  }
+});
 
 let B, turn, over, busy, started, lastPit;
+let sown = -1;   // the pit the last move was sown from (lastPit: where its last seed landed)
 // positions before each move, for Undo (vs the computer it takes back your move and its replies)
 let history = [];
 // online: moves from your friend wait here while a move is still being sown
@@ -66,6 +75,7 @@ function render() {
     const mine = own(turn, i) && B[i] > 0 && humanCanMove();
     el.classList.toggle('can', mine);
     el.classList.toggle('last', i === lastPit);
+    el.classList.toggle('sown', i === sown && i !== lastPit);
     if (el.tagName === 'BUTTON') el.disabled = !mine;
     const owner = names[i <= 6 ? 0 : 1];
     const what = STORE.includes(i) ? owner + ' store' : owner + ' pit ' + (i <= 5 ? i + 1 : i - 6);
@@ -103,6 +113,7 @@ async function moveFrom(i) {
   if (!started) { started = true; track('game_start', { game: 'mancala', opponent: getOpp() }); L?.start(); }
   busy = true;
   const p = turn;
+  sown = i;
   // sow seed by seed: each one hops from pit to pit and drops in
   let n = B[i]; B[i] = 0; let j = i;
   const step = animMs(150);
@@ -164,7 +175,9 @@ const turnText = () => (onlineOn ? (ol.myTurn() ? 'Your turn: pick a pit' : 'Wai
 async function cpuTurn() {
   const g = gameNo;
   busy = true; render();
-  await wait(700);
+  // keep news like a capture or an extra turn on screen; otherwise say the computer is thinking
+  if (/’s turn$/.test($('status').textContent)) setStatus(cpuName + ' is thinking…', 'cpu');
+  await wait(600);
   if (g !== gameNo) return;
   busy = false;
   if (over) return;
@@ -203,9 +216,15 @@ function resume() {
   if (L || !g || g.opp !== getOpp() || !Array.isArray(g.B) || g.B.length !== 14) return false;
   // a game against the computer reopens only with the same First / Second / Random choice
   if (vsCpu() && (g.side || 'first') !== getSide()) return false;
-  B = g.B; turn = g.turn | 0; over = false; busy = false; started = true; lastPit = -1;
-  render(); setStatus('Welcome back. ' + turnText(), '');
-  if (vsCpu() && turn === 1) cpuTurn();
+  B = g.B; turn = g.turn | 0; over = false; busy = false; started = true; lastPit = -1; sown = -1;
+  busy = true; render();   // the saved game shows behind the question
+  const order = { first: 'you go first', second: 'you go second', random: 'random order' }[getSide()];
+  askResume(modeName(!vsCpu(), getLevel(), vsCpu() ? order : '')).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    render(); setStatus(turnText(), turn && vsCpu() ? 'cpu' : '');
+    if (vsCpu() && turn === 1) cpuTurn();
+  });
   return true;
 }
 function newGame() {
@@ -213,7 +232,8 @@ function newGame() {
   gameLog = []; history = []; pending.length = 0; hideReview();
   gameNo++;
   stopAnimations(); clearFlying();
-  B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1;
+  hint.reset();
+  B = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]; turn = 0; over = false; busy = false; started = false; lastPit = -1; sown = -1;
   if (vsCpu() && !movesFirst(getSide())) turn = 1;   // the computer sows first
   $('result').hidden = true;
   store.set(SAVE, null);
@@ -237,7 +257,7 @@ undoBtn.addEventListener('click', () => {
   let h = history.pop();
   while (vsCpu() && h.turn !== 0 && history.length) h = history.pop();
   if (vsCpu() && h.turn !== 0) { history.push(h); return; }
-  B = h.B; turn = h.turn; lastPit = h.lastPit; gameLog.length = h.log;
+  B = h.B; turn = h.turn; lastPit = h.lastPit; sown = -1; gameLog.length = h.log;
   play('card');
   save();
   render();

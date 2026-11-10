@@ -17,6 +17,8 @@ export function setStatus(text, kind) {
 }
 
 export function showResult(kind, text, sub) {
+  // a game against the computer where hints were used says so (the record counts it as usual)
+  if (hintsUsed) sub = (sub ? sub + ' ' : '') + (hintsUsed === 1 ? '1 hint used.' : hintsUsed + ' hints used.');
   $('result').hidden = false;
   $('result-img').src = MASCOT[kind];
   $('result-text').textContent = text;
@@ -67,6 +69,160 @@ export function record(gameKey, { draws = true } = {}) {
       paint();
     }
   };
+}
+
+// ---------- Show hint (Easy, against the computer) ----------
+// A button beside Undo. shown(): whether hints are on offer (Easy, against the computer, not online).
+// find(): the elements to light up for a good move, a message to show instead, or null when it isn't
+// your turn. Hints don't change the record, but the result says how many were used.
+let hintsUsed = 0;
+export const hintCount = () => hintsUsed;
+const HINT_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.1V16h5v-.1c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3z"/></svg>';
+export function hintButton({ shown, find }) {
+  const undo = $('undo');
+  if (!undo || $('hint')) return { reset() {}, paint() {} };
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = 'hint';
+  btn.className = undo.className.replace(/\bonline-hide\b/, '').trim() + ' online-hide';
+  btn.innerHTML = (undo.classList.contains('tool-btn') ? HINT_ICON : '') + 'Show hint';
+  undo.after(btn);
+  let lit = [], timer = 0;
+  const unlight = () => { lit.forEach((el) => el.classList.remove('hinted')); lit = []; };
+  const paint = () => { btn.hidden = !shown(); };
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-level], [data-opponent]')) setTimeout(paint); });
+  btn.addEventListener('click', () => {
+    const got = find();
+    if (got == null) { setStatus('Hints are for your turn', 'neutral'); return; }
+    hintsUsed++;
+    unlight(); clearTimeout(timer);
+    if (typeof got === 'string') { setStatus(got, 'neutral'); return; }
+    lit = got.filter(Boolean);
+    lit.forEach((el) => el.classList.add('hinted'));
+    setStatus('Hint: try the highlighted move', 'neutral');
+    timer = setTimeout(unlight, 3000);
+  });
+  setTimeout(paint);   // once the game script has set itself up
+  return { reset() { hintsUsed = 0; unlight(); paint(); }, paint };
+}
+
+// ---------- Move list, and a replay once the game is over ----------
+// A "Moves" box under the players card. set(names) shows the moves so far (call it after every move);
+// end() offers the replay, stepping back and forward through the game: show(k) draws the position after
+// k moves, and show(null) the game as it ended. reset() for a new game.
+export function moveHistory({ show }) {
+  const players = document.querySelector('[data-max-root] .panel .players');
+  if (!players) return { set() {}, end() {}, reset() {}, replaying: () => false };
+  const box = document.createElement('div');
+  box.className = 'panel-box card mh';
+  box.innerHTML = '<p class="seg-label" style="margin:0">Moves</p><ol class="cs-moves mh-list" aria-label="Moves so far"></ol>' +
+    '<div class="mh-replay" hidden><p class="seg-label" style="margin:0">Replay</p><div class="mh-row">' +
+    '<button type="button" class="tool-btn" data-mh="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back</button>' +
+    '<span class="mh-at" aria-live="polite"></span>' +
+    '<button type="button" class="tool-btn" data-mh="1">Forward<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div></div>';
+  players.after(box);
+  const list = box.querySelector('ol'), bar = box.querySelector('.mh-replay'), atEl = box.querySelector('.mh-at');
+  let names = [], at = null;   // at: the move being shown in the replay (null: not replaying)
+  function paint() {
+    let h = '';
+    for (let k = 0; k < names.length; k += 2) {
+      const cell = (j) => (names[j] == null ? '' : '<button type="button" class="mh-mv' + (at != null && j === at - 1 ? ' on' : '') + '" data-k="' + (j + 1) + '"' + (at == null ? ' tabindex="-1" disabled' : '') + '>' + names[j] + '</button>');
+      h += '<li><span>' + (k / 2 + 1) + '.</span> ' + cell(k) + ' ' + cell(k + 1) + '</li>';
+    }
+    list.innerHTML = h;
+    if (at == null) list.scrollTop = list.scrollHeight;
+    else list.querySelector('.on')?.scrollIntoView({ block: 'nearest' });
+    bar.hidden = at == null;
+    if (at != null) {
+      atEl.textContent = at === 0 ? 'Start' : 'Move ' + at + ' of ' + names.length;
+      bar.querySelector('[data-mh="-1"]').disabled = at === 0;
+      bar.querySelector('[data-mh="1"]').disabled = at === names.length;
+    }
+  }
+  const go = (k) => { at = Math.max(0, Math.min(names.length, k)); paint(); show(at === names.length ? null : at); };
+  bar.addEventListener('click', (e) => { const b = e.target.closest('[data-mh]'); if (b) go(at + Number(b.dataset.mh)); });
+  list.addEventListener('click', (e) => { const b = e.target.closest('.mh-mv'); if (b && at != null) go(Number(b.dataset.k)); });
+  box.addEventListener('keydown', (e) => { if (at != null && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { e.preventDefault(); go(at + (e.key === 'ArrowLeft' ? -1 : 1)); } });
+  return {
+    set(next) { if (at != null) return; if (next.length !== names.length || next.some((x, k) => x !== names[k])) { names = next.slice(); paint(); } },
+    end() { if (names.length) { at = names.length; paint(); } },
+    reset() { const was = at != null; at = null; names = []; paint(); if (was) show(null); },
+    replaying: () => at != null && at !== names.length
+  };
+}
+
+// ---------- Resume a saved game, or start a new one ----------
+// A card over the board, which shows the saved game behind it: "Resume your game? Computer, Medium, you
+// play black" with Resume game / New game. Resolves true to resume.
+export const modeName = (friend, level, extra = '') => (friend ? '2 players' : 'Computer, ' + level[0].toUpperCase() + level.slice(1) + (extra ? ', ' + extra : ''));
+export function askResume(what) {
+  return new Promise((done) => {
+    const col = document.querySelector('[data-max-root] .board-col');
+    if (!col) return done(true);
+    if (getComputedStyle(col).position === 'static') col.style.position = 'relative';
+    const card = document.createElement('div');
+    card.className = 'resume-card';
+    card.setAttribute('role', 'dialog');
+    card.setAttribute('aria-label', 'Resume your game?');
+    card.innerHTML = '<div class="card"><p class="big">Welcome back</p><p class="text-2">Resume your game?<br><b></b></p>' +
+      '<div class="resume-btns"><button type="button" class="btn btn-gold raised" data-r="1">Resume game</button><button type="button" class="btn btn-outline" data-r="0">New game</button></div></div>';
+    card.querySelector('b').textContent = what;
+    col.appendChild(card);
+    card.querySelector('[data-r="1"]').focus({ preventScroll: true });
+    const close = (ok) => { card.remove(); document.removeEventListener('click', other, true); done(ok); };
+    card.addEventListener('click', (e) => { const b = e.target.closest('[data-r]'); if (b) close(b.dataset.r === '1'); });
+    // choosing another opponent, side or board, or New game, answers "New game"
+    const other = (e) => { if (e.target.closest('[data-opponent], [data-side], [data-hsize], [data-dsize], #new-game')) setTimeout(() => close(false)); };
+    document.addEventListener('click', other, true);
+  });
+}
+
+// ---------- Tap to confirm (boards with small points: Hex, Dots and Boxes, Five in a Row) ----------
+// With it on, the first tap shows where your stone or line would go and the second tap on the same spot
+// places it. On by default on touch screens; the choice is remembered (bgs-tap-confirm).
+const CONFIRM_KEY = 'bgs-tap-confirm';
+export function tapConfirm() {
+  const panel = document.querySelector('[data-max-root] .panel');
+  let on = store.get(CONFIRM_KEY, matchMedia('(pointer: coarse)').matches ? 'on' : 'off') === 'on';
+  let pending = null, shown = null;
+  const clear = () => { if (shown) shown.classList.remove('preview', 'pv1', 'pv2'); pending = null; shown = null; };
+  if (panel && !panel.querySelector('[data-confirm]')) {
+    const segs = panel.querySelectorAll(':scope > .seg, :scope > div > .seg');
+    const after = segs[segs.length - 1];
+    const label = document.createElement('p');
+    label.className = 'seg-label';
+    label.textContent = 'Tap to confirm';
+    const seg = document.createElement('div');
+    seg.className = 'seg';
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Tap to confirm: tap once to preview, again to place');
+    seg.innerHTML = '<button type="button" data-confirm="off">Off</button><button type="button" data-confirm="on">On</button>';
+    const paint = () => seg.querySelectorAll('[data-confirm]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.confirm === 'on') === on)));
+    seg.addEventListener('click', (e) => { const b = e.target.closest('[data-confirm]'); if (!b) return; on = b.dataset.confirm === 'on'; store.set(CONFIRM_KEY, on ? 'on' : 'off'); clear(); paint(); });
+    paint();
+    if (after) { after.after(seg); after.after(label); }
+  }
+  return {
+    // true: place now. false: this tap only showed the preview on `el`, for player `who` (1 or 2)
+    ok(id, el, who) {
+      if (!on || pending === id) { clear(); return true; }
+      clear();
+      pending = id; shown = el;
+      if (el) el.classList.add('preview', 'pv' + who);
+      setStatus('Tap again to place it there', '');
+      return false;
+    },
+    clear
+  };
+}
+
+// ---------- Captured pieces, under each player (as on the Chess page) ----------
+// el: <div class="pc-cap">; n pieces of the colour `cls` ('ck-gold', 'ck-black', 'nm-gold', 'nm-ivory').
+export function showCaptures(el, n, cls, label) {
+  if (!el) return;
+  const html = ('<i class="' + cls + '"></i>').repeat(Math.max(0, n));
+  if (el.innerHTML !== html) el.innerHTML = html;
+  el.setAttribute('aria-label', label + ': ' + n);
 }
 
 // ---------- Opponent: the computer, or a friend on this device ----------

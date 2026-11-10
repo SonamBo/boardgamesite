@@ -2,7 +2,7 @@
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
 import { onProgressLoaded } from './store.js';
-import { levelSwitch, opponentSwitch, record, sideSwitch, movesFirst } from './game-ui.js';
+import { levelSwitch, opponentSwitch, record, sideSwitch, movesFirst, hintButton, hintCount, askResume, modeName } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -29,6 +29,7 @@ let over = false;
 let highlight = [];      // winning cells
 let answerCell = -1;     // daily: where the right move would land
 let lastDropped = -1;
+let lastCell = -1;        // the last disc dropped, marked until the next one
 let started = false;
 
 // ---------- Board DOM ----------
@@ -72,7 +73,8 @@ function render() {
       (v === E.YOU ? ' p1' : v === E.CPU ? ' p2' : '') +
       (highlight.includes(i) ? ' win' : '') +
       (i === answerCell ? ' answer' : '') +
-      (i === lastDropped ? ' drop' : '');
+      (i === lastDropped ? ' drop' : '') +
+      (i === lastCell && !highlight.includes(i) ? ' last' : '');
     buttons[i].disabled = over || busy || E.lowestRow(board, i % E.COLS) < 0;
   }
   lastDropped = -1;
@@ -85,6 +87,7 @@ function setStatus(text, kind) {
 }
 
 function showResult(kind, text, sub) {
+  if (hintCount()) sub = (sub ? sub + ' ' : '') + (hintCount() === 1 ? '1 hint used.' : hintCount() + ' hints used.');
   $('result').hidden = false;
   $('result-img').src = MASCOT[kind];
   $('result-text').textContent = text;
@@ -95,7 +98,7 @@ function showResult(kind, text, sub) {
 function drop(c, p) {
   const r = E.lowestRow(board, c);
   board = E.place(board, c, p);
-  lastDropped = r * E.COLS + c;
+  lastDropped = lastCell = r * E.COLS + c;
   play('drop');
 }
 
@@ -105,6 +108,16 @@ const getOpp = mode === 'classic' ? opponentSwitch('c4', () => newGame()) : () =
 const friend = () => getOpp() === 'friend';
 // Against the computer you drop first, second, or either at random. You always play gold.
 const getSide = mode === 'classic' ? sideSwitch('c4', ['first', 'second', 'random'], () => newGame()) : () => 'first';
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => mode === 'classic' && !friend() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (over || busy || turn !== E.YOU) return null;
+    // the computer's own search, run from your side: swap the colours on a copy of the board
+    const c = E.pickComputerMove(board.map((v) => (v === E.YOU ? E.CPU : v === E.CPU ? E.YOU : v)), 'hard');
+    return [buttons[E.lowestRow(board, c) * E.COLS + c]];
+  }
+});
 let turn = E.YOU;                       // whose disc drops next (2-player mode: Player 1 = gold, Player 2 = ivory)
 let cpuTimer = 0;
 let onlineOn = roomInLink && mode === 'classic', ol = null;
@@ -202,7 +215,8 @@ function classicMove(c, remote = false) {
 }
 function newGame() {
   clearTimeout(cpuTimer);
-  board = E.emptyBoard();
+  hint.reset();
+  board = E.emptyBoard(); lastCell = -1;
   history = [];
   over = false; busy = false; highlight = []; started = false; turn = E.YOU;
   clearGame();
@@ -220,20 +234,25 @@ function resumeClassic() {
   if ((g.mode || 'cpu') !== getOpp()) return false;
   // a game against the computer reopens only with the same First / Second / Random choice
   if (getOpp() === 'cpu' && (g.side || 'first') !== getSide()) return false;
-  board = g.board;
+  board = g.board; lastCell = -1;
   over = false; highlight = []; started = true;
   turn = g.toMove === E.CPU ? E.CPU : E.YOU;
   $('result').hidden = true;
-  if (friend()) {
-    setTurn(turn === E.YOU ? 'you' : 'cpu');
-    setStatus(nameOf(turn) + '’s turn', turn === E.CPU ? 'cpu' : '');
+  busy = true; render();   // the saved game shows behind the question (and the number keys wait)
+  const order = { first: 'you go first', second: 'you go second', random: 'random order' }[getSide()];
+  askResume(modeName(friend(), getLevel(), friend() ? '' : order)).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    if (friend()) {
+      setTurn(turn === E.YOU ? 'you' : 'cpu');
+      setStatus(nameOf(turn) + '’s turn', turn === E.CPU ? 'cpu' : '');
+      return render();
+    }
+    if (turn === E.CPU) return startComputerTurn();
+    setTurn('you');
+    setStatus('Your turn');
     render();
-    return true;
-  }
-  if (g.toMove === E.CPU) { startComputerTurn(); return true; }
-  setTurn('you');
-  setStatus('Welcome back. Your turn');
-  render();
+  });
   return true;
 }
 
@@ -309,7 +328,7 @@ if (mode === 'daily') {
     let h = history.pop();
     while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
     if (!friend() && h.turn !== E.YOU) { history.push(h); return; }   // only the computer's opening drop is left
-    board = h.board; turn = h.turn; highlight = [];
+    board = h.board; turn = h.turn; highlight = []; lastCell = -1;
     play('card');
     saveGame(turn);
     setTurn(turn === E.YOU ? 'you' : 'cpu');

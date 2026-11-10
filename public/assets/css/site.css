@@ -450,6 +450,8 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .disc.win { box-shadow: 0 0 0 4px #fff; }
 .disc.answer { box-shadow: 0 0 0 4px var(--you); background: color-mix(in srgb, var(--you) 35%, transparent); }
 .disc.drop { animation: drop .28s ease-in; }
+/* the last disc dropped */
+.disc.last { box-shadow: inset 0 -4px 0 rgba(0,0,0,.22), 0 0 0 3px var(--text-hi); }
 @keyframes drop { from { transform: translateY(-260%); } to { transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .disc.drop { animation: none; } }
 /* Animation speed: Off (game-ui.js) stops the boards' own CSS animations too, as reduced motion does */
@@ -1507,6 +1509,8 @@ body.maxed .dice-wrap { max-width: none; }
 .bg-board .ck.s0 circle:first-child { fill: var(--you); } .bg-board .ck.s0 .ring { fill: none; stroke: var(--you-lo); stroke-width: .8; }
 .bg-board .ck.s1 circle:first-child { fill: #F4ECDE; } .bg-board .ck.s1 .ring { fill: none; stroke: #C7B596; stroke-width: .8; }
 .bg-board .ck.sel circle:first-child { stroke: #fff; stroke-width: 1.6; }
+/* the checkers that moved last turn */
+.bg-board .ck.moved circle:first-child { stroke: var(--brand); stroke-width: 1.4; }
 .bg-board .cnt { font: 700 7px var(--body); text-anchor: middle; fill: #2A1D20; }
 .bg-board .offck.s0 { fill: var(--you); } .bg-board .offck.s1 { fill: #F4ECDE; }
 .bg-board .can { fill: rgba(255,255,255,.08); stroke: rgba(255,255,255,.35); stroke-width: .6; rx: 3; pointer-events: none; }
@@ -1574,9 +1578,47 @@ body.maxed .dice-wrap { max-width: none; }
 .cs-promo span { color: var(--muted); font-size: 14px; }
 .cs-cap { display: flex; flex-wrap: wrap; gap: 0; min-height: 22px; padding-left: 34px; }
 .cs-cap .pz { width: 22px; height: 22px; }
+/* Show hint (game-ui.js): the suggested move's squares pulse with a bright ring */
+.hinted { outline: 3px solid #3FB6A8; outline-offset: -3px; animation: hint-pulse 1s ease-in-out infinite; z-index: 2; }
+svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6A8 !important; stroke-width: .2; animation: hint-pulse 1s ease-in-out infinite; }
+.db-board .hinted { stroke-width: 2.2 !important; stroke-dasharray: none; opacity: 1; }
+.nm-board .hinted .hitc, .nm-board g.hinted .hitc { fill: rgba(63,182,168,.45); }
+@keyframes hint-pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .hinted { animation: none; } }
+/* captured checkers and Morris pieces under each player (game-ui.js showCaptures) */
+.pc-cap { display: flex; flex-wrap: wrap; gap: 3px; min-height: 14px; padding-left: 52px; margin-top: -6px; }
+.pc-cap:empty { display: none; }
+.pc-cap i { width: 14px; height: 14px; border-radius: 50%; }
+.pc-cap .ck-gold, .pc-cap .nm-gold { background: var(--you); box-shadow: inset 0 -2px 0 var(--you-lo), 0 0 0 1.5px var(--ck-gold-rim); }
+.pc-cap .ck-black { background: var(--ck-black); box-shadow: 0 0 0 1.5px var(--ck-black-rim); }
+.pc-cap .nm-ivory { background: #F4ECDE; box-shadow: 0 0 0 1.5px #A8977A; }
 .cs-dot.w { background: #FBF6EA; } .cs-dot.b { background: #2A1D20; box-shadow: 0 0 0 2px #FBF6EA; }
 .cs-moves { list-style: none; margin: 0; padding: 0; max-height: 200px; overflow-y: auto; columns: 2; font-size: 14px; font-variant-numeric: tabular-nums; }
 .cs-moves li { padding: 2px 0; break-inside: avoid; } .cs-moves span { color: var(--muted); display: inline-block; min-width: 28px; }
+/* Resume your game? (game-ui.js askResume): a card over the board */
+.resume-card { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(2px); border-radius: 12px; }
+.resume-card .card { max-width: 340px; width: 100%; padding: 22px; display: flex; flex-direction: column; gap: 10px; text-align: center; box-shadow: 0 18px 40px rgba(0,0,0,.35); }
+.resume-card .big { font: 600 24px/1.2 var(--display); margin: 0; }
+.resume-card .text-2 { margin: 0; }
+.resume-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+/* Tap to confirm (game-ui.js tapConfirm): where the stone or line would go */
+.hx-board .hx.preview { stroke: var(--brand); stroke-width: .16; stroke-dasharray: .25 .15; }
+.hx-board .hx.preview.pv1 { fill: color-mix(in srgb, var(--you) 55%, #E8DCC8); }
+.hx-board .hx.preview.pv2 { fill: #FBF8F2; }
+.gm.preview { background: radial-gradient(circle closest-side, color-mix(in srgb, var(--you) 60%, transparent) 0 70%, transparent 74%); box-shadow: inset 0 0 0 2px var(--brand); border-radius: 50%; }
+.gm.preview.pv2 { background: radial-gradient(circle closest-side, rgba(255,255,255,.75) 0 70%, transparent 74%); }
+.gm.preview::before, .gm.preview::after { display: none; }
+.db-board .hit.preview { stroke: color-mix(in srgb, var(--brand) 70%, transparent); stroke-dasharray: 2 1.5; }
+/* move list and replay (game-ui.js moveHistory) */
+.mh { display: flex; flex-direction: column; gap: 10px; }
+.mh-mv { border: 0; background: none; padding: 1px 4px; border-radius: 6px; font: inherit; color: inherit; }
+.mh-mv:not(:disabled) { cursor: pointer; } .mh-mv:not(:disabled):hover { background: var(--surface-2); }
+.mh-mv:disabled { opacity: 1; cursor: default; }
+.mh-mv.on { background: var(--you); color: var(--on-you); }
+.mh-replay { display: flex; flex-direction: column; gap: 6px; }
+.mh-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.mh-row .tool-btn { flex-direction: row; gap: 4px; padding: 0 12px; }
+.mh-at { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- Mancala ---------- */
 .mc-wrap { max-width: 760px; }
@@ -1599,6 +1641,7 @@ body.maxed .dice-wrap { max-width: none; }
 .mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: 16px; }
 .mc-pit.can { cursor: pointer; box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--you); }
 .mc-pit.last { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--text-hi); }
+.mc-pit.sown { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px transparent; outline: 2px dashed var(--text-hi); outline-offset: 1px; }
 .mc-pit:disabled { opacity: 1; }
 .mc-pit.shake { animation: shake .3s; }
 
@@ -1616,6 +1659,7 @@ body.maxed .dice-wrap { max-width: none; }
 .gm.p2 { background: radial-gradient(circle closest-side, #FFFFFF 0%, #EFE6D8 55%, #BFB3A2 88%, transparent 92%); }
 .gm.p1::before, .gm.p1::after, .gm.p2::before, .gm.p2::after { display: none; }
 .gm.last { box-shadow: inset 0 0 0 2px var(--brand); border-radius: 50%; }
+.gm.last.p1, .gm.last.p2 { box-shadow: inset 0 0 0 3px var(--brand); }
 .gm.win { box-shadow: 0 0 0 3px var(--brand); border-radius: 50%; }
 .gm:disabled { cursor: default; opacity: 1; }
 .gm:not(:disabled):hover { background: radial-gradient(circle, rgba(42,29,32,.18) 35%, transparent 38%); }
@@ -1646,6 +1690,8 @@ body.maxed .dice-wrap { max-width: none; }
 .nm-board .sel .pc1, .nm-board .sel .pc2 { stroke: var(--brand); stroke-width: .1; }
 .nm-board .take .pc1, .nm-board .take .pc2 { stroke: #C0392B; stroke-width: .1; stroke-dasharray: .12 .08; }
 .nm-board .last .spot { fill: var(--brand); }
+/* the piece that moved last: a halo round it (the spot is hidden under the piece) */
+.nm-board .last .hitc { fill: rgba(138,36,67,.32); }
 .nm-board .pt:focus-visible .hitc { fill: rgba(207,170,98,.4); }
 
 /* ---------- Hex ---------- */
@@ -2537,6 +2583,7 @@ body.returning .hero { display: none; }
 .ttt-cell.o svg, .ttt-mark svg circle { stroke: #3A2418; }
 .ttt-cell svg { animation: ttt-in .22s ease-out; }
 .ttt-cell.win { background: #FFE2A8; box-shadow: inset 0 0 0 4px #E0A23B; }
+.ttt-cell.last { box-shadow: inset 0 0 0 3px rgba(224,131,43,.55); }
 .ttt-mark { display: inline-block; width: 22px; height: 22px; flex: none; }
 @keyframes ttt-in { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .ttt-cell svg { animation: none; } }

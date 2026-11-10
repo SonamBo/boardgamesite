@@ -1,6 +1,6 @@
 // Checkers page.
 import * as E from './checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut, showCaptures, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -33,6 +33,21 @@ const getSide = L ? () => 'gold' : sideSwitch('ck', ['gold', 'black'], () => new
 let me = E.YOU;   // the side the person plays against the computer in this game
 animationSwitch();
 const Q = moveQueue();   // moves animate one at a time
+// Moves so far, and a replay at the end: view is the position being replayed (null: the game itself)
+let view = null;
+const sqIndex = (n) => (8 - Number(n.slice(1))) * 8 + 'abcdefgh'.indexOf(n[0]);
+const hist = moveHistory({
+  show: (k) => { view = k == null ? null : { board: gameLog[k].position, lastPath: k ? gameLog[k - 1].move.split('-').map(sqIndex) : null }; render(); }
+});
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => !L && !friend() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (!playerMoves().length) return null;
+    const m = E.pickComputerMove(board, 'medium', Math.random, me);
+    return m ? m.path.map((i) => cells[i]) : null;
+  }
+});
 
 // turn: whose move it is (E.YOU = gold, which starts at the bottom, E.CPU = black at the top). Black moves first, as in the American rules.
 let board, over, busy, partial, lastPath, quiet, started, turn;
@@ -82,6 +97,7 @@ function playerMoves() {
 }
 
 function render() {
+  const shown = view ? view.board : board, shownPath = view ? view.lastPath : lastPath;
   const moves = playerMoves();
   const matching = moves.filter((m) => partial.every((p, k) => m.path[k] === p));
   const pickable = new Set(partial.length <= 1 ? moves.map((m) => m.path[0]) : []);
@@ -90,9 +106,9 @@ function render() {
 
   for (let i = 0; i < 64; i++) {
     if (!E.isDark(i)) continue;
-    const p = board[i];
+    const p = shown[i];
     const btn = cells[i];
-    btn.classList.toggle('last', !!lastPath && lastPath.includes(i));
+    btn.classList.toggle('last', !!shownPath && shownPath.includes(i));
     btn.classList.toggle('sel', partial.includes(i));
     btn.classList.toggle('can', pickable.has(i) || targets.has(i));
     btn.classList.toggle('must', mustCapture && !partial.length && pickable.has(i));
@@ -107,9 +123,13 @@ function render() {
   }
   // Undo: vs the computer only once you've moved (it may have opened the game)
   undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === me));
-  const n = E.countPieces(board);
+  const n = E.countPieces(shown);
+  hist.set(gameLog.map((e) => e.move));
   document.getElementById('count-you').textContent = n.you + (n.you === 1 ? ' piece' : ' pieces');
   document.getElementById('count-cpu').textContent = n.cpu + (n.cpu === 1 ? ' piece' : ' pieces');
+  // what each side has taken (both start with 12)
+  showCaptures(document.getElementById('cap-you'), 12 - n.cpu, 'ck-black', 'Pieces gold has taken');
+  showCaptures(document.getElementById('cap-cpu'), 12 - n.you, 'ck-gold', 'Pieces black has taken');
   if (!over && !busy) {
     const whose = friend() ? nameOf(turn) + '’s turn' : 'Your turn';
     setStatus(partial.length > 1 ? 'Keep jumping' : mustCapture ? whose + ': you must capture' : whose, friend() && turn === E.CPU ? 'cpu' : '');
@@ -161,7 +181,7 @@ function finish(result, resigned = false) {
     play(mine === 'lose' ? 'lose' : 'win', 0.25);
     setStatus(mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'lose' ? 'cpu' : 'neutral');
     showResult(mine, mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', mine === 'draw' ? 'No captures for a long while.' : 'Good game.');
-    render();
+    render(); hist.end();
     return;
   }
   if (friend()) {
@@ -174,7 +194,7 @@ function finish(result, resigned = false) {
       showResult('win', winner + ' wins!', 'Nicely played. New game?');
     }
     track('game_end', { game: 'checkers', result, mode: 'friend' });
-    render();
+    render(); hist.end();
     return;
   }
   play(result, 0.25);
@@ -184,7 +204,7 @@ function finish(result, resigned = false) {
   if (result === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', 'No captures for a long while.'); }
   rec.add(result);
   track('game_end', { game: 'checkers', result, level: getLevel() });
-  render();
+  render(); hist.end();
 }
 
 // Slide the piece hop by hop, longer hops (a flying king) taking longer, and fade the captured pieces.
@@ -255,6 +275,8 @@ function makeComputerMove(m) {
 
 function newGame() {
   Q.reset();
+  view = null; hist.reset();
+  hint.reset();
   L?.newGame();
   gameLog = []; history = []; hideReview();
   board = E.startBoard();
@@ -272,6 +294,7 @@ function newGame() {
 // Pick up an unfinished game after a refresh or a return visit.
 function resume() {
   Q.reset();
+  view = null; hist.reset();
   const g = store.get(SAVE, null);
   if (L || !g || !Array.isArray(g.board) || g.board.length !== 64) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
@@ -286,10 +309,14 @@ function resume() {
   turn = g.toMove === E.CPU ? E.CPU : E.YOU;
   hideResult();
   paintSides();
-  if (turn !== me && !friend()) { startComputerTurn(); return true; }
   markTurn();
-  render();
-  if (!friend()) setStatus('Welcome back. Your turn');
+  busy = true; render();   // the saved game shows behind the question
+  askResume(modeName(friend(), getLevel(), friend() ? '' : 'you play ' + (me === E.YOU ? 'gold' : 'black'))).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    if (turn !== me && !friend()) return startComputerTurn();
+    render();
+  });
   return true;
 }
 

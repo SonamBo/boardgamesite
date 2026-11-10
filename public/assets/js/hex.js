@@ -1,6 +1,6 @@
 // Hex: Gold joins top to bottom, Ivory joins left to right. Take turns placing stones; there are no draws.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, tapConfirm } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -20,6 +20,16 @@ let gameNo = 0;   // a computer move still waiting when a new game starts is dro
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
 const cellEl = (i) => svg.querySelector('.hx[data-i="' + i + '"]');
+const tap2 = tapConfirm();   // on small cells: tap once to preview, again to place
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (!humanTurn()) return null;
+    if (canSwap()) return 'Gold’s stone is near the middle: swapping is a good idea';
+    return [cellEl(cpuPick(B, me, 'hard'))];
+  }
+});
 const goal = (p) => (p === 1 ? 'join top to bottom' : 'join left to right');
 function paintSides() {
   if (!vsCpu() || onlineOn) return;
@@ -73,8 +83,7 @@ function distance(b, p) {
   }
   return 99;
 }
-function cpuPick(b, p) {
-  const lvl = getLevel();
+function cpuPick(b, p, lvl = getLevel()) {
   const empties = b.map((x, i) => (x ? -1 : i)).filter((i) => i >= 0);
   if (empties.length === n * n) return Math.floor(n / 2) * n + Math.floor(n / 2);
   const noise = lvl === 'easy' ? 3 : lvl === 'medium' ? 0.8 : 0.05;
@@ -119,6 +128,7 @@ function render() {
 }
 
 async function put(i, remote = false) {
+  tap2.clear();
   history.push({ B: B.slice(), turn, last });
   if (!started) { started = true; track('game_start', { game: 'hex', opponent: getOpp(), size: n }); }
   B[i] = turn; last = i;
@@ -140,10 +150,10 @@ async function put(i, remote = false) {
   if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap to take over Gold’s stone', vsCpu() ? '' : 'cpu');
   if (cpuTurnNow()) cpuTurn();
 }
-const statusText = () => (vsCpu() ? (turn === me ? 'Your turn: ' + goal(me) : 'Computer’s turn') : (turn === 1 ? 'Gold: ' : 'Ivory: ') + goal(turn));
+const statusText = () => (vsCpu() ? (turn === me ? 'Your turn: ' + goal(me) : 'Computer is thinking…') : (turn === 1 ? 'Gold: ' : 'Ivory: ') + goal(turn));
 async function cpuTurn() {
   const g = gameNo;
-  busy = true; render(); await wait(400);
+  busy = true; render(); await wait(500);
   if (g !== gameNo) return;
   busy = false;
   if (over) return;
@@ -165,7 +175,7 @@ function swap(remote = false) {
   turn = 1;
   render();
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your friend swapped. Your turn: join top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
-  if (cpuTurnNow()) { setStatus('You swapped: the stone is yours now. Computer’s turn', 'cpu'); cpuTurn(); return; }
+  if (cpuTurnNow()) { setStatus('You swapped: the stone is yours now. Computer is thinking…', 'cpu'); cpuTurn(); return; }
   setStatus(vsCpu() ? 'The computer swapped: your stone is now theirs. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
 }
 function finish(w) {
@@ -190,6 +200,7 @@ function finish(w) {
 function newGame() {
   gameNo++;
   stopAnimations();
+  hint.reset();
   B = new Array(n * n).fill(0); turn = 1; history = []; over = false; busy = false; started = false; last = -1; winPath = null;
   me = movesFirst(getSide()) ? 1 : 2;
   $('result').hidden = true;
@@ -198,7 +209,8 @@ function newGame() {
   setStatus(statusText(), cpuTurnNow() ? 'cpu' : '');
   if (cpuTurnNow()) cpuTurn();
 }
-svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || !humanTurn()) return; const i = Number(h.dataset.i); if (!B[i]) put(i); });
+// a click from the keyboard (detail 0) places straight away; a tap may ask for a second tap first
+svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || !humanTurn()) return; const i = Number(h.dataset.i); if (!B[i] && (e.detail === 0 || tap2.ok(i, h, turn))) put(i); });
 svg.addEventListener('keydown', (e) => { const h = e.target.closest('.hx'); if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); h.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
 document.querySelector('[data-hsize]').parentElement.classList.add('online-hide');
 document.querySelector('[data-hsize]').parentElement.previousElementSibling.classList.add('online-hide');
