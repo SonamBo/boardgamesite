@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -637,8 +637,70 @@ function solitaireBoard(el) {
   });
 }
 
+
+// ---------- Hex ----------
+// The same rhombus of hexagons as the game page, drawn in SVG. Cells are named column a… row 1… from the top.
+function hexBoard(el) {
+  const b = base(el);
+  const A = RULES.hex;
+  let S, last = null, line = new Set();
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('class', 'hx-board');
+  svg.setAttribute('role', 'group');
+  el.className = 'hxw lp-board hx-lesson';
+  el.textContent = '';
+  el.appendChild(svg);
+  const R = 1, W = Math.sqrt(3) * R;
+  svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (h) tap(Number(h.dataset.i)); });
+  svg.addEventListener('keydown', (e) => { const h = e.target.closest('.hx'); if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tap(Number(h.dataset.i)); } });
+  function render() {
+    const n = S.n;
+    const center = (i) => { const r = Math.floor(i / n), c = i % n; return [W * (c + r / 2) + W, 1.5 * R * r + 2 * R]; };
+    const w = W * (n + (n - 1) / 2) + 2 * W, h = 1.5 * R * (n - 1) + 4 * R;
+    svg.setAttribute('viewBox', '0 0 ' + w.toFixed(2) + ' ' + h.toFixed(2));
+    const [ax, ay] = center(0), [bx, by] = center(n - 1), [cx, cy] = center(n * n - n), [dx, dy] = center(n * n - 1), pad = 1.25;
+    let out = '<path d="M' + (ax - W * 0.6) + ' ' + (ay - pad) + 'L' + (bx + W * 0.6) + ' ' + (by - pad) + '" class="edge e1"/>' +
+      '<path d="M' + (cx - W * 0.6) + ' ' + (cy + pad) + 'L' + (dx + W * 0.6) + ' ' + (dy + pad) + '" class="edge e1"/>' +
+      '<path d="M' + (ax - pad) + ' ' + (ay - 0.6) + 'L' + (cx - pad) + ' ' + (cy + 0.6) + '" class="edge e2"/>' +
+      '<path d="M' + (bx + pad) + ' ' + (by - 0.6) + 'L' + (dx + pad) + ' ' + (dy + 0.6) + '" class="edge e2"/>';
+    const can = new Set(b.live ? A.list(S).map((x) => x.i) : []);
+    for (let i = 0; i < n * n; i++) {
+      const [x, y] = center(i), v = S.b[i], nm = A.name(i, n);
+      const pts = [0, 1, 2, 3, 4, 5].map((k) => { const a = Math.PI / 6 + k * Math.PI / 3; return (x + R * 0.98 * Math.cos(a)).toFixed(3) + ',' + (y + R * 0.98 * Math.sin(a)).toFixed(3); }).join(' ');
+      const mark = b.marks[nm] || '';
+      out += '<polygon points="' + pts + '" class="hx' + (v ? ' p' + v : '') + (i === last ? ' last' : '') + (line.has(i) ? ' win' : '') + (can.has(i) || b.tapFn ? ' can' : '') +
+        '" data-i="' + i + '" data-mark="' + mark + '" tabindex="' + (can.has(i) || b.tapFn ? 0 : -1) + '" role="button" aria-label="' + nm + (v === 1 ? ', gold' : v === 2 ? ', ivory' : ', empty') + (mark ? ', ' + mark : '') + '"/>';
+      if (mark === 'hint' && !v) out += '<circle cx="' + x.toFixed(3) + '" cy="' + y.toFixed(3) + '" r=".28" class="hx-hint"/>';
+    }
+    svg.innerHTML = out;
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, last, line };
+    const r = A.apply(S, x);
+    S = r.s; last = x.i; line = new Set(r.line || []);
+    sound('place');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, last, line } = prev); render(); }, 650);
+    return r.f;
+  }
+  function tap(i) {
+    if (b.tapFn) return b.tapFn(A.name(i, S.n));
+    if (!b.live || S.b[i]) return;
+    doMove({ name: A.name(i, S.n), i }, true);
+  }
+  return Object.assign(b, {
+    set(p) { S = A.load(p); last = null; line = new Set(); render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; render(); },
+    side: () => S.side
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;
