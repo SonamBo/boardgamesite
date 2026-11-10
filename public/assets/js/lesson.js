@@ -111,6 +111,26 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     if (!started && !opts.finish) { started = true; track('lesson_start', { game: course.game, lesson: lesson.slug }); }
   }
 
+  // Scroll so the whole board is visible between the top of the window and the instruction sheet (fixed at
+  // the bottom on phones). A board taller than that space is lined up with its marked squares, or its top.
+  function reveal() {
+    const sheet = $('.lp-sheet'), fixed = getComputedStyle(sheet).position === 'fixed';
+    const bottom = window.innerHeight - (fixed ? sheet.getBoundingClientRect().height : 0) - 8;
+    const r = boardWrap.getBoundingClientRect();
+    if (r.top >= 8 && r.bottom <= bottom) return;
+    let by;
+    if (r.height <= bottom - 8) by = r.top < 8 ? r.top - 8 : r.bottom - bottom;
+    else {
+      const marked = [...boardWrap.querySelectorAll('[data-mark]:not([data-mark=""])')].map((x) => x.getBoundingClientRect());
+      const top = marked.length ? Math.min(...marked.map((x) => x.top)) : r.top, end = marked.length ? Math.max(...marked.map((x) => x.bottom)) : r.top + bottom - 16;
+      by = top < 8 || end > bottom ? Math.min(top - 8, end - bottom + Math.max(0, (bottom - 8 - (end - top)) / 2)) : 0;
+      if (top - by < 8) by = top - 8;
+    }
+    if (Math.abs(by) < 2) return;
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches && document.documentElement.dataset.anim !== 'off';
+    window.scrollBy({ top: by, behavior: smooth ? 'smooth' : 'auto' });
+  }
+
   function show() {
     const s = steps[k];
     timers.forEach(clearTimeout);
@@ -132,6 +152,8 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     board.mark(s.marks || {});
     board.interactive(false);
     if (s.demo) s.demo.forEach((mv, n) => later(() => board.play(mv), 500 + n * 700));
+    // a step that asks you to do something: make sure the board is in view, above the instruction sheet
+    if (s.type !== 'info' && !boardWrap.hidden) requestAnimationFrame(reveal);
 
     if (s.type === 'info') { board.interactive(false); return; }
 

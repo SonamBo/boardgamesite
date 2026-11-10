@@ -1795,6 +1795,12 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 .lp-board-wrap[hidden] { display: none; }
 .lp-board.cs-board, .lp-board.grid8 { width: 100%; max-width: 560px; margin: 0 auto; }
 .lp-board.mc-board { width: 100%; max-width: 640px; margin: 0 auto; }
+/* square lesson boards never grow taller than the space they have: the window, less the lesson's top bar,
+   and on phones the instruction sheet fixed at the bottom (lesson.js also scrolls the board into view) */
+.lp-board:is(.cs-board, .grid8, .gm-board, .go-board, .nm-lesson, .db-lesson, .sdk-lesson, .mines-lesson, .pic-lesson) { max-width: min(560px, max(260px, calc(100dvh - 90px))); }
+@media (max-width: 900px) {
+  .lp-board:is(.cs-board, .grid8, .gm-board, .go-board, .nm-lesson, .db-lesson, .sdk-lesson, .mines-lesson, .pic-lesson) { max-width: min(560px, max(240px, calc(100dvh - 230px - env(safe-area-inset-bottom)))); }
+}
 .lp-card { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
 .lp-kicker { margin: 0; font: 600 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); }
 .lp-text { font-size: 17px; line-height: 1.55; color: var(--text); }
