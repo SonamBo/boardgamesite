@@ -1,7 +1,7 @@
 // Ludo: race your four counters round the board and into your home. Roll a 6 to bring a counter out.
 // Land on an opponent to send them back to base (not on the starred safe squares).
 import { store } from './site.js';
-import { setStatus, record, showResult } from './game-ui.js';
+import { setStatus, record, showResult, animationSwitch, slide } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -30,6 +30,17 @@ let seats, tokens, turn, rolled, sixes, over, busy, started, place;
 const die = makeDie($('lu-die'));
 const human = (s) => opp === 'friend' || s === 0;
 const label = (s) => (opp === 'cpu' ? (s === 0 ? 'You' : COLOURS[seats[s]].name) : COLOURS[seats[s]].name);
+
+animationSwitch();
+// ---------- Counters on the move ----------
+const tokEl = (s, k) => document.querySelector('#lu-tokens .tok[data-s="' + s + '"][data-k="' + k + '"] circle');
+// the screen point at the centre of the square a counter at position p is drawn on
+function cellPt(c, p, k) {
+  const [r, cc] = cellOf(c, p, k), m = $('lu-board').getScreenCTM();
+  return { x: m.a * (cc * 10 + 5) + m.e, y: m.d * (r * 10 + 5) + m.f };
+}
+// hop: slide the whole counter (both circles) one square
+const hop = (s, k, to, ms) => { const g = tokEl(s, k)?.parentNode; return g ? slide(g, [to], ms) : Promise.resolve(); };
 
 function cellOf(c, p, k) {
   const col = COLOURS[c];
@@ -125,23 +136,31 @@ async function move(k) {
   const s = turn, v = rolled, c = seats[s];
   busy = true;
   let p = tokens[s][k];
-  if (p < 0) { tokens[s][k] = 0; play('place'); drawTokens(); await wait(200); }
+  // the counter hops square by square (and onto the start square when it leaves base)
+  if (p < 0) { await hop(s, k, cellPt(c, 0, k), 220); tokens[s][k] = 0; play('place'); drawTokens(); }
   else {
-    for (let i = 0; i < v; i++) { tokens[s][k]++; play('select'); drawTokens(); await wait(120); }
+    for (let i = 0; i < v; i++) {
+      await hop(s, k, cellPt(c, tokens[s][k] + 1, k), 140);
+      tokens[s][k]++; play('select'); drawTokens();
+    }
   }
   p = tokens[s][k];
   let captured = false;
+  const sent = [];
   if (p <= 50) {
     const sq = (COLOURS[c].start + p) % 52;
     if (!SAFE.has(sq)) {
       seats.forEach((oc, os) => {
         if (os === s) return;
         tokens[os].forEach((op, ok) => {
-          if (op >= 0 && op <= 50 && (COLOURS[oc].start + op) % 52 === sq) { tokens[os][ok] = -1; captured = true; }
+          if (op >= 0 && op <= 50 && (COLOURS[oc].start + op) % 52 === sq) { sent.push([os, ok]); captured = true; }
         });
       });
     }
   }
+  // a captured counter slides back to its base
+  await Promise.all(sent.map(([os, ok]) => hop(os, ok, cellPt(seats[os], -1, ok), 360)));
+  sent.forEach(([os, ok]) => { tokens[os][ok] = -1; });
   if (captured) { play('capture'); setStatus(label(s) + ' sent a counter back to base!', s && opp === 'cpu' ? 'cpu' : ''); }
   if (p === END) { play('king'); setStatus(label(s) + ' got a counter home!', ''); }
   busy = false;

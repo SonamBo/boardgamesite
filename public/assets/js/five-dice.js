@@ -70,7 +70,7 @@ function roll() {
   busy = true;
   rollsLeft--;
   play('shuffle');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.anim === 'off';
   return new Promise((done) => {
     let n = reduce ? 0 : 6;
     (function tick() {

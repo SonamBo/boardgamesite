@@ -20,6 +20,7 @@ import { RULES } from './lesson-rules.js';
 import * as BGE from './backgammon-engine.js';
 import { makeDie, paintDie } from './dice-ui.js';   // Go, Reversi, Four in a Row (positions and move names documented there)
 import { play as sound } from './sound.js';
+import { slideIn, popIn } from './game-ui.js';   // moves slide and stones pop in, as in the games
 
 const FILES = 'abcdefgh';
 const nameOf = (i) => FILES[i % 8] + (8 - Math.floor(i / 8));
@@ -75,6 +76,8 @@ function chessBoard(el) {
     S = next; last = m; sel = null; legalNow = C.legal(S);
     sound(m.captured ? 'capture' : m.castle ? 'king' : 'move');
     render();
+    slideIn(cells[m.to].querySelector('svg'), cells[m.from], 240);
+    if (m.castle) { const row = m.from >> 3, [rf, rt] = m.castle === 'k' ? [row * 8 + 7, row * 8 + 5] : [row * 8, row * 8 + 3]; slideIn(cells[rt].querySelector('svg'), cells[rf], 240); }
     if (fromPerson && b.moveFn && b.moveFn(uci(m), f) === false) {
       // the lesson rejected it: put the board back
       setTimeout(() => { S = prev.S; last = prev.last; legalNow = C.legal(S); render(); }, 650);
@@ -161,6 +164,7 @@ function checkersBoard(el, K = CK) {
     sound(m.caps.length ? 'capture' : 'move');
     if (f.king) sound('king', 0.2);
     render();
+    slideIn(cells[m.path[m.path.length - 1]].querySelector('.piece'), m.path.slice(0, -1).map((i) => cells[i]), 190);
     if (fromPerson && b.moveFn && b.moveFn(name(m), f) === false) {
       setTimeout(() => { B = prev.B; side = prev.side; last = prev.last; render(); }, 650);
     }
@@ -322,6 +326,7 @@ function ruleBoard(kind, el) {
     extra = new Set(kind === 'reversi' ? r.flips : kind === 'c4' || kind === 'gomoku' ? r.line || [] : []);
     sound(kind === 'go' || kind === 'gomoku' ? (r.f.capture ? 'capture' : 'place') : kind === 'reversi' ? 'flip' : 'drop');
     render();
+    if (kind === 'go' || kind === 'gomoku') popIn(cells[x.i], 200);
     if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
       setTimeout(() => { S = prev.S; last = prev.last; extra = prev.extra; render(); }, 650);
     }
@@ -681,6 +686,7 @@ function hexBoard(el) {
     S = r.s; last = x.i; line = new Set(r.line || []);
     sound('place');
     render();
+    popIn(svg.querySelector('[data-i="' + x.i + '"]'), 200);
     if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, last, line } = prev); render(); }, 650);
     return r.f;
   }
@@ -736,11 +742,13 @@ function morrisBoard(el) {
     svg.innerHTML = h;
   }
   function doMove(x, fromPerson) {
-    const prev = { S, last };
+    const prev = { S, last }, shown = pending;   // while choosing a removal, the piece is already drawn moved
     const r = A.apply(S, x);
     S = r.s; last = x.to; sel = null; pending = null;
     sound(x.take != null ? 'capture' : 'place');
     render();
+    const piece = svg.querySelector('.pt[data-i="' + x.to + '"] .pc1, .pt[data-i="' + x.to + '"] .pc2');
+    if (!shown) { if (x.from != null) slideIn(piece, svg.querySelector('.pt[data-i="' + x.from + '"] .spot'), 230); else popIn(piece, 220); }
     if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, last } = prev); render(); }, 650);
     return r.f;
   }

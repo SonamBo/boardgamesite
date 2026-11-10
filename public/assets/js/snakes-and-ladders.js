@@ -1,6 +1,6 @@
 // Snakes and Ladders: race from 1 to 100. Ladders take you up, snakes take you down.
 import { store } from './site.js';
-import { setStatus, record, showResult } from './game-ui.js';
+import { setStatus, record, showResult, animationSwitch, slide, pause } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -24,6 +24,15 @@ const human = (p) => opp === 'friend' || p === 0;
 function xy(sq) {
   const i = sq - 1, row = Math.floor(i / 10), col = row % 2 ? 9 - (i % 10) : i % 10;
   return [col * 10 + 5, (9 - row) * 10 + 5];
+}
+
+animationSwitch();
+// ---------- Counters on the move ----------
+const tokEl = (p) => $('sl-tokens').querySelector('[data-p="' + p + '"]');
+// the screen point a counter on square sq is drawn at
+function sqPt(sq) {
+  const [x, y] = xy(sq), m = $('sl-board').getScreenCTM();
+  return { x: m.a * x + m.e, y: m.d * (y + 1.2) + m.f };
 }
 
 function drawBoard() {
@@ -60,7 +69,7 @@ function drawTokens() {
     const [x, y] = xy(sq);
     const same = pos.map((s, q) => (s === sq ? q : -1)).filter((q) => q >= 0);
     const k = same.indexOf(p), off = same.length > 1 ? (k - (same.length - 1) / 2) * 2.4 : 0;
-    return '<circle class="tok' + (p === turn && !over ? ' now' : '') + '" cx="' + (x + off) + '" cy="' + (y + 1.2) + '" r="2.4" fill="' + COLOURS[p] + '"/>';
+    return '<circle class="tok' + (p === turn && !over ? ' now' : '') + '" data-p="' + p + '" cx="' + (x + off) + '" cy="' + (y + 1.2) + '" r="2.4" fill="' + COLOURS[p] + '"/>';
   }).join('');
   const list = $('sl-players');
   list.innerHTML = names().map((nm, p) => '<p class="' + (p === turn && !over ? 'now' : '') + '"><i style="background:' + COLOURS[p] + '"></i><b>' + nm + '</b><span>' + (pos[p] ? 'Square ' + pos[p] : 'Start') + '</span></p>').join('');
@@ -71,7 +80,8 @@ async function step(p, to) {
   const from = pos[p];
   const dir = to > from ? 1 : -1;
   for (let s = from + dir; dir > 0 ? s <= to : s >= to; s += dir) {
-    pos[p] = s; drawTokens(); play('select'); await wait(140);
+    await slide(tokEl(p), [sqPt(s)], 150);
+    pos[p] = s; drawTokens(); play('select');
   }
 }
 
@@ -93,12 +103,14 @@ async function roll() {
   } else await step(p, target);
   if (LADDERS[pos[p]]) {
     setStatus(nm + ' climbed a ladder!', p && opp === 'cpu' ? 'cpu' : '');
-    play('king'); await wait(300);
-    pos[p] = LADDERS[pos[p]]; drawTokens(); await wait(400);
+    play('king'); await pause(250);
+    await slide(tokEl(p), [sqPt(LADDERS[pos[p]])], 560);   // up the ladder
+    pos[p] = LADDERS[pos[p]]; drawTokens(); await pause(250);
   } else if (SNAKES[pos[p]]) {
     setStatus('Oh no! ' + nm + ' slid down a snake', p && opp === 'cpu' ? 'cpu' : 'neutral');
-    play('error'); await wait(300);
-    pos[p] = SNAKES[pos[p]]; drawTokens(); await wait(400);
+    play('error'); await pause(250);
+    await slide(tokEl(p), [sqPt(SNAKES[pos[p]])], 620);   // down the snake
+    pos[p] = SNAKES[pos[p]]; drawTokens(); await pause(250);
   } else setStatus(nm + ' rolled ' + v, p && opp === 'cpu' ? 'cpu' : '');
   if (pos[p] === 100) { busy = false; return finish(p); }
   // a 6 earns another roll
