@@ -95,14 +95,15 @@ function negamax(b, side, depth, alpha, beta, exact) {
 
 export const LEVELS = { easy: { depth: 1, noise: 40 }, medium: { depth: 3, noise: 6 }, hard: { depth: 5, noise: 0 } };
 
-export function pickComputerMove(b, level = 'medium', rnd = Math.random) {
+// `side`: the colour the computer plays (black unless the person chose to move second).
+export function pickComputerMove(b, level = 'medium', rnd = Math.random, side = CPU) {
   const { depth, noise } = LEVELS[level] || LEVELS.medium;
-  const moves = legalMoves(b, CPU);
+  const moves = legalMoves(b, side);
   if (moves.length <= 1) return moves.length ? moves[0] : -1;
   const exact = level === 'hard' && count(b).empty <= 10;   // play the ending perfectly
   let best = moves[0], bestScore = -Infinity;
   for (const m of moves) {
-    const v = -negamax(play(b, m, CPU).board, YOU, exact ? 64 : depth - 1, -Infinity, Infinity, exact) +
+    const v = -negamax(play(b, m, side).board, -side, exact ? 64 : depth - 1, -Infinity, Infinity, exact) +
       (noise ? (rnd() - 0.5) * noise * 2 : 0);
     if (v > bestScore) { bestScore = v; best = m; }
   }

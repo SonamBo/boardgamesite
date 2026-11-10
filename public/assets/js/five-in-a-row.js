@@ -1,6 +1,6 @@
 // Five in a Row (Gomoku): take turns placing stones. First to make five in a row, in any direction, wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
@@ -11,6 +11,17 @@ const score = record('gomoku');
 const getLevel = levelSwitch('gomoku', () => {});
 const getOpp = opponentSwitch('gomoku', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';
+// Against the computer you move first (gold), second (ivory) or either at random.
+const getSide = sideSwitch('gomoku', ['first', 'second', 'random'], () => newGame());
+let me = 1;   // your colour against the computer in this game: 1 gold (first), 2 ivory
+const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
+// your stones so far (gold plays the even moves of the history)
+const myStones = () => (me === 1 ? Math.ceil(history.length / 2) : Math.floor(history.length / 2));
+function paintSides() {
+  if (!vsCpu() || onlineOn) return;
+  document.querySelector('[data-name="p1"]').textContent = me === 1 ? 'You' : 'Computer';
+  document.querySelector('[data-name="p2"]').textContent = me === 2 ? 'You' : 'Computer';
+}
 const boardEl = $('gm-board');
 const DIRS = [[0, 1], [1, 0], [1, 1], [1, -1]];
 
@@ -86,11 +97,11 @@ function render() {
   });
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
-  $('undo').disabled = !history.length || busy || over || onlineOn;
+  $('undo').disabled = !(vsCpu() ? myStones() : history.length) || busy || over || onlineOn;
 }
 
 function place(i) {
-  if (over || busy || B[i] || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2)) return;
+  if (over || busy || B[i] || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
   put(i);
 }
 function put(i, remote = false) {
@@ -107,11 +118,14 @@ function put(i, remote = false) {
   render();
   save();
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
-  if (vsCpu() && turn === 2) {
-    busy = true; render();
-    setStatus('Computer’s turn', 'cpu');
-    setTimeout(() => { busy = false; put(cpuPick(B, 2)); }, 450);
-  } else setStatus(turnText(), turn === 2 ? 'cpu' : '');
+  if (cpuTurnNow()) cpuTurn();
+  else setStatus(turnText(), !vsCpu() && turn === 2 ? 'cpu' : '');
+}
+let cpuTimer = 0;
+function cpuTurn() {
+  busy = true; render();
+  setStatus('Computer’s turn', 'cpu');
+  cpuTimer = setTimeout(() => { busy = false; if (!over) put(cpuPick(B, 3 - me)); }, 450);
 }
 const turnText = () => (vsCpu() ? 'Your turn' : (turn === 1 ? 'Gold' : 'Ivory') + '’s turn');
 
@@ -128,28 +142,34 @@ function finish(w) {
   }
   if (!w) { if (vsCpu()) score.add('draw'); showResult('draw', 'It’s a draw', 'The board is full.'); setStatus('Draw', 'neutral'); return; }
   if (vsCpu()) {
-    const won = w === 1;
+    const won = w === me;
     score.add(won ? 'win' : 'lose');
     showResult(won ? 'win' : 'lose', won ? 'Five in a row! You won' : 'The computer made five in a row', history.length + ' stones played.');
     setStatus(won ? 'You won!' : 'The computer won', won ? '' : 'cpu');
     play(won ? 'win' : 'lose', 0.1);
   } else { showResult('win', (w === 1 ? 'Gold' : 'Ivory') + ' wins!', 'Five in a row.'); setStatus((w === 1 ? 'Gold' : 'Ivory') + ' wins!'); play('win', 0.1); }
-  track('game_end', { game: 'five-in-a-row', result: w === 1 ? 'win' : 'lose' });
+  track('game_end', { game: 'five-in-a-row', result: w === (vsCpu() ? me : 1) ? 'win' : 'lose' });
 }
 
-function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), history }); }
-function newGame(moves = []) {
+function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), history, me, side: getSide() }); }
+// moves: a game to pick up (after Undo or a return visit), played with your colour `side`
+function newGame(moves = [], side = 0) {
+  clearTimeout(cpuTimer);
   B = new Array(N * N).fill(0); turn = 1; over = false; busy = false; started = false; last = -1; winLine = null; history = [];
+  me = side || (movesFirst(getSide()) ? 1 : 2);
   $('result').hidden = true;
   moves.forEach((i) => { B[i] = turn; turn = 3 - turn; history.push(i); last = i; });
   started = moves.length > 0;
+  paintSides();
   render();
+  if (cpuTurnNow()) return cpuTurn();
   setStatus(moves.length ? 'Welcome back. ' + turnText() : turnText() + ': place a stone anywhere', '');
 }
 $('undo').addEventListener('click', () => {
   if (!history.length || busy || over) return;
+  // vs the computer, take back your move and its reply
   const h = history.slice(0, vsCpu() ? Math.max(0, history.length - 2) : history.length - 1);
-  newGame(h); play('card'); save();
+  newGame(h, me); play('card'); save();
 });
 $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) { store.set(SAVE, null); newGame(); } });
 $('new-game').classList.add('online-hide');
@@ -164,4 +184,5 @@ ol = online('five-in-a-row', {
 $('again').addEventListener('click', () => newGame());
 window.addEventListener('pagehide', save);
 const g = roomInLink ? null : store.get(SAVE, null);
-if (g && g.opp === getOpp() && Array.isArray(g.history) && g.history.length) newGame(g.history); else newGame();
+// a game against the computer reopens only with the same First / Second / Random choice
+if (g && g.opp === getOpp() && Array.isArray(g.history) && g.history.length && (!vsCpu() || (g.side || 'first') === getSide())) newGame(g.history, g.me === 2 ? 2 : 1); else newGame();

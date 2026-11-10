@@ -1,6 +1,6 @@
 // Checkers page.
 import * as E from './checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -28,8 +28,11 @@ const getLevel = L ? () => L.level : levelSwitch('ck');
 const rec = record('ck');
 const getOpp = L ? () => 'cpu' : opponentSwitch('ck', () => newGame(), { p1: 'Gold', p2: 'Black' });
 const friend = () => getOpp() === 'friend';
+// Against the computer you play gold or black (black moves first). Playing black turns the board round.
+const getSide = L ? () => 'gold' : sideSwitch('ck', ['gold', 'black'], () => newGame());
+let me = E.YOU;   // the side the person plays against the computer in this game
 
-// turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top). Black moves first, as in the American rules.
+// turn: whose move it is (E.YOU = gold, which starts at the bottom, E.CPU = black at the top). Black moves first, as in the American rules.
 let board, over, busy, partial, lastPath, quiet, started, turn;
 let cpuTimer = 0;
 // positions before each move, for Undo (vs the computer it takes back your move and its reply)
@@ -41,6 +44,14 @@ const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const token = (m) => m.path.map((i) => ALPH[i]).join('');
 const nameOf = (side) => (side === E.YOU ? 'Gold' : 'Black');
 const markTurn = () => setTurn(turn === E.YOU ? 'you' : 'cpu');
+// The gold row and the black row of the players card, named for this game; the board turns round when you play black.
+function paintSides() {
+  const vsCpu = !friend() && !onlineOn;
+  const gold = document.querySelector('[data-name="p1"]'), black = document.querySelector('[data-name="p2"]');
+  if (vsCpu) { gold.textContent = me === E.YOU ? 'You' : cpuName; black.textContent = me === E.YOU ? cpuName : 'You'; }
+  boardEl.classList.toggle('flipped', onlineOn ? !!ol && ol.mySeat() === 0 : vsCpu && me === E.CPU);
+  boardEl.setAttribute('aria-label', 'Checkers board. ' + (vsCpu ? 'You play ' + (me === E.YOU ? 'gold' : 'black') + ' from the bottom.' : 'Gold starts at the bottom.'));
+}
 
 // ---------- Board DOM ----------
 const cells = [];
@@ -64,7 +75,7 @@ const squareName = (i) => FILES[i & 7] + (8 - (i >> 3));
 function playerMoves() {
   if (over || busy) return [];
   if (onlineOn) return ol.myTurn() ? E.legalMoves(board, turn) : [];
-  if (!friend() && turn !== E.YOU) return [];
+  if (!friend() && turn !== me) return [];
   return E.legalMoves(board, turn);
 }
 
@@ -87,13 +98,13 @@ function render() {
     if (p) html = '<span class="piece ' + (p > 0 ? 'you' : 'cpu') + '">' + (Math.abs(p) === 2 ? CROWN : '') + '</span>';
     else if (targets.has(i)) html = '<span class="hint-dot"></span>';
     if (btn.innerHTML !== html) btn.innerHTML = html;
-    const who = friend() ? (p > 0 ? 'gold ' : p < 0 ? 'black ' : '') : (p > 0 ? 'your ' : p < 0 ? 'computer ' : '');
+    const who = friend() ? (p > 0 ? 'gold ' : p < 0 ? 'black ' : '') : (p * me > 0 ? 'your ' : p ? 'computer ' : '');
     const what = p ? who + (Math.abs(p) === 2 ? 'king' : 'piece') : (targets.has(i) ? 'move here' : 'empty');
     btn.setAttribute('aria-label', squareName(i) + ', ' + what);
     btn.disabled = !(pickable.has(i) || targets.has(i));
   }
   // Undo: vs the computer only once you've moved (it may have opened the game)
-  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === E.YOU));
+  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === me));
   const n = E.countPieces(board);
   document.getElementById('count-you').textContent = n.you + (n.you === 1 ? ' piece' : ' pieces');
   document.getElementById('count-cpu').textContent = n.cpu + (n.cpu === 1 ? ' piece' : ' pieces');
@@ -134,12 +145,12 @@ function moveSound(m) {
   if ((p === 1 && row === 0) || (p === -1 && row === 7)) play('king', 0.2);
 }
 
-const saveGame = (toMove) => onlineOn || L || store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp() });
+const saveGame = (toMove) => onlineOn || L || store.set(SAVE, { board, quiet, toMove, lastPath, mode: getOpp(), me });
 const clearGame = () => store.set(SAVE, null);
 
 function finish(result, resigned = false) {
   over = true;
-  if (!friend() && !onlineOn) offerReview(() => ({ game: 'checkers', board: 'checkers', plies: gameLog, me: E.YOU, final: board.slice() }));
+  if (!friend() && !onlineOn) offerReview(() => ({ game: 'checkers', board: 'checkers', plies: gameLog, me, final: board.slice() }));
   clearGame();
   setTurn(null);
   if (onlineOn) {
@@ -186,7 +197,8 @@ function playerMove(m, remote = false) {
   const next = -turn;
   const ends = !E.legalMoves(board, next).length || quiet >= DRAW_AFTER;
   if (onlineOn && !remote) ol.send(token(m), next === E.CPU ? 0 : 1, ends);
-  if (!E.legalMoves(board, next).length) return finish(turn === E.YOU ? 'win' : 'lose');
+  // the result is from gold's side in 2-player and online games, and from yours against the computer
+  if (!E.legalMoves(board, next).length) return finish(turn === (friend() || onlineOn ? E.YOU : me) ? 'win' : 'lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
   turn = next;
   saveGame(turn);
@@ -196,29 +208,29 @@ function playerMove(m, remote = false) {
 }
 
 function startComputerTurn() {
-  turn = E.CPU;
+  turn = -me;
   busy = true;
-  setTurn('cpu');
+  markTurn();
   setStatus(cpuName + ' is thinking…', 'cpu');
   render();
   cpuTimer = setTimeout(computerMove, 450);
 }
 
 function computerMove() {
-  const m = E.pickComputerMove(board, getLevel());
+  const m = E.pickComputerMove(board, getLevel(), Math.random, -me);
   busy = false;
   if (!m) return finish('win');
   snapshot();
-  logMove(board, E.CPU, m);
+  logMove(board, -me, m);
   noteQuiet(m);
   moveSound(m);
   board = E.applyMove(board, m);
   lastPath = m.path;
-  if (!E.legalMoves(board, E.YOU).length) return finish('lose');
+  if (!E.legalMoves(board, me).length) return finish('lose');
   if (quiet >= DRAW_AFTER) return finish('draw');
-  turn = E.YOU;
-  saveGame(E.YOU);
-  setTurn('you');
+  turn = me;
+  saveGame(me);
+  markTurn();
   render();
 }
 
@@ -227,10 +239,12 @@ function newGame() {
   gameLog = []; history = []; hideReview();
   board = E.startBoard();
   over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false; turn = E.CPU;   // Black moves first
+  me = getSide() === 'black' ? E.CPU : E.YOU;
   clearTimeout(cpuTimer);
   clearGame();
   hideResult();
-  if (!friend() && !onlineOn) { startComputerTurn(); return; }
+  paintSides();
+  if (!friend() && !onlineOn && me !== E.CPU) { startComputerTurn(); return; }
   markTurn();
   render();
 }
@@ -240,6 +254,9 @@ function resume() {
   const g = store.get(SAVE, null);
   if (L || !g || !Array.isArray(g.board) || g.board.length !== 64) return false;
   if ((g.mode || 'cpu') !== getOpp()) return false;
+  // a game against the computer reopens only with the side it was played with
+  if (getOpp() === 'cpu' && (g.me === E.CPU ? 'black' : 'gold') !== getSide()) return false;
+  me = g.me === E.CPU ? E.CPU : E.YOU;
   if (!E.legalMoves(g.board, E.YOU).length || !E.legalMoves(g.board, E.CPU).length) return false;
   board = g.board;
   quiet = g.quiet | 0;
@@ -247,7 +264,8 @@ function resume() {
   over = false; busy = false; partial = []; started = true;
   turn = g.toMove === E.CPU ? E.CPU : E.YOU;
   hideResult();
-  if (turn === E.CPU && !friend()) { startComputerTurn(); return true; }
+  paintSides();
+  if (turn !== me && !friend()) { startComputerTurn(); return true; }
   markTurn();
   render();
   if (!friend()) setStatus('Welcome back. Your turn');
@@ -259,8 +277,8 @@ undoBtn.addEventListener('click', () => {
   if (busy || over || onlineOn || !history.length) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
-  while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
-  if (!friend() && h.turn !== E.YOU) { history.push(h); return; }
+  while (!friend() && h.turn !== me && history.length) h = history.pop();
+  if (!friend() && h.turn !== me) { history.push(h); return; }
   board = h.board; turn = h.turn; quiet = h.quiet; lastPath = h.lastPath;
   gameLog.length = h.log;
   partial = [];
@@ -276,6 +294,6 @@ ol = online('checkers', {
   apply: (t) => { const m = E.legalMoves(board, turn).find((x) => token(x) === t); if (m) playerMove(m, true); },
   seatName: (s) => (s === 0 ? 'Black (moves first)' : 'Gold'),
   over: () => over,
-  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); boardEl.classList.toggle('flipped', on && ol && ol.mySeat() === 0); render(); }
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); paintSides(); render(); }
 });
 if (roomInLink || !resume()) newGame();

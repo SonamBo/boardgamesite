@@ -288,6 +288,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -320,7 +326,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Dots and Boxes</h2>
-  <p>Dots and Boxes is a classic pencil-and-paper game, simple to learn and full of clever traps.</p>
+  <p>Dots and Boxes is a classic pencil-and-paper game, simple to learn and full of clever traps. Against the computer, choose <strong>You play: First</strong>, <strong>Second</strong> or <strong>Random</strong> to set who draws the first line.</p>
   <ol>
     <li><strong>Take turns drawing one line</strong> between two dots next to each other, across or down.</li>
     <li><strong>Close a box</strong> by drawing its fourth side, and it’s yours.</li>

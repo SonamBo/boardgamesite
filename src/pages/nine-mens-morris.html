@@ -40,6 +40,12 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your turn order (starts a new game)" data-cpu-only>
+          <button type="button" data-side="first">First</button>
+          <button type="button" data-side="second">Second</button>
+          <button type="button" data-side="random">Random</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -72,7 +78,7 @@
 
 <section class="page game-guide" aria-labelledby="guide-h">
   <h2 id="guide-h">How to play Nine Men’s Morris</h2>
-  <p>Nine Men’s Morris is one of the oldest board games, played for over two thousand years. Each player has nine pieces and a board of 24 points.</p>
+  <p>Nine Men’s Morris is one of the oldest board games, played for over two thousand years. Each player has nine pieces and a board of 24 points. Gold moves first. Against the computer, choose <strong>You play: First</strong> (gold), <strong>Second</strong> (ivory) or <strong>Random</strong>.</p>
   <ol>
     <li><strong>Place.</strong> Take turns placing one piece on any empty point until all 18 pieces are placed.</li>
     <li><strong>Move.</strong> Then take turns moving a piece along a line to a neighbouring empty point.</li>

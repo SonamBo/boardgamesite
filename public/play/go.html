@@ -264,6 +264,11 @@
           <button type="button" data-opponent="cpu">Computer</button>
           <button type="button" data-opponent="friend">2 players</button>
         </div>
+        <p class="seg-label" data-cpu-only>You play</p>
+        <div class="seg" role="group" aria-label="Your colour (starts a new game)" data-cpu-only>
+          <button type="button" data-side="black">Black</button>
+          <button type="button" data-side="white">White</button>
+        </div>
         <p class="seg-label" data-cpu-only>Computer level</p>
         <div class="seg" role="group" aria-label="Computer level" data-cpu-only>
           <button type="button" data-level="easy">Easy</button>
@@ -298,7 +303,7 @@
   <h2 id="guide-h">How to play Go</h2>
   <p>Go is an ancient strategy game from China, over 2,500 years old. The rules are simple; the strategy is endless. The 9×9 board is the perfect way to learn.</p>
   <ol>
-    <li><strong>Black goes first.</strong> Take turns placing one stone on any empty point where the lines cross. Stones don’t move once placed.</li>
+    <li><strong>Black goes first.</strong> Take turns placing one stone on any empty point where the lines cross. Stones don’t move once placed. Against the computer, choose <strong>You play: Black</strong> or <strong>White</strong>.</li>
     <li><strong>Liberties.</strong> The empty points next to a stone (up, down, left, right) are its liberties. Stones of the same colour that touch share their liberties.</li>
     <li><strong>Capture.</strong> Take away a group’s last liberty and it’s captured and removed from the board.</li>
     <li><strong>No suicide.</strong> You can’t play where your stone would have no liberties, unless it captures something.</li>
