@@ -170,6 +170,7 @@ function recommendations(st) {
       href: first ? '/learn/' + g + '/' + first.slug : '/learn/' + g,
       why: { chess: 'The world’s favourite strategy game. Start with how the pieces move, finish with checkmate patterns and a BGS Rating.',
         checkers: 'Learn the rules in five minutes, then the forcing jumps that win games. Quick to learn, deep to master.',
+        'russian-checkers': 'Checkers with flying kings and backward captures. Learn the Russian rules, then combinations and the main road.',
         mancala: 'An ancient counting game. Learn sowing, free turns and captures, then plan chains of free turns.',
         go: 'Simple rules, endless depth. Learn liberties, captures and ko on a 9×9 board, then ladders and living groups.',
         reversi: 'Flip discs to your colour. Learn the rules in two minutes, then why corners and quiet moves win.',

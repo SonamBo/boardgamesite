@@ -16,7 +16,7 @@ export const BOTS = [
   { id: 'monocle', name: 'The Monocle', rating: 1200, level: 'hard' }
 ];
 export const botById = (id) => BOTS.find((b) => b.id === id) || null;
-export const RATED_GAMES = ['chess', 'checkers', 'mancala'];
+export const RATED_GAMES = ['chess', 'checkers', 'russian-checkers', 'mancala'];
 
 const KEY = (game) => 'bgs-rating-' + game;
 const PENDING = 'bgs-rated-pending';

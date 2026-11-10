@@ -31,6 +31,7 @@ Read this file first when resuming. It is the whole plan and the current state; 
 - [x] Five in a Row, Hex (board size stored in the room as `hex:9`), Go (end-of-game scoring is seeded so both boards agree)
 - [x] Checkers (moves sent as one character per square; board turned round for seat 1), Reversi (passes handled by the page), Four in a Row (classic mode only, not the daily puzzle)
 - [x] Tic Tac Toe (cell 0–8 as the token)
+- [x] Russian Checkers (same tokens and seats as Checkers; draws by repetition or 15 king-only moves each are decided on both boards)
 - [x] Crazy Eights, 2 players: both boards deal from the same deck, seeded by the room id, and replay the same moves ('d' draw, 'x' pass, 'p<card>[:<suit>]' play). Hands are hidden on screen but not secret from someone reading the page's memory; fine for friends, not for stakes.
 - [ ] Owner to test on two real devices (needs Anonymous sign-in ON)
 - [ ] Later, needs Blaze: card and dice games with hidden hands (server-side dealing)

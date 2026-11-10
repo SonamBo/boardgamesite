@@ -1,4 +1,4 @@
-// The daily challenge page (/daily): today's 3 challenges. Board puzzles (Chess, Checkers, Mancala, from the
+// The daily challenge page (/daily): today's 3 challenges. Board puzzles (Chess, Checkers, Russian Checkers, Mancala, from the
 // learning paths) are played right here; the other games open in their own daily mode.
 import { runLesson } from './lesson.js';
 import { logActivity } from './learn-progress.js';

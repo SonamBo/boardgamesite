@@ -1,5 +1,5 @@
 // Post-game analysis. Chess uses Stockfish 10 (GPL-3.0, /assets/engine/, run as a separate Web Worker);
-// Checkers and Mancala use the site's own engines searching deeper in a Web Worker (analysis-worker.js).
+// Checkers, Russian Checkers and Mancala use the site's own engines searching deeper in a Web Worker (analysis-worker.js).
 //
 // analyseGame({ game, plies, me }, onProgress) → [{ ...ply, best, bestScore, playedScore, drop, cls, accuracy }]
 //   plies: [{ position, side, move, label }]   position before the move; move by its name (chess UCI,
@@ -11,6 +11,7 @@ const CHANCES = {
   // Stockfish 10's centipawns run about 1.4× today's normalised scale, so they are scaled down first.
   chess: (s) => 2 / (1 + Math.exp(-0.00368208 * 0.7 * s)) - 1,
   checkers: (s) => 2 / (1 + Math.exp(-s / 140)) - 1,
+  'russian-checkers': (s) => 2 / (1 + Math.exp(-s / 140)) - 1,
   mancala: (s) => 2 / (1 + Math.exp(-s / 8)) - 1
 };
 // The size of the drop in winning chances that makes a move an inaccuracy, mistake or blunder (lichess's scale).

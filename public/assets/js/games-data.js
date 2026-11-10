@@ -22,6 +22,13 @@ export const GAMES = [
   "key": "bgs-ck-score"
  },
  {
+  "slug": "russian-checkers",
+  "name": "Russian Checkers",
+  "cat": "strategy",
+  "record": "wld",
+  "key": "bgs-rck-score"
+ },
+ {
   "slug": "go",
   "name": "Go",
   "cat": "strategy",

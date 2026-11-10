@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -13,7 +13,8 @@
 // Facts: { check, mate, capture, castle, promote, king, again, captured (count) }
 import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
-import * as K from './checkers-engine.js';
+import * as CK from './checkers-engine.js';
+import * as RK from './russian-checkers-engine.js';
 import * as M from './mancala-rules.js';
 import { RULES } from './lesson-rules.js';
 import * as BGE from './backgammon-engine.js';
@@ -111,7 +112,8 @@ export function checkersFrom(rows) {
   rows.split('/').forEach((row, r) => [...row].forEach((ch, c) => { out[r * 8 + c] = { g: 1, G: 2, b: -1, B: -2 }[ch] || 0; }));
   return out;
 }
-function checkersBoard(el) {
+// K: the rules engine (checkers-engine.js, or russian-checkers-engine.js for Russian Checkers)
+function checkersBoard(el, K = CK) {
   const b = base(el);
   let B, side = 1, partial = [], last = null;
   el.className = 'grid8 ck lp-board';
@@ -629,7 +631,7 @@ function solitaireBoard(el) {
 }
 
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;

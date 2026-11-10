@@ -57,6 +57,12 @@
    "card": "Sautez les pions adverses, faites des dames et videz le plateau. La prise est obligatoire.",
    "blurb": "Sautez les pions, faites des dames, videz le plateau."
   },
+  "russian-checkers": {
+   "name": "Dames russes",
+   "full": "Dames russes (chachki)",
+   "card": "Les chachki, dames russes. Les pions prennent en arrière, les dames volent sur les diagonales et la prise est obligatoire.",
+   "blurb": "Les dames avec dames volantes et prises en arrière."
+  },
   "solitaire": {
    "name": "Solitaire",
    "full": "Solitaire Klondike",
@@ -462,6 +468,76 @@
     ", move here": ", jouer ici"
    },
    "patterns": [
+    [
+     "(\\d+) pieces?",
+     "{1} pions"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "Au tour de {1} : prise obligatoire"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "À vous : prise obligatoire"
+    ],
+    [
+     "(.+)’s turn",
+     "Au tour de {1}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, pion doré{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, pion noir{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, dame dorée{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, dame noire{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, vide"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, jouer ici"
+    ]
+   ]
+  },
+  "russian-checkers": {
+   "exact": {
+    "Keep jumping": "Continuez à sauter",
+    "No captures for a long while.": "Aucune prise depuis longtemps.",
+    "Nicely played. New game?": "Bien joué. Une autre partie ?",
+    ", move here": ", jouer ici",
+    "Keep capturing": "Continuez la rafle",
+    "The same position came up three times.": "La même position est revenue trois fois.",
+    "15 moves each with only kings moving and nothing captured.": "15 coups chacun avec seulement des dames et aucune prise.",
+    "Neither side can make progress.": "Aucun camp ne peut progresser."
+   },
+   "patterns": [
+    [
+     "([a-h]\\d), (?:your|gold) piece, captured",
+     "{1}, pion doré, pris"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece, captured",
+     "{1}, pion noir, pris"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king, captured",
+     "{1}, dame dorée, prise"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king, captured",
+     "{1}, dame noire, prise"
+    ],
     [
      "(\\d+) pieces?",
      "{1} pions"

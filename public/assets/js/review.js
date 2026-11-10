@@ -39,7 +39,7 @@ function marksFor(game, move, kind, base = {}) {
   const out = { ...base };
   if (!move) return out;
   if (game === 'chess') { out[move.slice(0, 2)] = kind; out[move.slice(2, 4)] = kind; }
-  else if (game === 'checkers') move.split('-').forEach((sq) => { out[sq] = kind; });
+  else if (game === 'checkers' || game === 'russian-checkers') move.split('-').forEach((sq) => { out[sq] = kind; });
   else out[move] = kind;
   return out;
 }
@@ -53,7 +53,7 @@ function label(game, position, move) {
     });
     return m ? C.san(s, m) : move;
   }
-  if (game === 'checkers') return move.replace(/-/g, move.split('-').length > 2 ? '×' : '-');
+  if (game === 'checkers' || game === 'russian-checkers') return move.replace(/-/g, move.split('-').length > 2 ? '×' : '-');
   return 'pit ' + move.replace('t', '');
 }
 

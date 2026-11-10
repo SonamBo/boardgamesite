@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import * as C from '../public/assets/js/chess-engine.js';
 import * as K from '../public/assets/js/checkers-engine.js';
+import * as RK from '../public/assets/js/russian-checkers-engine.js';
 import * as M from '../public/assets/js/mancala-rules.js';
 import { RULES } from '../public/assets/js/lesson-rules.js';
 
@@ -43,7 +44,8 @@ const chess = {
   isSquare: (n) => SQ.test(n)
 };
 
-const checkers = {
+// K: the rules engine (American checkers, or Russian for russian-checkers)
+const checkersWith = (K) => ({
   load(p, where) {
     const rows = String(p).split('/');
     if (rows.length !== 8 || rows.some((r) => r.length !== 8 || /[^.gGbB]/.test(r))) { err(where, 'checkers position needs 8 rows of 8 from . g G b B: ' + p); return null; }
@@ -65,7 +67,8 @@ const checkers = {
   },
   dests(s, from) { return this.list(s).filter((x) => x.name.startsWith(from + '-')).map((x) => x.name.split('-').pop()); },
   isSquare: (n) => SQ.test(n)
-};
+});
+const checkers = checkersWith(K);
 
 const pitName = (i) => (i <= 5 ? String(i + 1) : 't' + (13 - i));
 const mancala = {
@@ -84,7 +87,7 @@ const mancala = {
 };
 // Go, Reversi and Four in a Row: the lesson boards' own rules, so the two can't disagree
 const wrap = (A) => ({ ...A, load(p, where) { try { return A.load(p); } catch (e) { err(where, e.message); return null; } } });
-const ADAPTERS = { chess, checkers, mancala, go: wrap(RULES.go), reversi: wrap(RULES.reversi), c4: wrap(RULES.c4), sudoku: wrap(RULES.sudoku), backgammon: wrap(RULES.backgammon), solitaire: wrap(RULES.solitaire) };
+const ADAPTERS = { chess, checkers, 'russian-checkers': checkersWith(RK), mancala, go: wrap(RULES.go), reversi: wrap(RULES.reversi), c4: wrap(RULES.c4), sudoku: wrap(RULES.sudoku), backgammon: wrap(RULES.backgammon), solitaire: wrap(RULES.solitaire) };
 
 function checkCourse(file) {
   const course = JSON.parse(readFileSync(join(dir, file), 'utf8'));

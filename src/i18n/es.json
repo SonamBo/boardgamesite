@@ -57,6 +57,12 @@
    "card": "Salta las fichas rivales, corona damas y limpia el tablero. Comer es obligatorio.",
    "blurb": "Salta fichas, corona damas y limpia el tablero."
   },
+  "russian-checkers": {
+   "name": "Damas rusas",
+   "full": "Damas rusas (shashki)",
+   "card": "Shashki, las damas rusas. Las fichas comen hacia atrás, las damas vuelan por las diagonales y comer es obligatorio.",
+   "blurb": "Damas con damas voladoras y capturas hacia atrás."
+  },
   "solitaire": {
    "name": "Solitario",
    "full": "Solitario Klondike",
@@ -462,6 +468,76 @@
     ", move here": ", mover aquí"
    },
    "patterns": [
+    [
+     "(\\d+) pieces?",
+     "{1} fichas"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "Turno de {1}: tienes que comer"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "Tu turno: tienes que comer"
+    ],
+    [
+     "(.+)’s turn",
+     "Turno de {1}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, ficha dorada{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, ficha negra{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, dama dorada{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, dama negra{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, vacía"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, mover aquí"
+    ]
+   ]
+  },
+  "russian-checkers": {
+   "exact": {
+    "Keep jumping": "Sigue saltando",
+    "No captures for a long while.": "Hace mucho que nadie come.",
+    "Nicely played. New game?": "Bien jugado. ¿Otra partida?",
+    ", move here": ", mover aquí",
+    "Keep capturing": "Sigue comiendo",
+    "The same position came up three times.": "La misma posición se ha repetido tres veces.",
+    "15 moves each with only kings moving and nothing captured.": "15 jugadas por bando moviendo solo damas y sin comer.",
+    "Neither side can make progress.": "Ningún bando puede avanzar."
+   },
+   "patterns": [
+    [
+     "([a-h]\\d), (?:your|gold) piece, captured",
+     "{1}, ficha dorada, comida"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece, captured",
+     "{1}, ficha negra, comida"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king, captured",
+     "{1}, dama dorada, comida"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king, captured",
+     "{1}, dama negra, comida"
+    ],
     [
      "(\\d+) pieces?",
      "{1} fichas"
