@@ -16,7 +16,7 @@ const getSide = sideSwitch('gomoku', ['first', 'second', 'random'], () => newGam
 let me = 1;   // your colour against the computer in this game: 1 gold (first), 2 ivory
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
-const tap2 = tapConfirm();   // on the 15×15 board: tap once to preview, again to place
+const tap2 = tapConfirm({ large: () => true });   // the board is always 15×15: tap once to preview, again to place
 // Show hint: Easy, against the computer
 const hint = hintButton({
   shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',

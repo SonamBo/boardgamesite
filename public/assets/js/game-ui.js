@@ -179,11 +179,13 @@ export function askResume(what) {
 
 // ---------- Tap to confirm (boards with small points: Hex, Dots and Boxes, Five in a Row) ----------
 // With it on, the first tap shows where your stone or line would go and the second tap on the same spot
-// places it. On by default on touch screens; the choice is remembered (bgs-tap-confirm).
+// places it. Until you choose, it's on for touch screens when large() says the board is a big one (11×11 Hex,
+// 6×6 Dots and Boxes, 15×15 Five in a Row) and off otherwise; your choice is remembered (bgs-tap-confirm).
 const CONFIRM_KEY = 'bgs-tap-confirm';
-export function tapConfirm() {
+export function tapConfirm({ large = () => true } = {}) {
   const panel = document.querySelector('[data-max-root] .panel');
-  let on = store.get(CONFIRM_KEY, matchMedia('(pointer: coarse)').matches ? 'on' : 'off') === 'on';
+  const chosen = () => store.get(CONFIRM_KEY, null);
+  const isOn = () => (chosen() ? chosen() === 'on' : matchMedia('(pointer: coarse)').matches && large());
   let pending = null, shown = null;
   const clear = () => { if (shown) shown.classList.remove('preview', 'pv1', 'pv2'); pending = null; shown = null; };
   if (panel && !panel.querySelector('[data-confirm]')) {
@@ -197,15 +199,17 @@ export function tapConfirm() {
     seg.setAttribute('role', 'group');
     seg.setAttribute('aria-label', 'Tap to confirm: tap once to preview, again to place');
     seg.innerHTML = '<button type="button" data-confirm="off">Off</button><button type="button" data-confirm="on">On</button>';
-    const paint = () => seg.querySelectorAll('[data-confirm]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.confirm === 'on') === on)));
-    seg.addEventListener('click', (e) => { const b = e.target.closest('[data-confirm]'); if (!b) return; on = b.dataset.confirm === 'on'; store.set(CONFIRM_KEY, on ? 'on' : 'off'); clear(); paint(); });
-    paint();
+    const paint = () => seg.querySelectorAll('[data-confirm]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.confirm === 'on') === isOn())));
+    seg.addEventListener('click', (e) => { const b = e.target.closest('[data-confirm]'); if (!b) return; store.set(CONFIRM_KEY, b.dataset.confirm); clear(); paint(); });
+    // a change of board size can change the default
+    document.addEventListener('click', (e) => { if (e.target.closest('[data-hsize], [data-dsize]')) setTimeout(paint); });
+    setTimeout(paint);   // once the game script has set up its board size
     if (after) { after.after(seg); after.after(label); }
   }
   return {
     // true: place now. false: this tap only showed the preview on `el`, for player `who` (1 or 2)
     ok(id, el, who) {
-      if (!on || pending === id) { clear(); return true; }
+      if (!isOn() || pending === id) { clear(); return true; }
       clear();
       pending = id; shown = el;
       if (el) el.classList.add('preview', 'pv' + who);

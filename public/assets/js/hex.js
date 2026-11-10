@@ -20,7 +20,7 @@ let gameNo = 0;   // a computer move still waiting when a new game starts is dro
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
 const cellEl = (i) => svg.querySelector('.hx[data-i="' + i + '"]');
-const tap2 = tapConfirm();   // on small cells: tap once to preview, again to place
+const tap2 = tapConfirm({ large: () => n >= 11 });   // on the 11×11 board: tap once to preview, again to place
 // Show hint: Easy, against the computer
 const hint = hintButton({
   shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
