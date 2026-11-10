@@ -75,6 +75,6 @@ export function streak() {
 export const activeToday = () => activeDays()(dayKey());
 
 // XP across every learning path (lessons and gift chests).
-export const LEARN_GAMES = ['chess', 'checkers', 'mancala', 'go', 'reversi', 'four-in-a-row', 'sudoku', 'backgammon', 'solitaire'];
-export const LEARN_NAME = { chess: 'Chess', checkers: 'Checkers', mancala: 'Mancala', go: 'Go', reversi: 'Reversi', 'four-in-a-row': 'Four in a Row', sudoku: 'Sudoku', backgammon: 'Backgammon', solitaire: 'Solitaire' };
+export const LEARN_GAMES = ['chess', 'checkers', 'russian-checkers', 'mancala', 'go', 'reversi', 'four-in-a-row', 'sudoku', 'backgammon', 'solitaire'];
+export const LEARN_NAME = { chess: 'Chess', checkers: 'Checkers', 'russian-checkers': 'Russian Checkers', mancala: 'Mancala', go: 'Go', reversi: 'Reversi', 'four-in-a-row': 'Four in a Row', sudoku: 'Sudoku', backgammon: 'Backgammon', solitaire: 'Solitaire' };
 export const totalXp = () => LEARN_GAMES.reduce((n, g) => n + progress(g).xp, 0);

@@ -10,6 +10,7 @@ import { GAMES as ALL } from './games-data.js';
 const GAMES = [
   { id: 'chess', name: 'Chess', blurb: 'The classic. 23 lessons from the moves to mating patterns.' },
   { id: 'checkers', name: 'Checkers', blurb: 'Quick to learn, full of clever jumps.' },
+  { id: 'russian-checkers', name: 'Russian Checkers', blurb: 'Flying kings and captures in every direction.' },
   { id: 'mancala', name: 'Mancala', blurb: 'Sow seeds, plan ahead, fill your store.' },
   { id: 'go', name: 'Go', blurb: 'Simple rules, endless depth. Learn on 9×9.' },
   { id: 'reversi', name: 'Reversi', blurb: 'Flip discs to your colour and grab the corners.' },
@@ -115,7 +116,7 @@ export function welcome() {
       store.set('bgs-goal', Number(b.dataset.v));
       done('finish');
       const g = pick.game;
-      location.href = pick.level === 'play' ? '/play/' + g + (['chess', 'checkers', 'mancala'].includes(g) ? '?bot=mira' : '') : '/learn/' + g + '/path' + (pick.level === 'rules' ? '?jump=strategy' : '');
+      location.href = pick.level === 'play' ? '/play/' + g + (['chess', 'checkers', 'russian-checkers', 'mancala'].includes(g) ? '?bot=mira' : '') : '/learn/' + g + '/path' + (pick.level === 'rules' ? '?jump=strategy' : '');
     }));
   }
   box.addEventListener('keydown', (e) => { if (e.key === 'Escape') done('skip'); });

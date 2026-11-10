@@ -18,7 +18,7 @@ Every push to `main` builds the pages and deploys the site and the database rule
 | `tools/indexnow.py` | Run after each deploy: tells Bing and other IndexNow search engines which pages changed |
 | `public/assets/fonts/` | The site's two fonts, hosted here instead of Google Fonts (Latin characters only) |
 | `public/` | The website that gets deployed. Images, CSS and JS live in `public/assets/` |
-| `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Reversi, Solitaire), no page code |
+| `public/assets/js/*-engine.js` | Game rules and computer players (Four in a Row, Checkers, Russian Checkers, Reversi, Solitaire), no page code |
 | `public/assets/js/four-in-a-row.js`, `checkers.js`, `reversi.js`, `solitaire.js` | Each game's page |
 | `public/assets/js/solo.js` | Shared pieces for single-player games: clock, games played and won, best times, seeded daily puzzles |
 | `public/assets/js/game-ui.js` | Shared game page pieces: status line, result panel, difficulty switch, win/loss record |

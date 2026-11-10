@@ -6,6 +6,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 export const LEARN_ICONS = [
   { game: 'chess', name: 'Chess', icon: 'piece:N' },
   { game: 'checkers', name: 'Checkers', icon: 'ck' },
+  { game: 'russian-checkers', name: 'Russian Checkers', icon: 'ck-king' },
   { game: 'mancala', name: 'Mancala', icon: 'seeds' },
   { game: 'go', name: 'Go', icon: 'go' },
   { game: 'reversi', name: 'Reversi', icon: 'rv' },

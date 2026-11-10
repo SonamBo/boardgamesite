@@ -1,6 +1,6 @@
 // The daily challenge: 3 games a day, picked from every game with daily content. The same 3 for everyone.
 // This module is small on purpose (every page uses it for the menu badge and home page): it only reads progress.
-//   bgs-puzzles      { day: { chess|checkers|mancala: mistakes + 1 } }  board puzzles solved on /daily
+//   bgs-puzzles      { day: { chess|checkers|russian-checkers|mancala: mistakes + 1 } }  board puzzles solved on /daily
 //   bgs-daily-log    { day: { hub: challenges done that day } }         for the daily-challenge streak
 // The other games keep their own daily records (four-in-a-row: bgs-daily, sudoku: bgs-sdk-daily,
 // word-guess: bgs-wg-daily, letter-hive: bgs-hive-daily).
@@ -12,6 +12,7 @@ export const dayKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMo
 export const DAILY_GAMES = [
   { game: 'chess', name: 'Chess', icon: '♟️', inline: true, task: 'A chess puzzle: find the winning move.' },
   { game: 'checkers', name: 'Checkers', icon: '⛀', inline: true, task: 'A checkers puzzle: find the jump, the shot or the trap.' },
+  { game: 'russian-checkers', name: 'Russian Checkers', icon: '⛁', inline: true, task: 'A Russian Checkers puzzle: find the capture, the combination or the king trap.' },
   { game: 'mancala', name: 'Mancala', icon: '🫘', inline: true, task: 'A mancala puzzle: find the free turn or the capture.' },
   { game: 'four-in-a-row', name: 'Four in a Row', icon: '🔴', href: '/play/four-in-a-row?mode=daily', task: 'One move to win. You get one try, so look carefully.' },
   { game: 'sudoku', name: 'Sudoku', icon: '🔢', href: '/play/sudoku?mode=daily', task: 'Today’s Sudoku: the same grid for everyone.' },
@@ -34,7 +35,7 @@ export function statusOf(game) {
   const today = dayKey();
   const get = (k) => store.get(k, null) || {};
   switch (game) {
-    case 'chess': case 'checkers': case 'mancala': {
+    case 'chess': case 'checkers': case 'russian-checkers': case 'mancala': {
       const s = !!(get('bgs-puzzles')[today] || {})[game];
       return { done: s, solved: s };
     }

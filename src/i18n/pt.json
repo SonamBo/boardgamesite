@@ -57,6 +57,12 @@
    "card": "Pule as peças do adversário, faça damas e limpe o tabuleiro. Capturar é obrigatório.",
    "blurb": "Pule peças, faça damas e limpe o tabuleiro."
   },
+  "russian-checkers": {
+   "name": "Damas russas",
+   "full": "Damas russas (shashki)",
+   "card": "Shashki, as damas russas. As peças capturam para trás, a dama voa pelas diagonais e capturar é obrigatório.",
+   "blurb": "Damas com dama voadora e captura para trás."
+  },
   "solitaire": {
    "name": "Paciência",
    "full": "Paciência (Klondike)",
@@ -466,6 +472,80 @@
     ", move here": ", mover para cá"
    },
    "patterns": [
+    [
+     "1 piece",
+     "1 peça"
+    ],
+    [
+     "(\\d+) pieces?",
+     "{1} peças"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "Vez de {1}: captura obrigatória"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "Sua vez: captura obrigatória"
+    ],
+    [
+     "(.+)’s turn",
+     "Vez de {1}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, peça dourada{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, peça preta{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, dama dourada{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, dama preta{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, vazia"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, mover para cá"
+    ]
+   ]
+  },
+  "russian-checkers": {
+   "exact": {
+    "Keep jumping": "Continue pulando",
+    "No captures for a long while.": "Faz tempo que ninguém captura.",
+    "Nicely played. New game?": "Bem jogado. Outra partida?",
+    ", move here": ", mover para cá",
+    "Keep capturing": "Continue capturando",
+    "The same position came up three times.": "A mesma posição se repetiu três vezes.",
+    "15 moves each with only kings moving and nothing captured.": "15 lances de cada lado só com damas e sem capturas.",
+    "Neither side can make progress.": "Nenhum lado consegue avançar."
+   },
+   "patterns": [
+    [
+     "([a-h]\\d), (?:your|gold) piece, captured",
+     "{1}, peça dourada, capturada"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece, captured",
+     "{1}, peça preta, capturada"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king, captured",
+     "{1}, dama dourada, capturada"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king, captured",
+     "{1}, dama preta, capturada"
+    ],
     [
      "1 piece",
      "1 peça"

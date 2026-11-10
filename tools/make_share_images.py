@@ -44,6 +44,22 @@ def checkers():
     return f'<div class="grid8 ck">{"".join(cells)}</div>'
 
 
+def russian_checkers():
+    # A flying gold king on the long diagonal, about to sweep through the black pieces.
+    gold = {56, 58, 60, 51, 53, 46, 44, 62, 35}
+    ivory = {1, 3, 5, 7, 10, 12, 19, 21, 26, 14}
+    cells = []
+    for i in range(64):
+        dark = ((i >> 3) + (i & 7)) % 2 == 1
+        piece = ""
+        if dark and i in gold:
+            piece = '<i class="pc g k"></i>' if i in (35, 56) else '<i class="pc g"></i>'
+        elif dark and i in ivory:
+            piece = '<i class="pc d"></i>'
+        cells.append(f'<b class="{"d" if dark else "l"}">{piece}</b>')
+    return f'<div class="grid8 ck">{"".join(cells)}</div>'
+
+
 def reversi():
     gold = {19, 27, 28, 29, 35, 36, 43, 20, 44, 37}
     ivory = {18, 26, 34, 42, 21, 30, 45, 52}
@@ -505,6 +521,7 @@ def hex():
 ART = {
     "solitaire": ("Classic Klondike.", solitaire),
     "checkers": ("Jump. Crown. Win.", checkers),
+    "russian-checkers": ("Kings that fly.", russian_checkers),
     "reversi": ("Flip the board.", reversi),
     "four-in-a-row": ("Line up four.", four),
     "tic-tac-toe": ("Three in a row.", tic_tac_toe),

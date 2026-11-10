@@ -65,7 +65,7 @@ CATS = {
         "icon": "cat-multiplayer.svg",
         "title": "Two-Player Games – Play a Friend Free | BoardGameSite",
         "description": "Free two-player board games: play a friend on one phone, tablet or computer: Checkers, Reversi, Four in a Row and more.",
-        "intro": "Two players, one device: pick a game, choose “2 players” and take turns. Chess, Checkers, Reversi, Four in a Row, Five in a Row, Go, Hex and Crazy Eights can also be played online with a friend by sending a link.",
+        "intro": "Two players, one device: pick a game, choose “2 players” and take turns. Chess, Checkers, Russian Checkers, Reversi, Four in a Row, Five in a Row, Go, Hex and Crazy Eights can also be played online with a friend by sending a link.",
     },
 }
 
@@ -108,6 +108,19 @@ GAMES = {
         "friend": True,
         "record": "wld",
         "key": "bgs-ck-score",
+    },
+    "russian-checkers": {
+        "name": "Russian Checkers",
+        "full": "Russian Checkers (Shashki)",
+        "cat": "strategy",
+        "genre": ["Board game", "Strategy"],
+        "blurb": "Checkers with flying kings and backward captures.",
+        "card": "Shashki, the Russian draughts. Men capture backwards, kings fly along the diagonals and captures are compulsory.",
+        "tip": "Flying kings, backward captures, the main road and the Turkish strike.",
+        "chips": ["Strategy", "vs Computer", "2 players"],
+        "friend": True,
+        "record": "wld",
+        "key": "bgs-rck-score",
     },
     "go": {
         "name": "Go",

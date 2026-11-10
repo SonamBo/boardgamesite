@@ -57,6 +57,12 @@
    "card": "Überspringe gegnerische Steine, mach Damen und räum das Brett ab. Schlagen ist Pflicht.",
    "blurb": "Steine überspringen, Damen machen, Brett abräumen."
   },
+  "russian-checkers": {
+   "name": "Russische Dame",
+   "full": "Russische Dame (Schaschki)",
+   "card": "Schaschki, die russische Dame. Steine schlagen auch rückwärts, Damen fliegen über die Diagonalen, Schlagen ist Pflicht.",
+   "blurb": "Dame mit fliegenden Damen und Rückwärtsschlagen."
+  },
   "solitaire": {
    "name": "Solitär",
    "full": "Solitär (Klondike)",
@@ -470,6 +476,80 @@
     ", move here": ", hierher ziehen"
    },
    "patterns": [
+    [
+     "1 piece",
+     "1 Stein"
+    ],
+    [
+     "(\\d+) pieces?",
+     "{1} Steine"
+    ],
+    [
+     "(.+)’s turn: you must capture",
+     "{1} ist dran: Schlagen ist Pflicht"
+    ],
+    [
+     "Your (?:move|turn): you must capture",
+     "Du bist dran: Schlagen ist Pflicht"
+    ],
+    [
+     "(.+)’s turn",
+     "{1} ist dran"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) piece(, move here)?",
+     "{1}, goldener Stein{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece(, move here)?",
+     "{1}, schwarzer Stein{2}"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king(, move here)?",
+     "{1}, goldene Dame{2}"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king(, move here)?",
+     "{1}, schwarze Dame{2}"
+    ],
+    [
+     "([a-h]\\d), empty",
+     "{1}, leer"
+    ],
+    [
+     "([a-h]\\d), move here",
+     "{1}, hierher ziehen"
+    ]
+   ]
+  },
+  "russian-checkers": {
+   "exact": {
+    "Keep jumping": "Weiter springen",
+    "No captures for a long while.": "Schon lange wurde nichts geschlagen.",
+    "Nicely played. New game?": "Gut gespielt. Neues Spiel?",
+    ", move here": ", hierher ziehen",
+    "Keep capturing": "Weiter schlagen",
+    "The same position came up three times.": "Dieselbe Stellung kam dreimal vor.",
+    "15 moves each with only kings moving and nothing captured.": "15 Züge pro Seite nur mit Damen und ohne Schlagen.",
+    "Neither side can make progress.": "Keine Seite kommt weiter."
+   },
+   "patterns": [
+    [
+     "([a-h]\\d), (?:your|gold) piece, captured",
+     "{1}, goldener Stein, geschlagen"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) piece, captured",
+     "{1}, schwarzer Stein, geschlagen"
+    ],
+    [
+     "([a-h]\\d), (?:your|gold) king, captured",
+     "{1}, goldene Dame, geschlagen"
+    ],
+    [
+     "([a-h]\\d), (?:computer|black) king, captured",
+     "{1}, schwarze Dame, geschlagen"
+    ],
     [
      "1 piece",
      "1 Stein"
