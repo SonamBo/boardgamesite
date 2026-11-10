@@ -4,6 +4,7 @@ import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './ga
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const SIZES = { easy: 3, medium: 4, hard: 5 };
@@ -11,12 +12,17 @@ const SIZE_KEY = 'bgs-dots-size';
 const score = record('dots');
 const getLevel = levelSwitch('dots', () => {});
 const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
-const vsCpu = () => getOpp() === 'cpu';
+let onlineOn = roomInLink, ol = null;
+const vsCpu = () => !onlineOn && getOpp() === 'cpu';
+const humanTurn = () => !busy && !over && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
+const undoBtn = $('undo');
 const svg = $('db-board');
 
 let n = [3, 4, 5, 6].includes(store.get(SIZE_KEY, 4)) ? store.get(SIZE_KEY, 4) : 4;
 // lines: ids "h:r:c" (r 0..n, c 0..n-1) and "v:r:c" (r 0..n-1, c 0..n)
 let lines, owner, turn, scores, over, busy, started, lastLine;
+// positions before each line, for Undo (vs the computer it takes back your line and its replies)
+let history = [];
 
 const allLines = () => {
   const out = [];
@@ -79,7 +85,7 @@ function render() {
   let h = '';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
     const o = owner[r * n + c];
-    if (o) h += '<rect x="' + (X(c) + 1) + '" y="' + (Y(r) + 1) + '" width="' + (g - 2) + '" height="' + (g - 2) + '" rx="2" class="bx p' + o + '"/><text x="' + (X(c) + g / 2) + '" y="' + (Y(r) + g / 2 + 2.4) + '" class="bxl">' + (vsCpu() ? (o === 1 ? 'You' : 'CPU') : 'P' + o) + '</text>';
+    if (o) h += '<rect x="' + (X(c) + 1) + '" y="' + (Y(r) + 1) + '" width="' + (g - 2) + '" height="' + (g - 2) + '" rx="2" class="bx p' + o + '"/><text x="' + (X(c) + g / 2) + '" y="' + (Y(r) + g / 2 + 2.4) + '" class="bxl">' + (onlineOn ? (o === ol.mySeat() + 1 ? 'You' : 'Them') : vsCpu() ? (o === 1 ? 'You' : 'CPU') : 'P' + o) + '</text>';
   }
   for (const id of allLines()) {
     const [t, r, c] = [id[0], +id.split(':')[1], +id.split(':')[2]];
@@ -90,21 +96,25 @@ function render() {
   }
   for (let r = 0; r <= n; r++) for (let c = 0; c <= n; c++) h += '<circle cx="' + X(c) + '" cy="' + Y(r) + '" r="1.5" class="dot"/>';
   svg.innerHTML = h;
-  svg.classList.toggle('wait', busy || over || (vsCpu() && turn === 2));
+  svg.classList.toggle('wait', !humanTurn());
+  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === 1) : history.length);
   $('score-you').textContent = String(scores[1]);
   $('score-cpu').textContent = String(scores[2]);
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
 }
 
-async function move(id, p) {
+async function move(id, p, remote = false) {
+  history.push({ lines: new Set(lines), owner: owner.slice(), turn, scores: scores.slice(), lastLine });
   if (!started) { started = true; track('game_start', { game: 'dots-and-boxes', opponent: getOpp(), size: n }); }
   const closed = draw(id, p);
   scores[p] += closed;
   play(closed ? 'found' : 'place');
+  if (onlineOn && !remote) ol.send(id, (closed ? p : 3 - p) - 1, lines.size === allLines().length);
   if (lines.size === allLines().length) { render(); return finish(); }
   if (!closed) turn = 3 - p;
   render();
+  if (onlineOn) { setStatus(ol.myTurn() ? (closed && p === ol.mySeat() + 1 ? 'You closed a box: go again' : 'Your turn') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   const who = vsCpu() ? (turn === 1 ? 'Your' : 'Computer’s') : (turn === 1 ? 'Player 1’s' : 'Player 2’s');
   setStatus(closed ? (p === 1 && vsCpu() ? 'You closed ' : (vsCpu() ? 'The computer closed ' : 'Player ' + p + ' closed ')) + (closed === 1 ? 'a box' : 'two boxes') + ': go again' : who + ' turn', turn === 2 ? 'cpu' : '');
   if (vsCpu() && turn === 2) { busy = true; render(); await wait(closed ? 350 : 600); busy = false; move(cpuPick(), 2); }
@@ -115,6 +125,15 @@ function finish() {
   render();
   const [a, b] = [scores[1], scores[2]];
   const res = a > b ? 'win' : a < b ? 'lose' : 'draw';
+  if (onlineOn) {
+    const me = ol.mySeat() + 1, [mine, theirs] = [scores[me], scores[3 - me]];
+    const r = mine > theirs ? 'win' : mine < theirs ? 'lose' : 'draw';
+    showResult(r, r === 'win' ? 'You win!' : r === 'lose' ? 'Your friend wins' : 'It’s a draw', 'Boxes: you ' + mine + ', your friend ' + theirs + '.');
+    setStatus('Game over: ' + mine + ' to ' + theirs, r === 'lose' ? 'cpu' : '');
+    play(r === 'lose' ? 'lose' : 'win', 0.1);
+    track('game_end', { game: 'dots-and-boxes', result: r, mode: 'online' });
+    return;
+  }
   if (vsCpu()) { score.add(res); showResult(res, res === 'win' ? 'You won!' : res === 'lose' ? 'The computer won' : 'It’s a draw', 'Boxes: you ' + a + ', computer ' + b + '.'); }
   else showResult(res === 'draw' ? 'draw' : 'win', res === 'draw' ? 'It’s a draw' : (a > b ? 'Player 1' : 'Player 2') + ' wins!', 'Boxes: ' + a + ' to ' + b + '.');
   setStatus('Game over: ' + a + ' to ' + b, res === 'lose' && vsCpu() ? 'cpu' : '');
@@ -123,14 +142,15 @@ function finish() {
 }
 
 function newGame() {
-  lines = new Set(); owner = new Array(n * n).fill(0); turn = 1; scores = [0, 0, 0]; over = false; busy = false; started = false; lastLine = null;
+  lines = new Set(); owner = new Array(n * n).fill(0); turn = 1; history = []; scores = [0, 0, 0]; over = false; busy = false; started = false; lastLine = null;
   $('result').hidden = true;
   render();
-  setStatus((vsCpu() ? 'Your' : 'Player 1’s') + ' turn: draw a line', '');
+  if (onlineOn) setStatus(ol.myTurn() ? 'Your turn: draw a line' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
+  else setStatus((vsCpu() ? 'Your' : 'Player 1’s') + ' turn: draw a line', '');
 }
 svg.addEventListener('click', (e) => {
   const l = e.target.closest('.hit');
-  if (!l || busy || over || (vsCpu() && turn === 2)) return;
+  if (!l || !humanTurn()) return;
   move(l.dataset.id, turn);
 });
 svg.addEventListener('keydown', (e) => { const l = e.target.closest('.hit'); if (l && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); l.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
@@ -143,7 +163,35 @@ document.querySelectorAll('[data-dsize]').forEach((b) => {
     newGame();
   });
 });
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
-$('again').addEventListener('click', newGame);
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+$('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
+$('new-game').classList.add('online-hide');
+$('again').classList.add('online-hide');
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your line and the computer's replies
+  let h = history.pop();
+  while (vsCpu() && h.turn !== 1 && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== 1) { history.push(h); return; }
+  ({ lines, owner, turn, scores, lastLine } = h);
+  play('card');
+  render();
+  setStatus((vsCpu() ? 'Your' : turn === 1 ? 'Player 1’s' : 'Player 2’s') + ' turn: draw a line', !vsCpu() && turn === 2 ? 'cpu' : '');
+});
+undoBtn.classList.add('online-hide');
+// the board size can't change during an online game: it's set by whoever made the link
+document.querySelector('[data-dsize]').parentElement.classList.add('online-hide');
+document.querySelector('[data-dsize]').parentElement.previousElementSibling?.classList.add('online-hide');
+ol = online('dots-and-boxes', {
+  reset: () => newGame(),
+  apply: (t) => { if (/^[hv]:\d+:\d+$/.test(t) && !lines.has(t)) move(t, turn, true); },
+  seatName: (s) => (s === 0 ? 'Player 1 (first)' : 'Player 2'),
+  variant: (v) => {
+    if (v && [3, 4, 5, 6].includes(Number(v))) { n = Number(v); document.querySelectorAll('[data-dsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.dsize) === n))); }
+    return String(n);
+  },
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
+});
 void SIZES; void G;
 newGame();

@@ -8,6 +8,7 @@ import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const SIZE_KEY = 'bgs-hex-size';
+const SWAP_KEY = 'bgs-hex-swap';
 const score = record('hex', { draws: false });
 const getLevel = levelSwitch('hex', () => {});
 const getOpp = opponentSwitch('hex', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
@@ -15,6 +16,15 @@ const vsCpu = () => getOpp() === 'cpu';
 const svg = $('hx-board');
 let n = [7, 9, 11].includes(store.get(SIZE_KEY, 9)) ? store.get(SIZE_KEY, 9) : 9;
 let B, turn, over, busy, started, last, winPath, onlineOn = roomInLink, ol = null;
+// Swap (pie) rule, off by default: after Gold's first stone, Ivory may take it over instead of placing one.
+// The stone is replaced by an ivory stone on the mirror-image cell (row and column swapped), so it serves Ivory's sides.
+let swapRule = store.get(SWAP_KEY, false) === true;
+// positions before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
+const undoBtn = $('undo'), swapBtn = $('swap');
+const stones = () => B.filter(Boolean).length;
+const canSwap = () => swapRule && !over && turn === 2 && stones() === 1 && B.indexOf(1) >= 0;
+const humanTurn = () => !busy && !over && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
 
 const NB = [[-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0]];
 const nbs = (i) => { const r = Math.floor(i / n), c = i % n; return NB.map(([dr, dc]) => [r + dr, c + dc]).filter(([a, b]) => a >= 0 && b >= 0 && a < n && b < n).map(([a, b]) => a * n + b); };
@@ -89,11 +99,14 @@ function render() {
   }
   svg.innerHTML = s;
   svg.classList.toggle('wait', busy || over || (vsCpu() && turn === 2));
+  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === 1) : history.length);
+  swapBtn.hidden = !(canSwap() && humanTurn());
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
 }
 
 async function put(i, remote = false) {
+  history.push({ B: B.slice(), turn, last });
   if (!started) { started = true; track('game_start', { game: 'hex', opponent: getOpp(), size: n }); }
   B[i] = turn; last = i;
   play('place');
@@ -104,7 +117,31 @@ async function put(i, remote = false) {
   render();
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn: join ' + (ol.mySeat() === 0 ? 'top to bottom' : 'left to right') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   setStatus(vsCpu() ? (turn === 1 ? 'Your turn: join top to bottom' : 'Computer’s turn') : (turn === 1 ? 'Gold: join top to bottom' : 'Ivory: join left to right'), turn === 2 ? 'cpu' : '');
-  if (vsCpu() && turn === 2) { busy = true; render(); await wait(400); busy = false; put(cpuPick(B, 2)); }
+  if (canSwap() && humanTurn()) setStatus((onlineOn ? 'Your turn' : 'Ivory') + ': place a stone, or swap to take over Gold’s stone', turn === 2 ? 'cpu' : '');
+  if (vsCpu() && turn === 2) cpuTurn();
+}
+async function cpuTurn() {
+  busy = true; render(); await wait(400); busy = false;
+  if (over) return;
+  if (canSwap() && cpuWantsSwap()) return swap();
+  put(cpuPick(B, 2));
+}
+// The computer takes over a first stone in the middle of the board, where it's strongest.
+function cpuWantsSwap() {
+  const i = B.indexOf(1), r = Math.floor(i / n), c = i % n, m = (n - 1) / 2;
+  return Math.abs(r - m) + Math.abs(c - m) + Math.abs(r + c - 2 * m) <= (getLevel() === 'easy' ? n * 0.35 : n * 0.6);
+}
+function swap(remote = false) {
+  if (!canSwap()) return;
+  history.push({ B: B.slice(), turn, last });
+  const i = B.indexOf(1), r = Math.floor(i / n), c = i % n, j = c * n + r;
+  B[i] = 0; B[j] = 2; last = j;
+  play('card');
+  if (onlineOn && !remote) ol.send('s', 0, false);
+  turn = 1;
+  render();
+  if (onlineOn) { setStatus(ol.myTurn() ? 'Your friend swapped. Your turn: join top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
+  setStatus(vsCpu() ? 'The computer swapped: your stone is now theirs. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
 }
 function finish(w) {
   over = true; render();
@@ -125,12 +162,12 @@ function finish(w) {
   track('game_end', { game: 'hex', result: w === 1 ? 'win' : 'lose' });
 }
 function newGame() {
-  B = new Array(n * n).fill(0); turn = 1; over = false; busy = false; started = false; last = -1; winPath = null;
+  B = new Array(n * n).fill(0); turn = 1; history = []; over = false; busy = false; started = false; last = -1; winPath = null;
   $('result').hidden = true;
   render();
   setStatus(vsCpu() ? 'Your turn: join top to bottom' : 'Gold: join top to bottom', '');
 }
-svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || busy || over || (onlineOn ? !ol.myTurn() : vsCpu() && turn === 2)) return; const i = Number(h.dataset.i); if (!B[i]) put(i); });
+svg.addEventListener('click', (e) => { const h = e.target.closest('.hx'); if (!h || !humanTurn()) return; const i = Number(h.dataset.i); if (!B[i]) put(i); });
 svg.addEventListener('keydown', (e) => { const h = e.target.closest('.hx'); if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); h.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
 document.querySelector('[data-hsize]').parentElement.classList.add('online-hide');
 document.querySelector('[data-hsize]').parentElement.previousElementSibling.classList.add('online-hide');
@@ -140,11 +177,32 @@ document.querySelectorAll('[data-hsize]').forEach((b) => {
 });
 $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
 $('new-game').classList.add('online-hide');
+swapBtn.addEventListener('click', () => { if (humanTurn()) swap(); });
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your move and its reply
+  let h = history.pop();
+  while (vsCpu() && h.turn !== 1 && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== 1) { history.push(h); return; }
+  B = h.B; turn = h.turn; last = h.last; winPath = null;
+  play('card');
+  render();
+  setStatus(vsCpu() ? 'Your turn: join top to bottom' : (turn === 1 ? 'Gold: join top to bottom' : 'Ivory: join left to right'), turn === 2 ? 'cpu' : '');
+});
+undoBtn.classList.add('online-hide');
+document.querySelector('[data-hswap]').parentElement.classList.add('online-hide');
+document.querySelector('[data-hswap]').parentElement.previousElementSibling.classList.add('online-hide');
+document.querySelectorAll('[data-hswap]').forEach((b) => {
+  const paint = () => document.querySelectorAll('[data-hswap]').forEach((x) => x.setAttribute('aria-pressed', String((x.dataset.hswap === 'on') === swapRule)));
+  paint();
+  b.addEventListener('click', () => { if (busy) return; swapRule = b.dataset.hswap === 'on'; store.set(SWAP_KEY, swapRule); paint(); newGame(); });
+});
 ol = online('hex', {
   reset: () => newGame(),
-  apply: (t) => { const i = Number(t); if (B[i] === 0) put(i, true); },
+  apply: (t) => { if (t === 's') return swap(true); const i = Number(t); if (B[i] === 0) put(i, true); },
   seatName: (s) => (s === 0 ? 'Gold (top to bottom)' : 'Ivory (left to right)'),
-  variant: (v) => { if (v) { const k = Number(v); if ([7, 9, 11].includes(k)) n = k; } return String(n); },
+  // the room carries the board size, plus 's' when the swap rule is on: '9' or '9s'
+  variant: (v) => { if (v) { const k = parseInt(v, 10); if ([7, 9, 11].includes(k)) n = k; swapRule = /s$/.test(v); } return String(n) + (swapRule ? 's' : ''); },
   over: () => over,
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
 });

@@ -131,6 +131,14 @@
     },
     {
      "@type": "Question",
+     "name": "Can I take back a move?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games."
+     }
+    },
+    {
+     "@type": "Question",
      "name": "Can I play Four in a Row with a friend?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -256,6 +264,7 @@
         </div>
       </div>
       <div id="board" class="board" role="group" aria-label="Game board, 7 columns. Press 1 to 7 to drop a disc."></div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p id="board-hint" class="board-hint">Click a column, or press 1–7, to drop your disc.</p>
     </section>
 
@@ -266,9 +275,9 @@
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b><small id="score-you">0 wins</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b><small id="score-cpu">0 wins</small></div>
-        <p class="muted" style="font-size: 14px">Draws: <span id="score-draws">0</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">You</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
@@ -348,6 +357,8 @@
   <section class="faq">
     <h3>Is this Four in a Row game free?</h3>
     <p>Yes. Play the computer, a friend on the same device, or a friend online by sending a link, as often as you like. The daily challenge is free too. Everything runs in your browser, with no download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>Can I play Four in a Row with a friend?</h3>
     <p>Yes. Choose 2 players to take turns on one phone, tablet or computer, or tap Create a game link and send it so your friend can play on their own device.</p>
     <h3>Can the first player always win Four in a Row?</h3>
@@ -364,29 +375,29 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">More games to play</h2>
   <div class="related-grid">
-    <a class="related-card card" href="/play/chess">
-      <b>Chess</b>
-      <span>The classic. Checkmate the king to win.</span>
-    </a>
-    <a class="related-card card" href="/play/checkers">
-      <b>Checkers</b>
-      <span>Jump pieces, crown kings and clear the board.</span>
-    </a>
-    <a class="related-card card" href="/play/russian-checkers">
-      <b>Russian Checkers</b>
-      <span>Checkers with flying kings and backward captures.</span>
-    </a>
-    <a class="related-card card" href="/play/go">
-      <b>Go</b>
-      <span>Surround territory and capture stones. 9×9 board.</span>
+    <a class="related-card card" href="/play/tic-tac-toe">
+      <b>Tic Tac Toe</b>
+      <span>Three in a row. Play the computer, a friend, or online by link.</span>
     </a>
     <a class="related-card card" href="/play/reversi">
       <b>Reversi</b>
       <span>Trap discs between yours to flip them to your colour.</span>
     </a>
-    <a class="related-card card" href="/play/tic-tac-toe">
-      <b>Tic Tac Toe</b>
-      <span>Three in a row. Play the computer, a friend, or online by link.</span>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
+    </a>
+    <a class="related-card card" href="/play/go">
+      <b>Go</b>
+      <span>Surround territory and capture stones. 9×9 board.</span>
+    </a>
+    <a class="related-card card" href="/play/five-in-a-row">
+      <b>Five in a Row</b>
+      <span>Get five stones in a line before your opponent.</span>
+    </a>
+    <a class="related-card card" href="/play/russian-checkers">
+      <b>Russian Checkers</b>
+      <span>Checkers with flying kings and backward captures.</span>
     </a>
   </div>
   <a class="link-green" href="/games/strategy">All strategy games</a>

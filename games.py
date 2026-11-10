@@ -66,7 +66,7 @@ CATS = {
         "icon": "cat-multiplayer.svg",
         "title": "Two-Player Games – Play a Friend Free | BoardGameSite",
         "description": "Free two-player board games: play a friend on one phone, tablet or computer: Checkers, Reversi, Four in a Row and more.",
-        "intro": "Two players, one device: pick a game, choose “2 players” and take turns. Chess, Checkers, Russian Checkers, Reversi, Four in a Row, Five in a Row, Go, Hex and Crazy Eights can also be played online with a friend by sending a link.",
+        "intro": "Two players, one device: pick a game, choose “2 players” and take turns. Chess, Checkers, Russian Checkers, Reversi, Four in a Row, Five in a Row, Go, Hex, Mancala, Nine Men’s Morris, Dots and Boxes and Crazy Eights can also be played online with a friend by sending a link.",
     },
 }
 

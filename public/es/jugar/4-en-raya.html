@@ -243,6 +243,7 @@
         </div>
       </div>
       <div id="board" class="board" role="group" aria-label="Tablero de 7 columnas. Pulsa del 1 al 7 para soltar una ficha."></div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Deshacer</button></div>
       <p id="board-hint" class="board-hint">Toca una columna, o pulsa del 1 al 7, para soltar tu ficha.</p>
     </section>
 
@@ -253,9 +254,9 @@
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Tú</b><small id="score-you">0 victorias</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Máquina</b><small id="score-cpu">0 victorias</small></div>
-        <p class="muted" style="font-size: 14px">Empates: <span id="score-draws">0</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Tú</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Máquina</b></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Tu historial: <span id="record">Victorias: 0 · Derrotas: 0 · Empates: 0</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
@@ -344,29 +345,29 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">Más juegos para jugar</h2>
   <div class="related-grid">
-    <a class="related-card card" href="/es/jugar/ajedrez">
-      <b>Ajedrez</b>
-      <span>El clásico. Da jaque mate al rey para ganar.</span>
-    </a>
-    <a class="related-card card" href="/es/jugar/damas">
-      <b>Damas</b>
-      <span>Salta fichas, corona damas y limpia el tablero.</span>
-    </a>
-    <a class="related-card card" href="/es/jugar/damas-rusas">
-      <b>Damas rusas</b>
-      <span>Damas con damas voladoras y capturas hacia atrás.</span>
-    </a>
-    <a class="related-card card" href="/es/jugar/solitario">
-      <b>Solitario</b>
-      <span>El Klondike clásico, robando 1 o 3 cartas, con deshacer ilimitado.</span>
+    <a class="related-card card" href="/es/jugar/mancala">
+      <b>Mancala</b>
+      <span>Siembra semillas, gana turnos extra y captura para ganar.</span>
     </a>
     <a class="related-card card" href="/es/jugar/sudoku">
       <b>Sudoku</b>
       <span>Rellena la cuadrícula del 1 al 9. Tres niveles y un sudoku diario.</span>
     </a>
-    <a class="related-card card" href="/es/jugar/mancala">
-      <b>Mancala</b>
-      <span>Siembra semillas, gana turnos extra y captura para ganar.</span>
+    <a class="related-card card" href="/es/jugar/backgammon">
+      <b>Backgammon</b>
+      <span>Lleva tus fichas a casa y sácalas primero.</span>
+    </a>
+    <a class="related-card card" href="/es/jugar/solitario">
+      <b>Solitario</b>
+      <span>El Klondike clásico, robando 1 o 3 cartas, con deshacer ilimitado.</span>
+    </a>
+    <a class="related-card card" href="/es/jugar/reversi">
+      <b>Reversi</b>
+      <span>Encierra fichas entre las tuyas para darles la vuelta.</span>
+    </a>
+    <a class="related-card card" href="/es/jugar/damas-rusas">
+      <b>Damas rusas</b>
+      <span>Damas con damas voladoras y capturas hacia atrás.</span>
     </a>
   </div>
 </section>

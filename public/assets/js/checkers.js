@@ -16,6 +16,7 @@ const logMove = (b, side, m) => gameLog.push({ position: b.slice(), side, move: 
 const SAVE = 'bgs-ck-game';
 
 const boardEl = document.getElementById('board');
+const undoBtn = document.getElementById('undo');
 const FILES = 'abcdefgh';
 const CROWN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg>';
 const DRAW_AFTER = 80;   // half-moves of kings shuffling with no capture
@@ -31,6 +32,9 @@ const friend = () => getOpp() === 'friend';
 // turn: whose move it is (E.YOU = gold at the bottom, E.CPU = black at the top). Black moves first, as in the American rules.
 let board, over, busy, partial, lastPath, quiet, started, turn;
 let cpuTimer = 0;
+// positions before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
+const snapshot = () => history.push({ board: board.slice(), turn, quiet, lastPath, log: gameLog.length });
 let onlineOn = roomInLink && !L, ol = null;
 // a move as one character per square (keeps online moves short)
 const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -88,6 +92,8 @@ function render() {
     btn.setAttribute('aria-label', squareName(i) + ', ' + what);
     btn.disabled = !(pickable.has(i) || targets.has(i));
   }
+  // Undo: vs the computer only once you've moved (it may have opened the game)
+  undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === E.YOU));
   const n = E.countPieces(board);
   document.getElementById('count-you').textContent = n.you + (n.you === 1 ? ' piece' : ' pieces');
   document.getElementById('count-cpu').textContent = n.cpu + (n.cpu === 1 ? ' piece' : ' pieces');
@@ -169,6 +175,7 @@ function finish(result, resigned = false) {
 }
 
 function playerMove(m, remote = false) {
+  snapshot();
   logMove(board, turn, m);
   if (!started) { started = true; track('game_start', { game: 'checkers', level: friend() ? 'friend' : getLevel() }); L?.start(); }
   noteQuiet(m);
@@ -201,6 +208,7 @@ function computerMove() {
   const m = E.pickComputerMove(board, getLevel());
   busy = false;
   if (!m) return finish('win');
+  snapshot();
   logMove(board, E.CPU, m);
   noteQuiet(m);
   moveSound(m);
@@ -216,7 +224,7 @@ function computerMove() {
 
 function newGame() {
   L?.newGame();
-  gameLog = []; hideReview();
+  gameLog = []; history = []; hideReview();
   board = E.startBoard();
   over = false; busy = false; partial = []; lastPath = null; quiet = 0; started = false; turn = E.CPU;   // Black moves first
   clearTimeout(cpuTimer);
@@ -247,6 +255,21 @@ function resume() {
 }
 
 document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your move and its reply
+  let h = history.pop();
+  while (!friend() && h.turn !== E.YOU && history.length) h = history.pop();
+  if (!friend() && h.turn !== E.YOU) { history.push(h); return; }
+  board = h.board; turn = h.turn; quiet = h.quiet; lastPath = h.lastPath;
+  gameLog.length = h.log;
+  partial = [];
+  play('card');
+  saveGame(turn);
+  markTurn();
+  render();
+});
+undoBtn.classList.add('online-hide');
 document.getElementById('new-game').classList.add('online-hide');
 ol = online('checkers', {
   reset: () => newGame(),

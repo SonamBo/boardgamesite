@@ -7,12 +7,15 @@ import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
 import { wait } from './dice-ui.js';
+import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const score = record('morris');
 const getLevel = levelSwitch('morris', () => {});
 const getOpp = opponentSwitch('morris', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
-const vsCpu = () => getOpp() === 'cpu';
+let onlineOn = roomInLink, ol = null;
+const vsCpu = () => !onlineOn && getOpp() === 'cpu';
+const humanTurn = () => !over && !busy && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
 const svg = $('nm-board');
 
 const XY = [[0,0],[3,0],[6,0],[1,1],[3,1],[5,1],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,5],[3,5],[5,5],[0,6],[3,6],[6,6]];
@@ -97,11 +100,18 @@ let S, turn, sel, removing, over, busy, started, last;
 // quiet: half-moves since a piece was last removed; seen: how often each position has come up since then
 let quiet, seen;
 const posKey = () => S.b.join('') + S.hand.join(',') + turn;
+// positions before each move, for Undo (vs the computer it takes back your move and its reply)
+let history = [];
+const snapshot = () => history.push({ b: S.b.slice(), hand: S.hand.slice(), turn, last, quiet, seen: { ...seen } });
+// the move being made (online it's sent once any piece to remove has been picked): 'from-to', 'to' or with 'x<taken>'
+let cur = null;
+const token = (m, take) => (m.from != null ? m.from + '-' : '') + m.to + (take != null ? 'x' + take : '');
+const undoBtn = $('undo');
 function render() {
   let h = '<rect x="0" y="0" width="6" height="6" class="sq"/><rect x="1" y="1" width="4" height="4" class="sq"/><rect x="2" y="2" width="2" height="2" class="sq"/>';
   h += '<path d="M3 0V2M3 4V6M0 3H2M4 3H6" class="sq"/>';
   const canTake = removing ? removable(S.b, turn) : [];
-  const ms = !removing && !over && !busy && !(vsCpu() && turn === 2) ? moves(S, turn) : [];
+  const ms = !removing && humanTurn() ? moves(S, turn) : [];
   XY.forEach(([x, y], i) => {
     const p = S.b[i];
     const target = sel != null ? ms.some((m) => m.from === sel && m.to === i) : phase(S, turn) === 'place' && ms.some((m) => m.to === i);
@@ -114,16 +124,18 @@ function render() {
   $('hand2').textContent = S.hand[2] ? S.hand[2] + ' to place' : onBoard(S, 2) + ' on board';
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
+  undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === 1) : history.length);
 }
-const name = (p) => (vsCpu() ? (p === 1 ? 'You' : 'The computer') : p === 1 ? 'Gold' : 'Ivory');
+const name = (p) => (onlineOn ? (p === ol.mySeat() + 1 ? 'You' : 'Your friend') : vsCpu() ? (p === 1 ? 'You' : 'The computer') : p === 1 ? 'Gold' : 'Ivory');
 function prompt() {
   if (removing) return setStatus((vsCpu() && turn === 1 ? 'Mill! ' : '') + 'Pick a piece to remove', '');
   const ph = phase(S, turn);
-  const who = vsCpu() ? (turn === 1 ? 'Your turn' : 'Computer’s turn') : name(turn) + '’s turn';
+  if (onlineOn && !ol.myTurn()) return setStatus('Waiting for your friend', 'cpu');
+  const who = onlineOn ? 'Your turn' : vsCpu() ? (turn === 1 ? 'Your turn' : 'Computer’s turn') : name(turn) + '’s turn';
   setStatus(who + ': ' + (ph === 'place' ? 'place a piece' : ph === 'fly' ? 'three left, fly anywhere' : 'move a piece along a line'), turn === 2 ? 'cpu' : '');
 }
 
-async function after(p, m) {
+async function after(p, m, remote = false) {
   last = m.to;
   const millMade = MILLS.some((ml) => ml.includes(m.to) && ml.every((j) => S.b[j] === p));
   if (millMade && m.take == null) { removing = true; render(); prompt(); play('king'); return; }
@@ -131,22 +143,25 @@ async function after(p, m) {
   removing = false;
   turn = 3 - p; sel = null;
   if (m.take != null) { quiet = 0; seen = {}; } else quiet++;
-  if (lost(S, turn)) return finish(p);
   const k = posKey();
   seen[k] = (seen[k] || 0) + 1;
-  if (seen[k] >= REPEATS) return finishDraw('The same position came up three times.');
-  if (quiet >= DRAW_AFTER) return finishDraw('50 moves each with no piece removed.');
+  const end = lost(S, turn) ? 'won' : seen[k] >= REPEATS ? 'repeat' : quiet >= DRAW_AFTER ? 'quiet' : null;
+  if (onlineOn && !remote && cur) ol.send(token(cur, m.take), turn - 1, !!end);
+  if (end === 'won') return finish(p);
+  if (end === 'repeat') return finishDraw('The same position came up three times.');
+  if (end === 'quiet') return finishDraw('50 moves each with no piece removed.');
   render(); prompt();
   if (vsCpu() && turn === 2) {
     busy = true; render(); await wait(600); busy = false;
     const cm = cpuMove(S, 2);
+    snapshot(); cur = cm;
     S = apply(S, 2, cm);
     after(2, cm);
   }
 }
 
 function tap(i) {
-  if (over || busy || (vsCpu() && turn === 2)) return;
+  if (!humanTurn()) return;
   if (!started) { started = true; track('game_start', { game: 'nine-mens-morris', opponent: getOpp() }); }
   if (removing) {
     if (!removable(S.b, turn).includes(i)) { setStatus('You can’t take a piece in a mill unless they’re all in mills', 'neutral'); return; }
@@ -156,16 +171,25 @@ function tap(i) {
   const ms = moves(S, turn);
   if (phase(S, turn) === 'place') {
     if (S.b[i]) return;
+    snapshot(); cur = { to: i };
     S = apply(S, turn, { to: i });
     return after(turn, { to: i });
   }
   if (S.b[i] === turn) { sel = ms.some((m) => m.from === i) ? i : null; if (sel == null) shake(svg, play); else play('select'); return render(); }
-  if (sel != null && ms.some((m) => m.from === sel && m.to === i)) { const m = { from: sel, to: i }; S = apply(S, turn, m); sel = null; return after(turn, m); }
+  if (sel != null && ms.some((m) => m.from === sel && m.to === i)) { const m = { from: sel, to: i }; snapshot(); cur = m; S = apply(S, turn, m); sel = null; return after(turn, m); }
 }
 
 function finish(w) {
   over = true; render();
   const why = onBoard(S, 3 - w) < 3 ? 'is down to two pieces' : 'has no moves left';
+  if (onlineOn) {
+    const won = w === ol.mySeat() + 1;
+    showResult(won ? 'win' : 'lose', won ? 'You win!' : 'Your friend wins', (won ? 'Your friend ' + why : 'You ' + why.replace('is', 'are').replace('has', 'have')) + '.');
+    setStatus(won ? 'You win!' : 'Your friend wins', won ? '' : 'cpu');
+    play(won ? 'win' : 'lose', 0.1);
+    track('game_end', { game: 'nine-mens-morris', result: won ? 'win' : 'lose', mode: 'online' });
+    return;
+  }
   if (vsCpu()) {
     const won = w === 1;
     score.add(won ? 'win' : 'lose');
@@ -187,13 +211,44 @@ function finishDraw(why) {
 
 function newGame() {
   S = { b: new Array(24).fill(0), hand: [0, 9, 9] }; turn = 1; sel = null; removing = false; over = false; busy = false; started = false; last = -1;
-  quiet = 0; seen = {};
+  quiet = 0; seen = {}; history = []; cur = null;
   $('result').hidden = true;
   render(); prompt();
 }
 svg.addEventListener('click', (e) => { const g = e.target.closest('.pt'); if (g) tap(Number(g.dataset.i)); });
 svg.addEventListener('keydown', (e) => { const g = e.target.closest('.pt'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tap(Number(g.dataset.i)); } });
-$('new-game').addEventListener('click', () => { if (!busy) newGame(); });
-$('again').addEventListener('click', newGame);
+$('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
+$('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
+$('new-game').classList.add('online-hide');
+$('again').classList.add('online-hide');
+undoBtn.addEventListener('click', () => {
+  if (busy || over || onlineOn || !history.length) return;
+  // vs the computer, take back your move and its reply
+  let h = history.pop();
+  while (vsCpu() && h.turn !== 1 && history.length) h = history.pop();
+  if (vsCpu() && h.turn !== 1) { history.push(h); return; }
+  S = { b: h.b, hand: h.hand }; turn = h.turn; last = h.last; quiet = h.quiet; seen = h.seen;
+  sel = null; removing = false; cur = null;
+  play('card');
+  render(); prompt();
+});
+undoBtn.classList.add('online-hide');
+// Online with a friend: moves travel as 'from-to' (or just 'to' while placing), plus 'x<point>' for a removed piece
+ol = online('nine-mens-morris', {
+  reset: () => newGame(),
+  apply: (t) => {
+    const m = /^(?:(\d+)-)?(\d+)(?:x(\d+))?$/.exec(t);
+    if (!m || over) return;
+    const mv = { from: m[1] != null ? Number(m[1]) : null, to: Number(m[2]), take: m[3] != null ? Number(m[3]) : null };
+    if (mv.from == null) delete mv.from;
+    if (mv.take == null) delete mv.take;
+    snapshot(); cur = mv;
+    S = apply(S, turn, mv);
+    after(turn, mv, true);
+  },
+  seatName: (s) => (s === 0 ? 'Gold (first)' : 'Ivory'),
+  over: () => over,
+  onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); prompt(); }
+});
 newGame();
 void store;

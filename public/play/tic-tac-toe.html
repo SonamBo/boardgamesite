@@ -125,6 +125,14 @@
     },
     {
      "@type": "Question",
+     "name": "Can I take back a move?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games."
+     }
+    },
+    {
+     "@type": "Question",
      "name": "How do I play tic tac toe with a friend online?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -252,6 +260,7 @@
       <div class="board-fit ttt-wrap">
         <div id="board" class="ttt" role="group" aria-label="Tic tac toe grid. Press 1 to 9 to play a square, counting from the top left."></div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap a square to play your mark. Players take turns going first. Your record: <span id="record">0 wins · 0 losses · 0 draws</span></p>
     </section>
 
@@ -334,6 +343,8 @@
   <section class="faq">
     <h3>Is this tic tac toe game free?</h3>
     <p>Yes. Play as many games as you like against the computer or friends, free in your browser on a phone, tablet or computer. No download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>How do I play tic tac toe with a friend online?</h3>
     <p>Tap Create a game link and send the link to your friend. When they open it, the game starts on both devices. To play side by side instead, choose 2 players.</p>
     <h3>Is it possible to beat the Hard computer?</h3>
@@ -350,29 +361,29 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">More games to play</h2>
   <div class="related-grid">
-    <a class="related-card card" href="/play/chess">
-      <b>Chess</b>
-      <span>The classic. Checkmate the king to win.</span>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
     </a>
-    <a class="related-card card" href="/play/checkers">
-      <b>Checkers</b>
-      <span>Jump pieces, crown kings and clear the board.</span>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
     </a>
-    <a class="related-card card" href="/play/russian-checkers">
-      <b>Russian Checkers</b>
-      <span>Checkers with flying kings and backward captures.</span>
-    </a>
-    <a class="related-card card" href="/play/go">
-      <b>Go</b>
-      <span>Surround territory and capture stones. 9×9 board.</span>
+    <a class="related-card card" href="/play/five-in-a-row">
+      <b>Five in a Row</b>
+      <span>Get five stones in a line before your opponent.</span>
     </a>
     <a class="related-card card" href="/play/reversi">
       <b>Reversi</b>
       <span>Trap discs between yours to flip them to your colour.</span>
     </a>
-    <a class="related-card card" href="/play/four-in-a-row">
-      <b>Four in a Row</b>
-      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    <a class="related-card card" href="/play/nine-mens-morris">
+      <b>Nine Men’s Morris</b>
+      <span>Form mills of three to remove your rival’s pieces.</span>
+    </a>
+    <a class="related-card card" href="/play/go">
+      <b>Go</b>
+      <span>Surround territory and capture stones. 9×9 board.</span>
     </a>
   </div>
   <a class="link-green" href="/games/strategy">All strategy games</a>

@@ -700,12 +700,12 @@ body.maxed .sol-wrap > * { width: min(100%, calc((100dvh - 150px) * 1.3)); margi
    space left under the header and status line, so the status and the computer's reply stay in view without scrolling.
    game-ui.js measures that space into --fit-h (the calc is a fallback); --fit-ratio is the board's width ÷ height. */
 [data-fit-height] { --board-chrome: 200px; }
-[data-fit-height] .board-col > .board-head + * { width: min(100%, max(240px, calc(var(--fit-h, 100dvh - var(--board-chrome)) * var(--fit-ratio, 1)))); }
+[data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { width: min(100%, max(240px, calc(var(--fit-h, 100dvh - var(--board-chrome)) * var(--fit-ratio, 1)))); }
 @media (max-width: 900px) {
   [data-fit-height] { --board-chrome: calc(272px + env(safe-area-inset-bottom)); }
-  [data-fit-height] .board-col > .board-head + * { margin-inline: auto; }
+  [data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { margin-inline: auto; }
 }
-body.maxed [data-fit-height] .board-col > .board-head + * { width: 100%; }
+body.maxed [data-fit-height] .board-col > .board-head + *, body.maxed [data-fit-height] .board-col > .board-head + * + .peg-tools { width: 100%; }
 
 /* ---------- Single-player game panels ---------- */
 .solo-stats { flex-direction: row; justify-content: space-around; text-align: center; }

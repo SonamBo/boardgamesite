@@ -130,6 +130,14 @@
     },
     {
      "@type": "Question",
+     "name": "Can I take back a move?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games."
+     }
+    },
+    {
+     "@type": "Question",
      "name": "What happens if I can’t make a move?",
      "acceptedAnswer": {
       "@type": "Answer",
@@ -249,6 +257,7 @@
       <div class="board-wrap">
         <div id="board" class="grid8 rv" role="group" aria-label="Reversi board. You play gold and move first."></div>
       </div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Undo</button></div>
       <p class="board-hint">Tap a square with a gold dot. Every dark disc caught in a line between your discs flips to gold.</p>
     </section>
 
@@ -321,6 +330,8 @@
   <section class="faq">
     <h3>Is this Reversi game free?</h3>
     <p>Yes. Play as many games as you like in your browser on a phone, tablet or computer. There’s no download and no account needed.</p>
+    <h3>Can I take back a move?</h3>
+    <p>Yes. Undo takes back your last move, and against the computer its reply too. Undo isn’t available in online games.</p>
     <h3>What happens if I can’t make a move?</h3>
     <p>Your turn is skipped and the computer moves again. You get your turn back as soon as you have a move that flips at least one disc.</p>
     <h3>Can a game of Reversi end in a draw?</h3>
@@ -335,29 +346,29 @@
 <section class="related" aria-labelledby="related-h">
   <h2 id="related-h">More games to play</h2>
   <div class="related-grid">
-    <a class="related-card card" href="/play/chess">
-      <b>Chess</b>
-      <span>The classic. Checkmate the king to win.</span>
-    </a>
-    <a class="related-card card" href="/play/checkers">
-      <b>Checkers</b>
-      <span>Jump pieces, crown kings and clear the board.</span>
-    </a>
-    <a class="related-card card" href="/play/russian-checkers">
-      <b>Russian Checkers</b>
-      <span>Checkers with flying kings and backward captures.</span>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
     </a>
     <a class="related-card card" href="/play/go">
       <b>Go</b>
       <span>Surround territory and capture stones. 9×9 board.</span>
     </a>
-    <a class="related-card card" href="/play/four-in-a-row">
-      <b>Four in a Row</b>
-      <span>Drop discs and line up four, plus a new daily puzzle.</span>
-    </a>
     <a class="related-card card" href="/play/tic-tac-toe">
       <b>Tic Tac Toe</b>
       <span>Three in a row. Play the computer, a friend, or online by link.</span>
+    </a>
+    <a class="related-card card" href="/play/russian-checkers">
+      <b>Russian Checkers</b>
+      <span>Checkers with flying kings and backward captures.</span>
+    </a>
+    <a class="related-card card" href="/play/mancala">
+      <b>Mancala</b>
+      <span>Sow seeds, earn extra turns and capture to win.</span>
+    </a>
+    <a class="related-card card" href="/play/checkers">
+      <b>Checkers</b>
+      <span>Jump pieces, crown kings and clear the board.</span>
     </a>
   </div>
   <a class="link-green" href="/games/strategy">All strategy games</a>

@@ -23,6 +23,7 @@
         </div>
       </div>
       <div id="board" class="board" role="group" aria-label="Brett mit 7 Spalten. Drück 1 bis 7, um einen Stein einzuwerfen."></div>
+      <div class="peg-tools"><button id="undo" type="button" class="tool-btn" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Rückgängig</button></div>
       <p id="board-hint" class="board-hint">Tippe auf eine Spalte oder drück 1 bis 7, um deinen Stein einzuwerfen.</p>
     </section>
 
@@ -33,9 +34,9 @@
       </nav>
 
       <div id="classic-panel" class="players card">
-        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Du</b><small id="score-you">0 Siege</small></div>
-        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b><small id="score-cpu">0 Siege</small></div>
-        <p class="muted" style="font-size: 14px">Unentschieden: <span id="score-draws">0</span></p>
+        <div id="row-you" class="player"><span class="dot you" aria-hidden="true"></span><b data-name="p1">Du</b></div>
+        <div id="row-cpu" class="player"><span class="dot cpu" aria-hidden="true"></span><b data-name="p2">Computer</b></div>
+        <p class="muted" style="font-size: 14px" data-cpu-only>Deine Bilanz: <span id="record">Siege: 0 · Niederlagen: 0 · Unentschieden: 0</span></p>
       </div>
 
       <div id="level-box" style="display: flex; flex-direction: column; gap: 16px">
