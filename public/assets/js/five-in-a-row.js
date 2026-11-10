@@ -1,6 +1,6 @@
 // Five in a Row (Gomoku): take turns placing stones. First to make five in a row, in any direction, wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, askResume, modeName, tapConfirm } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
@@ -16,6 +16,15 @@ const getSide = sideSwitch('gomoku', ['first', 'second', 'random'], () => newGam
 let me = 1;   // your colour against the computer in this game: 1 gold (first), 2 ivory
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
+const tap2 = tapConfirm();   // on the 15×15 board: tap once to preview, again to place
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (over || busy || cpuTurnNow()) return null;
+    return [cells[cpuPick(B, me, 'hard')]];
+  }
+});
 // your stones so far (gold plays the even moves of the history)
 const myStones = () => (me === 1 ? Math.ceil(history.length / 2) : Math.floor(history.length / 2));
 function paintSides() {
@@ -32,7 +41,7 @@ for (let i = 0; i < N * N; i++) {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'gm';
-  b.addEventListener('click', () => place(i));
+  b.addEventListener('click', (e) => place(i, e.detail === 0));
   boardEl.appendChild(b);
   cells.push(b);
 }
@@ -67,8 +76,7 @@ function spotValue(b, i, p) {
   }
   return total;
 }
-function cpuPick(b, p) {
-  const lvl = getLevel();
+function cpuPick(b, p, lvl = getLevel()) {
   const cand = [];
   const any = b.some((x) => x);
   for (let i = 0; i < N * N; i++) {
@@ -101,11 +109,13 @@ function render() {
   $('undo').disabled = !(vsCpu() ? myStones() : history.length) || busy || over || onlineOn;
 }
 
-function place(i) {
+// key: a click from the keyboard places straight away; a tap may ask for a second tap first
+function place(i, key = false) {
   if (over || busy || animating() || B[i] || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
-  put(i);
+  if (key || tap2.ok(i, cells[i], turn)) put(i);
 }
 function put(i, remote = false) {
+  tap2.clear();
   if (!started) { started = true; track('game_start', { game: 'five-in-a-row', opponent: getOpp() }); }
   history.push(i);
   B[i] = turn; last = i;
@@ -132,8 +142,8 @@ function put(i, remote = false) {
 let cpuTimer = 0;
 function cpuTurn() {
   busy = true; render();
-  setStatus('Computer’s turn', 'cpu');
-  cpuTimer = setTimeout(() => { busy = false; if (!over) put(cpuPick(B, 3 - me)); }, 450);
+  setStatus('Computer is thinking…', 'cpu');
+  cpuTimer = setTimeout(() => { busy = false; if (!over) put(cpuPick(B, 3 - me)); }, 500);
 }
 const turnText = () => (vsCpu() ? 'Your turn' : (turn === 1 ? 'Gold' : 'Ivory') + '’s turn');
 
@@ -160,9 +170,11 @@ function finish(w) {
 }
 
 function save() { if (started && !over && !onlineOn) store.set(SAVE, { opp: getOpp(), history, me, side: getSide() }); }
-// moves: a game to pick up (after Undo or a return visit), played with your colour `side`
-function newGame(moves = [], side = 0) {
+// moves: a game to pick up (after Undo or a return visit), played with your colour `side`;
+// hold: show it and wait (a saved game, while the Resume / New game question is open)
+function newGame(moves = [], side = 0, hold = false) {
   clearTimeout(cpuTimer);
+  hint.reset();
   stopAnimations();
   B = new Array(N * N).fill(0); turn = 1; over = false; busy = false; started = false; last = -1; winLine = null; history = [];
   me = side || (movesFirst(getSide()) ? 1 : 2);
@@ -170,9 +182,10 @@ function newGame(moves = [], side = 0) {
   moves.forEach((i) => { B[i] = turn; turn = 3 - turn; history.push(i); last = i; });
   started = moves.length > 0;
   paintSides();
+  if (hold) { busy = true; render(); return; }
   render();
   if (cpuTurnNow()) return cpuTurn();
-  setStatus(moves.length ? 'Welcome back. ' + turnText() : turnText() + ': place a stone anywhere', '');
+  setStatus(moves.length ? turnText() : turnText() + ': place a stone anywhere', '');
 }
 $('undo').addEventListener('click', () => {
   if (!history.length || busy || over) return;
@@ -194,4 +207,13 @@ $('again').addEventListener('click', () => newGame());
 window.addEventListener('pagehide', save);
 const g = roomInLink ? null : store.get(SAVE, null);
 // a game against the computer reopens only with the same First / Second / Random choice
-if (g && g.opp === getOpp() && Array.isArray(g.history) && g.history.length && (!vsCpu() || (g.side || 'first') === getSide())) newGame(g.history, g.me === 2 ? 2 : 1); else newGame();
+if (g && g.opp === getOpp() && Array.isArray(g.history) && g.history.length && (!vsCpu() || (g.side || 'first') === getSide())) {
+  newGame(g.history, g.me === 2 ? 2 : 1, true);
+  askResume(modeName(!vsCpu(), getLevel(), vsCpu() ? 'you play ' + (me === 1 ? 'gold' : 'ivory') : '')).then((ok) => {
+    busy = false;
+    if (!ok) { store.set(SAVE, null); return newGame(); }
+    render();
+    if (cpuTurnNow()) return cpuTurn();
+    setStatus(turnText(), '');
+  });
+} else newGame();

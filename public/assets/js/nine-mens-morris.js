@@ -2,7 +2,7 @@
 // lets you remove an opponent's piece. Reduce them to two pieces, or leave them no move, to win.
 // Draws: the same position three times with the same player to move, or 50 moves each with no piece removed.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, moveQueue, slide, fadeOut, popIn } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, moveQueue, slide, fadeOut, popIn, showCaptures, hintButton } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -22,6 +22,22 @@ let gameNo = 0;   // a computer move still waiting when a new game starts is dro
 const cpuTurnNow = () => vsCpu() && turn !== me;
 animationSwitch();
 const Q = moveQueue();   // moves animate one at a time
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && getLevel() === 'easy',
+  find: () => {
+    if (!humanTurn()) return null;
+    const at = (i) => svg.querySelector('.pt[data-i="' + i + '"]');
+    if (removing) {
+      // the piece whose removal leaves you best placed
+      let best = null, bv = -Infinity;
+      removable(S.b, turn).forEach((t) => { const b = S.b.slice(); b[t] = 0; const v = evaluate({ b, hand: S.hand }, turn); if (v > bv) { bv = v; best = t; } });
+      return [at(best)];
+    }
+    const m = cpuMove(S, me, 'medium');
+    return [m.from != null ? at(m.from) : null, at(m.to)];
+  }
+});
 const humanTurn = () => !over && !busy && !Q.busy() && (onlineOn ? ol.myTurn() : !cpuTurnNow());
 function paintSides() {
   if (!vsCpu()) return;
@@ -96,8 +112,8 @@ function search(s, p, depth, alpha, beta, me) {
   }
   return best;
 }
-function cpuMove(s, p) {
-  const lvl = getLevel(), depth = { easy: 1, medium: 2, hard: 4 }[lvl];
+function cpuMove(s, p, lvl = getLevel()) {
+  const depth = { easy: 1, medium: 2, hard: 4 }[lvl];
   const ms = fullMoves(s, p);
   if (lvl === 'easy' && Math.random() < 0.35) return ms[Math.floor(Math.random() * ms.length)];
   let best = ms[0], bv = -Infinity;
@@ -134,6 +150,9 @@ function render() {
   svg.innerHTML = h;
   $('hand1').textContent = S.hand[1] ? S.hand[1] + ' to place' : onBoard(S, 1) + ' on board';
   $('hand2').textContent = S.hand[2] ? S.hand[2] + ' to place' : onBoard(S, 2) + ' on board';
+  // what each side has removed (both start with nine)
+  showCaptures($('cap-you'), 9 - onBoard(S, 2) - S.hand[2], 'nm-ivory', 'Pieces gold has removed');
+  showCaptures($('cap-cpu'), 9 - onBoard(S, 1) - S.hand[1], 'nm-gold', 'Pieces ivory has removed');
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
   $('row-cpu').classList.toggle('turn-cpu', turn === 2 && !over);
   undoBtn.disabled = busy || over || onlineOn || !(vsCpu() ? history.some((h) => h.turn === me) : history.length);
@@ -185,7 +204,7 @@ async function after(p, m, remote = false) {
 }
 async function cpuTurn() {
   const g = gameNo;
-  busy = true; render(); await wait(600);
+  busy = true; render(); setStatus('Computer is thinking…', 'cpu'); await wait(550);
   if (g !== gameNo) return;
   const cpu = 3 - me;
   const cm = cpuMove(S, cpu);
@@ -263,6 +282,7 @@ function newGame() {
   quiet = 0; seen = {}; history = []; cur = null;
   gameNo++;
   Q.reset();
+  hint.reset();
   me = movesFirst(getSide()) ? 1 : 2;
   $('result').hidden = true;
   paintSides();

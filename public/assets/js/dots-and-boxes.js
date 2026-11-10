@@ -1,6 +1,6 @@
 // Dots and Boxes: take turns drawing a line between two dots. Close a box to claim it and go again.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, drawIn, fadeIn, animating, stopAnimations } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, drawIn, fadeIn, animating, stopAnimations, hintButton, tapConfirm } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -15,10 +15,20 @@ const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Compu
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
 animationSwitch();
+const tap2 = tapConfirm();   // on small boards: tap once to preview, again to draw
 const humanTurn = () => !busy && !over && !animating() && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
 // Against the computer you draw the first line, the second, or either at random. You are always player 1.
 const getSide = sideSwitch('dots', ['first', 'second', 'random'], () => newGame());
 let gameNo = 0;   // a computer move still waiting when a new game starts is dropped
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && getLevel() === 'easy',
+  find: () => {
+    if (!humanTurn()) return null;
+    const id = cpuPick('hard');
+    return [...svg.querySelectorAll('.hit')].filter((l) => l.dataset.id === id);
+  }
+});
 const undoBtn = $('undo');
 const svg = $('db-board');
 
@@ -65,8 +75,7 @@ function chainSize(L, id) {
   }
   return taken;
 }
-function cpuPick() {
-  const lvl = getLevel();
+function cpuPick(lvl = getLevel()) {
   const free = allLines().filter((l) => !lines.has(l));
   // 1. take any box that's ready
   const take = free.filter((l) => boxesOf(l).some(([r, c]) => count(lines, r, c) === 3));
@@ -109,6 +118,7 @@ function render() {
 }
 
 async function move(id, p, remote = false) {
+  tap2.clear();
   history.push({ lines: new Set(lines), owner: owner.slice(), turn, scores: scores.slice(), lastLine });
   if (!started) { started = true; track('game_start', { game: 'dots-and-boxes', opponent: getOpp(), size: n }); }
   const before = owner.slice();
@@ -126,9 +136,9 @@ async function move(id, p, remote = false) {
   render();
   show();
   if (onlineOn) { setStatus(ol.myTurn() ? (closed && p === ol.mySeat() + 1 ? 'You closed a box: go again' : 'Your turn') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
-  const who = vsCpu() ? (turn === 1 ? 'Your' : 'Computer’s') : (turn === 1 ? 'Player 1’s' : 'Player 2’s');
-  setStatus(closed ? (p === 1 && vsCpu() ? 'You closed ' : (vsCpu() ? 'The computer closed ' : 'Player ' + p + ' closed ')) + (closed === 1 ? 'a box' : 'two boxes') + ': go again' : who + ' turn', turn === 2 ? 'cpu' : '');
-  if (vsCpu() && turn === 2) cpuTurn(closed ? 350 : 600);
+  const who = vsCpu() ? (turn === 1 ? 'Your turn' : 'Computer is thinking…') : (turn === 1 ? 'Player 1’s turn' : 'Player 2’s turn');
+  setStatus(closed ? (p === 1 && vsCpu() ? 'You closed ' : (vsCpu() ? 'The computer closed ' : 'Player ' + p + ' closed ')) + (closed === 1 ? 'a box' : 'two boxes') + ': go again' : who, turn === 2 ? 'cpu' : '');
+  if (vsCpu() && turn === 2) cpuTurn(500);
 }
 async function cpuTurn(ms) {
   const g = gameNo;
@@ -161,18 +171,20 @@ function finish() {
 function newGame() {
   gameNo++;
   stopAnimations();
+  hint.reset();
   lines = new Set(); owner = new Array(n * n).fill(0); turn = 1; history = []; scores = [0, 0, 0]; over = false; busy = false; started = false; lastLine = null;
   if (vsCpu() && !movesFirst(getSide())) turn = 2;   // the computer draws first
   $('result').hidden = true;
   render();
   if (onlineOn) setStatus(ol.myTurn() ? 'Your turn: draw a line' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu');
-  else if (turn === 2) { setStatus('Computer’s turn', 'cpu'); cpuTurn(600); }
+  else if (turn === 2) { setStatus('Computer is thinking…', 'cpu'); cpuTurn(500); }
   else setStatus((vsCpu() ? 'Your' : 'Player 1’s') + ' turn: draw a line', '');
 }
 svg.addEventListener('click', (e) => {
   const l = e.target.closest('.hit');
   if (!l || !humanTurn()) return;
-  move(l.dataset.id, turn);
+  // a click from the keyboard (detail 0) draws straight away; a tap may ask for a second tap first
+  if (e.detail === 0 || tap2.ok(l.dataset.id, l, turn)) move(l.dataset.id, turn);
 });
 svg.addEventListener('keydown', (e) => { const l = e.target.closest('.hit'); if (l && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); l.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
 document.querySelectorAll('[data-dsize]').forEach((b) => {

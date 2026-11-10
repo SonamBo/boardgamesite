@@ -2,7 +2,7 @@
 import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, fadeOut, popIn } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, fadeOut, popIn, hintButton, askResume, modeName } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -23,6 +23,15 @@ const vsCpu = () => getOpp() === 'cpu';
 const boardEl = $('chess-board');
 animationSwitch();
 const Q = moveQueue();   // moves animate one at a time
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => !L && vsCpu() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (!myTurn() || promo) return null;
+    const m = C.bestMove(S, 'medium');
+    return m ? [sqEls[sqToView(m.from)], sqEls[sqToView(m.to)]] : null;
+  }
+});
 
 let mySide = L ? L.side : store.get(SIDE_KEY, 'w') === 'b' ? 'b' : 'w';
 let gameLog = [];   // every move this game, for the post-game review
@@ -147,17 +156,18 @@ function makeMove(m, remote) {
   save();
   if (vsCpu() && S.turn !== mySide) cpuMove();
 }
-const turnText = () => (vsCpu() ? (S.turn === mySide ? 'Your move' : cpuName + ' is thinking') : (S.turn === 'w' ? 'White' : 'Black') + ' to move');
+const turnText = () => (vsCpu() ? (S.turn === mySide ? 'Your move' : cpuName + ' is thinking…') : (S.turn === 'w' ? 'White' : 'Black') + ' to move');
 
 function cpuMove() {
   busy = true;
   render();
-  setStatus(cpuName + ' is thinking', 'cpu');
+  setStatus(cpuName + ' is thinking…', 'cpu');
+  // a short pause before the move, so it isn't missed (the search itself runs at full speed)
   setTimeout(() => {
     const m = C.bestMove(S, getLevel());
     busy = false;
     if (m && !over) doMove(m);
-  }, 250);
+  }, 500);
 }
 
 function finish(st) {
@@ -204,13 +214,19 @@ function resume() {
   gameLog = [];   // moves before a refresh are not kept, so a review covers the moves from here on
   S = C.fromFen(g.fen); sans = g.sans || []; keys = g.keys || []; last = g.last || null; history = []; sel = null; over = false; busy = false; started = true; promo = null;
   legalNow = C.legal(S);
-  render();
-  setStatus('Welcome back. ' + turnText(), '');
-  if (vsCpu() && S.turn !== mySide) cpuMove();
+  busy = true; render();   // the saved game shows behind the question
+  askResume(modeName(!vsCpu(), getLevel(), vsCpu() ? 'you play ' + (mySide === 'w' ? 'white' : 'black') : '')).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    render();
+    setStatus(turnText(), '');
+    if (vsCpu() && S.turn !== mySide) cpuMove();
+  });
   return true;
 }
 function newGame() {
   Q.reset();
+  hint.reset();
   if (L) { L.newGame(); mySide = L.side; }
   gameLog = []; hideReview();
   S = C.fromFen(C.START); sel = null; last = null; sans = []; keys = [C.key(S)]; history = []; over = false; busy = false; started = false; promo = null;

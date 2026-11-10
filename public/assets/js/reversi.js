@@ -1,7 +1,7 @@
 // Reversi page: against the computer, or two players taking turns on one device.
 import * as E from './reversi-engine.js';
 import { online, roomInLink } from './online.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, movesFirst } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, movesFirst, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -24,6 +24,15 @@ const friend = () => getOpp() === 'friend';
 // Against the computer you move first (gold), second (black) or either at random.
 const getSide = sideSwitch('rv', ['first', 'second', 'random'], () => newGame());
 let me = E.YOU;   // your colour against the computer in this game: gold moves first
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => !friend() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (!humanToMove() || friend()) return null;
+    const i = E.pickComputerMove(board, 'medium', Math.random, me);
+    return i >= 0 ? [cells[i]] : null;
+  }
+});
 
 // turn: E.YOU (gold, moves first) or E.CPU (black). In 2-player mode these are Player 1 and Player 2.
 // Against the computer, `me` is your colour and the computer plays -me.
@@ -60,23 +69,29 @@ boardEl.addEventListener('click', (e) => {
 });
 
 const squareName = (i) => FILES[i & 7] + ((i >> 3) + 1);
+// Moves so far, and a replay at the end: history holds the position before each move, so the position
+// after k moves is history[k] (or the board itself). view: the position being replayed (null: the game).
+let view = null;
+const hist = moveHistory({ show: (k) => { view = k == null ? null : { board: history[k].board, last: history[k].last }; render(); } });
 
 function render() {
+  const shown = view ? view.board : board, shownLast = view ? view.last : last;
   const moves = new Set(humanToMove() ? E.legalMoves(board, turn) : []);
   const dotClass = 'move-dot' + (turn === E.CPU ? ' p2' : '');
   for (let i = 0; i < 64; i++) {
-    const v = board[i];
+    const v = shown[i];
     const btn = cells[i];
     const span = btn.firstChild;
     const cls = v === E.YOU ? 'disc you' : v === E.CPU ? 'disc cpu' : moves.has(i) ? dotClass : '';
     if (span.className !== cls) span.className = cls;
-    btn.classList.toggle('last', i === last);
+    btn.classList.toggle('last', i === shownLast);
     btn.classList.toggle('can', moves.has(i));
     btn.disabled = !moves.has(i);
     btn.setAttribute('aria-label', squareName(i) + ', ' + (v === E.YOU ? 'gold' : v === E.CPU ? 'black' : moves.has(i) ? 'you can play here' : 'empty'));
   }
   undoBtn.disabled = busy || over || onlineOn || !(friend() ? history.length : history.some((h) => h.turn === me));
-  const c = E.count(board);
+  const c = E.count(shown);
+  hist.set(history.map((h, k) => squareName(k + 1 < history.length ? history[k + 1].last : last)));
   document.getElementById('count-you').textContent = c.you + (c.you === 1 ? ' disc' : ' discs');
   document.getElementById('count-cpu').textContent = c.cpu + (c.cpu === 1 ? ' disc' : ' discs');
 }
@@ -93,7 +108,7 @@ function finish() {
     play(mine === 'lose' ? 'lose' : 'win', 0.4);
     setStatus(mine === 'win' ? 'You win ' + line : mine === 'lose' ? 'Your friend wins ' + line : 'It’s a draw', mine === 'lose' ? 'cpu' : '');
     showResult(mine, mine === 'win' ? 'You win!' : mine === 'lose' ? 'Your friend wins' : 'It’s a draw', 'Final score ' + line + ' (Gold – Black).');
-    render();
+    render(); hist.end();
     return;
   }
   if (friend()) {
@@ -105,7 +120,7 @@ function finish() {
       showResult('win', winner + ' wins!', 'Final score ' + line + '.');
     }
     track('game_end', { game: 'reversi', result, mode: 'friend' });
-    render();
+    render(); hist.end();
     return;
   }
   // against the computer: your discs first
@@ -117,7 +132,7 @@ function finish() {
   if (mine === 'draw') { setStatus('It’s a draw', 'neutral'); showResult('draw', 'It’s a draw', '32 discs each.'); }
   rec.add(mine);
   track('game_end', { game: 'reversi', result: mine, level: getLevel() });
-  render();
+  render(); hist.end();
 }
 
 function onSquare(i, remote = false) {
@@ -186,8 +201,9 @@ function computerMove() {
 
 function newGame() {
   clearTimeout(cpuTimer);
+  hint.reset();
   board = E.startBoard();
-  history = [];
+  history = []; view = null; hist.reset();
   over = false; busy = false; last = -1; started = false; turn = E.YOU;   // gold moves first
   me = movesFirst(getSide()) ? E.YOU : E.CPU;
   clearGame();
@@ -218,9 +234,13 @@ function resume() {
   over = false; busy = false; started = true;
   hideResult();
   const next = g.toMove === E.CPU ? E.CPU : E.YOU;
-  // afterMove(next) hands the turn to `next` (or handles a pass).
-  afterMove(next);
-  if (!friend() && turn === me && !busy) setStatus('Welcome back. Your turn');
+  turn = next; busy = true; render();   // the saved game shows behind the question
+  askResume(modeName(friend(), getLevel(), friend() ? '' : 'you play ' + (me === E.YOU ? 'gold' : 'black'))).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    // afterMove(next) hands the turn to `next` (or handles a pass).
+    afterMove(next);
+  });
   return true;
 }
 

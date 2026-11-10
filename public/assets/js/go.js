@@ -1,7 +1,7 @@
 // Go (9×9): place stones to surround territory and capture. Two passes in a row end the game.
 import * as G from './go-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, animationSwitch, moveQueue, popIn, fadeOut, settle } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, animationSwitch, moveQueue, popIn, fadeOut, settle, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake, rng, seedFrom } from './solo.js';
@@ -19,6 +19,15 @@ let me = 1;   // your colour against the computer in this game: 1 black, 2 white
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
 const Q = moveQueue();   // moves animate one at a time
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
+  find: () => {
+    if (over || busy || Q.busy() || cpuTurnNow()) return null;
+    const m = G.bestMove(B, me, prev, 'easy');
+    return m.pass || m.winrate < 0.02 ? 'Nothing useful is left to play: pass' : [pts[m.i]];
+  }
+});
 const boardEl = $('go-board');
 
 let B, prev, turn, caps, passes, over, busy, started, last, history, final, onlineOn = roomInLink, ol = null;
@@ -35,6 +44,11 @@ for (let i = 0; i < N * N; i++) {
 }
 const name = (c) => (vsCpu() ? (c === me ? 'You' : 'The computer') : c === 1 ? 'Black' : 'White');
 const colour = (c) => (c === 1 ? 'Black' : 'White');
+const pointName = (i) => String.fromCharCode(65 + (i % N) + (i % N >= 8 ? 1 : 0)) + (N - Math.floor(i / N));
+// Moves so far, and a replay at the end: history holds the position before each move (or pass), so the
+// position after k moves is history[k] (or the board itself). view: the position being replayed (null: the game).
+let view = null;
+const hist = moveHistory({ show: (k) => { view = k == null ? null : { B: history[k].B, last: history[k].last }; render(); } });
 // the players card: the black row and the white row, named for this game
 function paintSides() {
   if (!vsCpu() || onlineOn) return;
@@ -43,16 +57,18 @@ function paintSides() {
 }
 
 function render() {
+  const shown = view ? view.B : B, shownLast = view ? view.last : last;
   pts.forEach((b, i) => {
-    const v = B[i];
+    const v = shown[i];
     let cls = 'gp' + (b.classList.contains('star') ? ' star' : '');
     if (v) cls += v === 1 ? ' bk' : ' wh';
-    if (i === last) cls += ' last';
-    if (final) { if (final.dead.includes(i)) cls += ' dead'; else if (!v && final.owner[i]) cls += final.owner[i] === 1 ? ' tb' : ' tw'; }
+    if (i === shownLast) cls += ' last';
+    if (final && !view) { if (final.dead.includes(i)) cls += ' dead'; else if (!v && final.owner[i]) cls += final.owner[i] === 1 ? ' tb' : ' tw'; }
     b.className = cls;
     b.disabled = over || !!v;
-    b.setAttribute('aria-label', String.fromCharCode(65 + (i % N) + (i % N >= 8 ? 1 : 0)) + (N - Math.floor(i / N)) + (v ? (v === 1 ? ', black' : ', white') : ', empty'));
+    b.setAttribute('aria-label', pointName(i) + (v ? (v === 1 ? ', black' : ', white') : ', empty'));
   });
+  hist.set(history.map((h, k) => { const at = k + 1 < history.length ? history[k + 1].last : last; return at < 0 ? 'pass' : pointName(at); }));
   $('caps-b').textContent = 'Captures ' + caps[1];
   $('caps-w').textContent = 'Captures ' + caps[2] + ' · komi 6.5';
   $('row-you').classList.toggle('turn-you', turn === 1 && !over);
@@ -110,12 +126,13 @@ function pass(remote = false) {
   render(); save();
   if (cpuTurnNow()) cpuTurn();
 }
-const turnText = () => (vsCpu() ? (turn === me ? 'Your turn (' + colour(me) + ')' : 'Computer’s turn') : name(turn) + '’s turn');
+const turnText = () => (vsCpu() ? (turn === me ? 'Your turn (' + colour(me) + ')' : 'Computer is thinking…') : name(turn) + '’s turn');
 
 let cpuTimer = 0;
 function cpuTurn() {
   busy = true; render();
-  setStatus('Computer is thinking', 'cpu');
+  setStatus('Computer is thinking…', 'cpu');
+  // a short pause before the move, so it isn't missed (the search itself runs at full speed)
   cpuTimer = setTimeout(() => {
     const cpu = 3 - me;
     const m = G.bestMove(B, cpu, prev, getLevel());
@@ -125,7 +142,7 @@ function cpuTurn() {
     const ahead = cpu === 2 ? G.score(B).diff < 0 : G.score(B).diff > 0;
     if (m.pass || m.winrate < 0.02 || (passes === 1 && ahead && m.winrate > 0.9)) return pass();
     move(m.i, G.play(B, m.i, cpu, prev));
-  }, 60);
+  }, 450);
 }
 
 function finish() {
@@ -137,7 +154,7 @@ function finish() {
     const dead = onlineOn ? G.deadStones(B, turn, 120, rng(seedFrom(B.join('')))) : G.deadStones(B, turn);
     const sc = G.score(B, dead);
     final = { dead, owner: sc.owner };
-    render();
+    render(); hist.end();
     const blackWins = sc.diff > 0;
     const margin = Math.abs(sc.diff);
     const sub = 'Black ' + sc.black + ', White ' + sc.white + ' (with komi). Faded stones were counted as captured.';
@@ -165,16 +182,23 @@ function resume() {
   // a game against the computer reopens only with the colour it was played with
   if (vsCpu() && (g.me === 2 ? 'white' : 'black') !== getSide()) return false;
   me = g.me === 2 ? 2 : 1;
-  ({ B, prev, turn, caps, last, passes } = g); history = []; over = false; busy = false; started = true; final = null;
+  ({ B, prev, turn, caps, last, passes } = g); history = []; view = null; hist.reset(); over = false; busy = false; started = true; final = null;
   paintSides();
-  render(); setStatus('Welcome back. ' + turnText(), '');
-  if (cpuTurnNow()) cpuTurn();
+  busy = true; render();   // the saved game shows behind the question
+  askResume(modeName(!vsCpu(), getLevel(), vsCpu() ? 'you play ' + colour(me).toLowerCase() : '')).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    render(); setStatus(turnText(), '');
+    if (cpuTurnNow()) cpuTurn();
+  });
   return true;
 }
 function newGame() {
   clearTimeout(cpuTimer);
   Q.reset();
+  hint.reset();
   B = new Array(N * N).fill(0); prev = null; turn = 1; caps = [0, 0, 0]; passes = 0; over = false; busy = false; started = false; last = -1; history = []; final = null;
+  view = null; hist.reset();
   me = getSide() === 'white' ? 2 : 1;
   $('result').hidden = true;
   store.set(SAVE, null);
@@ -196,7 +220,7 @@ $('undo').addEventListener('click', () => {
 $('resign').addEventListener('click', () => {
   if (over || busy) return;
   Q.reset();
-  over = true; store.set(SAVE, null); render();
+  over = true; store.set(SAVE, null); render(); hist.end();
   if (vsCpu()) { score.add('lose'); showResult('lose', 'You resigned', 'The computer wins this one.'); }
   else showResult('win', (turn === 1 ? 'White' : 'Black') + ' wins', name(turn) + ' resigned.');
   setStatus(name(turn) + (turn === me && vsCpu() ? ' resigned' : ' resigns'), 'neutral');
