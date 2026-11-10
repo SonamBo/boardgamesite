@@ -92,7 +92,7 @@ function check() {
     setTimeout(() => { busy = false; next(); }, 900);
   } else {
     shake($('un-answer'), play);
-    setStatus('Not a word. Tap a letter in the answer to take it back', 'neutral');
+    setStatus('Not a word. Tap a letter to take it back', 'neutral');
   }
 }
 

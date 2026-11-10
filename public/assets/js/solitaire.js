@@ -301,7 +301,7 @@ function resume() {
   tick();
   timerId = setInterval(tick, 1000);
   $('sol-result').hidden = true;
-  setStatus('Welcome back. Your game is where you left it');
+  setStatus('Your game is where you left it');
   render();
   return true;
 }

@@ -99,7 +99,7 @@ function refill() {
   const keep = discard.pop();
   pile = shuffle(discard, rand);
   discard = [keep];
-  setStatus('The discards were shuffled into a new pile', 'neutral');
+  setStatus('Discards shuffled into a new pile', 'neutral');
   return true;
 }
 function drawCard(s) {
@@ -203,7 +203,7 @@ area.addEventListener('click', (e) => {
   }
   const c = T.idFrom(e);
   if (c == null || !hands[me].includes(c)) return;
-  if (!fits(c)) { shake(T.els.get(c), play); setStatus('Match the suit or the number, or play an 8', 'neutral'); return; }
+  if (!fits(c)) { shake(T.els.get(c), play); setStatus('Match suit or number, or play an 8', 'neutral'); return; }
   if (rank(c) === 8) { choosing = c; setStatus('Pick the new suit', ''); return render(); }
   playCard(me, c);
   send('p' + c, 1 - me, over);

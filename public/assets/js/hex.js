@@ -26,7 +26,7 @@ const hint = hintButton({
   shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
   find: () => {
     if (!humanTurn()) return null;
-    if (canSwap()) return 'Gold’s stone is near the middle: swapping is a good idea';
+    if (canSwap()) return 'Swapping is a good idea here';
     return [cellEl(cpuPick(B, me, 'hard'))];
   }
 });
@@ -147,7 +147,7 @@ async function put(i, remote = false) {
   popIn(cellEl(i), 200);
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn: join ' + (ol.mySeat() === 0 ? 'top to bottom' : 'left to right') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   setStatus(statusText(), (vsCpu() ? turn !== me : turn === 2) ? 'cpu' : '');
-  if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap to take over Gold’s stone', vsCpu() ? '' : 'cpu');
+  if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap', vsCpu() ? '' : 'cpu');
   if (cpuTurnNow()) cpuTurn();
 }
 const statusText = () => (vsCpu() ? (turn === me ? 'Your turn: ' + goal(me) : 'Computer is thinking…') : (turn === 1 ? 'Gold: ' : 'Ivory: ') + goal(turn));
@@ -174,9 +174,9 @@ function swap(remote = false) {
   if (onlineOn && !remote) ol.send('s', 0, false);
   turn = 1;
   render();
-  if (onlineOn) { setStatus(ol.myTurn() ? 'Your friend swapped. Your turn: join top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
-  if (cpuTurnNow()) { setStatus('You swapped: the stone is yours now. Computer is thinking…', 'cpu'); cpuTurn(); return; }
-  setStatus(vsCpu() ? 'The computer swapped: your stone is now theirs. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
+  if (onlineOn) { setStatus(ol.myTurn() ? 'Swapped. Your turn: top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
+  if (cpuTurnNow()) { setStatus('You swapped. Computer is thinking…', 'cpu'); cpuTurn(); return; }
+  setStatus(vsCpu() ? 'The computer swapped. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
 }
 function finish(w) {
   over = true; render();

@@ -83,7 +83,7 @@ async function nextBid() {
     return nextPlay();
   }
   if (bids[turn] != null) { turn = (turn + 1) % 4; return nextBid(); }
-  if (turn === 0) { setStatus('Your bid: how many tricks will you take? North bid ' + (bids[2] ?? '–'), ''); draw(); return; }
+  if (turn === 0) { setStatus('How many tricks will you take? North bid ' + (bids[2] ?? '–'), ''); draw(); return; }
   busy = true; draw();
   await wait(500);
   busy = false;
@@ -157,7 +157,7 @@ function endRound() {
   totals = totals.map((v, t) => v + add[t]);
   history.push(add);
   const made = teamTricks(0) >= teamBid(0);
-  setStatus('Your team ' + (made ? 'made' : 'missed') + ' its bid: ' + (add[0] >= 0 ? '+' : '') + add[0] + '. They scored ' + (add[1] >= 0 ? '+' : '') + add[1], made ? '' : 'cpu');
+  setStatus('Your team ' + (made ? 'made' : 'missed') + ' its bid: ' + (add[0] >= 0 ? '+' : '') + add[0] + '. Them: ' + (add[1] >= 0 ? '+' : '') + add[1], made ? '' : 'cpu');
   play(made ? 'found' : 'lose');
   dealer = (dealer + 1) % 4;
   if ((totals[0] >= GOAL || totals[1] >= GOAL) && totals[0] !== totals[1]) return finish();

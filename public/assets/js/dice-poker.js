@@ -70,7 +70,7 @@ async function roll() {
   busy = false;
   stage[p]++;
   const who = p === 0 && vsCpu() ? 'You' : names()[p];
-  setStatus(who + ': ' + RANKS[handValue(dice[p])[0]] + (stage[p] === 1 ? '. Keep dice and roll again, or stand' : ''), p ? 'cpu' : '');
+  setStatus(who + ': ' + RANKS[handValue(dice[p])[0]] + (stage[p] === 1 ? '. Roll again, or stand' : ''), p ? 'cpu' : '');
   render();
   if (stage[p] === 2) { await wait(700); next(); }
 }

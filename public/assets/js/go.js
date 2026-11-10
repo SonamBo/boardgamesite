@@ -81,7 +81,7 @@ function render() {
 function tap(i) {
   if (over || busy || Q.busy() || (onlineOn ? !ol.myTurn() : cpuTurnNow())) return;
   const r = G.play(B, i, turn, prev);
-  if (!r) { shake(pts[i], play); setStatus(B[i] ? 'That point is taken' : 'Not allowed there: it would be suicide or repeat the position (ko)', 'neutral'); return; }
+  if (!r) { shake(pts[i], play); setStatus(B[i] ? 'That point is taken' : 'Not allowed: suicide, or a ko repeat', 'neutral'); return; }
   move(i, r);
 }
 // Show the stone arriving, then any stones it captures fading away; then make the move.

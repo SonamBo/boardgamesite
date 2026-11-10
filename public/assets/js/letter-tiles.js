@@ -114,7 +114,7 @@ function commit(p, placed, pts, words) {
   scoreless = 0;
   draw(p);
   const who = p === 0 && vsCpu() ? 'You' : names()[p];
-  setStatus(who + ' played ' + words[0].toUpperCase() + ' for ' + pts + (placed.length === E.RACK ? ', with the +' + E.BONUS + ' all-tiles bonus!' : ''), p ? 'cpu' : '');
+  setStatus(who + ' played ' + words[0].toUpperCase() + ' for ' + pts + (placed.length === E.RACK ? ' (+' + E.BONUS + ' bonus)!' : ''), p ? 'cpu' : '');
   play(placed.length === E.RACK ? 'king' : 'capture');
   if (!racks[p].length && !bagT.length) return endGame(p);
   nextTurn();
@@ -233,7 +233,7 @@ function resume() {
   if (!g || g.opp !== getOpp() || !Array.isArray(g.board) || g.board.length !== N || !Array.isArray(g.racks)) return false;
   ({ board, scores, turn, scoreless } = g); bagT = g.bag; racks = g.racks;
   pending = []; sel = null; swapMode = false; swapPick = new Set(); over = false; busy = false; last = new Set(); hidden = !vsCpu(); started = true;
-  setStatus('Welcome back. Your game is where you left it', 'neutral');
+  setStatus('Your game is where you left it', 'neutral');
   render();
   if (vsCpu() && turn === 1) cpuTurn();
   return true;

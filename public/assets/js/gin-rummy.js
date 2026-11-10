@@ -92,7 +92,7 @@ function deal() {
   phase = 'draw'; sel = null; took = null; reveal = false; busy = false;
   T.hideAll();
   render();
-  if (turn === 1) cpuTurn(); else setStatus('Your turn: draw from the deck or take the discard', '');
+  if (turn === 1) cpuTurn(); else setStatus('Your turn: draw, or take the discard', '');
 }
 
 function draw(from) {
@@ -109,7 +109,7 @@ function doDiscard(c, knock) {
   if (stock.length <= 2) return endDraw();
   turn = 1 - turn; phase = 'draw';
   render();
-  if (turn === 1) cpuTurn(); else setStatus('Your turn: draw from the deck or take the ' + short(discard[discard.length - 1]), '');
+  if (turn === 1) cpuTurn(); else setStatus('Your turn: draw, or take the ' + short(discard[discard.length - 1]), '');
 }
 
 async function cpuTurn() {
@@ -179,12 +179,12 @@ area.addEventListener('click', (e) => {
   if (turn !== 0 || busy || over || phase === 'end') return;
   const c = T.idFrom(e);
   if (phase === 'draw') {
-    if (e.target.closest('.stock') || (c != null && stock.includes(c))) { draw('stock'); if (phase === 'discard') { setStatus('Tap a card to discard. Knock if your deadwood is 10 or less', ''); render(); } return; }
-    if (c != null && c === discard[discard.length - 1]) { draw('discard'); setStatus('You took the ' + short(c) + '. Now discard a different card', ''); return render(); }
+    if (e.target.closest('.stock') || (c != null && stock.includes(c))) { draw('stock'); if (phase === 'discard') { setStatus('Discard a card, or knock with 10 or less', ''); render(); } return; }
+    if (c != null && c === discard[discard.length - 1]) { draw('discard'); setStatus('You took the ' + short(c) + '. Now discard another card', ''); return render(); }
     return;
   }
   if (c == null || !hands[0].includes(c)) return;
-  if (c === took) { shake(T.els.get(c), play); setStatus('You can’t throw back the card you just picked up', 'neutral'); return; }
+  if (c === took) { shake(T.els.get(c), play); setStatus('You can’t throw back the card you took', 'neutral'); return; }
   sel = sel === c ? null : c;
   play('select');
   if (sel != null) { const after = G.best(hands[0].filter((x) => x !== sel)).score; setStatus('Discard the ' + short(sel) + '? Deadwood after: ' + after, ''); }

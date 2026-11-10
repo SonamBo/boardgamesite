@@ -106,7 +106,7 @@ async function roll() {
     await wait(1400);
     return nextTurn();
   }
-  setStatus('Pick scoring dice: 1s, 5s, or three of a kind', turn ? 'cpu' : '');
+  setStatus('Pick scoring dice: 1s, 5s or triples', turn ? 'cpu' : '');
   render();
 }
 

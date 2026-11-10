@@ -149,7 +149,7 @@ function resume() {
   build();
   lights = g.lights.map(Boolean); moves = g.moves | 0; par = g.par | 0; started = true; done = false; hintAt = -1;
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your puzzle is where you left it', 'neutral');
+  setStatus('Your puzzle is where you left it', 'neutral');
   render();
   return true;
 }

@@ -105,7 +105,7 @@ function resume() {
   if (!g || g.n !== n || !Array.isArray(g.pegs) || g.pegs.length !== 3 || g.pegs.flat().length !== n) return false;
   pegs = g.pegs; moves = g.moves | 0; held = null; started = true; done = false; history = [];
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your tower is where you left it', 'neutral');
+  setStatus('Your tower is where you left it', 'neutral');
   render();
   return true;
 }

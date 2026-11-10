@@ -106,7 +106,7 @@ export function cardGame(cfg) {
     g.S = s.S; g.history = []; g.sel = null; g.started = true; g.done = false;
     timer.start(Number(s.elapsed) || 0);
     g.render();
-    setStatus('Welcome back. Your game is where you left it', 'neutral');
+    setStatus('Your game is where you left it', 'neutral');
     return true;
   }
   window.addEventListener('pagehide', g.save);

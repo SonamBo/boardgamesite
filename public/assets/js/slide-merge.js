@@ -184,7 +184,7 @@ function resume() {
   grid = g.grid.map((row) => row.map((v) => (v ? { id: nextId++, v } : null)));
   if (!grid.flat().some(Boolean)) return false;
   score = g.score | 0; won = !!g.won; keepGoing = !!g.keepGoing; prev = null; over = false; started = true;
-  setStatus('Welcome back. Your game is where you left it', 'neutral');
+  setStatus('Your game is where you left it', 'neutral');
   render();
   return true;
 }
