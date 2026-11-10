@@ -175,6 +175,7 @@ function recommendations(st) {
         go: 'Simple rules, endless depth. Learn liberties, captures and ko on a 9×9 board, then ladders and living groups.',
         reversi: 'Flip discs to your colour. Learn the rules in two minutes, then why corners and quiet moves win.',
         'four-in-a-row': 'A quick classic. Learn to block, then the centre column, double threats and the odd-even trick.',
+        'five-in-a-row': 'Gomoku in ten short lessons: making five, blocking, then open fours and the four-three that wins games.',
         sudoku: 'From the one rule to real techniques: cross-hatching, singles, pencil marks and pairs. No guessing.',
         backgammon: 'Dice, hitting and bearing off, then the best opening moves, safe play, primes and the pip count.',
         solitaire: 'Klondike from the layout up, then the habits that win more games: dig out hidden cards and use Kings well.' }[g] });

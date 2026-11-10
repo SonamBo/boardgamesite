@@ -28,6 +28,11 @@
 //               orders that end in the same position count as the same move; the course checker says which way to
 //               write it. Facts: hit, point (made a new point of 2+), safe (no single checkers left anywhere),
 //               off (checkers borne off), entered (came in from the bar).
+//   Five in a Row  15 rows of 15, top row first: '.' empty, 'g' gold (you, moves first), 'b' ivory. Points are named
+//               like Go: columns a–o, rows 1–15 from the bottom ('h8' is the centre). Facts: win (five or more in a
+//               line), threat (this move made a new point where you'd make five next turn: a four), three (this move
+//               made a new open three: a move that would make an open four), double (the opponent can't stop you: whatever they play, you win or make two
+//               threats next), block (the opponent had a five or an open four to make next turn, and now hasn't).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -295,4 +300,84 @@ export const solitaire = {
   isSquare: (n) => /^(t[1-7]|f|stock|waste|(A|[2-9]|10|J|Q|K)[SHDC])$/.test(n)
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire };
+
+// ---------- Five in a Row ----------
+const GMN = 15, GMF = 'abcdefghijklmno';
+const gmName = (i) => GMF[i % GMN] + (GMN - Math.floor(i / GMN));
+const gmIndex = (n) => (GMN - Number(n.slice(1))) * GMN + GMF.indexOf(n[0]);
+const GDIRS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const gAt = (r, c) => (r >= 0 && c >= 0 && r < GMN && c < GMN ? r * GMN + c : -1);
+function gFive(b, i, p) {
+  const r = Math.floor(i / GMN), c = i % GMN;
+  for (const [dr, dc] of GDIRS) {
+    const line = [i];
+    for (const s of [1, -1]) for (let k = 1; ; k++) { const j = gAt(r + dr * k * s, c + dc * k * s); if (j < 0 || b[j] !== p) break; line.push(j); }
+    if (line.length >= 5) return line;
+  }
+  return null;
+}
+// empty points next to (within two of) a stone: where anything happens in these small positions
+function gNear(b) {
+  const out = [];
+  for (let i = 0; i < GMN * GMN; i++) {
+    if (b[i]) continue;
+    const r = Math.floor(i / GMN), c = i % GMN;
+    let near = false;
+    for (let dr = -2; dr <= 2 && !near; dr++) for (let dc = -2; dc <= 2; dc++) { const j = gAt(r + dr, c + dc); if (j >= 0 && b[j]) { near = true; break; } }
+    if (near) out.push(i);
+  }
+  return out;
+}
+const gWins = (b, p) => gNear(b).filter((i) => { b[i] = p; const w = gFive(b, i, p); b[i] = 0; return !!w; });
+// moves that make an open four (two different winning points at once)
+const gOpenFours = (b, p) => gNear(b).filter((i) => { b[i] = p; const n = gWins(b, p).length; b[i] = 0; return n >= 2; });
+// p to move after this: can p's opponent (who just moved) no longer be stopped?
+function gUnstoppable(b, me) {
+  const opp = 3 - me;
+  if (gWins(b, me).length >= 2) return true;
+  for (const r of gNear(b)) {
+    b[r] = opp;
+    const oppWon = !!gFive(b, r, opp);
+    let ok = false;
+    if (!oppWon) ok = gWins(b, me).length > 0 || gOpenFours(b, me).length > 0;
+    b[r] = 0;
+    if (!ok) return false;
+  }
+  return true;
+}
+export const gomoku = {
+  kind: 'gomoku',
+  cells: Array.from({ length: GMN * GMN }, (_, i) => gmName(i)),
+  name: gmName,
+  index: gmIndex,
+  load(p) {
+    const rows = String(p).split('/');
+    if (rows.length !== GMN || rows.some((r) => r.length !== GMN || /[^.gb]/.test(r))) fail('Five in a Row position needs 15 rows of 15 from . g b: ' + p);
+    const b = rows.join('').split('').map((ch) => (ch === 'g' ? 1 : ch === 'b' ? 2 : 0));
+    for (let i = 0; i < b.length; i++) if (b[i] && gFive(b, i, b[i])) fail('the position already has five in a row at ' + gmName(i));
+    return { b, side: 1 };
+  },
+  list(s) { return s.b.map((v, i) => (v ? null : { name: gmName(i), i })).filter(Boolean); },
+  find(s, name) { const i = gmIndex(name); return s.b[i] === 0 && /^[a-o](1[0-5]|[1-9])$/.test(name) ? { name, i } : undefined; },
+  apply(s, x) {
+    const me = s.side, opp = 3 - me;
+    const before = s.b;
+    const oppHad = gWins(before.slice(), opp).length > 0 || gOpenFours(before.slice(), opp).length > 0;
+    const winsBefore = new Set(gWins(before.slice(), me)), foursBefore = new Set(gOpenFours(before.slice(), me));
+    const b = before.slice(); b[x.i] = me;
+    const line = gFive(b, x.i, me);
+    const f = { win: !!line };
+    if (!line) {
+      // a new threat or open three: one this move made, not one that was already there
+      f.threat = gWins(b.slice(), me).some((i) => !winsBefore.has(i));
+      f.three = gOpenFours(b.slice(), me).some((i) => !foursBefore.has(i) && i !== x.i);
+      f.block = oppHad && !gWins(b.slice(), opp).length && !gOpenFours(b.slice(), opp).length;
+      f.double = gUnstoppable(b.slice(), me);
+    }
+    return { s: { b, side: opp }, f, line };
+  },
+  dests: () => [],
+  isSquare: (n) => /^[a-o](1[0-5]|[1-9])$/.test(n)
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku };

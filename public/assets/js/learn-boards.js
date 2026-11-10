@@ -272,7 +272,7 @@ function ruleBoard(kind, el) {
   const A = RULES[kind];
   let S, last = null, extra = new Set();
   const n = A.cells.length;
-  el.className = (kind === 'go' ? 'go-board' : kind === 'reversi' ? 'grid8 rv' : 'board c4-lesson') + ' lp-board';
+  el.className = (kind === 'go' ? 'go-board' : kind === 'reversi' ? 'grid8 rv' : kind === 'gomoku' ? 'gm-board' : 'board c4-lesson') + ' lp-board';
   el.setAttribute('role', 'group');
   const cells = [];
   for (let i = 0; i < n; i++) {
@@ -281,7 +281,8 @@ function ruleBoard(kind, el) {
     if (kind === 'go') {
       const r = Math.floor(i / 9), c = i % 9;
       btn.className = 'gp' + ([2, 4, 6].includes(r) && [2, 4, 6].includes(c) && (r === 4) === (c === 4) ? ' star' : '');
-    } else btn.innerHTML = '<span></span>';
+    } else if (kind === 'gomoku') btn.className = 'gm';
+    else btn.innerHTML = '<span></span>';
     btn.addEventListener('click', () => tap(i));
     el.appendChild(btn);
     cells.push(btn);
@@ -295,6 +296,10 @@ function ruleBoard(kind, el) {
         c.className = 'gp' + (c.classList.contains('star') ? ' star' : '') + (v === 1 ? ' bk' : v === 2 ? ' wh' : '') + (i === last ? ' last' : '');
         c.disabled = !!v;   // empty points stay tappable; tap() decides what a tap does
         c.setAttribute('aria-label', nm + (v ? (v === 1 ? ', black' : ', white') : ''));
+      } else if (kind === 'gomoku') {
+        c.className = 'gm' + (v === 1 ? ' p1' : v === 2 ? ' p2' : '') + (i === last ? ' last' : '') + (extra.has(i) ? ' win' : '');
+        c.disabled = !!v && !b.tapFn;
+        c.setAttribute('aria-label', nm + (v === 1 ? ', gold' : v === 2 ? ', ivory' : ''));
       } else if (kind === 'reversi') {
         c.firstChild.className = v === 1 ? 'disc you' : v === -1 ? 'disc cpu' : can.has(i) ? 'move-dot' : '';
         c.classList.toggle('last', i === last);
@@ -314,8 +319,8 @@ function ruleBoard(kind, el) {
     const r = A.apply(S, x);
     S = r.s;
     last = kind === 'c4' ? r.cell : x.i;
-    extra = new Set(kind === 'reversi' ? r.flips : kind === 'c4' ? r.line || [] : []);
-    sound(kind === 'go' ? (r.f.capture ? 'capture' : 'place') : kind === 'reversi' ? 'flip' : 'drop');
+    extra = new Set(kind === 'reversi' ? r.flips : kind === 'c4' || kind === 'gomoku' ? r.line || [] : []);
+    sound(kind === 'go' || kind === 'gomoku' ? (r.f.capture ? 'capture' : 'place') : kind === 'reversi' ? 'flip' : 'drop');
     render();
     if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) {
       setTimeout(() => { S = prev.S; last = prev.last; extra = prev.extra; render(); }, 650);
