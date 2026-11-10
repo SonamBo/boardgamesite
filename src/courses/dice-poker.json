@@ -1,0 +1,359 @@
+{
+ "game": "dice-poker",
+ "name": "Dice Poker",
+ "board": "dice",
+ "play": "/play/dice-poker",
+ "intro": "A short path through Dice Poker: the hand rankings, then which dice to keep for your second roll and when to stand.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Dice Poker works",
+   "blurb": "Two rolls and the hand rankings.",
+   "lessons": [
+    {
+     "slug": "dice-poker-hands",
+     "title": "The hand rankings",
+     "icon": "⚄",
+     "summary": "Dice Poker hands run from nothing up to five of a kind. Learn the rankings, including why a full house beats a straight, and spot hands in a roll.",
+     "wrap": "Nine hands, best to worst: five, four, full house, high straight, low straight, three, two pair, pair, nothing. Next: a quick rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "dice": [
+         3,
+         3,
+         3,
+         5,
+         5
+        ],
+        "label": "A full house"
+       },
+       "text": "<p>You and your opponent each roll five dice. After your first roll, keep any dice you like and roll the rest <strong>once more</strong>, or stand. The best poker hand wins the round; first to three rounds wins.</p><p>From best to worst: <strong>five of a kind, four of a kind, full house, high straight (2–6), low straight (1–5), three of a kind, two pair, one pair, nothing</strong>.</p>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         2,
+         6,
+         2,
+         4,
+         6
+        ],
+        "label": "Your roll"
+       },
+       "targets": [
+        "d1",
+        "d2",
+        "d3",
+        "d5"
+       ],
+       "text": "<p>Find the hand.</p>",
+       "prompt": "Tap the dice that make this hand.",
+       "wrong": "Look for matching numbers. There are two sets.",
+       "done": "Two pair: 6s and 2s."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         1,
+         2,
+         3,
+         4,
+         5
+        ],
+        "label": "Your roll"
+       },
+       "text": "<p>What’s this one?</p>",
+       "prompt": "Name the hand.",
+       "options": [
+        "Nothing",
+        "Low straight",
+        "High straight"
+       ],
+       "answer": 1,
+       "explain": "1 to 5 is a low straight. 2 to 6 is a high straight."
+      },
+      {
+       "type": "choice",
+       "text": "<p>A tricky one.</p>",
+       "prompt": "Which is better: a full house or a high straight?",
+       "options": [
+        "Full house",
+        "High straight"
+       ],
+       "answer": 0,
+       "explain": "A full house, even though straights are slightly rarer in one roll. That’s the traditional order from card poker. When two hands are the same type, the higher numbers win."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "dice-poker-rules-check",
+     "xp": 40,
+     "title": "Dice Poker rules check",
+     "icon": "🏆",
+     "summary": "Test your Dice Poker rules: rolls per turn, reading a hand, the order of hands and how ties between the same hand are broken.",
+     "wrap": "Rules check passed. Now for the strategy.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         6,
+         2,
+         6,
+         6,
+         6
+        ],
+        "label": "Your roll"
+       },
+       "targets": [
+        "d1",
+        "d3",
+        "d4",
+        "d5"
+       ],
+       "text": "<p>Question 1.</p>",
+       "prompt": "Tap the dice that make this hand.",
+       "wrong": "Four dice show the same number.",
+       "done": "Correct: four of a kind."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 2.</p>",
+       "prompt": "How many times can you roll in one turn?",
+       "options": [
+        "Once",
+        "Twice: once, then one reroll",
+        "Three times"
+       ],
+       "answer": 1,
+       "explain": "Your first roll and one reroll of any dice you choose."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "Which hand ranks higher?",
+       "options": [
+        "Three of a kind",
+        "Two pair"
+       ],
+       "answer": 0,
+       "explain": "Three of a kind."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 4.</p>",
+       "prompt": "You have three 5s, your opponent has three 6s. Who wins?",
+       "options": [
+        "You",
+        "Your opponent",
+        "It’s a tie"
+       ],
+       "answer": 1,
+       "explain": "Same hand type, so the higher numbers win."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "Which ranks higher: a low straight or a high straight?",
+       "options": [
+        "Low straight",
+        "High straight"
+       ],
+       "answer": 1,
+       "explain": "The high straight, 2 to 6."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Keeping and standing",
+   "blurb": "Which dice to keep, and when to stop.",
+   "lessons": [
+    {
+     "slug": "what-to-keep-in-dice-poker",
+     "title": "What to keep",
+     "icon": "✓",
+     "summary": "Your one reroll decides most rounds of Dice Poker. Learn what to keep with three of a kind, two pair, one pair and an almost-straight.",
+     "wrap": "Keep the sets, roll the rest. Next: when to stand.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         5,
+         5,
+         5,
+         2,
+         6
+        ],
+        "label": "Your first roll"
+       },
+       "targets": [
+        "d1",
+        "d2",
+        "d3"
+       ],
+       "text": "<p>With <strong>three of a kind</strong>, keep them and roll two dice for four of a kind or a full house.</p>",
+       "prompt": "Tap the dice to keep.",
+       "wrong": "Keep the three matching dice.",
+       "done": "Keep the three 5s and roll two."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         4,
+         4,
+         6,
+         6,
+         1
+        ],
+        "label": "Your first roll"
+       },
+       "targets": [
+        "d1",
+        "d2",
+        "d3",
+        "d4"
+       ],
+       "text": "<p>With <strong>two pair</strong>, keep both pairs and roll one die for a full house.</p>",
+       "prompt": "Tap the dice to keep.",
+       "wrong": "Keep both pairs.",
+       "done": "One die to roll: a 4 or a 6 makes a full house."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         2,
+         3,
+         4,
+         5,
+         5
+        ],
+        "label": "Your first roll"
+       },
+       "targets": [
+        "d4",
+        "d5"
+       ],
+       "text": "<p>Here you have a pair of 5s, and also 2, 3, 4, 5: four in a row.</p>",
+       "prompt": "Tap the dice to keep.",
+       "wrong": "Chasing the straight needs one exact die. The pair gives you three dice to improve with.",
+       "done": "Keep the pair and roll three. Four to a straight only works if one die lands on the number you need: a 1 in 3 chance at best. Chase it only if a straight is what you need to win."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         1,
+         3,
+         4,
+         6,
+         2
+        ],
+        "label": "Your first roll"
+       },
+       "text": "<p>Nothing at all.</p>",
+       "prompt": "What should you keep?",
+       "options": [
+        "The 6, or nothing",
+        "The 1 and 2"
+       ],
+       "answer": 0,
+       "explain": "Keep the highest die, or roll all five."
+      }
+     ]
+    },
+    {
+     "slug": "when-to-stand-in-dice-poker",
+     "title": "When to stand",
+     "icon": "■",
+     "summary": "In Dice Poker you can stand instead of rerolling. Learn when to stop: as soon as you’re winning if you roll second, and on a full house if you roll first.",
+     "wrap": "Stand when you’re winning, or on a full house when you go first. The same idea of knowing when to stop helps in Five Dice and Ship, Captain and Crew.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         4,
+         4,
+         4,
+         2,
+         6
+        ],
+        "label": "Your first roll. Opponent: two pair"
+       },
+       "text": "<p>If you roll <strong>second</strong>, you know what you have to beat.</p>",
+       "prompt": "Your opponent stood on two pair. You have three 4s. Reroll or stand?",
+       "options": [
+        "Reroll the 2 and 6",
+        "Stand"
+       ],
+       "answer": 1,
+       "explain": "Stand. Three 4s already beat two pair, so the round is yours. There’s nothing to gain from another roll."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         3,
+         3,
+         3,
+         6,
+         6
+        ],
+        "label": "Your first roll. You go first"
+       },
+       "text": "<p>If you roll <strong>first</strong>, you don’t know the target yet.</p>",
+       "prompt": "You have a full house. Reroll or stand?",
+       "options": [
+        "Reroll the 6s for four of a kind",
+        "Stand"
+       ],
+       "answer": 1,
+       "explain": "Stand on a full house or better when you go first. Breaking it up usually leaves you with less."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         2,
+         2,
+         5,
+         1,
+         6
+        ],
+        "label": "Your first roll. Opponent: three 5s"
+       },
+       "text": "<p>One more.</p>",
+       "prompt": "Your opponent has three 5s. You have a pair of 2s. What now?",
+       "options": [
+        "Stand",
+        "Keep the 2s and roll three"
+       ],
+       "answer": 1,
+       "explain": "You’re losing, so you have to roll. Keep the pair and roll three for a better hand."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -2285,6 +2285,13 @@ body.returning .hero { display: none; }
 .ni-db i:first-child { background: var(--you); border-color: var(--you-lo); }
 .ni-nm { width: 28px; height: 28px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
 .ni-nm i { width: 12px; height: 12px; border: 2px solid currentColor; }
+.ni-mn svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; fill: currentColor; }
+.ni-pic { display: grid; grid-template-columns: repeat(3, 9px); gap: 2px; }
+.ni-pic i { width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 1px; }
+.ni-pic i.on { background: currentColor; }
+.ni-die { display: grid; grid-template-columns: repeat(3, 6px); gap: 2px; padding: 4px; border: 2px solid currentColor; border-radius: 7px; }
+.ni-die i { width: 6px; height: 6px; border-radius: 50%; }
+.ni-die i.on { background: currentColor; }
 .ni-hx { display: flex; align-items: center; gap: 2px; }
 .ni-hx i { width: 14px; height: 16px; background: var(--you); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 .ni-hx i:nth-child(2) { background: #EFE6D8; }
@@ -2315,6 +2322,34 @@ body.returning .hero { display: none; }
 .card-lesson [data-mark="hint"]::before { display: none; }
 .sol-lesson.fc-lesson .sl-top, .sol-lesson.fc-lesson .sl-tab { grid-template-columns: repeat(8, var(--cw)); }
 .sol-lesson.fc-lesson > * { --cw: min(80px, calc((100cqw - 48px) / 8)); }
+.sol-lesson.sp-lesson .sl-tab { grid-template-columns: repeat(10, var(--cw)); gap: 4px; }
+.sol-lesson.sp-lesson > * { --cw: min(60px, calc((100cqw - 60px) / 10)); }
+.sp-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.sp-deal { min-height: 40px; }
+/* lesson boards for dice, Mines, Picture Logic and Cryptogram (look-and-tap) */
+.lp-board.dice-lesson { width: 100%; max-width: 560px; margin: 0 auto; padding: 18px 14px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%); box-shadow: inset 0 0 0 1px var(--felt-dark); }
+.dl-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.dice-lesson .die { width: clamp(48px, 13vw, 68px); }
+.dice-lesson .die.held { opacity: .85; transform: scale(.85); }
+.dice-lesson [data-mark="good"] .face, .dice-lesson [data-mark="target"] .face { box-shadow: 0 0 0 4px #5FA36B; }
+.dice-lesson [data-mark="bad"] .face { box-shadow: 0 0 0 4px #D2564B; }
+.dice-lesson [data-mark="hint"] .face { box-shadow: 0 0 0 4px var(--accent-text); }
+.dice-lesson [data-mark]::before { display: none; }
+.lp-board.mines-lesson { width: 100%; max-width: 420px; margin: 0 auto; padding: 8px; }
+.mines-lesson .mn { position: relative; }
+.mines-lesson .mn[data-mark]::before { display: none; }
+.mines-lesson .mn[data-mark="hint"] { box-shadow: inset 0 0 0 3px var(--accent-text); }
+.mines-lesson .mn[data-mark="good"], .mines-lesson .mn[data-mark="target"] { box-shadow: inset 0 0 0 3px #5FA36B; background-color: color-mix(in srgb, #5FA36B 35%, transparent); }
+.mines-lesson .mn[data-mark="bad"] { box-shadow: inset 0 0 0 3px #D2564B; }
+.lp-board.pic-lesson { width: 100%; max-width: 480px; margin: 0 auto; padding: 8px; }
+.pic-lesson .pic-cell { position: relative; }
+.pic-lesson .pic-cell[data-mark="hint"]::before { inset: 34%; }
+.lp-board.cg-lesson { width: 100%; max-width: 640px; margin: 0 auto; }
+.cg-lesson .cg-punct { align-self: flex-end; font-weight: 700; color: #6E6158; padding-bottom: 18px; }
+.cg-lesson .cg-cell[data-mark="good"] b, .cg-lesson .cg-cell[data-mark="target"] b { background: rgba(95,163,107,.25); }
+.cg-lesson .cg-cell[data-mark="hint"] b { background: color-mix(in srgb, var(--accent-text) 22%, transparent); }
+.cg-lesson .cg-cell[data-mark]::before { display: none; }
 /* lesson boards for Dots and Boxes */
 .lp-board.db-lesson { width: 100%; max-width: 480px; margin: 0 auto; }
 .db-lesson .db-mark { fill: none; stroke-width: 1.4; pointer-events: none; }

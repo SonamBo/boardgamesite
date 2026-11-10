@@ -983,8 +983,131 @@ function freecellBoard(el) {
   });
 }
 
+
+// ---------- Boards for looking and tapping: dice, Mines, Picture Logic, Cryptogram ----------
+// They show a position, take marks, and report taps (tap steps); there are no moves to make.
+function lookBoard(el, kind, A, paint) {
+  const b = base(el);
+  let S;
+  el.addEventListener('click', (e) => { const t = e.target.closest('[data-at]'); if (t && b.tapFn) b.tapFn(t.dataset.at); });
+  const render = () => { el.innerHTML = paint(S, b); };
+  return Object.assign(b, {
+    set(p) { S = A.load(p); render(); },
+    play: () => null,
+    moves: () => [],
+    mark(map) { b.marks = map || {}; render(); },
+    interactive() { render(); },
+    side: () => 0
+  });
+}
+const PIP_AT = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+const dieHtml = (v, at, mark, extra = '') => '<button type="button" class="die plain' + extra + '" data-at="' + at + '" data-mark="' + (mark || '') + '" aria-label="Die showing ' + v + '"><span class="face">' +
+  Array.from({ length: 9 }, (_, k) => '<i' + (PIP_AT[v].includes(k) ? ' class="on"' : '') + '></i>').join('') + '</span></button>';
+function diceBoard(el) {
+  el.className = 'lp-board dice-lesson';
+  return lookBoard(el, 'dice', RULES.dice, (S, b) =>
+    (S.label ? '<p class="cl-note">' + S.label + '</p>' : '') +
+    '<div class="dl-row">' + S.dice.map((v, k) => dieHtml(v, 'd' + (k + 1), b.marks['d' + (k + 1)])).join('') + '</div>' +
+    (S.kept.length ? '<p class="cl-note">Set aside</p><div class="dl-row">' + S.kept.map((v) => dieHtml(v, '', '', ' held')).join('') + '</div>' : ''));
+}
+const FLAG_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path class="cloth" d="M6 4h11l-3 4 3 4H6z"/></svg>';
+function minesBoard(el) {
+  el.className = 'lp-board mines-lesson';
+  return lookBoard(el, 'mines', RULES.mines, (S, b) => {
+    const cols = S.rows[0].length;
+    let h = '<div class="mines" style="--cols:' + cols + ';--fs:clamp(14px, 4vw, 22px)">';
+    S.rows.forEach((row, r) => [...row].forEach((ch, c) => {
+      const at = 'r' + (r + 1) + 'c' + (c + 1), open = /[0-8]/.test(ch);
+      h += '<button type="button" class="mn' + (open ? ' open' : '') + (ch === 'F' ? ' flag' : '') + (open && ch !== '0' ? ' n' + ch : '') + '" data-at="' + at + '" data-mark="' + (b.marks[at] || '') + '" aria-label="Row ' + (r + 1) + ', column ' + (c + 1) + ', ' + (ch === '.' ? 'hidden' : ch === 'F' ? 'flagged' : ch === '0' ? 'empty' : ch) + '">' + (ch === 'F' ? FLAG_SVG : open && ch !== '0' ? ch : '') + '</button>';
+    }));
+    return h + '</div>';
+  });
+}
+function nonogramBoard(el) {
+  el.className = 'lp-board pic-lesson';
+  return lookBoard(el, 'nonogram', RULES.nonogram, (S, b) => {
+    const n = S.cols.length;
+    let h = '<div class="pic" style="--n:' + n + '"><div class="pic-corner"></div>';
+    S.cols.forEach((c) => { h += '<div class="pic-clue col">' + c.split(/\s+/).map((x) => '<span>' + x + '</span>').join('') + '</div>'; });
+    S.rows.forEach((clue, r) => {
+      h += '<div class="pic-clue row">' + clue.split(/\s+/).map((x) => '<span>' + x + '</span>').join('') + '</div>';
+      [...S.grid[r]].forEach((ch, c) => {
+        const at = 'r' + (r + 1) + 'c' + (c + 1);
+        h += '<button type="button" class="pic-cell' + (ch === '#' ? ' on' : ch === 'x' ? ' x' : '') + '" data-at="' + at + '" data-mark="' + (b.marks[at] || '') + '" aria-label="Row ' + (r + 1) + ', column ' + (c + 1) + (ch === '#' ? ', filled' : ch === 'x' ? ', crossed out' : '') + '"></button>';
+      });
+    });
+    return h + '</div>';
+  });
+}
+function cryptogramBoard(el) {
+  el.className = 'lp-board cg-board cg-lesson';
+  return lookBoard(el, 'cryptogram', RULES.cryptogram, (S, b) => '<div class="cg-text">' + S.text.split(' ').map((w) => '<span class="cg-word">' + [...w].map((ch) => {
+    if (!/[A-Z]/.test(ch)) return '<span class="cg-punct">' + ch + '</span>';
+    return '<button type="button" class="cg-cell" data-at="' + ch + '" data-mark="' + (b.marks[ch] || '') + '" aria-label="Code letter ' + ch + (S.key[ch] ? ', ' + S.key[ch] : '') + '"><b>' + (S.key[ch] || '') + '</b><small>' + ch + '</small></button>';
+  }).join('') + '</span>').join('') + '</div>');
+}
+
+
+function spiderBoard(el) {
+  const b = base(el);
+  const A = RULES.spider;
+  let S, sel = null, lastCard = null;
+  el.className = 'sol-lesson sp-lesson lp-board';
+  el.innerHTML = '<div class="sp-top"></div><div class="sl-tab"></div>';
+  const slot = (at, label) => '<button type="button" class="sl-slot" data-at="' + at + '" data-mark="' + (b.marks[at] || '') + '" aria-label="' + label + '"></button>';
+  function render() {
+    el.querySelector('.sp-top').innerHTML = '<button type="button" class="btn btn-outline sp-deal" data-at="deal" data-mark="' + (b.marks.deal || '') + '"' + (S.deals ? '' : ' disabled') + '>Deal a row (' + S.deals + ' left)</button><span class="cl-note">Complete runs: ' + S.done + ' of 8</span>';
+    el.querySelector('.sl-tab').innerHTML = S.tab.map((pile, col) => {
+      let y = 0, cards = '';
+      pile.forEach((x, idx) => {
+        const code = A.cardCode(x.c);
+        cards += '<div class="sl-card" style="top:calc(var(--cw) * ' + y.toFixed(2) + ')">' + (x.up ? cardFace(x.c, code, b, (sel === code ? ' sel' : '') + (lastCard === code ? ' moved' : '')) : '<span class="pc back" aria-label="Face-down card"></span>') + '</div>';
+        if (idx < pile.length - 1) y += x.up ? 0.34 : 0.14;
+      });
+      return '<div class="sl-col" style="height:calc(var(--cw) * ' + (y + 1.4).toFixed(2) + ')">' + slot('t' + (col + 1), 'Column ' + (col + 1) + (pile.length ? '' : ', empty')) + cards + '</div>';
+    }).join('');
+  }
+  function destFor(at) {
+    if (/^t([1-9]|10)$/.test(at)) return at;
+    const col = S.tab.findIndex((p) => p.some((x) => x.up && A.cardCode(x.c) === at));
+    return col >= 0 ? 't' + (col + 1) : null;
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, lastCard };
+    const r = A.apply(S, x);
+    S = r.s; sel = null; lastCard = x.deal ? null : x.name.split('-')[0];
+    sound(r.f.complete ? 'found' : 'card');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, lastCard } = prev); render(); }, 650);
+    return r.f;
+  }
+  function tap(at) {
+    if (b.tapFn) return b.tapFn(at);
+    if (!b.live) return;
+    const all = A.list(S);
+    if (at === 'deal') { const d = all.find((x) => x.deal); if (d) doMove(d, true); return; }
+    if (sel) {
+      const dest = destFor(at);
+      const m = dest && all.find((x) => x.name === sel + '-' + dest);
+      if (m) return doMove(m, true);
+    }
+    sel = all.some((x) => x.name.startsWith(at + '-')) && sel !== at ? at : null;
+    if (sel) sound('select');
+    render();
+  }
+  el.addEventListener('click', (e) => { const t = e.target.closest('[data-at]'); if (t) tap(t.dataset.at); });
+  return Object.assign(b, {
+    set(p) { S = A.load(p); sel = null; lastCard = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; if (!on) sel = null; render(); },
+    side: () => 0
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'tricks' ? tricksBoard(el) : kind === 'gin' ? ginBoard(el) : kind === 'freecell' ? freecellBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'tricks' ? tricksBoard(el) : kind === 'gin' ? ginBoard(el) : kind === 'freecell' ? freecellBoard(el) : kind === 'spider' ? spiderBoard(el) : kind === 'dice' ? diceBoard(el) : kind === 'mines' ? minesBoard(el) : kind === 'nonogram' ? nonogramBoard(el) : kind === 'cryptogram' ? cryptogramBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;

@@ -183,6 +183,13 @@ function recommendations(st) {
         hearts: 'Points, passing and breaking hearts, then ducking, dumping the queen and shooting the moon.',
         'gin-rummy': 'Melds, deadwood and knocking, then discarding well and knowing when to knock.',
         freecell: 'Building down, free cells and foundations, then freeing aces and winning empty columns.',
+        mines: 'Learn the 1-2-1 and 1-1 patterns, then when to guess.',
+        'picture-logic': 'Learn the overlap and edge methods for nonograms.',
+        'liars-dice': 'Learn bid odds and when to call Liar.',
+        spider: 'Learn same-suit runs and how to use empty columns.',
+        'hot-dice': 'Learn the scoring combos and when to bank.',
+        'dice-poker': 'Learn the hand rankings, what to keep and when to stand.',
+        cryptogram: 'Learn letter frequency and common words.',
         sudoku: 'From the one rule to real techniques: cross-hatching, singles, pencil marks and pairs. No guessing.',
         backgammon: 'Dice, hitting and bearing off, then the best opening moves, safe play, primes and the pip count.',
         solitaire: 'Klondike from the layout up, then the habits that win more games: dig out hidden cards and use Kings well.' }[g] });
