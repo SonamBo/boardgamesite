@@ -2317,6 +2317,21 @@ body.returning .hero { display: none; }
 .ni-go i:first-child { left: 0; top: 0; background: #1A1416; box-shadow: inset 0 -2px 0 rgba(255,255,255,.15); }
 .ni-go i:last-child { right: 0; bottom: 0; background: #FFF; box-shadow: 0 0 0 1.5px #1A1416; }
 .ni-rv { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, var(--you) 50%, #262A27 50%); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.ni-db { display: grid; grid-template-columns: repeat(2, 12px); gap: 2px; }
+.ni-db i { width: 12px; height: 12px; border: 2px solid currentColor; border-radius: 2px; }
+.ni-db i:first-child { background: var(--you); border-color: var(--you-lo); }
+.ni-nm { width: 28px; height: 28px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
+.ni-nm i { width: 12px; height: 12px; border: 2px solid currentColor; }
+.ni-mn svg { width: 30px; height: 30px; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; fill: currentColor; }
+.ni-pic { display: grid; grid-template-columns: repeat(3, 9px); gap: 2px; }
+.ni-pic i { width: 9px; height: 9px; border: 1.5px solid currentColor; border-radius: 1px; }
+.ni-pic i.on { background: currentColor; }
+.ni-die { display: grid; grid-template-columns: repeat(3, 6px); gap: 2px; padding: 4px; border: 2px solid currentColor; border-radius: 7px; }
+.ni-die i { width: 6px; height: 6px; border-radius: 50%; }
+.ni-die i.on { background: currentColor; }
+.ni-hx { display: flex; align-items: center; gap: 2px; }
+.ni-hx i { width: 14px; height: 16px; background: var(--you); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.ni-hx i:nth-child(2) { background: #EFE6D8; }
 .ni-gm { display: flex; align-items: center; gap: 2px; }
 .ni-gm i { width: 10px; height: 10px; border-radius: 50%; background: var(--you); box-shadow: inset 0 -2px 0 var(--you-lo); }
 .ni-gm i:nth-child(2) { background: #EFE6D8; box-shadow: 0 0 0 1.5px #8E7E6C; }
@@ -2324,6 +2339,73 @@ body.returning .hero { display: none; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* card lessons: a trick (Spades, Hearts) or a hand (Gin Rummy) on the felt */
+.lp-board.card-lesson { container-type: inline-size; width: 100%; max-width: 680px; margin: 0 auto; padding: 14px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%); box-shadow: inset 0 0 0 1px var(--felt-dark); user-select: none; -webkit-user-select: none; --cw: min(76px, calc((100cqw - 40px) / 7)); }
+.card-lesson .pc { position: relative; display: block; width: var(--cw); height: calc(var(--cw) * 1.4); padding: 0; font: inherit; cursor: default; flex: none; }
+.card-lesson button.pc.can { cursor: pointer; }
+.card-lesson .pc.dim { filter: brightness(.7); }
+.card-lesson .pc.moved { box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 70%, transparent); }
+.cl-note { color: rgba(233,239,230,.75); font-size: 14px; margin: 0; }
+.cl-trick { display: flex; gap: 10px; justify-content: center; min-height: calc(var(--cw) * 1.4 + 20px); align-items: flex-end; }
+.cl-play { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cl-play small { color: rgba(233,239,230,.7); font-size: 12px; }
+.cl-empty { color: rgba(233,239,230,.6); margin: auto 0; }
+.cl-hand { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 2px; }
+.cl-hand .pc + .pc { margin-left: calc(var(--cw) * -0.38); }
+.cl-hand .pc.can:hover { transform: translateY(-4px); }
+.card-lesson [data-mark="good"], .card-lesson [data-mark="bad"], .card-lesson [data-mark="target"] { border-radius: 8px; }
+.card-lesson [data-mark="hint"] { box-shadow: 0 0 0 3px var(--accent-text); }
+.card-lesson [data-mark="hint"]::before { display: none; }
+.sol-lesson.fc-lesson .sl-top, .sol-lesson.fc-lesson .sl-tab { grid-template-columns: repeat(8, var(--cw)); }
+.sol-lesson.fc-lesson > * { --cw: min(80px, calc((100cqw - 48px) / 8)); }
+.sol-lesson.sp-lesson .sl-tab { grid-template-columns: repeat(10, var(--cw)); gap: 4px; }
+.sol-lesson.sp-lesson > * { --cw: min(60px, calc((100cqw - 60px) / 10)); }
+.sp-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.sp-deal { min-height: 40px; }
+/* lesson boards for dice, Mines, Picture Logic and Cryptogram (look-and-tap) */
+.lp-board.dice-lesson { width: 100%; max-width: 560px; margin: 0 auto; padding: 18px 14px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: radial-gradient(ellipse at 50% 0%, var(--felt-light), var(--felt-hover) 70%); box-shadow: inset 0 0 0 1px var(--felt-dark); }
+.dl-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.dice-lesson .die { width: clamp(48px, 13vw, 68px); }
+.dice-lesson .die.held { opacity: .85; transform: scale(.85); }
+.dice-lesson [data-mark="good"] .face, .dice-lesson [data-mark="target"] .face { box-shadow: 0 0 0 4px #5FA36B; }
+.dice-lesson [data-mark="bad"] .face { box-shadow: 0 0 0 4px #D2564B; }
+.dice-lesson [data-mark="hint"] .face { box-shadow: 0 0 0 4px var(--accent-text); }
+.dice-lesson [data-mark]::before { display: none; }
+.lp-board.mines-lesson { width: 100%; max-width: 420px; margin: 0 auto; padding: 8px; }
+.mines-lesson .mn { position: relative; }
+.mines-lesson .mn[data-mark]::before { display: none; }
+.mines-lesson .mn[data-mark="hint"] { box-shadow: inset 0 0 0 3px var(--accent-text); }
+.mines-lesson .mn[data-mark="good"], .mines-lesson .mn[data-mark="target"] { box-shadow: inset 0 0 0 3px #5FA36B; background-color: color-mix(in srgb, #5FA36B 35%, transparent); }
+.mines-lesson .mn[data-mark="bad"] { box-shadow: inset 0 0 0 3px #D2564B; }
+.lp-board.pic-lesson { width: 100%; max-width: 480px; margin: 0 auto; padding: 8px; }
+.pic-lesson .pic-cell { position: relative; }
+.pic-lesson .pic-cell[data-mark="hint"]::before { inset: 34%; }
+.lp-board.cg-lesson { width: 100%; max-width: 640px; margin: 0 auto; }
+.cg-lesson .cg-punct { align-self: flex-end; font-weight: 700; color: #6E6158; padding-bottom: 18px; }
+.cg-lesson .cg-cell[data-mark="good"] b, .cg-lesson .cg-cell[data-mark="target"] b { background: rgba(95,163,107,.25); }
+.cg-lesson .cg-cell[data-mark="hint"] b { background: color-mix(in srgb, var(--accent-text) 22%, transparent); }
+.cg-lesson .cg-cell[data-mark]::before { display: none; }
+/* lesson boards for Dots and Boxes */
+.lp-board.db-lesson { width: 100%; max-width: 480px; margin: 0 auto; }
+.db-lesson .db-mark { fill: none; stroke-width: 1.4; pointer-events: none; }
+.db-lesson .db-mark.mk-good { stroke: #5FA36B; } .db-lesson .db-mark.mk-bad { stroke: #D2564B; } .db-lesson .db-mark.mk-target { stroke: var(--accent-text); }
+.db-lesson .db-mark.mk-hint { fill: color-mix(in srgb, var(--accent-text) 22%, transparent); stroke: none; }
+.db-lesson .ln.mk-hint { stroke: var(--accent-text); stroke-dasharray: 2 2; opacity: 1; }
+/* lesson boards for Nine Men's Morris */
+.lp-board.nm-lesson { width: 100%; max-width: 520px; margin: 0 auto; padding: 8px; }
+.nm-lesson .mk { fill: none; stroke-width: .08; pointer-events: none; }
+.nm-lesson .mk-good { stroke: #5FA36B; } .nm-lesson .mk-bad { stroke: #D2564B; } .nm-lesson .mk-target { stroke: var(--accent-text); }
+.nm-lesson .mk-hint { fill: color-mix(in srgb, var(--accent-text) 55%, transparent); stroke: none; }
+/* lesson boards for Hex: marks are outlines and dots on the cells */
+.lp-board.hx-lesson { width: 100%; max-width: 640px; margin: 0 auto; }
+.hx-lesson .hx { cursor: default; }
+.hx-lesson .hx.can { cursor: pointer; }
+.hx-lesson .hx[data-mark="good"] { stroke: #5FA36B; stroke-width: .18; }
+.hx-lesson .hx[data-mark="bad"] { stroke: #D2564B; stroke-width: .18; }
+.hx-lesson .hx[data-mark="target"] { stroke: var(--accent-text); stroke-width: .18; }
+.hx-lesson .hx-hint { fill: color-mix(in srgb, var(--accent-text) 75%, transparent); pointer-events: none; }
 /* lesson boards for Five in a Row: marks are rings and dots, so the grid lines (::before/::after) stay */
 .lp-board.gm-board { width: 100%; max-width: 560px; margin: 0 auto; }
 .gm-board .gm[data-mark="good"], .gm-board .gm[data-mark="bad"], .gm-board .gm[data-mark="target"] { border-radius: 50%; }

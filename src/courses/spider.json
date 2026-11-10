@@ -1,0 +1,340 @@
+{
+ "game": "spider",
+ "name": "Spider Solitaire",
+ "board": "spider",
+ "play": "/play/spider",
+ "intro": "A short path through Spider Solitaire: building down, moving same-suit runs and dealing, then why building in suit and emptying columns win games.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Spider works",
+   "blurb": "Building down, moving runs and dealing.",
+   "lessons": [
+    {
+     "slug": "spider-solitaire-rules",
+     "title": "Building and moving runs",
+     "icon": "K",
+     "summary": "In Spider you build down in any suit, but only same-suit runs move together. Learn the moves, the deal and how runs are cleared.",
+     "wrap": "Any suit to build, one suit to move. Next: a quick rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "tab": [
+         "#5S #2H 10S",
+         "#7H 9H 8H",
+         "#QS 8S",
+         "#4S #JH 7H",
+         "#6S JS",
+         "#AH 10H",
+         "#9S 5H",
+         "#2S KH",
+         "#3H 6S",
+         "#8S 4S"
+        ],
+        "deals": 5
+       },
+       "text": "<p>Spider has ten columns. Only the top cards are face up; the rest turn over as you clear the cards above them. The deck waits to deal more rows.</p><p>The goal is to build complete runs from <strong>King down to Ace in one suit</strong>. Each one is cleared away. Clear eight to win. The lessons show just part of a game, with two suits.</p>"
+      },
+      {
+       "type": "move",
+       "accept": [
+        "7H-t3",
+        "7H-t2"
+       ],
+       "text": "<p>You can move a card onto any card <strong>one rank higher, in any suit</strong>.</p>",
+       "prompt": "Move the 7♥ onto an 8.",
+       "wrong": "The 7♥ goes on an 8 of either suit.",
+       "done": "And the face-down card under it turns over."
+      },
+      {
+       "type": "move",
+       "position": {
+        "tab": [
+         "#5S #2H 10S",
+         "#7H 9H 8H",
+         "#QS 8S 7H",
+         "#4S JH",
+         "#6S JS",
+         "#AH 10H",
+         "#9S 5H",
+         "#2S KH",
+         "#3H 6S",
+         "#8S 4S"
+        ],
+        "deals": 5
+       },
+       "accept": [
+        "9H-t6",
+        "9H-t1"
+       ],
+       "text": "<p>A run that is in order <strong>and all one suit</strong> moves as a block.</p>",
+       "prompt": "Move the 9♥ 8♥ together onto a 10.",
+       "wrong": "Drag the 9♥, and the 8♥ comes with it.",
+       "done": "The whole run moved."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "tab": [
+         "#5S #2H 10S",
+         "#7H 9H 8H",
+         "#QS 8S 7H",
+         "#4S JH",
+         "#6S JS",
+         "#AH 10H",
+         "#9S 5H",
+         "#2S KH",
+         "#3H 6S",
+         "#8S 4S"
+        ],
+        "deals": 5
+       },
+       "marks": {},
+       "text": "<p>Now look at the 8♠ with the 7♥ on it.</p>",
+       "prompt": "Can the 8♠ 7♥ move together?",
+       "options": [
+        "Yes, they’re in order",
+        "No, they’re different suits"
+       ],
+       "answer": 1,
+       "explain": "No. Only same-suit runs move as a block. You’d have to move the 7♥ first."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Dealing.</p>",
+       "prompt": "When you’re stuck, you deal a new row: one card on every column. What do you need first?",
+       "options": [
+        "Nothing",
+        "At least one card in every column"
+       ],
+       "answer": 1,
+       "explain": "Every column needs at least one card before you deal."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Four questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "spider-rules-check",
+     "xp": 40,
+     "title": "Spider rules check",
+     "icon": "🏆",
+     "summary": "Test your Spider Solitaire rules: building down in any suit, moving same-suit runs, empty columns, dealing and completing a run.",
+     "wrap": "Rules check passed. Now for the strategy.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "tab": [
+         "#KH #3S 7S",
+         "#9H 7H",
+         "#2H #QS 6H",
+         "#JS 9S",
+         "#5H 8S",
+         "#AS #4H JH",
+         "#6S QH",
+         "QS 10H",
+         "#AH 4S",
+         "#10S 2H"
+        ],
+        "deals": 4
+       },
+       "text": "<p>Question 1.</p>",
+       "prompt": "Can a 6♥ go on a 7♠?",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "answer": 0,
+       "explain": "Yes. Any suit will do when you build."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 2.</p>",
+       "prompt": "What moves as a block?",
+       "options": [
+        "Any run in order",
+        "A run in order and all one suit"
+       ],
+       "answer": 1,
+       "explain": "Only same-suit runs."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "What can go into an empty column?",
+       "options": [
+        "Only a King",
+        "Any card or same-suit run"
+       ],
+       "answer": 1,
+       "explain": "Anything. That’s why an empty column is so useful."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 4.</p>",
+       "prompt": "What happens when you complete King down to Ace in one suit?",
+       "options": [
+        "It’s cleared away",
+        "It stays until the end"
+       ],
+       "answer": 0,
+       "explain": "It’s cleared. Clear eight runs to win."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Strategy",
+   "blurb": "Same-suit runs and empty columns.",
+   "lessons": [
+    {
+     "slug": "build-in-suit-spider",
+     "title": "Build in suit",
+     "icon": "♥♥",
+     "summary": "In Spider, a card on its own suit can move with it later; a card on another suit can’t. Learn to choose same-suit moves and uncover cards.",
+     "wrap": "In suit when you can, and uncover cards when you can. Next: empty columns.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "tab": [
+         "#KH #3S 7S",
+         "#9H 7H",
+         "#2H #QS 6H",
+         "#JS 9S",
+         "#5H 8S",
+         "#AS #4H JH",
+         "#6S QH",
+         "QS 10H",
+         "#AH 4S",
+         "#10S 2H"
+        ],
+        "deals": 4
+       },
+       "text": "<p>A 7♥ on an 8♥ can later move with it. A 7♥ on an 8♠ can’t: it makes a joint that has to be untangled later.</p><p>When two moves are possible, <strong>choose the one in suit</strong>.</p>"
+      },
+      {
+       "type": "move",
+       "accept": [
+        "6H-t2"
+       ],
+       "text": "<p>The 6♥ can go on either 7.</p>",
+       "prompt": "Move the 6♥ onto the 7 that keeps it in suit.",
+       "wrong": "Look for the 7 of the same suit as the 6♥.",
+       "done": "In suit, and it turned over a card too."
+      },
+      {
+       "type": "move",
+       "position": {
+        "tab": [
+         "#KH #3S 7S",
+         "#9H 7H",
+         "#2H #QS 6H",
+         "#JS 9S",
+         "#5H 8S",
+         "#AS #4H JH",
+         "#6S QH",
+         "QS 10H",
+         "#AH 4S",
+         "#10S 2H"
+        ],
+        "deals": 4
+       },
+       "accept": [
+        "8S-t4"
+       ],
+       "text": "<p>Two in-suit moves: the 8♠ onto the 9♠, or the 10♥ onto the J♥. Only one of them turns a face-down card over.</p>",
+       "prompt": "Make the in-suit move that uncovers a card.",
+       "wrong": "Of the 8♠ and the 10♥, which one is sitting on a face-down card?",
+       "done": "Every face-down card you turn over is new information and new options."
+      }
+     ]
+    },
+    {
+     "slug": "empty-columns-spider",
+     "title": "Empty columns",
+     "icon": "∅",
+     "summary": "An empty column is the most powerful thing in Spider. Learn to win one, why Kings need one, and why you shouldn’t waste it on a low card.",
+     "wrap": "Win empty columns and spend them well. Make your useful moves before you deal. You’re ready to play.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "tab": [
+         "#KH #3S 7S",
+         "#9H 7H",
+         "#2H #QS 6H",
+         "#JS 9S",
+         "#5H 8S",
+         "#AS #4H JH",
+         "5H",
+         "#3H JS 10H",
+         "#AH 6S",
+         "#4H #9S KS QS"
+        ],
+        "deals": 3
+       },
+       "text": "<p>An empty column can take <strong>any card or same-suit run</strong>. It lets you park cards, untangle mixed runs and rebuild in suit.</p><p>Columns with the fewest cards are the quickest to empty.</p>"
+      },
+      {
+       "type": "move",
+       "goal": "empty",
+       "text": "<p>One column here holds a single card.</p>",
+       "prompt": "Empty a column.",
+       "wrong": "Move the lone 5♥ somewhere.",
+       "done": "An empty column."
+      },
+      {
+       "type": "move",
+       "position": {
+        "tab": [
+         "#KH #3S 7S",
+         "#9H 7H",
+         "#2H #QS 6H",
+         "#JS 9S",
+         "#5H 8S",
+         "#AS #4H JH",
+         "",
+         "#3H JS 10H",
+         "#AH 6S 5H",
+         "#4H #9S KS QS"
+        ],
+        "deals": 3
+       },
+       "accept": [
+        "KS-t7"
+       ],
+       "text": "<p>Nothing can go on top of a King in another column, so a King can only move into an <strong>empty</strong> column. The K♠ Q♠ here is sitting on face-down cards.</p>",
+       "prompt": "Move the K♠ Q♠ into the empty column.",
+       "wrong": "Move the King and its Queen into the empty column.",
+       "done": "A King at the top of a column is perfect: you can build down from it where it stands, and you turned over a card."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "Should you drop a single low card into an empty column?",
+       "options": [
+        "Yes, to keep it tidy",
+        "Only if it leads somewhere"
+       ],
+       "answer": 1,
+       "explain": "An empty column is worth more empty. Fill it with a King, or with a card that frees something useful."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

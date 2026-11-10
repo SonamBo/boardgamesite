@@ -1,0 +1,320 @@
+{
+ "game": "liars-dice",
+ "name": "Liar’s Dice",
+ "board": "dice",
+ "play": "/play/liars-dice",
+ "intro": "A short path through Liar’s Dice: bids, wild ones and challenges, then the one-in-three rule for judging a bid and when to call “Liar!”.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Liar’s Dice works",
+   "blurb": "Bidding, wild ones and calling Liar.",
+   "lessons": [
+    {
+     "slug": "liars-dice-bids",
+     "title": "Bids and wild ones",
+     "icon": "1",
+     "summary": "In Liar’s Dice you bid on how many dice show one number across the whole table, with ones wild. Learn to count your dice and raise a bid.",
+     "wrap": "More dice, or the same number of a higher face. Next: a quick rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "dice": [
+         4,
+         1,
+         4,
+         6,
+         2
+        ],
+        "label": "Your dice"
+       },
+       "text": "<p>Everyone rolls five dice in secret. Players take turns <strong>bidding</strong> on how many dice of one number are on the <strong>whole table</strong>, not just in their own cup.</p><p><strong>Ones are wild</strong>: a 1 counts as any number. Bids are on 2s to 6s.</p>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         4,
+         1,
+         4,
+         6,
+         2
+        ],
+        "label": "The bid: four 4s"
+       },
+       "targets": [
+        "d1",
+        "d2",
+        "d3"
+       ],
+       "text": "<p>The bid is <strong>four 4s</strong>.</p>",
+       "prompt": "Tap every one of your dice that counts towards it.",
+       "wrong": "Count the 4s, and don’t forget that a 1 counts too.",
+       "done": "Three of yours count: two 4s and the wild 1."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Each bid must be <strong>higher</strong> than the last: more dice, or the same number of dice with a higher face.</p>",
+       "prompt": "The last bid was three 5s. Which of these is a legal raise?",
+       "options": [
+        "Three 4s",
+        "Two 6s",
+        "Three 6s"
+       ],
+       "answer": 2,
+       "explain": "Three 6s: same number of dice, higher face. Four of anything would work too."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Instead of raising, you can call <strong>“Liar!”</strong>. All the dice are shown. If the bid was true, the caller loses a die; if not, the bidder does.</p>",
+       "prompt": "You call Liar on five 3s. The table shows four 3s and one 1. Who loses a die?",
+       "options": [
+        "You",
+        "The bidder"
+       ],
+       "answer": 0,
+       "explain": "Four 3s plus the wild 1 make five, so the bid was true and you lose a die. The last player with dice wins."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "liars-dice-rules-check",
+     "xp": 40,
+     "title": "Liar’s Dice rules check",
+     "icon": "🏆",
+     "summary": "Test your Liar’s Dice rules: counting wild ones, legal raises, what happens after a challenge, and how the game is won.",
+     "wrap": "Rules check passed. Now for the odds.",
+     "steps": [
+      {
+       "type": "tap",
+       "position": {
+        "dice": [
+         6,
+         3,
+         1,
+         6,
+         2
+        ],
+        "label": "The bid: five 6s"
+       },
+       "targets": [
+        "d1",
+        "d3",
+        "d4"
+       ],
+       "text": "<p>Question 1.</p>",
+       "prompt": "Tap each of your dice that counts towards five 6s.",
+       "wrong": "The 6s count, and so does the 1.",
+       "done": "Correct: three of yours count."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 2.</p>",
+       "prompt": "The last bid was four 6s. Which is a legal raise?",
+       "options": [
+        "Four 2s",
+        "Five 2s",
+        "Three 6s"
+       ],
+       "answer": 1,
+       "explain": "After 6s, the only way up is more dice: five of any face."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "Which dice count towards a bid of 4s?",
+       "options": [
+        "Only 4s",
+        "4s and 1s",
+        "4s, 5s and 6s"
+       ],
+       "answer": 1,
+       "explain": "Ones are wild, so 4s and 1s."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 4.</p>",
+       "prompt": "You bid six 5s and someone calls Liar. There are only five. Who loses a die?",
+       "options": [
+        "You",
+        "The caller"
+       ],
+       "answer": 0,
+       "explain": "The bid was false, so the bidder loses a die."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "How do you win the game?",
+       "options": [
+        "Make the highest bid",
+        "Be the last player with dice left"
+       ],
+       "answer": 1,
+       "explain": "Every lost challenge costs a die. The last player with dice wins."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Odds and calling",
+   "blurb": "The one-in-three rule and when to call.",
+   "lessons": [
+    {
+     "slug": "liars-dice-odds",
+     "title": "Bid odds: one in three",
+     "icon": "⅓",
+     "summary": "With ones wild, a third of the dice you can’t see should count for any face. Use the one-in-three rule to judge every bid in Liar’s Dice.",
+     "wrap": "Your dice, plus a third of the rest. Next: when to call.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "dice": [
+         5,
+         1,
+         2,
+         5,
+         3
+        ],
+        "label": "Your dice: 20 on the table"
+       },
+       "text": "<p>Any die you can’t see has a <strong>1 in 3</strong> chance of counting for a given face: it could be that face or a wild 1.</p><p>So a fair guess for any face is <strong>your own matching dice, plus a third of everyone else’s</strong>.</p>"
+      },
+      {
+       "type": "tap",
+       "targets": [
+        "d1",
+        "d2",
+        "d4"
+       ],
+       "text": "<p>Start with what you know.</p>",
+       "prompt": "Tap your dice that would count in a bid on 5s.",
+       "wrong": "The 5s and the wild 1.",
+       "done": "Three of yours."
+      },
+      {
+       "type": "choice",
+       "text": "<p>There are 20 dice on the table: your 5 and 15 you can’t see.</p>",
+       "prompt": "About how many 5s are on the whole table?",
+       "options": [
+        "About 5",
+        "About 8",
+        "About 12"
+       ],
+       "answer": 1,
+       "explain": "Your 3, plus about a third of 15, which is 5. About 8 in total."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         6,
+         6,
+         1,
+         3,
+         2
+        ],
+        "label": "Your dice: 10 on the table"
+       },
+       "text": "<p>Bid on what you hold: your own dice make the bid more likely to be true. Now it’s just you and one opponent, 10 dice in all.</p>",
+       "prompt": "Which opening bid is sensible?",
+       "options": [
+        "Two 6s",
+        "Four 6s",
+        "Seven 6s"
+       ],
+       "answer": 0,
+       "explain": "You hold three 6s (two 6s and a wild 1), and the 5 hidden dice should add one or two more, so about four or five in all. Two 6s is safe and leaves room to raise. Raising slowly passes the pressure on."
+      }
+     ]
+    },
+    {
+     "slug": "when-to-call-liar",
+     "title": "When to call Liar",
+     "icon": "!",
+     "summary": "Call Liar when a bid is well above what the one-in-three rule expects, and raise when it’s close. Practise the call on real Liar’s Dice hands.",
+     "wrap": "Work out the expected count, then call or raise. Try it against the computer.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         2,
+         2,
+         5,
+         3,
+         6
+        ],
+        "label": "The bid: six 4s, 10 dice on the table"
+       },
+       "text": "<p>Before you call, count what the bidder needs.</p>",
+       "prompt": "You have no 4s and no 1s. Should you call Liar on six 4s?",
+       "options": [
+        "Yes, call",
+        "No, raise"
+       ],
+       "answer": 0,
+       "explain": "None of your dice count, so all six would have to be among the other five dice. It can’t be true: call."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         4,
+         4,
+         1,
+         2,
+         6
+        ],
+        "label": "The bid: five 4s, 15 dice on the table"
+       },
+       "text": "<p>A different hand.</p>",
+       "prompt": "Should you call Liar on five 4s?",
+       "options": [
+        "Yes, call",
+        "No, raise"
+       ],
+       "answer": 1,
+       "explain": "You have three, and the 10 hidden dice should add about three more: about six in all. Five is likely true, so raise instead."
+      },
+      {
+       "type": "choice",
+       "position": {
+        "dice": [
+         3,
+         1,
+         5,
+         6,
+         3
+        ],
+        "label": "The bid: seven 3s, 20 dice on the table"
+       },
+       "text": "<p>One more.</p>",
+       "prompt": "You hold three that count. Is seven 3s close or far from what you’d expect?",
+       "options": [
+        "Close: think about raising",
+        "Far above: call"
+       ],
+       "answer": 0,
+       "explain": "Three, plus a third of 15, is about 8. Seven is likely true. If the bid were 11 or 12, you’d call. Being slightly wrong costs a die either way, so when it’s close, make a small raise you can back up."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,527 @@
+{
+ "game": "nine-mens-morris",
+ "name": "Nine Men’s Morris",
+ "board": "morris",
+ "play": "/play/nine-mens-morris",
+ "intro": "Learn Nine Men’s Morris from scratch: the board, placing, mills, moving and flying, then blocking, flexible placing, the running mill and the flying endgame.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Nine Men’s Morris works",
+   "blurb": "The board, placing, mills, moving, flying and how you win.",
+   "lessons": [
+    {
+     "slug": "nine-mens-morris-board",
+     "title": "The Nine Men’s Morris board",
+     "summary": "Nine Men’s Morris is played on 24 points joined by lines, with nine pieces each. Learn the board, where mills can form and who moves first.",
+     "wrap": "That’s the board. Next: making a mill.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "",
+        "ivory": "",
+        "hand": [
+         9,
+         9
+        ]
+       },
+       "text": "<p>The board has <strong>24 points</strong> on three squares, one inside the other, joined by four short lines across the middle of each side.</p><p>Each player has <strong>nine pieces</strong>, which start off the board. Gold moves first.</p>"
+      },
+      {
+       "type": "info",
+       "marks": {
+        "a7": "hint",
+        "d7": "hint",
+        "g7": "hint",
+        "d6": "hint",
+        "d5": "hint"
+       },
+       "text": "<p>Three points in a straight line along a side of a square, like the top edge here, or along one of the joining lines, can make a <strong>mill</strong>. There are 16 possible mills.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "How many pieces does each player have?",
+       "options": [
+        "Six",
+        "Nine",
+        "Twelve"
+       ],
+       "answer": 1,
+       "explain": "Nine each, hence the name."
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "",
+        "ivory": "",
+        "hand": [
+         9,
+         9
+        ]
+       },
+       "goal": "any",
+       "text": "<p>The game starts with <strong>placing</strong>: players take turns putting one piece on any empty point.</p>",
+       "prompt": "Place your first piece.",
+       "done": "Placed. Now it’s Ivory’s turn."
+      }
+     ],
+     "icon": "★"
+    },
+    {
+     "slug": "making-a-mill",
+     "title": "Making a mill and removing a piece",
+     "summary": "Three of your pieces in a line is a mill, and every new mill lets you remove one of your opponent’s pieces. Learn the rule, and which pieces you can take.",
+     "wrap": "Mills remove pieces, but pieces in a mill are protected. Next: moving and flying.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "a7 d7",
+        "ivory": "g1 b4",
+        "hand": [
+         7,
+         7
+        ]
+       },
+       "marks": {
+        "g7": "hint"
+       },
+       "text": "<p>When you make a <strong>mill</strong>, three of your pieces in a line, you remove one of your opponent’s pieces from the board.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a7 d7",
+        "ivory": "g1 b4",
+        "hand": [
+         7,
+         7
+        ]
+       },
+       "goal": "mill",
+       "text": "<p>You have two pieces on the top line.</p>",
+       "prompt": "Make a mill, then tap an ivory piece to remove it.",
+       "wrong": "Complete the line of three along the top.",
+       "done": "A mill! One ivory piece is gone."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "gold": "b6 d2",
+        "ivory": "a1 d1 g1 b4 f4",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "targets": [
+        "b4",
+        "f4"
+       ],
+       "text": "<p>Pieces in a mill are <strong>protected</strong>: you can’t remove one unless all of your opponent’s pieces are in mills.</p><p>You’ve just made a mill.</p>",
+       "prompt": "Tap every ivory piece you’re allowed to remove.",
+       "wrong": "That piece is part of Ivory’s mill along the bottom.",
+       "done": "Right: only the two pieces outside the mill."
+      },
+      {
+       "type": "choice",
+       "text": "<p>And if every ivory piece is in a mill?</p>",
+       "prompt": "Can you remove one?",
+       "options": [
+        "No, never",
+        "Yes, any of them"
+       ],
+       "answer": 1,
+       "explain": "Yes. When all of your opponent’s pieces are in mills, you can take any of them."
+      }
+     ],
+     "icon": "≡"
+    },
+    {
+     "slug": "moving-and-flying-in-morris",
+     "title": "Moving and flying",
+     "summary": "Once all 18 pieces are placed, you move along the lines to a neighbouring point. With three pieces left, you can fly anywhere. Learn both.",
+     "wrap": "Moving makes and breaks mills; flying makes three pieces dangerous. Next: how to win.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "a7 d7 g4 b2 d2",
+        "ivory": "f2 f4 f6 e3 c5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "marks": {
+        "g4": "hint",
+        "g7": "target"
+       },
+       "text": "<p>When all the pieces are placed, players take turns <strong>moving</strong> one piece along a line to a neighbouring empty point. A mill made by moving removes a piece too.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a7 d7 g4 b2 d2",
+        "ivory": "f2 f4 f6 e3 c5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "mill",
+       "text": "<p>Tap your piece, then the point to move it to.</p>",
+       "prompt": "Make a mill by moving.",
+       "wrong": "Move a piece along a line to finish the top line of three.",
+       "done": "A mill, made by moving."
+      },
+      {
+       "type": "info",
+       "position": {
+        "gold": "a1 d1 b6",
+        "ivory": "a7 d7 f6 e5 c5 b4",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "text": "<p>A player with only <strong>three pieces</strong> left may <strong>fly</strong>: move a piece to any empty point, not just a neighbouring one.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a1 d1 b6",
+        "ivory": "a7 d7 f6 e5 c5 b4",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "mill",
+       "text": "<p>You have three pieces, so you can fly.</p>",
+       "prompt": "Fly a piece to make a mill.",
+       "wrong": "Your two pieces along the bottom line need a third. Fly your other piece there.",
+       "done": "Flown into a mill."
+      }
+     ],
+     "icon": "➜"
+    },
+    {
+     "slug": "how-to-win-nine-mens-morris",
+     "title": "How to win Nine Men’s Morris",
+     "summary": "You win Nine Men’s Morris by reducing your opponent to two pieces, or leaving them with no legal move. Learn both, and the draw rules.",
+     "wrap": "You know all the rules. Test yourself in the rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "a7 d7 g4 b2 d2",
+        "ivory": "f2 c3 e5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "text": "<p>You win when your opponent is down to <strong>two pieces</strong>, because they can’t make a mill any more. You also win if they have <strong>no legal move</strong>, with every piece blocked in.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a7 d7 g4 b2 d2",
+        "ivory": "f2 c3 e5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "win",
+       "text": "<p>Ivory has three pieces left.</p>",
+       "prompt": "Win the game.",
+       "wrong": "Make a mill, and the piece you remove leaves Ivory with two.",
+       "done": "Ivory is down to two pieces. You win!"
+      },
+      {
+       "type": "choice",
+       "text": "<p>And if nobody can win?</p>",
+       "prompt": "When is it a draw here?",
+       "options": [
+        "The same position three times, or 50 moves each with nothing removed",
+        "When both players have three pieces",
+        "Never"
+       ],
+       "answer": 0,
+       "explain": "Both of those are draws on BoardGameSite, so a game can’t go on for ever."
+      }
+     ],
+     "icon": "🏁"
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the strategy.",
+   "lessons": [
+    {
+     "slug": "nine-mens-morris-rules-check",
+     "xp": 40,
+     "title": "Nine Men’s Morris rules check",
+     "summary": "Test your Nine Men’s Morris rules: placing, making mills, which pieces you can remove, flying with three pieces and how to win.",
+     "wrap": "Rules check passed. Now for the strategy.",
+     "steps": [
+      {
+       "type": "move",
+       "position": {
+        "gold": "a1 a4",
+        "ivory": "g7 d5",
+        "hand": [
+         7,
+         7
+        ]
+       },
+       "goal": "mill",
+       "text": "<p>Question 1.</p>",
+       "prompt": "Make a mill, then remove a piece.",
+       "wrong": "Finish your line up the left side.",
+       "done": "Correct."
+      },
+      {
+       "type": "tap",
+       "position": {
+        "gold": "d2 b4",
+        "ivory": "a7 d7 g7 c3 e5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "targets": [
+        "c3",
+        "e5"
+       ],
+       "text": "<p>Question 2. You’ve made a mill.</p>",
+       "prompt": "Tap every ivory piece you may remove.",
+       "wrong": "That piece is in Ivory’s mill.",
+       "done": "Correct."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 3.</p>",
+       "prompt": "When may a player fly?",
+       "options": [
+        "Whenever they like",
+        "When they have three pieces left",
+        "Only while placing"
+       ],
+       "answer": 1,
+       "explain": "With three pieces left."
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a7 d7 g4 b2 d2",
+        "ivory": "f2 c3 e5",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "win",
+       "text": "<p>Question 4.</p>",
+       "prompt": "Win the game.",
+       "wrong": "A mill now leaves Ivory with two pieces.",
+       "done": "Won."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "What happens if you can’t move any piece?",
+       "options": [
+        "You pass",
+        "You lose"
+       ],
+       "answer": 1,
+       "explain": "You lose. Being blocked in is a way to lose with plenty of pieces left."
+      }
+     ],
+     "icon": "🏆"
+    }
+   ]
+  },
+  {
+   "id": "strategy",
+   "stage": "strategy",
+   "name": "Strategy",
+   "blurb": "Flexible placing, blocking, running mills and the endgame.",
+   "lessons": [
+    {
+     "slug": "block-two-in-a-row-morris",
+     "title": "Block two in a row",
+     "summary": "When your opponent has two pieces in a line with the third point empty, block it before it becomes a mill. Practise spotting the threat.",
+     "wrap": "Block two-in-a-rows, unless you can make a mill yourself first.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "b6 c4",
+        "ivory": "a1 d1",
+        "hand": [
+         7,
+         7
+        ]
+       },
+       "marks": {
+        "g1": "bad"
+       },
+       "text": "<p>Ivory has two pieces along the bottom line, and the third point is empty. Next turn that’s a mill, and you lose a piece.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "b6 c4",
+        "ivory": "a1 d1",
+        "hand": [
+         7,
+         7
+        ]
+       },
+       "goal": "block",
+       "text": "<p>You’re still placing pieces.</p>",
+       "prompt": "Stop Ivory’s mill.",
+       "wrong": "Ivory can still finish the line. Put your piece on its empty point.",
+       "done": "Blocked."
+      }
+     ],
+     "icon": "🛡"
+    },
+    {
+     "slug": "place-flexibly-morris",
+     "title": "Place on the busy points",
+     "summary": "Some points on the Morris board touch four others, and some only two. Learn why flexible points matter more than quick mills while placing.",
+     "wrap": "Flexible pieces make more mills later than quick mills made early.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "",
+        "ivory": "",
+        "hand": [
+         9,
+         9
+        ]
+       },
+       "text": "<p>While placing, quick mills are easy to see and easy to block. Strong players put pieces where they can join <strong>several</strong> possible mills and move freely later.</p><p>The points in the middle of each side of the middle square connect to the most other points.</p>"
+      },
+      {
+       "type": "tap",
+       "position": {
+        "gold": "",
+        "ivory": "",
+        "hand": [
+         9,
+         9
+        ]
+       },
+       "targets": [
+        "d6",
+        "b4",
+        "f4",
+        "d2"
+       ],
+       "text": "<p>Look at the lines from each point.</p>",
+       "prompt": "Tap every point that connects to four others.",
+       "wrong": "That point has fewer lines. Look at the middle square.",
+       "done": "Those four points connect to the most others."
+      }
+     ],
+     "icon": "✦"
+    },
+    {
+     "slug": "running-mill-morris",
+     "title": "The running mill",
+     "summary": "A mill you can open and close again with one piece removes a piece every other turn. Learn to close a running mill.",
+     "wrap": "Open your mill when it’s safe, and close it again next turn.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "d1 d2 c3 a7 g7",
+        "ivory": "g1 e4 b4 f6 b6",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "marks": {
+        "c3": "hint",
+        "d3": "target"
+       },
+       "text": "<p>A <strong>running mill</strong> is a mill where one piece can step out and back in. Every time it closes, you remove a piece.</p><p>Last turn you moved a piece out of your mill at the bottom of the middle line. No ivory piece is next to the empty point, so Ivory couldn’t block it.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "d1 d2 c3 a7 g7",
+        "ivory": "g1 e4 b4 f6 b6",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "mill",
+       "text": "<p>Close the mill again.</p>",
+       "prompt": "Make the mill and remove a piece.",
+       "wrong": "Move your piece back into the gap in your line.",
+       "done": "Closed. Next turn you can open it again."
+      }
+     ],
+     "icon": "⟳"
+    },
+    {
+     "slug": "flying-endgame-morris",
+     "title": "Defending against a flying opponent",
+     "summary": "A player with three pieces can fly anywhere, so every two-in-a-row is a threat. Learn to block a flying opponent.",
+     "wrap": "Against a flying opponent, watch every pair of their pieces.",
+     "steps": [
+      {
+       "type": "info",
+       "position": {
+        "gold": "a1 d2 g4 c5",
+        "ivory": "a7 d7 f2",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "marks": {
+        "g7": "bad"
+       },
+       "text": "<p>Ivory is down to three pieces, so Ivory can <strong>fly</strong>. Any two ivory pieces in a line with the third point empty can become a mill next turn.</p>"
+      },
+      {
+       "type": "move",
+       "position": {
+        "gold": "a1 d2 g4 c5",
+        "ivory": "a7 d7 f2",
+        "hand": [
+         0,
+         0
+        ]
+       },
+       "goal": "block",
+       "text": "<p>Ivory’s top line needs one more piece.</p>",
+       "prompt": "Block Ivory’s mill.",
+       "wrong": "Ivory can still fly into the top line. Move a piece onto the empty point.",
+       "done": "Blocked. Keep watching every pair."
+      }
+     ],
+     "icon": "🕊"
+    }
+   ]
+  }
+ ]
+}

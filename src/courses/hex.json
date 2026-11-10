@@ -1,0 +1,382 @@
+{
+ "game": "hex",
+ "name": "Hex",
+ "board": "hex",
+ "play": "/play/hex",
+ "intro": "Learn Hex from scratch: the board and your two edges, winning chains and blocking, then the bridge, edge templates and the swap rule.",
+ "units": [
+  {
+   "id": "basics",
+   "stage": "rules",
+   "name": "How Hex works",
+   "blurb": "The board, your two edges, winning chains and blocking.",
+   "lessons": [
+    {
+     "slug": "hex-board-and-edges",
+     "title": "The Hex board and your two edges",
+     "summary": "Hex is played on a board of hexagons. Gold joins the top and bottom edges, Ivory joins left and right. Learn the board in two minutes.",
+     "wrap": "Those are the edges. Next: how to win.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./......./......./......./......./......./.......",
+       "text": "<p>Hex is played on a rhombus of hexagons that starts empty. The lessons use a small 7×7 board.</p><p><strong>Gold</strong> owns the top and bottom edges. <strong>Ivory</strong> owns the left and right edges. Gold moves first.</p>"
+      },
+      {
+       "type": "info",
+       "position": "......./......./......./...g.../......./......./.......",
+       "marks": {
+        "d3": "hint",
+        "e3": "hint",
+        "c4": "hint",
+        "e4": "hint",
+        "c5": "hint",
+        "d5": "hint"
+       },
+       "text": "<p>Each cell in the middle touches <strong>six</strong> others. Stones that touch are connected.</p><p>Once placed, stones never move and are never captured.</p>"
+      },
+      {
+       "type": "choice",
+       "text": "<p>Quick check.</p>",
+       "prompt": "Which two edges is Gold trying to join?",
+       "options": [
+        "Left and right",
+        "Top and bottom",
+        "Any two edges"
+       ],
+       "answer": 1,
+       "explain": "Top and bottom, the gold edges. Ivory joins left and right."
+      },
+      {
+       "type": "move",
+       "position": "......./......./......./......./......./......./.......",
+       "goal": "any",
+       "text": "<p>Your turn. Tap any empty cell to place a stone.</p>",
+       "prompt": "Place your first stone.",
+       "done": "Your first stone. Now it’s Ivory’s turn."
+      }
+     ],
+     "icon": "★"
+    },
+    {
+     "slug": "how-to-win-hex",
+     "title": "How to win at Hex",
+     "summary": "You win Hex by building an unbroken chain of your stones between your two edges. The chain can twist and turn. Practise finishing one.",
+     "wrap": "Any unbroken chain between your edges wins. Next: blocking, and why Hex has no draws.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "....g../....g.b/b..g.../......./..g..../..g..b./..g....",
+       "marks": {
+        "d4": "hint",
+        "c4": "hint"
+       },
+       "text": "<p>You win by building an <strong>unbroken chain</strong> of your stones that touches both of your edges. It doesn’t need to be straight: it can twist any way it likes.</p>"
+      },
+      {
+       "type": "move",
+       "position": "....g../....g.b/b..g.../......./..g..../..g..b./..g....",
+       "goal": "win",
+       "text": "<p>Your chain from top to bottom has one gap.</p>",
+       "prompt": "Complete your chain.",
+       "wrong": "Find the empty cell that touches both halves of your chain.",
+       "done": "Top joined to bottom. You win!"
+      }
+     ],
+     "icon": "🏁"
+    },
+    {
+     "slug": "blocking-in-hex",
+     "title": "Blocking, and why Hex has no draws",
+     "summary": "In Hex every block is also part of your own chain, and the game can never end in a draw. Learn to stop a chain one cell from finished.",
+     "wrap": "Every stone attacks and defends at once. Test yourself in the rules check.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "g....../......./......./bbb.bbb/......./......./......g",
+       "marks": {
+        "d4": "bad"
+       },
+       "text": "<p>Ivory needs just one more stone to join left and right. If you don’t take that cell, Ivory wins.</p><p>Notice that in Hex, the stone that blocks Ivory is also a step across the board for you.</p>"
+      },
+      {
+       "type": "move",
+       "position": "g....../......./......./bbb.bbb/......./......./......g",
+       "goal": "block",
+       "text": "<p>Ivory’s row has one gap.</p>",
+       "prompt": "Stop Ivory winning.",
+       "wrong": "Ivory still wins next turn. Take the gap in Ivory’s chain.",
+       "done": "Blocked."
+      },
+      {
+       "type": "choice",
+       "text": "<p>One more rule.</p>",
+       "prompt": "Can a game of Hex end in a draw?",
+       "options": [
+        "Yes, if the board fills up",
+        "No, never"
+       ],
+       "answer": 1,
+       "explain": "Never. When the board is full, exactly one player has a winning chain. Blocking your opponent completely always means you’ve connected yourself."
+      }
+     ],
+     "icon": "🛡"
+    }
+   ]
+  },
+  {
+   "id": "rules-check",
+   "stage": "check",
+   "name": "Rules check",
+   "blurb": "Five questions on the rules. Pass to unlock the patterns strong players use.",
+   "lessons": [
+    {
+     "slug": "hex-rules-check",
+     "xp": 40,
+     "title": "Hex rules check",
+     "summary": "Test your Hex rules: the edges, which cells touch, finishing a chain, blocking one and why the game never ends in a draw.",
+     "wrap": "Rules check passed. Now for bridges and edge templates.",
+     "steps": [
+      {
+       "type": "choice",
+       "position": "......./......./......./......./......./......./.......",
+       "text": "<p>Question 1.</p>",
+       "prompt": "Which edges does Ivory join?",
+       "options": [
+        "Top and bottom",
+        "Left and right"
+       ],
+       "answer": 1,
+       "explain": "Left and right."
+      },
+      {
+       "type": "tap",
+       "position": "......./......./......./...g.../......./......./.......",
+       "targets": [
+        "d3",
+        "e3",
+        "c4",
+        "e4",
+        "c5",
+        "d5"
+       ],
+       "text": "<p>Question 2.</p>",
+       "prompt": "Tap every cell that touches the gold stone.",
+       "wrong": "That cell doesn’t share a side with the stone.",
+       "done": "All six."
+      },
+      {
+       "type": "move",
+       "position": "...g..b/...g.../...g.../bbbg.../...g.../...g.../.......",
+       "goal": "win",
+       "text": "<p>Question 3.</p>",
+       "prompt": "Win the game.",
+       "wrong": "One more stone reaches the bottom edge.",
+       "done": "Connected."
+      },
+      {
+       "type": "move",
+       "position": "g....../bbbbb.b/......./......./......./......./......g",
+       "goal": "block",
+       "text": "<p>Question 4.</p>",
+       "prompt": "Stop Ivory winning.",
+       "wrong": "Find the one cell Ivory still needs.",
+       "done": "Blocked."
+      },
+      {
+       "type": "choice",
+       "text": "<p>Question 5.</p>",
+       "prompt": "Can stones be captured or moved in Hex?",
+       "options": [
+        "Yes",
+        "No"
+       ],
+       "answer": 1,
+       "explain": "No. Once placed, a stone stays where it is for the rest of the game."
+      }
+     ],
+     "icon": "🏆"
+    }
+   ]
+  },
+  {
+   "id": "patterns",
+   "stage": "strategy",
+   "name": "Bridges and edges",
+   "blurb": "The bridge, edge templates and racing across the board.",
+   "lessons": [
+    {
+     "slug": "the-bridge-in-hex",
+     "title": "The bridge: the most important pattern in Hex",
+     "summary": "Two stones with two empty cells between them can’t be cut apart. Learn to make bridges and to answer when your opponent pushes into one.",
+     "wrap": "Bridges cover ground twice as fast and can’t be cut. Next: connecting to your edge.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./......./...g.../......./..g..../......./b......",
+       "marks": {
+        "c4": "hint",
+        "d4": "hint"
+       },
+       "text": "<p>These two gold stones don’t touch, but they share two empty neighbours. That’s a <strong>bridge</strong>.</p><p>If Ivory plays in one of the two cells, you play in the other, and your stones stay connected. A bridge is safe, and it covers ground twice as fast as stones side by side.</p>"
+      },
+      {
+       "type": "move",
+       "position": "......./.b...../......./...g.../......./......./.......",
+       "accept": [
+        "b5",
+        "c6",
+        "e5"
+       ],
+       "text": "<p>Your stone is in the middle. Build towards your bottom edge.</p>",
+       "prompt": "Make a bridge towards the bottom.",
+       "wrong": "A bridge stone doesn’t touch yours: it’s two steps away, with two empty cells between you. Go downwards.",
+       "done": "A bridge. Ivory can’t cut it."
+      },
+      {
+       "type": "move",
+       "position": "......./......./...g.../..b..../..g..../......./b......",
+       "goal": "connect",
+       "text": "<p>Ivory has pushed into your bridge.</p>",
+       "prompt": "Keep your stones connected.",
+       "wrong": "Your two stones aren’t joined yet. Take the other cell of the bridge.",
+       "done": "Connected. That’s why a bridge can’t be cut."
+      }
+     ],
+     "icon": "⬡"
+    },
+    {
+     "slug": "edge-templates-in-hex",
+     "title": "Edge templates: already connected to the edge",
+     "summary": "A stone on the second row with two empty cells behind it is already joined to its edge. Learn this edge template and how to defend it.",
+     "wrap": "Know when you’re already connected, and spend your moves somewhere else.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./.g...b./......./......./......./...g.../.......",
+       "marks": {
+        "c7": "hint",
+        "d7": "hint"
+       },
+       "text": "<p>A stone on the <strong>second row</strong> from your edge, with the two cells between it and the edge empty, is already connected to that edge. It works like a bridge to the edge.</p><p>Strong players count such a stone as touching the edge and play elsewhere.</p>"
+      },
+      {
+       "type": "move",
+       "position": "......./.g...b./......./......./......./...g.../...b...",
+       "accept": [
+        "c7"
+       ],
+       "text": "<p>Ivory has played into your edge template.</p>",
+       "prompt": "Keep your stone connected to the bottom edge.",
+       "wrong": "Your stone needs one of the two cells below it. Take the one Ivory left.",
+       "done": "Still connected to the edge."
+      },
+      {
+       "type": "move",
+       "position": "...b.../...g.../......./......./b....../...g.../.......",
+       "accept": [
+        "e1"
+       ],
+       "text": "<p>The same works at the top.</p>",
+       "prompt": "Keep your stone connected to the top edge.",
+       "wrong": "Take the other cell between your stone and the top edge.",
+       "done": "Connected at the top too."
+      }
+     ],
+     "icon": "▭"
+    },
+    {
+     "slug": "block-from-a-distance-in-hex",
+     "title": "Block from a distance",
+     "summary": "Blocking right next to an enemy stone is easy to walk around. Learn why strong Hex players block a little further ahead.",
+     "wrap": "Block where you can still answer, not right in front of the stone.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./...g.../......./.b...../......./......./.......",
+       "text": "<p>A stone placed right next to your opponent’s is easy for them to go around: they just step to one side, often with a bridge.</p><p>A block a little further ahead, in the direction they want to go, gives you time to answer whatever they try.</p>"
+      },
+      {
+       "type": "choice",
+       "position": "......./...g.../......./.b...../......./......./.......",
+       "marks": {
+        "c4": "bad",
+        "e4": "good"
+       },
+       "text": "<p>Ivory’s stone wants to head right, towards Ivory’s right edge.</p>",
+       "prompt": "Which block is usually stronger?",
+       "options": [
+        "The cell right next to Ivory’s stone",
+        "A cell a couple of steps ahead of it"
+       ],
+       "answer": 1,
+       "explain": "A couple of steps ahead. Right next to the stone, Ivory simply bridges around you."
+      }
+     ],
+     "icon": "🧱"
+    }
+   ]
+  },
+  {
+   "id": "play",
+   "stage": "strategy",
+   "name": "Playing well",
+   "blurb": "The centre, both edges and the swap rule.",
+   "lessons": [
+    {
+     "slug": "start-in-the-centre-in-hex",
+     "title": "Start near the centre",
+     "summary": "A stone in the middle of the Hex board is close to both of your edges and in your opponent’s way. Learn why the centre is the strongest opening.",
+     "wrap": "Central stones attack and defend at once.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./......./......./...g.../......./......./.......",
+       "text": "<p>A stone in the centre is three steps from each of your edges, and it sits right across your opponent’s shortest routes too. That’s why, on small boards, the centre is the strongest first move.</p>"
+      },
+      {
+       "type": "choice",
+       "position": "......./......./......./......./......./......./.......",
+       "text": "<p>You’re Gold and it’s the first move.</p>",
+       "prompt": "Where is usually the strongest place to start?",
+       "options": [
+        "In a corner",
+        "Near the centre",
+        "On your own edge"
+       ],
+       "answer": 1,
+       "explain": "Near the centre: it’s close to both of your edges and gets in Ivory’s way."
+      }
+     ],
+     "icon": "◎"
+    },
+    {
+     "slug": "swap-rule-in-hex",
+     "title": "The swap rule",
+     "summary": "Hex’s swap rule stops the first player opening in the centre. Learn how swapping works and which first moves are fair.",
+     "wrap": "With the swap rule on, open with a stone that’s good but not too good.",
+     "steps": [
+      {
+       "type": "info",
+       "position": "......./......./......./...g.../......./......./.......",
+       "text": "<p>Moving first in Hex is a big advantage. With the <strong>swap rule</strong>, after Gold’s first stone, Ivory may take it over instead of placing a stone.</p><p>So Gold wants a first move that’s neither too strong (Ivory would take it) nor too weak (Ivory would leave it).</p>"
+      },
+      {
+       "type": "choice",
+       "position": "......./......./......./...g.../......./......./.......",
+       "text": "<p>The swap rule is on, and you opened in the very centre.</p>",
+       "prompt": "What will a good opponent do?",
+       "options": [
+        "Leave it and place a stone",
+        "Swap and take your strong centre stone"
+       ],
+       "answer": 1,
+       "explain": "Swap. The centre is too good to leave, so with the swap rule players open nearer an edge."
+      }
+     ],
+     "icon": "⇄"
+    }
+   ]
+  }
+ ]
+}
