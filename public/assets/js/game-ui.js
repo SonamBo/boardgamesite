@@ -135,3 +135,23 @@ function setupMaximise() {
   right.insertBefore(btn, right.querySelector('[data-sound-toggle]'));
 }
 setupMaximise();
+
+// ---------- Boards that fit the screen height (pages with data-fit-height, see site.css) ----------
+// Works out how much height is left for the board under the header and status line (and above the phone tab bar),
+// so the board never runs off the bottom of the screen and the status and the computer's reply stay in view.
+function setupFitHeight() {
+  const root = document.querySelector('[data-fit-height]');
+  const el = root && root.querySelector('.board-col > .board-head + *');
+  if (!el) return;
+  const fit = () => {
+    if (document.body.classList.contains('maxed')) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const bar = document.querySelector('.tabbar');
+    const below = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().height : 0;
+    root.style.setProperty('--fit-h', Math.max(0, Math.floor(window.innerHeight - top - below - 12)) + 'px');
+  };
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+}
+setupFitHeight();

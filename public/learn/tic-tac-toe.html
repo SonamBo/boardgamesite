@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="yandex-verification" content="91f80b62fa92c0fb">
+<title>How to Play Tic Tac Toe: Rules and Strategy | BoardGameSite</title>
+<meta name="description" content="Learn the rules of tic tac toe and how to never lose: why corners and the centre matter, how to make a fork, and how to block your opponent’s forks.">
+<link rel="canonical" href="https://boardgamesite.com/learn/tic-tac-toe">
+
+<meta name="theme-color" content="#FFF7EC">
+<script>/* light by default; dark only if the player chose it. Applied before the page paints */(function(){var d=false;try{d=localStorage.getItem('bgs-theme')==='dark'}catch(e){}if(d){document.querySelector('meta[name=theme-color]').content='#1D1411'}else{document.documentElement.dataset.theme='light'}})()</script>
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="BoardGameSite">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="How to Play Tic Tac Toe: Rules and Strategy | BoardGameSite">
+<meta property="og:description" content="Learn the rules of tic tac toe and how to never lose: why corners and the centre matter, how to make a fork, and how to block your opponent’s forks.">
+<meta property="og:url" content="https://boardgamesite.com/learn/tic-tac-toe">
+<meta property="og:image" content="https://boardgamesite.com/assets/img/og/tic-tac-toe.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How to play Tic Tac Toe: rules and strategy on BoardGameSite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Play Tic Tac Toe: Rules and Strategy | BoardGameSite">
+<meta name="twitter:description" content="Learn the rules of tic tac toe and how to never lose: why corners and the centre matter, how to make a fork, and how to block your opponent’s forks.">
+<meta name="twitter:image" content="https://boardgamesite.com/assets/img/og/tic-tac-toe.jpg">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BoardGameSite">
+<link rel="preload" href="/assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="module" src="/assets/js/site.js"></script>
+
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://boardgamesite.com/learn/tic-tac-toe#article",
+   "headline": "How to play Tic Tac Toe: rules and strategy",
+   "description": "Learn the rules of tic tac toe and how to never lose: why corners and the centre matter, how to make a fork, and how to block your opponent’s forks.",
+   "image": "https://boardgamesite.com/assets/img/og/tic-tac-toe.jpg",
+   "datePublished": "2026-11-10",
+   "dateModified": "2026-11-10",
+   "inLanguage": "en",
+   "author": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "publisher": {
+    "@id": "https://boardgamesite.com/#org"
+   },
+   "mainEntityOfPage": "https://boardgamesite.com/learn/tic-tac-toe"
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://boardgamesite.com/#org",
+   "name": "Pixel Art Games",
+   "url": "https://boardgamesite.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://boardgamesite.com/assets/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.youtube.com/@Pixel-Art-Games-000"
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://boardgamesite.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Learn",
+     "item": "https://boardgamesite.com/learn"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How to play Tic Tac Toe",
+     "item": "https://boardgamesite.com/learn/tic-tac-toe"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Can you always win tic tac toe if you go first?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. With perfect play from both sides, tic tac toe always ends in a draw. Going first only helps if your opponent makes a mistake."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is the best first move in tic tac toe?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A corner. It gives your opponent only one safe reply, the centre. The centre is also a good first move and can never lose."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is a fork in tic tac toe?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A fork is a move that creates two different lines of two at once. Your opponent can block only one, so you win with the other."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How do you stop a fork?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Take the square your opponent needs for the fork, or make your own line of two so they have to block it instead, as long as their block doesn’t give them the fork."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I beat the Hard computer?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Hard plays perfectly, so a draw is the best result. Easy and Medium make mistakes you can learn to punish with forks."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<header class="sidebar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <span>BoardGameSite</span>
+  </a>
+  <a class="stats-chip on-phone" href="/dashboard" data-stats-chip aria-label="Your streak and XP">
+    <span class="sc sc-streak" title="Day streak">🔥 <b>0</b></span><span class="sc sc-xp" title="XP from lessons">⭐ <b>0</b></span>
+  </a>
+  <button type="button" class="theme-toggle on-phone" data-theme-toggle aria-label="Switch to light theme" title="Light or dark">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+  </button>
+  <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      Play
+    </a>
+    <a href="/daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      Daily challenge
+    </a>
+    <a href="/learn" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+      Learn
+    </a>
+    <a href="/dashboard">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      My progress
+    </a>
+    <a href="https://www.youtube.com/@Pixel-Art-Games-000" rel="noopener" target="_blank" class="ext">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg>
+      Watch on YouTube<span class="sr-only"> (opens in a new tab)</span>
+      <svg class="ext-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4"/></svg>
+    </a>
+    <a href="/about">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      About
+    </a>
+    <div class="nav-divider"></div>
+    <button type="button" class="btn btn-gold" data-open-accounts="sidebar-signup">Sign up</button>
+    <button type="button" class="btn btn-outline" data-open-accounts="sidebar-login" style="margin-top: 6px">Log in</button>
+    <button type="button" class="btn btn-outline" id="install-app" hidden style="margin-top: 6px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      Install app
+    </button>
+  </nav>
+</header>
+
+<main class="content" id="main">
+  <div class="topbar">
+  <a class="stats-chip" href="/dashboard" data-stats-chip aria-label="Your streak and XP">
+    <span class="sc sc-streak" title="Day streak">🔥 <b>0</b></span><span class="sc sc-xp" title="XP from lessons">⭐ <b>0</b></span>
+  </a>
+  <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" title="Light or dark">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+  </button>
+  </div>
+<div class="container">
+<article class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/learn">Learn</a><span aria-hidden="true">/</span><span aria-current="page">Tic Tac Toe</span></nav>
+  <h1>How to play Tic Tac Toe: rules and strategy</h1>
+  <p class="lede">Everyone knows how to play tic tac toe, but few people know how to never lose. This guide covers the rules, then the four ideas that decide every game: corners, the centre, forks and blocking forks.</p>
+
+  <div class="callout card">
+    <p>Try each idea against the computer on Medium while you read.</p>
+    <a class="btn btn-gold" href="/play/tic-tac-toe">Play Tic Tac Toe free</a>
+  </div>
+
+  <h2>The rules</h2>
+  <p>Tic tac toe, also called noughts and crosses or Xs and Os, is played on a grid of three by three squares. One player is <strong>X</strong> and the other is <strong>O</strong>.</p>
+  <ol>
+    <li><strong>X goes first.</strong> Players take turns placing their mark in any empty square.</li>
+    <li><strong>Three in a row wins:</strong> across, down or along either diagonal.</li>
+    <li><strong>A full grid with no line of three is a draw</strong>, often called a cat’s game.</li>
+  </ol>
+  <p>On BoardGameSite players take turns being X from one game to the next, so you get the first move every other game. Tap a square to play, or press 1 to 9 on a keyboard, counting from the top left.</p>
+
+  <h2>The three kinds of square</h2>
+  <p>Not all squares are equal. The <strong>centre</strong> is part of four lines (one row, one column and both diagonals). Each of the four <strong>corners</strong> is part of three lines. Each of the four <strong>edges</strong> (the middle square of each side) is part of only two. The more lines a square belongs to, the more ways it can help you win and the more of your opponent’s lines it can block.</p>
+
+  <h2>Strategy: playing first (X)</h2>
+  <p><strong>Start in a corner.</strong> The centre is a fine first move too, but a corner gives your opponent more ways to go wrong. If O answers anywhere except the centre, X can force a win.</p>
+  <p><strong>Then take the opposite corner.</strong> If O played an edge or a corner, a second corner usually sets up a fork on your third move.</p>
+  <p><strong>Start in the centre for a safe game.</strong> From the centre X can’t lose, and if O answers on an edge rather than a corner, X can force a win.</p>
+
+  <h2>Strategy: playing second (O)</h2>
+  <p><strong>Answer a corner with the centre.</strong> If X starts in a corner, the centre is the only reply that doesn’t lose against perfect play.</p>
+  <p><strong>Answer the centre with a corner.</strong> If X starts in the centre, take a corner. An edge reply lets X build a fork.</p>
+  <p><strong>Answer an edge with the centre.</strong> An edge opening is X’s weakest start. The centre, either corner next to X’s edge, or the opposite edge are all safe replies.</p>
+
+  <h2>Forks: how games are won</h2>
+  <p>A <strong>fork</strong> is a move that makes two lines of two at once, each with its third square empty. Your opponent can only block one of them, so you complete the other next turn. Almost every game of tic tac toe that isn’t a draw is won with a fork.</p>
+  <p>The classic fork for X: corner, then the opposite corner, then a third corner. With X in three corners, two lines are threatened at once.</p>
+
+  <h2>Blocking forks</h2>
+  <p>When you can’t win, look at where your opponent could fork next turn and stop it. There are two ways:</p>
+  <ul>
+    <li><strong>Play on the fork square yourself.</strong> If there is only one square where they could fork, take it.</li>
+    <li><strong>Force them to block you.</strong> Make a line of two so they must answer it, choosing a line whose empty square isn’t one of their fork squares. This is the key defence when X holds two opposite corners and you hold the centre: play an <strong>edge</strong>, not a corner, so X has to block on the other side.</li>
+  </ul>
+
+  <h2>The order of priorities</h2>
+  <p>Perfect play follows a simple checklist, top to bottom:</p>
+  <ol>
+    <li>If you can make three in a row, do it.</li>
+    <li>If your opponent can make three in a row next turn, block it.</li>
+    <li>If you can make a fork, do it.</li>
+    <li>If your opponent can fork next turn, block the fork.</li>
+    <li>Otherwise take the centre, then a corner (ideally opposite your opponent’s), then an edge.</li>
+  </ol>
+  <p>The Hard computer follows rules like these, which is why it never loses.</p>
+
+  <h2>Common beginner mistakes</h2>
+  <ul>
+    <li>Answering a corner opening with anything other than the centre.</li>
+    <li>Blocking one line of two without noticing the fork your opponent is building.</li>
+    <li>Answering X’s two opposite corners with another corner instead of an edge.</li>
+    <li>Rushing to make a line of two when it forces your opponent onto the very square they wanted.</li>
+  </ul>
+
+  <h2>Tic Tac Toe FAQ</h2>
+  <section class="faq">
+    <h3>Can you always win tic tac toe if you go first?</h3>
+    <p>No. With perfect play from both sides, tic tac toe always ends in a draw. Going first only helps if your opponent makes a mistake.</p>
+    <h3>What is the best first move in tic tac toe?</h3>
+    <p>A corner. It gives your opponent only one safe reply, the centre. The centre is also a good first move and can never lose.</p>
+    <h3>What is a fork in tic tac toe?</h3>
+    <p>A fork is a move that creates two different lines of two at once. Your opponent can block only one, so you win with the other.</p>
+    <h3>How do you stop a fork?</h3>
+    <p>Take the square your opponent needs for the fork, or make your own line of two so they have to block it instead, as long as their block doesn’t give them the fork.</p>
+    <h3>Can I beat the Hard computer?</h3>
+    <p>No. Hard plays perfectly, so a draw is the best result. Easy and Medium make mistakes you can learn to punish with forks.</p>
+  </section>
+
+  <div class="callout card">
+    <p>Set up a fork against the computer on Medium.</p>
+    <a class="btn btn-gold" href="/play/tic-tac-toe">Play Tic Tac Toe now</a>
+  </div>
+</article>
+
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">More games to play</h2>
+  <div class="related-grid">
+    <a class="related-card card" href="/play/chess">
+      <b>Chess</b>
+      <span>The classic. Checkmate the king to win.</span>
+    </a>
+    <a class="related-card card" href="/play/checkers">
+      <b>Checkers</b>
+      <span>Jump pieces, crown kings and clear the board.</span>
+    </a>
+    <a class="related-card card" href="/play/russian-checkers">
+      <b>Russian Checkers</b>
+      <span>Checkers with flying kings and backward captures.</span>
+    </a>
+    <a class="related-card card" href="/play/go">
+      <b>Go</b>
+      <span>Surround territory and capture stones. 9×9 board.</span>
+    </a>
+    <a class="related-card card" href="/play/reversi">
+      <b>Reversi</b>
+      <span>Trap discs between yours to flip them to your colour.</span>
+    </a>
+    <a class="related-card card" href="/play/four-in-a-row">
+      <b>Four in a Row</b>
+      <span>Drop discs and line up four, plus a new daily puzzle.</span>
+    </a>
+  </div>
+  <a class="link-green" href="/games/strategy">All strategy games</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/assets/img/logo.webp" alt="" width="256" height="256">
+    <div><b>BoardGameSite</b><span>© <span data-year>2026</span> Pixel Art Games</span></div>
+  </div>
+  <nav class="footer-links" aria-label="Footer">
+    <a href="/about">About</a>
+    <a href="/learn">How to play</a>
+    <a href="/teachers">For teachers</a>
+    <a href="/articles">Articles</a>
+    <a href="/contact">Contact</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <nav class="footer-langs" aria-label="Language"><a href="/" hreflang="en" lang="en" aria-current="true">English</a><a href="/es" hreflang="es" lang="es">Español</a><a href="/fr" hreflang="fr" lang="fr">Français</a><a href="/de" hreflang="de" lang="de">Deutsch</a><a href="/pt" hreflang="pt" lang="pt">Português</a><a href="/ru" hreflang="ru" lang="ru">Русский</a>
+  </nav>
+</footer>
+</div>
+</main>
+</div>
+<nav class="tabbar" aria-label="Quick links">
+  <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg><span>Play</span></a>
+  <a href="/daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0c0-1.5.6-2.6 1.5-3.5.2 1.5 1 2.3 2 2.5-.5-2.5 0-5 .5-7.5z"/><path d="M6.5 14.5A6 6 0 0 0 12 21a6 6 0 0 0 5.5-6.5"/></svg><span>Daily</span></a>
+  <a href="/learn" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg><span>Learn</span></a>
+  <a href="/dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V13M10 20V7M16 20v-9M22 20H2"/></svg><span>Progress</span></a>
+  <a href="/account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Me</span></a>
+</nav>
+</body>
+</html>

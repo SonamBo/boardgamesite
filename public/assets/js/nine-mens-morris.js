@@ -1,5 +1,6 @@
 // Nine Men's Morris: place your nine pieces, then move them along the lines. Three in a row (a mill)
 // lets you remove an opponent's piece. Reduce them to two pieces, or leave them no move, to win.
+// Draws: the same position three times with the same player to move, or 50 moves each with no piece removed.
 import { store } from './site.js';
 import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
 import { track } from './firebase.js';
@@ -90,7 +91,12 @@ function cpuMove(s, p) {
 }
 
 // ---------- Page ----------
+const DRAW_AFTER = 100;   // half-moves with no piece removed (50 moves each)
+const REPEATS = 3;
 let S, turn, sel, removing, over, busy, started, last;
+// quiet: half-moves since a piece was last removed; seen: how often each position has come up since then
+let quiet, seen;
+const posKey = () => S.b.join('') + S.hand.join(',') + turn;
 function render() {
   let h = '<rect x="0" y="0" width="6" height="6" class="sq"/><rect x="1" y="1" width="4" height="4" class="sq"/><rect x="2" y="2" width="2" height="2" class="sq"/>';
   h += '<path d="M3 0V2M3 4V6M0 3H2M4 3H6" class="sq"/>';
@@ -124,7 +130,12 @@ async function after(p, m) {
   if (m.take != null) play('capture'); else play('place');
   removing = false;
   turn = 3 - p; sel = null;
+  if (m.take != null) { quiet = 0; seen = {}; } else quiet++;
   if (lost(S, turn)) return finish(p);
+  const k = posKey();
+  seen[k] = (seen[k] || 0) + 1;
+  if (seen[k] >= REPEATS) return finishDraw('The same position came up three times.');
+  if (quiet >= DRAW_AFTER) return finishDraw('50 moves each with no piece removed.');
   render(); prompt();
   if (vsCpu() && turn === 2) {
     busy = true; render(); await wait(600); busy = false;
@@ -165,8 +176,18 @@ function finish(w) {
   track('game_end', { game: 'nine-mens-morris', result: w === 1 ? 'win' : 'lose' });
 }
 
+function finishDraw(why) {
+  over = true; render();
+  if (vsCpu()) score.add('draw');
+  showResult('draw', 'It’s a draw', why);
+  setStatus('It’s a draw', 'neutral');
+  play('draw', 0.1);
+  track('game_end', { game: 'nine-mens-morris', result: 'draw' });
+}
+
 function newGame() {
   S = { b: new Array(24).fill(0), hand: [0, 9, 9] }; turn = 1; sel = null; removing = false; over = false; busy = false; started = false; last = -1;
+  quiet = 0; seen = {};
   $('result').hidden = true;
   render(); prompt();
 }
