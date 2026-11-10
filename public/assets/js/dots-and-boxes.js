@@ -15,7 +15,7 @@ const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Compu
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
 animationSwitch();
-const tap2 = tapConfirm();   // on small boards: tap once to preview, again to draw
+const tap2 = tapConfirm({ large: () => n >= 6 });   // on the 6×6 board: tap once to preview, again to draw
 const humanTurn = () => !busy && !over && !animating() && (onlineOn ? ol.myTurn() : !(vsCpu() && turn === 2));
 // Against the computer you draw the first line, the second, or either at random. You are always player 1.
 const getSide = sideSwitch('dots', ['first', 'second', 'random'], () => newGame());
