@@ -1,7 +1,7 @@
 // Backgammon page: roll, then move your checkers by tapping a checker and then where it goes.
 import * as B from './backgammon-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, askResume, modeName } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -19,6 +19,7 @@ animationSwitch();
 const Q = moveQueue();   // moves animate one at a time
 
 let st, turn, dice, used, legal, made, history, sel, over, busy, started;
+let lastTo = [];   // where the last turn's checkers ended up, ringed until the next turn's first move
 
 // ---------- Drawing ----------
 const colX = (col) => 10 + col * 20 + (col >= 6 ? 20 : 0);
@@ -47,7 +48,7 @@ function drawCheckers() {
     const shown = Math.min(n, 5);
     for (let k = 0; k < shown; k++) {
       const y = top ? 17 + k * 17 : 203 - k * 17;
-      h += disc(x, y, side, sel === i && k === shown - 1 ? 'sel' : '', k === shown - 1 && n > 5 ? String(n) : '', k === shown - 1 ? i : '');
+      h += disc(x, y, side, (sel === i && k === shown - 1 ? 'sel' : '') + (k === shown - 1 && lastTo.includes(i) ? ' moved' : ''), k === shown - 1 && n > 5 ? String(n) : '', k === shown - 1 ? i : '');
     }
   }
   // bar: yours in the top half (you re-enter at the top right), computer's in the bottom half
@@ -152,6 +153,7 @@ function doMove(m) {
   return Q.run(() => showMove(m, side), () => makeMove(m));
 }
 function makeMove(m) {
+  if (!made.length) lastTo = [];
   st = B.apply(st, turn, { ...m });
   made.push(m); used.push(m.d);
   play(m.hit ? 'capture' : m.to === 'off' ? 'king' : 'place');
@@ -164,6 +166,7 @@ function makeMove(m) {
 
 function endTurn() {
   if (over) return;
+  lastTo = made.map((m) => m.to).filter((t) => t !== 'off');
   dice = null; legal = []; made = []; used = []; sel = null;
   turn = 1 - turn;
   render();
@@ -244,13 +247,18 @@ function resume() {
   const g = store.get(SAVE, null);
   if (!g || g.opp !== getOpp() || !g.st || !Array.isArray(g.st.pts)) return false;
   st = g.st; turn = g.turn | 0; dice = null; legal = []; made = []; used = []; sel = null; over = false; busy = false; started = true;
-  render();
-  if (vsCpu() && turn === 1) cpuTurn(); else setStatus('Welcome back. ' + (vsCpu() ? 'Your' : names()[turn] + '’s') + ' turn: roll', '');
+  busy = true; render();   // the saved game shows behind the question
+  askResume(modeName(!vsCpu(), getLevel())).then((ok) => {
+    busy = false;
+    if (!ok) return newGame();
+    render();
+    if (vsCpu() && turn === 1) cpuTurn(); else setStatus((vsCpu() ? 'Your' : names()[turn] + '’s') + ' turn: roll', '');
+  });
   return true;
 }
 function newGame() {
   Q.reset();
-  st = B.start(); turn = 0; dice = null; legal = []; made = []; used = []; history = []; sel = null; over = false; busy = false; started = false;
+  st = B.start(); turn = 0; dice = null; legal = []; made = []; used = []; history = []; sel = null; over = false; busy = false; started = false; lastTo = [];
   $('result').hidden = true;
   store.set(SAVE, null);
   setStatus((vsCpu() ? 'Your' : 'Gold’s') + ' turn: roll', '');

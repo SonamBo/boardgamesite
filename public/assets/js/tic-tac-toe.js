@@ -1,6 +1,6 @@
 // Tic-tac-toe: three in a row on a 3×3 grid. Against the computer (Easy / Medium / Hard),
 // two players on one device, or online with a friend by link (online.js; the token is the cell 0–8).
-import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn, sideSwitch } from './game-ui.js';
+import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn, sideSwitch, hintButton } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -14,11 +14,22 @@ const getOpp = opponentSwitch('ttt', () => { if (!onlineOn) newGame(); });
 // Against the computer you play X (first), O, or take turns going first (Alternate).
 const getSide = sideSwitch('ttt', ['x', 'o', 'alt'], () => { if (!onlineOn) newGame(); }, 'alt');
 let cpuTimer = 0;
+// Show hint: Easy, against the computer
+const hint = hintButton({
+  shown: () => vsCpu() && getLevel() === 'easy',
+  find: () => {
+    if (over || busy || !vsCpu() || turn !== youAre) return null;
+    // the Hard computer's search, from your side (minimax is written from O's side)
+    const b = youAre === O ? board.slice() : board.map((v) => (v === X ? O : v === O ? X : 0));
+    return [cells[board.every((v) => !v) ? 4 : minimax(b, O, 0).i]];
+  }
+});
 const boardEl = $('board');
 const undoBtn = $('undo');
 // grids before each move, for Undo (vs the computer it takes back your move and its reply)
 let history = [];
 
+let lastCell = -1;   // the square played last
 let board, turn, over, busy, youAre = X, firstThisGame = O, onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
 
@@ -80,7 +91,7 @@ function cpuMove() {
 function render(line = []) {
   cells.forEach((c, i) => {
     c.innerHTML = board[i] ? MARK[board[i]] : '';
-    c.className = 'ttt-cell' + (board[i] === X ? ' x' : board[i] === O ? ' o' : '') + (line.includes(i) ? ' win' : '');
+    c.className = 'ttt-cell' + (board[i] === X ? ' x' : board[i] === O ? ' o' : '') + (line.includes(i) ? ' win' : '') + (i === lastCell && !line.length ? ' last' : '');
     c.disabled = over || !!board[i] || busy;
     c.setAttribute('aria-label', 'Row ' + (Math.floor(i / 3) + 1) + ', column ' + (i % 3 + 1) + ': ' + (board[i] === X ? 'X' : board[i] === O ? 'O' : 'empty'));
   });
@@ -97,7 +108,7 @@ function turnText() {
 function place(i, remote = false) {
   if (over || board[i]) return;
   history.push({ board: board.slice(), turn });
-  board[i] = turn;
+  board[i] = turn; lastCell = i;
   play(turn === X ? 'place' : 'drop');
   const w = winner(board);
   const mover = turn;
@@ -144,7 +155,8 @@ function finish(w) {
 
 function newGame() {
   clearTimeout(cpuTimer);
-  board = Array(9).fill(0); over = false; busy = false; history = [];
+  hint.reset();
+  board = Array(9).fill(0); over = false; busy = false; history = []; lastCell = -1;
   hideResult();
   if (onlineOn) { turn = X; youAre = X; }
   else {
@@ -173,7 +185,7 @@ undoBtn.addEventListener('click', () => {
   let h = history.pop();
   while (vsCpu() && h.turn !== youAre && history.length) h = history.pop();
   if (vsCpu() && h.turn !== youAre) { history.push(h); return; }
-  board = h.board; turn = h.turn;
+  board = h.board; turn = h.turn; lastCell = -1;
   play('card');
   render();
   setTurn(vsCpu() || turn === X ? 'you' : 'cpu');
