@@ -35,6 +35,9 @@ async function start(el) {
 // opts.finish(card, mistakes): replaces the normal end-of-lesson card (daily puzzles, jump tests).
 // opts.autoFinish: finish straight after the last step is solved, with no Continue button (daily puzzles).
 export function runLesson(el, course, lesson, next, index, opts = {}) {
+  // The lesson written out (and the quiz answers) stays open without JavaScript; with the board running it
+  // folds into a closed "Read this lesson as text" disclosure, so the answers aren't on show
+  document.querySelectorAll('details.lesson-text').forEach((d) => { d.open = false; });
   el.innerHTML = `
   <div class="lp">
     <div class="lp-top">
