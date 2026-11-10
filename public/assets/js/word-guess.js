@@ -55,7 +55,10 @@ KEYS.forEach((line) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'wg-key';
-    if (ch === '+') { b.textContent = 'Enter'; b.classList.add('wide'); b.dataset.k = 'Enter'; }
+    if (ch === '+') {
+      b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5v8a2 2 0 0 1-2 2H6"/><path d="M10 11l-4 4 4 4"/></svg><span>Enter</span>';
+      b.classList.add('wide', 'enter'); b.dataset.k = 'Enter'; b.setAttribute('aria-label', 'Enter: check your word');
+    }
     else if (ch === '-') {
       b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12z"/><path d="M17 9l-5 6M12 9l5 6"/></svg>';
       b.classList.add('wide'); b.dataset.k = 'Backspace'; b.setAttribute('aria-label', 'Delete letter');
@@ -64,6 +67,20 @@ KEYS.forEach((line) => {
   }
   kb.appendChild(row);
 });
+
+// A line right above the keys says what to do next, so nobody is left wondering why nothing happened.
+const hint = document.createElement('p');
+hint.className = 'wg-hint';
+hint.setAttribute('aria-hidden', 'true'); // the status line already announces this
+kb.before(hint);
+const enterKey = kb.querySelector('.wg-key.enter');
+function paintHint(msg, bad) {
+  const full = !over && current && current.length === 5;
+  enterKey.classList.toggle('ready', !!full);
+  hint.classList.toggle('bad', !!bad);
+  hint.classList.toggle('go', !!full && !bad);
+  hint.textContent = msg || (over ? '' : full ? 'Press Enter to check your word' : 'Type a five-letter word, then press Enter');
+}
 
 let answer, guesses, current, over, busy;
 
@@ -118,30 +135,33 @@ function paintAll() {
     else paintRow(r, r === guesses.length ? current : '', null, false);
   }
   paintKeys();
+  paintHint();
 }
 
 function type(k) {
   if (over || busy) return;
   if (k === 'Enter') return submit();
-  if (k === 'Backspace') { current = current.slice(0, -1); paintRow(guesses.length, current); return; }
+  if (k === 'Backspace') { current = current.slice(0, -1); paintRow(guesses.length, current); paintHint(); return; }
   if (/^[a-z]$/.test(k) && current.length < 5) {
     current += k;
     paintRow(guesses.length, current);
     const t = rows[guesses.length].tiles[current.length - 1];
     t.classList.remove('pop'); void t.offsetWidth; t.classList.add('pop');
     play('select');
+    paintHint();
   }
 }
 
 function submit() {
   const row = rows[guesses.length].row;
-  if (current.length < 5) { setStatus('Not enough letters', 'neutral'); return shake(row, play); }
-  if (!valid.has(current)) { setStatus('“' + current.toUpperCase() + '” isn’t in the word list', 'neutral'); return shake(row, play); }
+  if (current.length < 5) { setStatus('Not enough letters', 'neutral'); paintHint('Not enough letters: the word needs five', true); return shake(row, play); }
+  if (!valid.has(current)) { setStatus('“' + current.toUpperCase() + '” isn’t in the word list', 'neutral'); paintHint('“' + current.toUpperCase() + '” isn’t in the word list. Try another word', true); return shake(row, play); }
   if (!guesses.length && mode === 'practice') { rec.played(); track('game_start', { game: 'word-guess', mode }); }
   if (!guesses.length && mode === 'daily') { rec.played(); track('game_start', { game: 'word-guess', mode }); }
   const g = current;
   guesses.push(g);
   current = '';
+  paintHint();
   const marks = score(g, answer);
   busy = true;
   paintRow(guesses.length - 1, g, marks, !reduced());
@@ -160,6 +180,7 @@ const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const PRAISE = ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'];
 function finish(won, quiet) {
   over = true;
+  paintHint();
   const n = guesses.length;
   if (!quiet) {
     if (won) rec.won(null);

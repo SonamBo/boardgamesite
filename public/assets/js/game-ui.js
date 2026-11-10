@@ -115,11 +115,72 @@ function setupMaximise() {
     btn.setAttribute('aria-label', isOn() ? 'Exit full screen' : 'Full screen');
     btn.title = isOn() ? 'Exit full screen (Esc)' : 'Full screen';
   };
+  // Boards that stretch with their width already fill the screen through CSS. Everything else (card tables,
+  // dice felts, word games) has a natural size, so it is scaled up as a whole until it fills the height or
+  // the width left beside the panel. Scaling uses CSS zoom, which keeps clicks and layout exact.
+  const col = document.querySelector('[data-max-root] .board-col');
+  const head = col && col.querySelector('.board-head');
+  const clearFit = () => {
+    if (!col) return;
+    for (const k of ['zoom', 'width', 'flex']) col.style[k] = '';
+    if (head) { head.style.zoom = ''; head.style.width = ''; }
+  };
+  const frame = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 30)));
+  let fitRun = 0;
+  const fit = async () => {
+    if (!col) return;
+    const run = ++fitRun;
+    clearFit();
+    if (!isOn()) return;
+    const root = col.closest('[data-max-root]');
+    const cs = getComputedStyle(root);
+    const pad = (k) => parseFloat(cs[k]) || 0;
+    const panel = root.querySelector('.panel');
+    const measure = () => {
+      const r = col.getBoundingClientRect();
+      const pr = panel && panel.getBoundingClientRect();
+      const beside = pr && pr.width && pr.top < r.bottom - 40 && pr.left >= r.right - 4;
+      const availW = root.clientWidth - pad('paddingLeft') - pad('paddingRight') - (beside ? pr.width + 24 : 0);
+      const availH = root.clientHeight - pad('paddingTop') - pad('paddingBottom');
+      const z = Math.min(availW / r.width, availH / r.height, 2.4);
+      return { w: r.width, h: r.height, z, fill: (r.height * z) / availH, beside };
+    };
+    let best = measure();
+    if (!best.w || !best.h) return;
+    // A table that only got wider (cards and dice keep their size) fills more when scaled up from a narrower start.
+    if (best.beside && best.fill < 0.8) {
+      for (const w of [660, 560]) {
+        if (w >= best.w - 20) continue;
+        col.style.flex = '0 0 auto'; col.style.width = w + 'px';
+        window.dispatchEvent(new Event('resize'));
+        await frame();
+        if (run !== fitRun) return;
+        const m = measure();
+        if (m.fill > best.fill + 0.04) best = m;
+      }
+      col.style.width = best.w + 'px';
+      window.dispatchEvent(new Event('resize'));
+      await frame();
+      if (run !== fitRun) return;
+      best = measure();
+    }
+    // Already fills its space, or is far too tall to shrink without becoming tiny (a long scorecard): leave it to scroll.
+    if ((best.z > 0.985 && best.z < 1.06) || best.z < 0.86) { clearFit(); window.dispatchEvent(new Event('resize')); return; }
+    col.style.flex = '0 0 auto';
+    col.style.width = best.w + 'px';
+    col.style.zoom = best.z;
+    if (head) { head.style.zoom = 1 / best.z; head.style.width = (best.w * best.z) + 'px'; } // the title bar keeps its normal size
+  };
+  let fitTimer = 0;
+  const refit = () => { clearTimeout(fitTimer); fitTimer = setTimeout(fit, 60); };
   const set = (on) => {
+    clearFit();
     document.body.classList.toggle('maxed', on);
     paint();
     window.dispatchEvent(new Event('resize')); // games that size themselves to their space re-measure
+    refit();
   };
+  window.addEventListener('resize', (e) => { if (isOn() && e.isTrusted) { clearFit(); refit(); } });
   btn.addEventListener('click', async () => {
     const on = !isOn();
     set(on);

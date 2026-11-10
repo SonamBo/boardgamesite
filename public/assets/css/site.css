@@ -668,7 +668,8 @@ body.maxed .board-hint { display: none; }
 body.maxed .game-layout .panel { flex: 0 0 300px; }
 body.maxed .panel .card-dark { display: none; }
 body.maxed .sol-wrap { display: flex; flex-direction: column; gap: 12px; }
-body.maxed .sol-wrap > * { width: min(100%, calc((100dvh - 150px) * 1.3)); margin: 0 auto; }
+body.maxed .sol-wrap > * { width: min(100%, calc((100dvh - 150px) * 1.55)); margin: 0 auto; }
+body.maxed .sol-table { min-height: calc(100dvh - 150px); }
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
   body.maxed .game-layout { flex-wrap: wrap; }
   body.maxed .game-layout .board-col { width: min(100%, calc((100dvh - 200px) * var(--board-ratio, 1))); margin: 0 auto; }
@@ -689,6 +690,12 @@ body.maxed .sol-wrap > * { width: min(100%, calc((100dvh - 150px) * 1.3)); margi
   .board-head h1 { font-size: 30px; }
   .head-right { gap: 8px; }
   .head-right .status { font-size: 15px; text-align: right; }
+  /* Compact game header on phones: title and buttons share one row, the status line sits under them. */
+  .board-head { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 4px 8px; }
+  .board-head h1 { font-size: 26px; grid-column: 1; }
+  .board-head .head-right { display: contents; }
+  .board-head .head-right .status { grid-row: 2; grid-column: 1 / -1; text-align: left; min-height: 20px; }
+  a.back { min-height: 32px; margin-bottom: -8px; }
   .icon-btn { width: 44px; height: 44px; }
   .board-wrap { padding: 8px; }
   .players { padding: 12px; }
@@ -1055,6 +1062,32 @@ body.maxed .tm-wrap { max-width: none; }
   font: 700 16px/1 var(--body); text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;
 }
 .wg-key.wide { flex-grow: 1.6; max-width: 72px; font-size: 13px; text-transform: none; }
+/* Word Guess: bigger keys, and an Enter key that looks like the button it is */
+.wg-wrap .wg-key { max-width: 50px; height: 58px; font-size: 18px; box-shadow: 0 2px 0 rgba(0,0,0,.18); }
+.wg-wrap .wg-key:active { transform: translateY(1px); box-shadow: none; }
+.wg-wrap .wg-key.wide { flex-grow: 1.9; max-width: 86px; }
+.wg-key.enter { flex-direction: column; gap: 1px; font-size: 11px; text-transform: uppercase; letter-spacing: 0; overflow: hidden; background: var(--surface); color: var(--accent-text); box-shadow: inset 0 0 0 2px var(--accent-text), 0 2px 0 rgba(0,0,0,.18); }
+.wg-key.enter svg { width: 20px; height: 20px; }
+.wg-key.enter.ready { background: var(--brand); color: var(--on-brand); box-shadow: 0 3px 0 rgba(0,0,0,.25); animation: wg-ready 1.1s ease-in-out infinite; }
+@keyframes wg-ready { 50% { transform: scale(1.04); } }
+@media (prefers-reduced-motion: reduce) { .wg-key.enter.ready { animation: none; } }
+.wg-hint { min-height: 22px; margin: -6px 0; font-size: 15px; font-weight: 600; color: var(--muted); text-align: center; }
+.wg-hint.go { color: var(--accent-text); }
+.wg-hint.bad { color: var(--bad); }
+/* On phones the grid shrinks so the whole keyboard, Enter included, stays on screen above the bottom bar */
+.wg-board { container-type: inline-size; }
+.wg-board .wg-tile { font-size: clamp(16px, 9.5cqw, 32px); }
+@media (max-width: 600px) {
+  .wg-wrap { gap: 10px; }
+  .wg-board { width: min(100%, 340px, max(160px, calc((100dvh - 520px) * 0.8333))); gap: 5px; }
+  .wg-board .wg-row { gap: 5px; }
+  .wg-hint { margin: -2px 0; font-size: 14px; }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  .wg-wrap .wg-key { height: 48px; } .wg-krow { gap: 4px; } .wg-keys { gap: 5px; }
+  .wg-board { width: min(100%, 340px, max(160px, calc((100dvh - 446px) * 0.8333))); }
+  main:has(.wg-wrap) a.back { display: none; } /* short screens: the bottom bar already leads back to the games */
+}
 .wg-key svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .wg-key:hover { filter: brightness(1.15); }
 .wg-key.s0 { background: var(--side); color: var(--muted); }
@@ -1073,7 +1106,11 @@ body.maxed .tm-wrap { max-width: none; }
 .wg-legend p { display: flex; align-items: center; gap: 10px; }
 .wg-legend .wg-tile { width: 30px; font-size: 16px; font-style: normal; flex-shrink: 0; border-radius: 6px; }
 body.maxed .wg-wrap { max-width: none; }
-@media (max-width: 600px) { .wg-key { height: 52px; } .wg-krow { gap: 5px; } }
+/* Full screen: the letter grid takes the height the keyboard leaves, and the keys grow with it */
+body.maxed .wg-wrap .wg-board { width: min(100%, 470px, calc((100dvh - 340px) * 0.8333)); }
+body.maxed .wg-wrap .wg-key { max-width: 60px; height: 60px; font-size: 20px; }
+body.maxed .wg-wrap .wg-key.wide { max-width: 100px; }
+@media (max-width: 600px) { .wg-key { height: 52px; } .wg-krow { gap: 5px; } .wg-wrap .wg-key { height: 56px; font-size: 17px; } }
 
 
 /* ---------- Word Search ---------- */
@@ -2443,3 +2480,35 @@ body.returning .hero { display: none; }
   .teach-table td { display: block; border: 0; padding: 2px 0; }
   .teach-table td:first-child { white-space: normal; }
 }
+
+/* ---------- Word games on phones: the typing controls always stay on screen ----------
+   Word Grid and Word Chain shrink their stretchy part (the letter grid, the chain of words) to the height left
+   above the tab bar (--fit-h, measured by game-ui.js). Hangman and Cryptogram keep their keyboard pinned just
+   above the tab bar, like a phone keyboard, while the puzzle scrolls under it. */
+@media (max-width: 900px) {
+  [data-fit-height] .wgd-wrap .wgd-grid { width: min(100%, max(190px, calc(var(--fit-h, 60dvh) - 160px))); }
+  [data-fit-height] .wc-chain { height: max(96px, calc(var(--fit-h, 60dvh) - 290px)); }
+  [data-fit-height] .hg-draw { width: min(46%, max(80px, calc((var(--fit-h, 60dvh) - 290px) * 0.91))); }
+  .hg-keys, #cg-keys { position: sticky; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 5;
+    background: var(--bg); padding: 8px 0; margin-block: -8px; box-shadow: 0 -10px 12px -12px rgba(0,0,0,.35); }
+}
+
+/* Five Dice in full screen on wide screens: dice on the left, scorecard beside them, so nothing runs off the bottom */
+@media (min-width: 901px) and (min-aspect-ratio: 1/1) {
+  body.maxed .dice-wrap:has(> .score-scroll) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; max-width: none; width: min(100%, 1080px); gap: 20px; }
+  body.maxed .dice-wrap:has(> .score-scroll) .score-scroll { max-height: calc(100dvh - 110px); overflow-y: auto; }
+  body.maxed .game-layout .board-col:has(.dice-wrap > .score-scroll) { width: min(100% - 330px, 1080px); flex: 0 1 auto; }
+  body.maxed .dice-wrap:has(> .score-scroll) .dice-tray { position: sticky; top: 0; }
+}
+
+/* ---------- Puzzle controls on phones: Sudoku's number pad, Box Pusher's arrows and the Letter Tiles rack stay on screen ---------- */
+@media (max-width: 900px) {
+  [data-fit-height] .sdk-wrap #grid { width: min(100%, max(280px, calc(var(--fit-h, 60dvh) - 132px))); margin-inline: auto; }
+  [data-fit-height] .sdk-tools .tool-btn { flex-direction: row; flex-wrap: wrap; justify-content: center; column-gap: 4px; row-gap: 0; min-height: 44px; padding-block: 4px; }
+  [data-fit-height] .sdk-tools .tool-btn svg { width: 20px; height: 20px; }
+  [data-fit-height] .bx-wrap .bx-board { width: min(100%, max(220px, calc((var(--fit-h, 60dvh) - 72px) * var(--w, 1) / var(--h, 1)))); margin-inline: auto; }
+  .lt-dock { position: sticky; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 5; display: flex; flex-direction: column; gap: 8px;
+    background: var(--bg); padding: 8px 0; margin-block: -8px; box-shadow: 0 -10px 12px -12px rgba(0,0,0,.35); }
+}
+.lt-dock { display: contents; }
+@media (max-width: 900px) { .lt-dock { display: flex; } }

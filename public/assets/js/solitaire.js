@@ -51,7 +51,8 @@ const tabSlots = [0, 1, 2, 3, 4, 5, 6].map(() => slot('tab'));
 function measure() {
   const W = area.clientWidth;
   L.gap = Math.max(4, Math.round(W * 0.014));
-  L.cw = Math.floor(Math.min(110, (W - 6 * L.gap) / 7));
+  const cap = document.body.classList.contains('maxed') ? 190 : 110; // full screen: cards grow with the table
+  L.cw = Math.floor(Math.min(cap, (W - 6 * L.gap) / 7));
   L.ch = Math.round(L.cw * 1.4);
   L.left0 = Math.max(0, Math.floor((W - (7 * L.cw + 6 * L.gap)) / 2));
   L.fd = Math.round(L.ch * 0.11);
