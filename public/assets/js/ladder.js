@@ -1,6 +1,7 @@
 // Practice-ladder (rated) games on a game page: /play/<game>?bot=<id>
 // The page asks ladder(game, hooks) at start-up. Outside the ladder it returns null and the page works as usual.
-// In the ladder: the computer plays at the bot's level, no take-backs or level changes, a Resign button,
+// In the ladder: the computer plays at the bot's level, no take-backs (Undo is hidden and the pages ignore it), no
+// level changes, a Resign button,
 // and the result updates the player's BGS Rating. Leaving a started game counts as a loss.
 import { botById, BOTS, ratingOf, show, isProvisional, recordResult, markPending, clearPending, settlePending, markBeaten } from './rating.js';
 import { track } from './firebase.js';
@@ -77,7 +78,7 @@ export function ladder(game, hooks = {}) {
         '<button type="button" class="btn ' + (result === 'win' && next ? 'btn-outline' : 'btn-gold') + '" data-ladder="again">Rematch</button>' +
         '<a class="btn btn-outline" href="/dashboard">Your dashboard</a></div>';
     } else {
-      html += '<p class="muted ladder-note">No take-backs. Leaving a game you’ve started counts as a loss.</p>' +
+      html += '<p class="muted ladder-note">Undo is off in rated games: no take-backs. Leaving a game you’ve started counts as a loss.</p>' +
         '<div class="ladder-actions">' + (inGame ? '<button type="button" class="btn btn-outline" data-ladder="resign">Resign</button>' : '') +
         '<a class="link-btn" href="/learn/' + game + '#path">Back to the path</a></div>';
     }
