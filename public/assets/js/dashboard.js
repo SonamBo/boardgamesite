@@ -178,6 +178,7 @@ function recommendations(st) {
         'five-in-a-row': 'Gomoku in ten short lessons: making five, blocking, then open fours and the four-three that wins games.',
         hex: 'The connection game in nine lessons: chains and blocking, then bridges, edge templates and the swap rule.',
         'nine-mens-morris': 'Mills, moving and flying in nine lessons, then blocking, the running mill and the flying endgame.',
+        'dots-and-boxes': 'Lines and boxes in minutes, then safe moves, chains and the double-cross that wins close games.',
         sudoku: 'From the one rule to real techniques: cross-hatching, singles, pencil marks and pairs. No guessing.',
         backgammon: 'Dice, hitting and bearing off, then the best opening moves, safe play, primes and the pip count.',
         solitaire: 'Klondike from the layout up, then the habits that win more games: dig out hidden cards and use Kings well.' }[g] });

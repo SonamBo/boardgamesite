@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Nine Men’s Morris, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Nine Men’s Morris, Dots and Boxes, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -775,8 +775,68 @@ function morrisBoard(el) {
   });
 }
 
+
+// ---------- Dots and Boxes ----------
+// Tap between two dots to draw a line. Boxes you close show "You"; your opponent's show "Them".
+function dotsBoard(el) {
+  const b = base(el);
+  const A = RULES.dots;
+  let S, last = null;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'db-board');
+  svg.setAttribute('role', 'group');
+  el.className = 'lp-board db-lesson';
+  el.textContent = '';
+  el.appendChild(svg);
+  svg.addEventListener('click', (e) => { const l = e.target.closest('[data-id]'); if (l) tap(l.dataset.id); });
+  svg.addEventListener('keydown', (e) => { const l = e.target.closest('[data-id]'); if (l && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tap(l.dataset.id); } });
+  function render() {
+    const n = S.n, g = 100 / (n + 0.6), off = g * 0.3;
+    const X = (c) => off + c * g, Y = (r) => off + r * g;
+    svg.setAttribute('viewBox', '0 0 100 100');
+    let h = '';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const o = S.owner[r * n + c], mark = b.marks['b:' + r + ':' + c] || '';
+      if (o) h += '<rect x="' + (X(c) + 1) + '" y="' + (Y(r) + 1) + '" width="' + (g - 2) + '" height="' + (g - 2) + '" rx="2" class="bx p' + o + '"/><text x="' + (X(c) + g / 2) + '" y="' + (Y(r) + g / 2 + 2.4) + '" class="bxl">' + (o === 1 ? 'You' : 'Them') + '</text>';
+      if (mark) h += '<rect x="' + (X(c) + 3) + '" y="' + (Y(r) + 3) + '" width="' + (g - 6) + '" height="' + (g - 6) + '" rx="3" class="db-mark mk-' + mark + '"/>';
+    }
+    for (const id of A.lines(n)) {
+      const [t, r, c] = [id[0], +id.split(':')[1], +id.split(':')[2]];
+      const [x1, y1, x2, y2] = t === 'h' ? [X(c), Y(r), X(c + 1), Y(r)] : [X(c), Y(r), X(c), Y(r + 1)];
+      const on = S.lines.has(id), mark = b.marks[id] || '';
+      h += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="ln' + (on ? ' on' : '') + (id === last ? ' last' : '') + (mark ? ' mk-' + mark : '') + '"/>';
+      if (!on) h += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="hit" data-id="' + id + '" tabindex="0" role="button" aria-label="Line between two dots, ' + (t === 'h' ? 'across' : 'down') + ', row ' + (r + 1) + ', ' + (c + 1) + '"/>';
+    }
+    for (let r = 0; r <= n; r++) for (let c = 0; c <= n; c++) h += '<circle cx="' + X(c) + '" cy="' + Y(r) + '" r="1.5" class="dot"/>';
+    svg.innerHTML = h;
+    svg.classList.toggle('wait', !b.live && !b.tapFn);
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, last };
+    const r = A.apply(S, x);
+    S = r.s; last = x.name;
+    sound(r.f.box ? 'found' : 'place');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, last } = prev); render(); }, 650);
+    return r.f;
+  }
+  function tap(id) {
+    if (b.tapFn) return b.tapFn(id);
+    if (!b.live || S.lines.has(id)) return;
+    doMove({ name: id }, true);
+  }
+  return Object.assign(b, {
+    set(p) { S = A.load(p); last = null; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; render(); },
+    side: () => S.side
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;

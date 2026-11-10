@@ -2317,6 +2317,9 @@ body.returning .hero { display: none; }
 .ni-go i:first-child { left: 0; top: 0; background: #1A1416; box-shadow: inset 0 -2px 0 rgba(255,255,255,.15); }
 .ni-go i:last-child { right: 0; bottom: 0; background: #FFF; box-shadow: 0 0 0 1.5px #1A1416; }
 .ni-rv { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, var(--you) 50%, #262A27 50%); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.ni-db { display: grid; grid-template-columns: repeat(2, 12px); gap: 2px; }
+.ni-db i { width: 12px; height: 12px; border: 2px solid currentColor; border-radius: 2px; }
+.ni-db i:first-child { background: var(--you); border-color: var(--you-lo); }
 .ni-nm { width: 28px; height: 28px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
 .ni-nm i { width: 12px; height: 12px; border: 2px solid currentColor; }
 .ni-hx { display: flex; align-items: center; gap: 2px; }
@@ -2329,6 +2332,12 @@ body.returning .hero { display: none; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* lesson boards for Dots and Boxes */
+.lp-board.db-lesson { width: 100%; max-width: 480px; margin: 0 auto; }
+.db-lesson .db-mark { fill: none; stroke-width: 1.4; pointer-events: none; }
+.db-lesson .db-mark.mk-good { stroke: #5FA36B; } .db-lesson .db-mark.mk-bad { stroke: #D2564B; } .db-lesson .db-mark.mk-target { stroke: var(--accent-text); }
+.db-lesson .db-mark.mk-hint { fill: color-mix(in srgb, var(--accent-text) 22%, transparent); stroke: none; }
+.db-lesson .ln.mk-hint { stroke: var(--accent-text); stroke-dasharray: 2 2; opacity: 1; }
 /* lesson boards for Nine Men's Morris */
 .lp-board.nm-lesson { width: 100%; max-width: 520px; margin: 0 auto; padding: 8px; }
 .nm-lesson .mk { fill: none; stroke-width: .08; pointer-events: none; }

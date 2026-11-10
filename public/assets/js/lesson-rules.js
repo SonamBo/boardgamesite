@@ -44,6 +44,11 @@
 //               'd2-d3' (move or fly), plus 'xg4' when it makes a mill and removes that piece ('a7-d7xg4').
 //               Facts: mill, removed, win (the opponent is down to two pieces or can't move), block (the opponent had
 //               a point that would make a mill next turn, and now hasn't).
+//   Dots and Boxes  { n: 3, lines: 'h:0:0 v:1:2 …', you: '0:0', them: '1:1 1:2' } (n boxes a side; boxes already
+//               claimed, as row:column; their four sides must be drawn). You move. A line is 'h:r:c' (r 0…n, c 0…n−1)
+//               or 'v:r:c' (r 0…n−1, c 0…n); a box is 'b:r:c' (for marks). Closing a box means you move again.
+//               Facts: box (closed at least one box), captured (how many), safe (no box now has three sides drawn),
+//               gift (some box now has three sides: your opponent can take it).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -541,4 +546,54 @@ export const morris = {
   geometry: { XY: NM_XY, MILLS: NM_MILLS, removable: nmRemovable }
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris };
+
+// ---------- Dots and Boxes ----------
+const dbSides = (r, c) => ['h:' + r + ':' + c, 'h:' + (r + 1) + ':' + c, 'v:' + r + ':' + c, 'v:' + r + ':' + (c + 1)];
+function dbAll(n) {
+  const out = [];
+  for (let r = 0; r <= n; r++) for (let c = 0; c < n; c++) out.push('h:' + r + ':' + c);
+  for (let r = 0; r < n; r++) for (let c = 0; c <= n; c++) out.push('v:' + r + ':' + c);
+  return out;
+}
+function dbBoxesOf(id, n) {
+  const [t, r, c] = [id[0], +id.split(':')[1], +id.split(':')[2]], out = [];
+  if (t === 'h') { if (r > 0) out.push([r - 1, c]); if (r < n) out.push([r, c]); } else { if (c > 0) out.push([r, c - 1]); if (c < n) out.push([r, c]); }
+  return out;
+}
+const dbCount = (L, r, c) => dbSides(r, c).filter((x) => L.has(x)).length;
+export const dots = {
+  kind: 'dots',
+  load(p) {
+    if (!p || typeof p !== 'object' || !(p.n >= 2 && p.n <= 6)) fail('Dots and Boxes position needs { n, lines, you, them }');
+    const n = p.n, all = new Set(dbAll(n));
+    const lines = new Set(String(p.lines || '').split(/\s+/).filter(Boolean));
+    for (const l of lines) if (!all.has(l)) fail('no line called ' + l);
+    const owner = new Array(n * n).fill(0);
+    for (const [k, v] of [['you', 1], ['them', 2]]) for (const bx of String(p[k] || '').split(/\s+/).filter(Boolean)) {
+      const [r, c] = bx.split(':').map(Number); if (!(r >= 0 && r < n && c >= 0 && c < n)) fail('no box ' + bx); owner[r * n + c] = v;
+    }
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const full = dbCount(lines, r, c) === 4;
+      if (full && !owner[r * n + c]) fail('box ' + r + ':' + c + ' has four sides but no owner');
+      if (!full && owner[r * n + c]) fail('box ' + r + ':' + c + ' has an owner but not four sides');
+    }
+    return { n, lines, owner, side: 1 };
+  },
+  lines: dbAll,
+  list(s) { return dbAll(s.n).filter((l) => !s.lines.has(l)).map((l) => ({ name: l })); },
+  find(s, name) { return s.lines.has(name) ? undefined : this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const lines = new Set(s.lines); lines.add(x.name);
+    const owner = s.owner.slice();
+    let closed = 0;
+    for (const [r, c] of dbBoxesOf(x.name, s.n)) if (dbCount(lines, r, c) === 4) { owner[r * s.n + c] = s.side; closed++; }
+    let threes = 0;
+    for (let r = 0; r < s.n; r++) for (let c = 0; c < s.n; c++) if (!owner[r * s.n + c] && dbCount(lines, r, c) === 3) threes++;
+    const f = { box: closed > 0, captured: closed, safe: threes === 0, gift: threes > 0 };
+    return { s: { n: s.n, lines, owner, side: closed ? s.side : 3 - s.side }, f };
+  },
+  dests: () => [],
+  isSquare: (n) => /^(h|v|b):\d:\d$/.test(n)
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris, dots };

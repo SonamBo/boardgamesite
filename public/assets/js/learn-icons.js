@@ -14,6 +14,7 @@ export const LEARN_ICONS = [
   { game: 'five-in-a-row', name: 'Five in a Row', icon: 'gm' },
   { game: 'hex', name: 'Hex', icon: 'hx' },
   { game: 'nine-mens-morris', name: 'Nine Men’s Morris', icon: 'nm' },
+  { game: 'dots-and-boxes', name: 'Dots and Boxes', icon: 'db' },
   { game: 'sudoku', name: 'Sudoku', icon: 'sdk' },
   { game: 'backgammon', name: 'Backgammon', icon: 'bgm' },
   { game: 'solitaire', name: 'Solitaire', icon: 'card' }
@@ -25,6 +26,7 @@ export function iconHtml(icon) {
   if (icon === 'ck') return '<span class="ni ni-ck"></span>';
   if (icon === 'ck-king') return '<span class="ni ni-ck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l-1.6-10.5-4.6 4.2L12 4.5 9.2 11.7 4.6 7.5z"/></svg></span>';
   if (icon === 'go') return '<span class="ni ni-go"><i></i><i></i></span>';
+  if (icon === 'db') return '<span class="ni ni-db"><i></i><i></i><i></i><i></i></span>';
   if (icon === 'nm') return '<span class="ni ni-nm"><i></i></span>';
   if (icon === 'hx') return '<span class="ni ni-hx"><i></i><i></i></span>';
   if (icon === 'gm') return '<span class="ni ni-gm"><i></i><i></i><i></i></span>';
