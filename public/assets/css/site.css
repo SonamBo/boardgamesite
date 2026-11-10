@@ -2280,6 +2280,8 @@ body.returning .hero { display: none; }
 .ni-go i:first-child { left: 0; top: 0; background: #1A1416; box-shadow: inset 0 -2px 0 rgba(255,255,255,.15); }
 .ni-go i:last-child { right: 0; bottom: 0; background: #FFF; box-shadow: 0 0 0 1.5px #1A1416; }
 .ni-rv { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, var(--you) 50%, #262A27 50%); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.ni-nm { width: 28px; height: 28px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; }
+.ni-nm i { width: 12px; height: 12px; border: 2px solid currentColor; }
 .ni-hx { display: flex; align-items: center; gap: 2px; }
 .ni-hx i { width: 14px; height: 16px; background: var(--you); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
 .ni-hx i:nth-child(2) { background: #EFE6D8; }
@@ -2290,6 +2292,11 @@ body.returning .hero { display: none; }
 .ni-c4 i { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
 .ni-c4 i:nth-child(2), .ni-c4 i:nth-child(3) { background: var(--you); }
 .lpath-games .ni-go { transform: scale(.7); } .lpath-games .ni-rv { width: 22px; height: 22px; } .lpath-games .ni-c4 { grid-template-columns: repeat(2, 8px); gap: 2px; } .lpath-games .ni-c4 i { width: 8px; height: 8px; }
+/* lesson boards for Nine Men's Morris */
+.lp-board.nm-lesson { width: 100%; max-width: 520px; margin: 0 auto; padding: 8px; }
+.nm-lesson .mk { fill: none; stroke-width: .08; pointer-events: none; }
+.nm-lesson .mk-good { stroke: #5FA36B; } .nm-lesson .mk-bad { stroke: #D2564B; } .nm-lesson .mk-target { stroke: var(--accent-text); }
+.nm-lesson .mk-hint { fill: color-mix(in srgb, var(--accent-text) 55%, transparent); stroke: none; }
 /* lesson boards for Hex: marks are outlines and dots on the cells */
 .lp-board.hx-lesson { width: 100%; max-width: 640px; margin: 0 auto; }
 .hx-lesson .hx { cursor: default; }
