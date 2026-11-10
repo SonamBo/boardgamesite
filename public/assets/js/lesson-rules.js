@@ -39,6 +39,11 @@
 //               bridge (the stone forms a bridge with one of yours: not touching, with two shared empty neighbours),
 //               connect (it joins two of your groups that weren't touching), shorter (it cuts how many more stones you
 //               need), longer (it adds to how many more stones the opponent needs).
+//   Nine Men's Morris  { gold: 'a7 d7', ivory: 'g1', hand: [7, 8] } (pieces still to place: gold, ivory). Gold (you)
+//               moves. Points use the usual notation: files a–g, ranks 1–7 from the bottom ('d2'). Moves: 'd2' (place),
+//               'd2-d3' (move or fly), plus 'xg4' when it makes a mill and removes that piece ('a7-d7xg4').
+//               Facts: mill, removed, win (the opponent is down to two pieces or can't move), block (the opponent had
+//               a point that would make a mill next turn, and now hasn't).
 //   Solitaire   Klondike, one card at a time. { tab: ['#5S #2D KH', …7 columns, bottom card first, '#' = face down],
 //               found: { S: 3, H: 0, D: 1, C: 0 } (cards already up, ace first), stock: '9C 4D' (top card last),
 //               waste: '8H' (top card last) }. Cards are rank + suit: 'AS', '10H', 'QD', 'KC'.
@@ -456,4 +461,84 @@ export const hex = {
   isSquare: (n) => /^[a-k](1[01]|[1-9])$/.test(n)
 };
 
-export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex };
+
+// ---------- Nine Men's Morris ----------
+const NM_XY = [[0, 0], [3, 0], [6, 0], [1, 1], [3, 1], [5, 1], [2, 2], [3, 2], [4, 2], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [2, 4], [3, 4], [4, 4], [1, 5], [3, 5], [5, 5], [0, 6], [3, 6], [6, 6]];
+const NM_MILLS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11], [12, 13, 14], [15, 16, 17], [18, 19, 20], [21, 22, 23], [0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [2, 14, 23]];
+const NM_ADJ = NM_XY.map(() => []);
+NM_MILLS.forEach(([a, b, c]) => { NM_ADJ[a].push(b); NM_ADJ[b].push(a, c); NM_ADJ[c].push(b); });
+const nmName = (i) => 'abcdefg'[NM_XY[i][0]] + (7 - NM_XY[i][1]);
+const NM_NAMES = NM_XY.map((_, i) => nmName(i));
+const nmIndex = (n) => NM_NAMES.indexOf(n);
+const nmOn = (b, p) => b.filter((x) => x === p).length;
+const nmInMill = (b, i) => NM_MILLS.some((m) => m.includes(i) && m.every((j) => b[j] === b[i] && b[i]));
+const nmMakes = (b, i, p) => NM_MILLS.some((m) => m.includes(i) && m.every((j) => (j === i ? p : b[j]) === p));
+function nmSteps(s, p) {   // moves without the removal: [{ from, to }]
+  const out = [];
+  if (s.hand[p] > 0) { s.b.forEach((x, i) => { if (!x) out.push({ to: i }); }); return out; }
+  const fly = nmOn(s.b, p) === 3;
+  s.b.forEach((x, i) => {
+    if (x !== p) return;
+    (fly ? s.b.map((y, j) => (y ? -1 : j)).filter((j) => j >= 0) : NM_ADJ[i].filter((j) => !s.b[j])).forEach((j) => out.push({ from: i, to: j }));
+  });
+  return out;
+}
+function nmRemovable(b, p) {
+  const all = b.map((x, i) => (x === 3 - p ? i : -1)).filter((i) => i >= 0);
+  const free = all.filter((i) => !nmInMill(b, i));
+  return free.length ? free : all;
+}
+const nmLost = (s, p) => (s.hand[p] === 0 && nmOn(s.b, p) < 3) || (nmOn(s.b, p) + s.hand[p] >= 3 && !nmSteps(s, p).length);
+// points where p would make a mill with their next move
+function nmMillPoints(s, p) {
+  const out = new Set();
+  for (const m of nmSteps(s, p)) {
+    const b = s.b.slice(); if (m.from != null) b[m.from] = 0;
+    if (nmMakes(b, m.to, p)) out.add(m.to);
+  }
+  return out;
+}
+export const morris = {
+  kind: 'morris',
+  cells: NM_NAMES,
+  name: nmName,
+  index: nmIndex,
+  load(p) {
+    if (!p || typeof p !== 'object') fail('Morris position needs { gold, ivory, hand }');
+    const b = new Array(24).fill(0);
+    for (const [k, v] of [['gold', 1], ['ivory', 2]]) for (const n of String(p[k] || '').split(/\s+/).filter(Boolean)) {
+      const i = nmIndex(n); if (i < 0) fail('no point called ' + n); if (b[i]) fail('two pieces on ' + n); b[i] = v;
+    }
+    const hand = [0, ...(p.hand || [0, 0])];
+    if (nmOn(b, 1) + hand[1] > 9 || nmOn(b, 2) + hand[2] > 9) fail('more than nine pieces for one side');
+    return { b, hand, side: 1 };
+  },
+  list(s) {
+    const p = s.side, out = [];
+    for (const m of nmSteps(s, p)) {
+      const b = s.b.slice(); if (m.from != null) b[m.from] = 0; b[m.to] = p;
+      const base = (m.from != null ? nmName(m.from) + '-' : '') + nmName(m.to);
+      if (nmMakes(s.b.map((x, i) => (i === m.from ? 0 : x)), m.to, p)) nmRemovable(b, p).forEach((t) => out.push({ name: base + 'x' + nmName(t), ...m, take: t }));
+      else out.push({ name: base, ...m });
+    }
+    return out;
+  },
+  find(s, name) { return this.list(s).find((x) => x.name === name); },
+  apply(s, x) {
+    const p = s.side, o = 3 - p;
+    const threatBefore = nmMillPoints(s, o).size > 0;
+    const b = s.b.slice(), hand = s.hand.slice();
+    if (x.from != null) b[x.from] = 0; else hand[p]--;
+    b[x.to] = p;
+    if (x.take != null) b[x.take] = 0;
+    const next = { b, hand, side: o };
+    const f = { mill: x.take != null, removed: x.take != null ? 1 : 0, win: nmLost(next, o) };
+    f.block = threatBefore && nmMillPoints(next, o).size === 0;
+    return { s: next, f };
+  },
+  dests(s, from) { return this.list(s).filter((x) => x.name.startsWith(from + '-')).map((x) => x.name.split('-')[1].split('x')[0]); },
+  isSquare: (n) => NM_NAMES.includes(n),
+  geometry: { XY: NM_XY, MILLS: NM_MILLS, removable: nmRemovable }
+};
+
+export const RULES = { go, reversi, c4, sudoku, backgammon, solitaire, gomoku, hex, morris };

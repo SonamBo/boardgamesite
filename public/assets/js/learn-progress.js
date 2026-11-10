@@ -75,6 +75,6 @@ export function streak() {
 export const activeToday = () => activeDays()(dayKey());
 
 // XP across every learning path (lessons and gift chests).
-export const LEARN_GAMES = ['chess', 'checkers', 'russian-checkers', 'mancala', 'go', 'reversi', 'four-in-a-row', 'five-in-a-row', 'hex', 'sudoku', 'backgammon', 'solitaire'];
-export const LEARN_NAME = { chess: 'Chess', checkers: 'Checkers', 'russian-checkers': 'Russian Checkers', mancala: 'Mancala', go: 'Go', reversi: 'Reversi', 'four-in-a-row': 'Four in a Row', 'five-in-a-row': 'Five in a Row', hex: 'Hex', sudoku: 'Sudoku', backgammon: 'Backgammon', solitaire: 'Solitaire' };
+export const LEARN_GAMES = ['chess', 'checkers', 'russian-checkers', 'mancala', 'go', 'reversi', 'four-in-a-row', 'five-in-a-row', 'hex', 'nine-mens-morris', 'sudoku', 'backgammon', 'solitaire'];
+export const LEARN_NAME = { chess: 'Chess', checkers: 'Checkers', 'russian-checkers': 'Russian Checkers', mancala: 'Mancala', go: 'Go', reversi: 'Reversi', 'four-in-a-row': 'Four in a Row', 'five-in-a-row': 'Five in a Row', hex: 'Hex', 'nine-mens-morris': 'Nine Men’s Morris', sudoku: 'Sudoku', backgammon: 'Backgammon', solitaire: 'Solitaire' };
 export const totalXp = () => LEARN_GAMES.reduce((n, g) => n + progress(g).xp, 0);

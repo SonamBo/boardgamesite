@@ -17,6 +17,7 @@ const GAMES = [
   { id: 'four-in-a-row', name: 'Four in a Row', blurb: 'Block, then build double threats.' },
   { id: 'five-in-a-row', name: 'Five in a Row', blurb: 'Fours, open threes and the winning four-three.' },
   { id: 'hex', name: 'Hex', blurb: 'Bridges, edge templates and the swap rule.' },
+  { id: 'nine-mens-morris', name: 'Nine Men’s Morris', blurb: 'Mills, running mills and the flying endgame.' },
   { id: 'sudoku', name: 'Sudoku', blurb: 'From the rules to pairs and pointing pairs.' },
   { id: 'backgammon', name: 'Backgammon', blurb: 'Dice, hitting, bearing off and opening moves.' },
   { id: 'solitaire', name: 'Solitaire', blurb: 'Win more Klondike games with a few habits.' }

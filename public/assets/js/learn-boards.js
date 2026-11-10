@@ -1,4 +1,4 @@
-// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
+// Boards for lessons and puzzles: Chess, Checkers, Russian Checkers, Hex, Nine Men’s Morris, Mancala, Go, Reversi and Four in a Row, driven by the real rules engines.
 //
 // makeBoard(kind, el) returns:
 //   set(position)       show a position (chess: FEN; checkers: 8 rows like '.b.b.b.b/...'; mancala: 14 numbers)
@@ -699,8 +699,84 @@ function hexBoard(el) {
   });
 }
 
+
+// ---------- Nine Men's Morris ----------
+// The game's board in SVG. Tap to place; tap a piece, then where it goes; after a mill, tap the piece to remove.
+function morrisBoard(el) {
+  const b = base(el);
+  const A = RULES.morris, { XY } = A.geometry;
+  let S, sel = null, pending = null, last = -1;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'nm-board');
+  svg.setAttribute('viewBox', '-0.6 -0.6 7.2 7.2');
+  svg.setAttribute('role', 'group');
+  el.className = 'lp-board nm-lesson';
+  el.textContent = '';
+  el.appendChild(svg);
+  svg.addEventListener('click', (e) => { const g = e.target.closest('.pt'); if (g) tap(Number(g.dataset.i)); });
+  svg.addEventListener('keydown', (e) => { const g = e.target.closest('.pt'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); tap(Number(g.dataset.i)); } });
+  const legal = () => (b.live ? A.list(S) : []);
+  function render() {
+    const moves = legal();
+    // while a removal is being chosen, show the piece already moved
+    const pm = pending ? moves.find((m) => m.name.startsWith(pending + 'x')) : null;
+    const shown = S.b.slice();
+    if (pm) { if (pm.from != null) shown[pm.from] = 0; shown[pm.to] = S.side; }
+    const takes = new Set(pending ? moves.filter((m) => m.name.startsWith(pending + 'x')).map((m) => m.take) : []);
+    const placing = S.hand[S.side] > 0;
+    const targets = new Set(pending ? [] : placing ? moves.map((m) => m.to) : sel != null ? moves.filter((m) => m.from === sel).map((m) => m.to) : []);
+    let h = '<rect x="0" y="0" width="6" height="6" class="sq"/><rect x="1" y="1" width="4" height="4" class="sq"/><rect x="2" y="2" width="2" height="2" class="sq"/><path d="M3 0V2M3 4V6M0 3H2M4 3H6" class="sq"/>';
+    XY.forEach(([x, y], i) => {
+      const v = shown[i], nm = A.name(i), mark = b.marks[nm] || '';
+      h += '<g class="pt' + (targets.has(i) ? ' tgt' : '') + (takes.has(i) ? ' take' : '') + (sel === i ? ' sel' : '') + (last === i ? ' last' : '') + '" data-i="' + i + '" data-mark="' + mark + '" role="button" tabindex="0" aria-label="' + nm + (v ? (v === 1 ? ', gold' : ', ivory') : ', empty') + '">' +
+        '<circle cx="' + x + '" cy="' + y + '" r=".42" class="hitc"/><circle cx="' + x + '" cy="' + y + '" r=".12" class="spot"/>' +
+        (v ? '<circle cx="' + x + '" cy="' + y + '" r=".32" class="pc' + v + '"/>' : '') +
+        (mark ? '<circle cx="' + x + '" cy="' + y + '" r=".4" class="mk mk-' + mark + '"/>' : '') + '</g>';
+    });
+    svg.innerHTML = h;
+  }
+  function doMove(x, fromPerson) {
+    const prev = { S, last };
+    const r = A.apply(S, x);
+    S = r.s; last = x.to; sel = null; pending = null;
+    sound(x.take != null ? 'capture' : 'place');
+    render();
+    if (fromPerson && b.moveFn && b.moveFn(x.name, r.f) === false) setTimeout(() => { ({ S, last } = prev); render(); }, 650);
+    return r.f;
+  }
+  function tap(i) {
+    if (b.tapFn) return b.tapFn(A.name(i));
+    if (!b.live) return;
+    const moves = A.list(S);
+    if (pending) {
+      const m = moves.find((x) => x.name.startsWith(pending + 'x') && x.take === i);
+      if (m) doMove(m, true);
+      return;
+    }
+    let cands;
+    if (S.hand[S.side] > 0) cands = moves.filter((m) => m.to === i);
+    else if (S.b[i] === S.side) { sel = moves.some((m) => m.from === i) ? i : null; if (sel != null) sound('select'); render(); return; }
+    else if (sel != null) cands = moves.filter((m) => m.from === sel && m.to === i);
+    else return;
+    if (!cands.length) return;
+    if (cands[0].take == null) return doMove(cands[0], true);
+    pending = cands[0].name.split('x')[0];   // a mill: now pick the piece to remove
+    sel = null;
+    sound('king');
+    render();
+  }
+  return Object.assign(b, {
+    set(p) { S = A.load(p); sel = null; pending = null; last = -1; render(); },
+    play(name) { const x = A.find(S, name); return x ? doMove(x, false) : null; },
+    moves: () => A.list(S).map((x) => x.name),
+    mark(map) { b.marks = map || {}; render(); },
+    interactive(on) { b.live = on; sel = null; pending = null; render(); },
+    side: () => S.side
+  });
+}
+
 export function makeBoard(kind, el) {
-  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
+  const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
   board.onTap = (fn) => { board.tapFn = fn; };
   return board;
