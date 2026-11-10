@@ -53,8 +53,9 @@ boardEl.addEventListener('mouseover', (e) => {
   buttons.forEach((b) => b.classList.toggle('col-hover', b.dataset.col === c));
 });
 boardEl.addEventListener('mouseleave', () => buttons.forEach((b) => b.classList.remove('col-hover')));
-// Keyboard: number keys 1–7 drop into that column while focus is on the board
-boardEl.addEventListener('keydown', (e) => {
+// Keyboard: number keys 1–7 drop into that column, anywhere on the page except while typing in a field
+document.addEventListener('keydown', (e) => {
+  if (e.target.closest?.('input, textarea, select, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   const n = Number(e.key);
   if (n >= 1 && n <= 7) { e.preventDefault(); onColumn(n - 1); }
 });

@@ -6,7 +6,7 @@ import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
 
 const $ = (id) => document.getElementById(id);
-const score = record('snakes');
+const score = record('snakes', { draws: false });
 // Our own board: ladders go up, snakes go down.
 const LADDERS = { 3: 22, 8: 30, 21: 42, 28: 76, 36: 57, 50: 67, 71: 92, 80: 99 };
 const SNAKES = { 32: 10, 48: 26, 62: 18, 74: 53, 88: 24, 95: 56, 97: 78, 44: 23 };

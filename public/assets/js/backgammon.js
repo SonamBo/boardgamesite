@@ -8,7 +8,7 @@ import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
 
 const $ = (id) => document.getElementById(id);
 const SAVE = 'bgs-bg-game';
-const score = record('backgammon');
+const score = record('backgammon', { draws: false });
 const getLevel = levelSwitch('backgammon', () => newGame());
 const getOpp = opponentSwitch('backgammon', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';

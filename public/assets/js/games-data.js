@@ -33,7 +33,8 @@ export const GAMES = [
   "name": "Go",
   "cat": "strategy",
   "record": "wld",
-  "key": "bgs-go-score"
+  "key": "bgs-go-score",
+  "draws": false
  },
  {
   "slug": "reversi",
@@ -89,7 +90,8 @@ export const GAMES = [
   "name": "Hex",
   "cat": "strategy",
   "record": "wld",
-  "key": "bgs-hex-score"
+  "key": "bgs-hex-score",
+  "draws": false
  },
  {
   "slug": "sudoku",
@@ -243,14 +245,16 @@ export const GAMES = [
   "name": "Backgammon",
   "cat": "dice",
   "record": "wld",
-  "key": "bgs-backgammon-score"
+  "key": "bgs-backgammon-score",
+  "draws": false
  },
  {
   "slug": "ludo",
   "name": "Ludo",
   "cat": "dice",
   "record": "wld",
-  "key": "bgs-ludo-score"
+  "key": "bgs-ludo-score",
+  "draws": false
  },
  {
   "slug": "hot-dice",
@@ -264,14 +268,16 @@ export const GAMES = [
   "name": "Snakes and Ladders",
   "cat": "dice",
   "record": "wld",
-  "key": "bgs-snakes-score"
+  "key": "bgs-snakes-score",
+  "draws": false
  },
  {
   "slug": "liars-dice",
   "name": "Liar’s Dice",
   "cat": "dice",
   "record": "wld",
-  "key": "bgs-liars-score"
+  "key": "bgs-liars-score",
+  "draws": false
  },
  {
   "slug": "dice-poker",
@@ -292,7 +298,8 @@ export const GAMES = [
   "name": "Pig",
   "cat": "dice",
   "record": "wld",
-  "key": "bgs-pig-score"
+  "key": "bgs-pig-score",
+  "draws": false
  },
  {
   "slug": "ship-captain-crew",

@@ -46,14 +46,14 @@ export function levelSwitch(gameKey, onChange) {
   return () => level;
 }
 
-// Win / loss / draw record, remembered per game.
-export function record(gameKey) {
+// Win / loss / draw record, remembered per game. { draws: false } for games that can't end in a draw (Go, Hex…).
+export function record(gameKey, { draws = true } = {}) {
   const key = 'bgs-' + gameKey + '-score';
   const score = store.get(key, { w: 0, l: 0, d: 0 });
   const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
   const paint = () => {
     const el = $('record');
-    if (el) el.textContent = plural(score.w, 'win', 'wins') + ' · ' + plural(score.l, 'loss', 'losses') + ' · ' + plural(score.d, 'draw', 'draws');
+    if (el) el.textContent = plural(score.w, 'win', 'wins') + ' · ' + plural(score.l, 'loss', 'losses') + (draws ? ' · ' + plural(score.d, 'draw', 'draws') : '');
   };
   paint();
   // An account's saved record arrived after sign-in: show it.

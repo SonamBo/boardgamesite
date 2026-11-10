@@ -753,7 +753,7 @@ print(f"SEO check passed ({len(pages)} pages)")
 
 # The game list for the browser (account page, syncing records). Generated: edit games.py instead.
 games_js = [
-    {"slug": s, "name": g["name"], "cat": g["cat"], "record": g["record"], "key": g["key"]}
+    {"slug": s, "name": g["name"], "cat": g["cat"], "record": g["record"], "key": g["key"], **({"draws": False} if g.get("draws") is False else {})}
     for s, g in GAMES.items()
 ]
 (OUT / "assets" / "js" / "games-data.js").write_text(

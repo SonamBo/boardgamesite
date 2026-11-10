@@ -6,7 +6,7 @@ import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
 
 const $ = (id) => document.getElementById(id);
 const GOAL = 100;
-const score = record('pig');
+const score = record('pig', { draws: false });
 const getLevel = levelSwitch('pig', () => newGame());
 const getOpp = opponentSwitch('pig', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
 const vsCpu = () => getOpp() === 'cpu';

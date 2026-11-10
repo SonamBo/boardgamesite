@@ -7,7 +7,7 @@ import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
 
 const $ = (id) => document.getElementById(id);
-const score = record('ludo');
+const score = record('ludo', { draws: false });
 const OPP_KEY = 'bgs-ludo-opp', N_KEY = 'bgs-ludo-n';
 let opp = store.get(OPP_KEY, 'cpu') === 'friend' ? 'friend' : 'cpu';
 let n = store.get(N_KEY, 4) === 2 ? 2 : 4;

@@ -161,7 +161,7 @@ function finish(st) {
     play(won ? 'win' : 'lose', 0.1);
   } else {
     showResult('win', (st.result === 'w' ? 'White' : 'Black') + ' wins by checkmate!', sans.length + ' moves played.');
-    setStatus('Checkmate!');
+    setStatus((st.result === 'w' ? 'White' : 'Black') + ' wins by checkmate!');
     play('win', 0.1);
   }
   track('game_end', { game: 'chess', result: st.result, reason: st.reason });

@@ -8,7 +8,7 @@ import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const SIZE_KEY = 'bgs-hex-size';
-const score = record('hex');
+const score = record('hex', { draws: false });
 const getLevel = levelSwitch('hex', () => {});
 const getOpp = opponentSwitch('hex', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';

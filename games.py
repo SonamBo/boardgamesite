@@ -17,6 +17,7 @@ Fields:
   chips    up to three short labels on the card
   friend   True if two people can play on one device (it then also appears under Multiplayer)
   record   "wld" (wins/losses/draws against the computer) or "solo" (games played/won, best time or score)
+  draws    False for a "wld" game that can never end in a draw (its record then shows wins and losses only)
   key      the browser-storage key holding the player's record (synced to their account)
   minutes  typical length of one game, for the card
 """
@@ -133,6 +134,7 @@ GAMES = {
         "chips": ["Strategy", "vs Computer", "2 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-go-score",
     },
     "reversi": {
@@ -237,6 +239,7 @@ GAMES = {
         "chips": ["Strategy", "vs Computer", "2 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-hex-score",
     },
     "sudoku": {
@@ -523,6 +526,7 @@ GAMES = {
         "chips": ["Dice", "vs Computer", "2 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-backgammon-score",
     },
     "ludo": {
@@ -536,6 +540,7 @@ GAMES = {
         "chips": ["Dice", "vs Computer", "2–4 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-ludo-score",
     },
     "hot-dice": {
@@ -562,6 +567,7 @@ GAMES = {
         "chips": ["Dice", "vs Computer", "2–4 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-snakes-score",
     },
     "liars-dice": {
@@ -575,6 +581,7 @@ GAMES = {
         "chips": ["Dice", "vs Computer", "10 min"],
         "friend": False,
         "record": "wld",
+        "draws": False,
         "key": "bgs-liars-score",
     },
     "dice-poker": {
@@ -614,6 +621,7 @@ GAMES = {
         "chips": ["Dice", "vs Computer", "2 players"],
         "friend": True,
         "record": "wld",
+        "draws": False,
         "key": "bgs-pig-score",
     },
     "ship-captain-crew": {

@@ -158,7 +158,7 @@ $('new-game').classList.add('online-hide');
 $('again').addEventListener('click', () => { if (!onlineOn) newGame(); });
 $('again').classList.add('online-hide');
 document.addEventListener('keydown', (e) => {
-  if (e.target.closest?.('input, textarea') || e.metaKey || e.ctrlKey) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
   const n = Number(e.key);
   if (n >= 1 && n <= 9) { e.preventDefault(); human(n - 1); }
 });
