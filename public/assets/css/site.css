@@ -459,7 +459,8 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .disc.last { box-shadow: inset 0 -4px 0 rgba(0,0,0,.22), 0 0 0 3px var(--text-hi); }
 @keyframes drop { from { transform: translateY(-260%); } to { transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .disc.drop { animation: none; } }
-/* Animation speed: Off (game-ui.js) stops the boards' own CSS animations too, as reduced motion does */
+/* Looping animations stop after three cycles and leave a still highlight; only the Letter Hive caret and the
+   dice tumbling while they roll repeat. Animation speed: Off (game-ui.js) stops the boards' own CSS animations too, as reduced motion does */
 [data-anim="off"] .game-layout *, [data-anim="off"] .lp-board * { animation: none !important; transition: none !important; }
 .board-hint { color: var(--muted); font-size: 14px; }
 
@@ -1495,7 +1496,7 @@ body.maxed .dice-wrap { max-width: none; }
 .lu-board .star { font-size: 7px; text-anchor: middle; fill: rgba(60,40,30,.45); }
 .lu-board .tok circle:first-child { stroke: #1A1214; stroke-width: .6; }
 .lu-board .tok.can { cursor: pointer; }
-.lu-board .tok.can circle:first-child { stroke: #fff; stroke-width: 1; animation: lu-pulse 1s ease-in-out infinite; }
+.lu-board .tok.can circle:first-child { stroke: #fff; stroke-width: 1; animation: lu-pulse 1s ease-in-out 3; }   /* three pulses, then the white ring stays */
 .lu-board .tok:focus-visible { outline: none; }
 .lu-board .tok:focus-visible circle:first-child { stroke: var(--accent-text); stroke-width: 1.4; }
 @keyframes lu-pulse { 50% { stroke-width: .3; } }
@@ -1584,8 +1585,8 @@ body.maxed .dice-wrap { max-width: none; }
 .cs-cap { display: flex; flex-wrap: wrap; gap: 0; min-height: 22px; padding-left: 34px; }
 .cs-cap .pz { width: 22px; height: 22px; }
 /* Show hint (game-ui.js): the suggested move's squares pulse with a bright ring */
-.hinted { outline: 3px solid #3FB6A8; outline-offset: -3px; animation: hint-pulse 1s ease-in-out infinite; z-index: 2; }
-svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6A8 !important; stroke-width: .2; animation: hint-pulse 1s ease-in-out infinite; }
+.hinted { outline: 3px solid #3FB6A8; outline-offset: -3px; animation: hint-pulse 1s ease-in-out 3; z-index: 2; }
+svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6A8 !important; stroke-width: .2; animation: hint-pulse 1s ease-in-out 3; }
 .db-board .hinted { stroke-width: 2.2 !important; stroke-dasharray: none; opacity: 1; }
 .nm-board .hinted .hitc, .nm-board g.hinted .hitc { fill: rgba(63,182,168,.45); }
 @keyframes hint-pulse { 50% { opacity: .55; } }
@@ -1988,16 +1989,16 @@ body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .
 .pcheck { position: absolute; right: -4px; top: -6px; width: 24px; height: 24px; border-radius: 50%; background: #5FA36B; color: #0E1A10; font: 800 13px/24px var(--body); text-align: center; box-shadow: 0 0 0 3px var(--bg); }
 .plock { position: absolute; right: -2px; bottom: -6px; font-size: 15px; filter: grayscale(1); }
 .pbubble { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); z-index: 2; padding: 7px 12px; border-radius: 12px; background: var(--surface); border: 2px solid var(--border-strong); color: var(--accent-text);
-  font: 800 13px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; animation: pbob 1.6s ease-in-out infinite; }
+  font: 800 13px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; animation: pbob 1.6s ease-in-out 3; }
 .pbubble::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 11px; height: 11px; background: var(--surface); border-right: 2px solid var(--border-strong); border-bottom: 2px solid var(--border-strong); transform: translateX(-50%) rotate(45deg); }
 .pbubble.jump { position: static; transform: none; margin-bottom: 12px; color: var(--good); animation: none; }
-.pbubble.jump { animation: pbob2 1.6s ease-in-out infinite; }
+.pbubble.jump { animation: pbob2 1.6s ease-in-out 3; }
 @keyframes pbob { 50% { transform: translate(-50%, -5px); } }
 @keyframes pbob2 { 50% { transform: translateY(-5px); } }
 .prow:has(.pbubble.jump) { height: 140px; }
 .pchest { width: 76px; height: 66px; border-radius: 18px; font-size: 38px; background: var(--surface-2); box-shadow: 0 7px 0 #171213; }
 .pchest.locked { filter: grayscale(.85) brightness(.6); }
-.pchest.ready { background: radial-gradient(circle at 50% 38%, var(--you-hi), var(--you) 62%); box-shadow: 0 7px 0 var(--you-lo), 0 0 24px color-mix(in srgb, var(--accent-text) 55%, transparent); animation: pwiggle 2.4s ease-in-out infinite; }
+.pchest.ready { background: radial-gradient(circle at 50% 38%, var(--you-hi), var(--you) 62%); box-shadow: 0 7px 0 var(--you-lo), 0 0 24px color-mix(in srgb, var(--accent-text) 55%, transparent); animation: pwiggle 2.4s ease-in-out 3; }   /* then the glow stays */
 .pchest.opened { opacity: .6; }
 .pchest.shake { animation: shake .3s; }
 .pchest.opening { animation: popen .6s ease-out forwards; }
