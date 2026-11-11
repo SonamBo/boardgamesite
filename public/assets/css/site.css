@@ -2622,3 +2622,14 @@ body.returning .hero { display: none; }
   .teach-table td { display: block; border: 0; padding: 2px 0; }
   .teach-table td:first-child { white-space: normal; }
 }
+
+/* Reduced motion: selected or picked things don't grow or lift; a still outline or ring marks them instead
+   (most of these already have a ring or a colour change, which stays) */
+@media (prefers-reduced-motion: reduce) {
+  .ck button.sel .piece { transform: none; outline: 3px solid var(--ck-ring); outline-offset: 2px; }
+  .peg-hole.sel i, .die.held .face, .lt-rtile.sel, .hn-disc.up, .tm-tile.sel, .sol-lesson .pc.sel, .dice-lesson .die.held { transform: none; }
+  .card-area .pc.sel { translate: none; }
+  .wgd-cell.last { transform: none; outline: 3px solid var(--brand); outline-offset: -3px; }
+  .sb-tile.pick span { transform: none; box-shadow: inset 0 0 0 3px var(--on-you); }
+  .un-tile:hover:not(:disabled), .cl-hand .pc.can:hover { transform: none; }
+}
