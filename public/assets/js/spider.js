@@ -1,6 +1,6 @@
 // Spider Solitaire: build runs from King down to Ace in the same suit to clear them away. Two decks, ten columns.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, shake } from './solo.js';
@@ -228,3 +228,5 @@ const getLevel = levelSwitch('spider', (l) => { level = l; newGame(); });
 level = getLevel();
 measure();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

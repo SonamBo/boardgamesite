@@ -11,7 +11,7 @@ import { wait } from './dice-ui.js';
 const $ = (id) => document.getElementById(id);
 const GOAL = 250, SPADE = 0;
 const score = record('spades');
-const getLevel = levelSwitch('spades', () => {});
+const getLevel = levelSwitch('spades');
 const table = new TrickTable($('area'));
 const team = (s) => s % 2; // 0: you + North, 1: West + East
 

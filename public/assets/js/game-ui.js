@@ -38,7 +38,10 @@ export function levelSwitch(gameKey, onChange) {
   let level = store.get(key, 'medium');
   const buttons = [...document.querySelectorAll('[data-level]')];
   const paint = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.level === level)));
-  buttons.forEach((b) => b.addEventListener('click', () => {
+  buttons.forEach((b) => b.addEventListener('click', async () => {
+    if (b.dataset.level === level) return;
+    // a level change that starts a new game asks first if a game is under way
+    if (onChange && !(await confirmNewGame())) return;
     level = b.dataset.level;
     store.set(key, level);
     paint();
@@ -155,7 +158,8 @@ export function moveHistory({ show }) {
 // A card over the board, which shows the saved game behind it: "Resume your game? Computer, Medium, you
 // play black" with Resume game / New game. Resolves true to resume.
 export const modeName = (friend, level, extra = '') => (friend ? '2 players' : 'Computer, ' + level[0].toUpperCase() + level.slice(1) + (extra ? ', ' + extra : ''));
-export function askResume(what) {
+// A question in a card over the board (the style of the Resume card). Resolves true for the first button.
+function askCard({ title, text, detail = '', yes, no, focusNo = false, closeOn = null }) {
   return new Promise((done) => {
     const col = document.querySelector('[data-max-root] .board-col');
     if (!col) return done(true);
@@ -163,18 +167,43 @@ export function askResume(what) {
     const card = document.createElement('div');
     card.className = 'resume-card';
     card.setAttribute('role', 'dialog');
-    card.setAttribute('aria-label', 'Resume your game?');
-    card.innerHTML = '<div class="card"><p class="big">Welcome back</p><p class="text-2">Resume your game?<br><b></b></p>' +
-      '<div class="resume-btns"><button type="button" class="btn btn-gold raised" data-r="1">Resume game</button><button type="button" class="btn btn-outline" data-r="0">New game</button></div></div>';
-    card.querySelector('b').textContent = what;
+    card.setAttribute('aria-label', title);
+    card.innerHTML = '<div class="card"><p class="big"></p><p class="text-2"><span></span>' + (detail ? '<br><b></b>' : '') + '</p>' +
+      '<div class="resume-btns"><button type="button" class="btn btn-gold raised" data-r="1"></button><button type="button" class="btn btn-outline" data-r="0"></button></div></div>';
+    card.querySelector('.big').textContent = title;
+    card.querySelector('.text-2 span').textContent = text;
+    if (detail) card.querySelector('b').textContent = detail;
+    card.querySelector('[data-r="1"]').textContent = yes;
+    card.querySelector('[data-r="0"]').textContent = no;
     col.appendChild(card);
-    card.querySelector('[data-r="1"]').focus({ preventScroll: true });
-    const close = (ok) => { card.remove(); document.removeEventListener('click', other, true); done(ok); };
+    card.querySelector(focusNo ? '[data-r="0"]' : '[data-r="1"]').focus({ preventScroll: true });
+    const close = (ok) => { card.remove(); document.removeEventListener('click', other, true); document.removeEventListener('keydown', esc); done(ok); };
     card.addEventListener('click', (e) => { const b = e.target.closest('[data-r]'); if (b) close(b.dataset.r === '1'); });
-    // choosing another opponent, side or board, or New game, answers "New game"
-    const other = (e) => { if (e.target.closest('[data-opponent], [data-side], [data-hsize], [data-dsize], #new-game')) setTimeout(() => close(false)); };
+    const esc = (e) => { if (e.key === 'Escape') close(false); };
+    document.addEventListener('keydown', esc);
+    const other = (e) => { if (closeOn && e.target.closest(closeOn)) setTimeout(() => close(false)); };
     document.addEventListener('click', other, true);
   });
+}
+let resuming = false;
+export function askResume(what) {
+  resuming = true;
+  // choosing another opponent, side or board, or New game, answers "New game"
+  return askCard({ title: 'Welcome back', text: 'Resume your game?', detail: what, yes: 'Resume game', no: 'New game',
+    closeOn: '[data-opponent], [data-side], [data-hsize], [data-dsize], [data-hswap], #new-game' })
+    .then((ok) => { resuming = false; return ok; });
+}
+
+// ---------- Changing a setting mid-game ----------
+// A game tells game-ui whether it's under way (a move made, not finished); a setting that would start a new
+// game then asks first. Cancel keeps the game and the setting as they were.
+let inProgress = () => false;
+export function gameInProgress(fn) { inProgress = fn; }
+export function confirmNewGame() {
+  let busy = false;
+  try { busy = !resuming && !!inProgress(); } catch (e) { busy = false; }
+  if (!busy) return Promise.resolve(true);
+  return askCard({ title: 'Start a new game?', text: 'Your current game will be lost.', yes: 'New game', no: 'Cancel', focusNo: true });
 }
 
 // ---------- Tap to confirm (boards with small points: Hex, Dots and Boxes, Five in a Row) ----------
@@ -247,8 +276,9 @@ export function opponentSwitch(gameKey, onChange, names = {}) {
     document.querySelectorAll('[data-friend-only]').forEach((el) => { el.hidden = mode !== 'friend'; });
     document.querySelectorAll('[data-name]').forEach((el) => { el.textContent = label[mode][el.dataset.name] || el.textContent; });
   };
-  buttons.forEach((b) => b.addEventListener('click', () => {
+  buttons.forEach((b) => b.addEventListener('click', async () => {
     if (b.dataset.opponent === mode) return;
+    if (onChange && !(await confirmNewGame())) return;
     mode = b.dataset.opponent === 'friend' ? 'friend' : 'cpu';
     store.set(key, mode);
     paint();
@@ -269,8 +299,9 @@ export function sideSwitch(gameKey, values, onChange, def = values[0]) {
   let side = store.get(key, def);
   if (!values.includes(side)) side = def;
   const paint = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.side === side)));
-  buttons.forEach((b) => b.addEventListener('click', () => {
+  buttons.forEach((b) => b.addEventListener('click', async () => {
     if (b.dataset.side === side) return;
+    if (onChange && !(await confirmNewGame())) return;
     side = b.dataset.side;
     store.set(key, side);
     paint();

@@ -1,6 +1,6 @@
 // Hot Dice (Farkle rules): roll six dice, set aside scoring dice, and roll on or bank.
 // Roll nothing that scores and you lose the turn's points. First to 4,000 wins.
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -186,3 +186,5 @@ $('bank').addEventListener('click', () => { if (!(vsCpu() && turn === 1)) bank()
 $('new-game').addEventListener('click', () => { if (!(vsCpu() && turn === 1) || over) newGame(); });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

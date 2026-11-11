@@ -1,7 +1,7 @@
 // Picture Logic (nonograms): use the number clues to fill in the hidden picture.
 import * as E from './picture-logic-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -208,3 +208,5 @@ const getLevel = levelSwitch('pic', (l) => { level = l; newGame(); });
 level = getLevel();
 paintTool();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

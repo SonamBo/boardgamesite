@@ -1,6 +1,6 @@
 // Unscramble: put the mixed-up letters back in order to make a word. Ten words a round.
 import { store } from './site.js';
-import { setStatus, levelSwitch, MASCOT } from './game-ui.js';
+import { setStatus, levelSwitch, MASCOT, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { soloRecord, shake } from './solo.js';
@@ -174,3 +174,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('unscr', (l) => { level = l; newGame(); });
 level = getLevel();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

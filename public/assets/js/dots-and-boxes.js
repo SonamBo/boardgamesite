@@ -1,6 +1,6 @@
 // Dots and Boxes: take turns drawing a line between two dots. Close a box to claim it and go again.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, drawIn, fadeIn, animating, stopAnimations, hintButton, tapConfirm } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, drawIn, fadeIn, animating, stopAnimations, hintButton, tapConfirm, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -10,7 +10,7 @@ const $ = (id) => document.getElementById(id);
 const SIZES = { easy: 3, medium: 4, hard: 5 };
 const SIZE_KEY = 'bgs-dots-size';
 const score = record('dots');
-const getLevel = levelSwitch('dots', () => {});
+const getLevel = levelSwitch('dots');
 const getOpp = opponentSwitch('dots', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
@@ -189,7 +189,8 @@ svg.addEventListener('click', (e) => {
 svg.addEventListener('keydown', (e) => { const l = e.target.closest('.hit'); if (l && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); l.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
 document.querySelectorAll('[data-dsize]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.dsize) === n));
-  b.addEventListener('click', () => {
+  b.addEventListener('click', async () => {
+    if (Number(b.dataset.dsize) === n || !(await confirmNewGame())) return;
     n = Number(b.dataset.dsize); store.set(SIZE_KEY, n);
     document.querySelectorAll('[data-dsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.dsize) === n)));
     newGame();
@@ -227,3 +228,5 @@ ol = online('dots-and-boxes', {
 });
 void SIZES; void G;
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

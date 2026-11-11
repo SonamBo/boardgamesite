@@ -1,7 +1,7 @@
 // Russian Checkers page. Same board and controls as the Checkers page (checkers.js), with the shashki rules
 // from russian-checkers-engine.js: flying kings, men capturing backwards, and the Russian draw rules.
 import * as E from './russian-checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut, showCaptures, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut, showCaptures, hintButton, moveHistory, askResume, modeName, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -370,3 +370,5 @@ ol = online(GAME, {
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); paintSides(); render(); }
 });
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

@@ -2,7 +2,7 @@
 // lets you remove an opponent's piece. Reduce them to two pieces, or leave them no move, to win.
 // Draws: the same position three times with the same player to move, or 50 moves each with no piece removed.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, moveQueue, slide, fadeOut, popIn, showCaptures, hintButton } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, moveQueue, slide, fadeOut, popIn, showCaptures, hintButton, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -11,7 +11,7 @@ import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const score = record('morris');
-const getLevel = levelSwitch('morris', () => {});
+const getLevel = levelSwitch('morris');
 const getOpp = opponentSwitch('morris', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 let onlineOn = roomInLink, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
@@ -332,3 +332,5 @@ ol = online('nine-mens-morris', {
 });
 newGame();
 void store;
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);
