@@ -1,6 +1,6 @@
 // Sliding Tiles (the 15 puzzle): slide the numbered tiles back into order.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, shake } from './solo.js';
@@ -153,3 +153,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('slide', (l) => { level = l; newGame(); });
 level = getLevel();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

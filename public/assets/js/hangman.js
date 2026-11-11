@@ -4,7 +4,7 @@
 // The word travels in the link (?w=), lightly scrambled so it isn't readable at a glance.
 import { THEMES, themeWords } from './themes.js';
 import { store } from './site.js';
-import { setStatus, MASCOT } from './game-ui.js';
+import { setStatus, MASCOT, confirmNewGame, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { soloRecord, shake } from './solo.js';
@@ -169,8 +169,9 @@ $('share-copy').addEventListener('click', async () => {
 $('share-another').addEventListener('click', () => newGame());
 
 function paintMode() { document.querySelectorAll('[data-hmode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.hmode === mode))); }
-document.querySelectorAll('[data-hmode]').forEach((b) => b.addEventListener('click', () => {
+document.querySelectorAll('[data-hmode]').forEach((b) => b.addEventListener('click', async () => {
   if (b.dataset.hmode === mode && !challenge) return;
+  if (!challenge && !(await confirmNewGame())) return;
   if (challenge) { challenge = false; history.replaceState(null, '', location.pathname); }
   mode = b.dataset.hmode; store.set(MODE_KEY, mode); paintMode(); newGame();
 }));
@@ -187,3 +188,5 @@ $('again').addEventListener('click', () => {
 });
 paintMode();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

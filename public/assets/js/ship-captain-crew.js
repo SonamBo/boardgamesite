@@ -1,6 +1,6 @@
 // Ship, Captain and Crew: in three rolls, find a 6 (ship), then a 5 (captain), then a 4 (crew).
 // Your other two dice are the cargo. Highest cargo wins the round; first to 3 rounds wins.
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -143,3 +143,5 @@ $('stop').addEventListener('click', () => { if (!(vsCpu() && turn === 1) && !bus
 $('new-game').addEventListener('click', () => { if (!(vsCpu() && turn === 1) || over) newGame(); });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

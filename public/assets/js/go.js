@@ -1,7 +1,7 @@
 // Go (9×9): place stones to surround territory and capture. Two passes in a row end the game.
 import * as G from './go-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, animationSwitch, moveQueue, popIn, fadeOut, settle, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, animationSwitch, moveQueue, popIn, fadeOut, settle, hintButton, moveHistory, askResume, modeName, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake, rng, seedFrom } from './solo.js';
@@ -10,7 +10,7 @@ import { online, roomInLink } from './online.js';
 const $ = (id) => document.getElementById(id);
 const N = G.N, SAVE = 'bgs-go-game';
 const score = record('go', { draws: false });
-const getLevel = levelSwitch('go', () => {});
+const getLevel = levelSwitch('go');
 const getOpp = opponentSwitch('go', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Black', p2: 'White' });
 const vsCpu = () => getOpp() === 'cpu';
 // Against the computer you play black (moves first) or white.
@@ -240,3 +240,5 @@ ol = online('go', {
 $('again').addEventListener('click', newGame);
 window.addEventListener('pagehide', save);
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

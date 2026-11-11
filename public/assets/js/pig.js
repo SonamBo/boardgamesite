@@ -1,5 +1,5 @@
 // Pig: roll one die as often as you like. A 1 loses everything you rolled this turn. Hold to bank it. First to 100 wins.
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -123,3 +123,5 @@ document.addEventListener('keydown', (e) => {
 $('new-game').addEventListener('click', () => { if (!(vsCpu() && turn === 1) || over) newGame(); });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

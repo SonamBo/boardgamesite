@@ -1,5 +1,5 @@
 // Word Ladder: change one letter at a time to turn the first word into the last.
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { soloRecord, shake } from './solo.js';
@@ -157,3 +157,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('ladder', (l) => { level = l; newGame(); });
 level = getLevel();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

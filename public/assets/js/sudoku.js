@@ -1,7 +1,7 @@
 // Sudoku page: pick a square, then a number. Notes, undo, hints, a daily puzzle and saved games.
 import * as S from './sudoku-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, rng, seedFrom, today, dayNumber, shake } from './solo.js';
@@ -328,3 +328,5 @@ if (mode === 'daily' && store.get(DAILY, {}).lastSolved === DATE) {
   $('again').textContent = 'Play a classic puzzle';
   $('result').hidden = false;
 } else if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

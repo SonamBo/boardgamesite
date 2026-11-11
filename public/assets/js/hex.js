@@ -1,6 +1,6 @@
 // Hex: Gold joins top to bottom, Ivory joins left to right. Take turns placing stones; there are no draws.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, tapConfirm } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, tapConfirm, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -10,7 +10,7 @@ const $ = (id) => document.getElementById(id);
 const SIZE_KEY = 'bgs-hex-size';
 const SWAP_KEY = 'bgs-hex-swap';
 const score = record('hex', { draws: false });
-const getLevel = levelSwitch('hex', () => {});
+const getLevel = levelSwitch('hex');
 const getOpp = opponentSwitch('hex', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';
 // Against the computer you move first (gold, top to bottom), second (ivory, left to right) or either at random.
@@ -216,7 +216,7 @@ document.querySelector('[data-hsize]').parentElement.classList.add('online-hide'
 document.querySelector('[data-hsize]').parentElement.previousElementSibling.classList.add('online-hide');
 document.querySelectorAll('[data-hsize]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.hsize) === n));
-  b.addEventListener('click', () => { if (busy) return; n = Number(b.dataset.hsize); store.set(SIZE_KEY, n); document.querySelectorAll('[data-hsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.hsize) === n))); newGame(); });
+  b.addEventListener('click', async () => { if (busy || Number(b.dataset.hsize) === n || !(await confirmNewGame())) return; n = Number(b.dataset.hsize); store.set(SIZE_KEY, n); document.querySelectorAll('[data-hsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.hsize) === n))); newGame(); });
 });
 $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
 $('new-game').classList.add('online-hide');
@@ -238,7 +238,7 @@ document.querySelector('[data-hswap]').parentElement.previousElementSibling.clas
 document.querySelectorAll('[data-hswap]').forEach((b) => {
   const paint = () => document.querySelectorAll('[data-hswap]').forEach((x) => x.setAttribute('aria-pressed', String((x.dataset.hswap === 'on') === swapRule)));
   paint();
-  b.addEventListener('click', () => { if (busy) return; swapRule = b.dataset.hswap === 'on'; store.set(SWAP_KEY, swapRule); paint(); newGame(); });
+  b.addEventListener('click', async () => { if (busy || (b.dataset.hswap === 'on') === swapRule || !(await confirmNewGame())) return; swapRule = b.dataset.hswap === 'on'; store.set(SWAP_KEY, swapRule); paint(); newGame(); });
 });
 ol = online('hex', {
   reset: () => newGame(),
@@ -251,3 +251,5 @@ ol = online('hex', {
 });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

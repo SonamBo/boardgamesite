@@ -1,6 +1,6 @@
 // Snakes and Ladders: race from 1 to 100. Ladders take you up, snakes take you down.
 import { store } from './site.js';
-import { setStatus, record, showResult, animationSwitch, slide, pause } from './game-ui.js';
+import { setStatus, record, showResult, animationSwitch, slide, pause, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -150,8 +150,8 @@ function paintSegs() {
   document.querySelectorAll('[data-sopp]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.sopp === opp)));
   document.querySelectorAll('[data-sn]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.sn) === n)));
 }
-document.querySelectorAll('[data-sopp]').forEach((b) => b.addEventListener('click', () => { if (busy) return; opp = b.dataset.sopp; store.set(OPP_KEY, opp); paintSegs(); newGame(); }));
-document.querySelectorAll('[data-sn]').forEach((b) => b.addEventListener('click', () => { if (busy) return; n = Number(b.dataset.sn); store.set(N_KEY, n); paintSegs(); newGame(); }));
+document.querySelectorAll('[data-sopp]').forEach((b) => b.addEventListener('click', async () => { if (busy || b.dataset.sopp === opp || !(await confirmNewGame())) return; opp = b.dataset.sopp; store.set(OPP_KEY, opp); paintSegs(); newGame(); }));
+document.querySelectorAll('[data-sn]').forEach((b) => b.addEventListener('click', async () => { if (busy || Number(b.dataset.sn) === n || !(await confirmNewGame())) return; n = Number(b.dataset.sn); store.set(N_KEY, n); paintSegs(); newGame(); }));
 $('roll').addEventListener('click', () => { if (human(turn)) roll(); });
 document.addEventListener('keydown', (e) => { if ((e.key === 'r' || e.key === ' ') && !e.target.closest?.('button, input')) { e.preventDefault(); if (human(turn)) roll(); } });
 $('new-game').addEventListener('click', () => { if (!busy) newGame(); });
@@ -159,3 +159,5 @@ $('again').addEventListener('click', newGame);
 drawBoard();
 paintSegs();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

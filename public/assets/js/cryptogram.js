@@ -1,6 +1,6 @@
 // Cryptogram: every letter of a saying has been swapped for another. Work out the code.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -260,3 +260,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('crypto', (l) => { level = l; newGame(); });
 level = getLevel();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

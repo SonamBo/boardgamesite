@@ -1,6 +1,6 @@
 // Light Switch: every tap flips a light and its four neighbours. Turn them all off.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -180,3 +180,5 @@ gridEl.addEventListener('keydown', (e) => {
 const getLevel = levelSwitch('lights', (l) => { level = l; newGame(); });
 level = getLevel();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

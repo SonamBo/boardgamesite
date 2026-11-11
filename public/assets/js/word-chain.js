@@ -1,6 +1,6 @@
 // Word Chain: take turns saying a word that starts with the last letter of the word before.
 // No repeats, and you have 20 seconds a turn. Play the computer or a friend.
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -138,3 +138,5 @@ $('wc-give').addEventListener('click', () => { if (!over && !(vsCpu() && turn ==
 $('new-game').addEventListener('click', () => { play('shuffle'); newGame(); });
 $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => !!chain && chain.length > 0 && !over);

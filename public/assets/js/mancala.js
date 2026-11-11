@@ -1,7 +1,7 @@
 // Mancala (Kalah rules): sow seeds round the board, land in your store for another turn, capture from empty pits.
 // pits[0..5] yours (left to right), [6] your store, [7..12] the opponent's (right to left along the top), [13] their store.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, animMs, slide, stopAnimations, hintButton, askResume, modeName } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, animMs, slide, stopAnimations, hintButton, askResume, modeName, gameInProgress } from './game-ui.js';
 import { ladder } from './ladder.js';
 import { online, roomInLink } from './online.js';
 import { offerReview, hideReview } from './review.js';
@@ -23,7 +23,7 @@ const score = record('mancala');
 // Rated practice-ladder game (?bot=…): fixed level. Null for an ordinary game.
 const L = ladder('mancala', { resign: () => { if (!over && started) finish(true); }, again: () => newGame() });
 const cpuName = L ? L.bot.name : 'Computer';
-const getLevel = L ? () => L.level : levelSwitch('mancala', () => {});
+const getLevel = L ? () => L.level : levelSwitch('mancala');
 const getOpp = L ? () => 'cpu' : opponentSwitch('mancala', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Player 1', p2: 'Player 2' });
 let onlineOn = roomInLink && !L, ol = null;
 const vsCpu = () => !onlineOn && getOpp() === 'cpu';
@@ -283,3 +283,5 @@ ol = online('mancala', {
 });
 window.addEventListener('pagehide', save);
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

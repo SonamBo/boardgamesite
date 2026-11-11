@@ -13,7 +13,7 @@ const QS = 11; // queen of spades: suit 0, rank 12 → id 11
 const TWO_C = 3 * 13 + 1;
 const GOAL = 100;
 const score = record('hearts');
-const getLevel = levelSwitch('hearts', () => {});
+const getLevel = levelSwitch('hearts');
 const table = new TrickTable($('area'));
 const PASS_DIR = ['left', 'right', 'across', 'none'];
 

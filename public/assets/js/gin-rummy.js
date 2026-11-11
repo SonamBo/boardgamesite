@@ -11,7 +11,7 @@ import { wait } from './dice-ui.js';
 const $ = (id) => document.getElementById(id);
 const GOAL = 100;
 const score = record('gin');
-const getLevel = levelSwitch('gin', () => {});
+const getLevel = levelSwitch('gin');
 const area = $('area');
 const T = new Table(area);
 const stockSlot = slotEl(area, 'click stock');

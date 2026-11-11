@@ -2,7 +2,7 @@
 // Play the computer at three levels, or a friend on one device.
 import * as E from './letter-tiles-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -261,3 +261,5 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'Escape') { pending = []; sel = null; render(); }
 });
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

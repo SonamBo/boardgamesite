@@ -2,7 +2,7 @@
 import * as C from './chess-engine.js';
 import { pieceSvg, PIECE_NAME } from './chess-pieces.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, fadeOut, popIn, hintButton, askResume, modeName } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, fadeOut, popIn, hintButton, askResume, modeName, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -16,7 +16,7 @@ const SIDE_KEY = 'bgs-chess-side';
 const score = record('chess');
 // Rated practice-ladder game (?bot=…): fixed level, no take-backs. Null for an ordinary game.
 const L = ladder('chess', { resign: () => resign(), again: () => newGame() });
-const getLevel = L ? () => L.level : levelSwitch('chess', () => {});
+const getLevel = L ? () => L.level : levelSwitch('chess');
 const getOpp = L ? () => 'cpu' : opponentSwitch('chess', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'White', p2: 'Black' });
 const cpuName = L ? L.bot.name : 'Computer';
 const vsCpu = () => getOpp() === 'cpu';
@@ -258,8 +258,8 @@ $('undo').addEventListener('click', () => {
 });
 document.querySelectorAll('[data-side]').forEach((b) => {
   b.setAttribute('aria-pressed', String(b.dataset.side === mySide));
-  b.addEventListener('click', () => {
-    if (busy) return;
+  b.addEventListener('click', async () => {
+    if (busy || b.dataset.side === mySide || !(await confirmNewGame())) return;
     mySide = b.dataset.side; store.set(SIDE_KEY, mySide);
     document.querySelectorAll('[data-side]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.side === mySide)));
     newGame();
@@ -283,3 +283,5 @@ ol = online('chess', {
 $('again').addEventListener('click', newGame);
 window.addEventListener('pagehide', save);
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);
