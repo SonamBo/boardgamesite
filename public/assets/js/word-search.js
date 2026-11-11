@@ -1,7 +1,7 @@
 // Word Search: find the hidden words in the grid. Drag across a word, in any allowed direction.
 import { THEMES, themeWords } from './themes.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -146,7 +146,7 @@ function finish(s) {
   const a = drag.a;
   drag.el.remove();
   drag = null;
-  if (!s.len) { setStatus('Drag across a word, or tap its first and last letters', 'neutral'); return; }
+  if (!s.len) { setStatus('Drag across a word, or tap both ends', 'neutral'); return; }
   let w = '';
   for (let k = 0; k <= s.len; k++) w += grid[(a.r + s.dr * k) * N + a.c + s.dc * k];
   const rev = [...w].reverse().join('');
@@ -198,7 +198,7 @@ function resume() {
   started = true; done = false;
   build(); render();
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. ' + (placed.length - found.length) + ' words to go', 'neutral');
+  setStatus((placed.length - found.length) + ' words to go', 'neutral');
   return true;
 }
 window.addEventListener('pagehide', save);
@@ -212,3 +212,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('ws', (l) => { level = l; newGame(); });
 level = getLevel();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

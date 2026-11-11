@@ -1,5 +1,5 @@
 // Dice Poker: roll five dice, keep the ones you like, roll the rest once more. Best hand wins the round.
-import { setStatus, levelSwitch, opponentSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -70,7 +70,7 @@ async function roll() {
   busy = false;
   stage[p]++;
   const who = p === 0 && vsCpu() ? 'You' : names()[p];
-  setStatus(who + ': ' + RANKS[handValue(dice[p])[0]] + (stage[p] === 1 ? '. Keep dice and roll again, or stand' : ''), p ? 'cpu' : '');
+  setStatus(who + ': ' + RANKS[handValue(dice[p])[0]] + (stage[p] === 1 ? '. Roll again, or stand' : ''), p ? 'cpu' : '');
   render();
   if (stage[p] === 2) { await wait(700); next(); }
 }
@@ -158,3 +158,5 @@ $('stand').addEventListener('click', () => { if (!(vsCpu() && turn === 1) && !bu
 $('new-game').addEventListener('click', () => { if (!(vsCpu() && turn === 1) || over) newGame(); });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

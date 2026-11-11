@@ -1,6 +1,6 @@
 // Mines: uncover every safe square. Numbers say how many of the 8 neighbours hide a mine.
 // Tap to dig, long-press or right-click (or switch to Flag) to flag. Tap a number to clear around it.
-import { setStatus, levelSwitch, MASCOT } from './game-ui.js';
+import { setStatus, levelSwitch, MASCOT, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -276,3 +276,5 @@ paintMode();
 newGame();
 // A game in progress keeps its shape; between games, re-fit Hard to the screen.
 window.addEventListener('resize', () => { if (!started && levelKey === 'hard') newGame(); else fitText(); });
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

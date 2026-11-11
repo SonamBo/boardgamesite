@@ -1,6 +1,6 @@
 // Five in a Row (Gomoku): take turns placing stones. First to make five in a row, in any direction, wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, askResume, modeName, tapConfirm } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, askResume, modeName, tapConfirm, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { online, roomInLink } from './online.js';
@@ -8,7 +8,7 @@ import { online, roomInLink } from './online.js';
 const $ = (id) => document.getElementById(id);
 const N = 15, SAVE = 'bgs-gomoku-game';
 const score = record('gomoku');
-const getLevel = levelSwitch('gomoku', () => {});
+const getLevel = levelSwitch('gomoku');
 const getOpp = opponentSwitch('gomoku', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';
 // Against the computer you move first (gold), second (ivory) or either at random.
@@ -16,7 +16,7 @@ const getSide = sideSwitch('gomoku', ['first', 'second', 'random'], () => newGam
 let me = 1;   // your colour against the computer in this game: 1 gold (first), 2 ivory
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
-const tap2 = tapConfirm();   // on the 15×15 board: tap once to preview, again to place
+const tap2 = tapConfirm({ large: () => true });   // the board is always 15×15: tap once to preview, again to place
 // Show hint: Easy, against the computer
 const hint = hintButton({
   shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
@@ -217,3 +217,5 @@ if (g && g.opp === getOpp() && Array.isArray(g.history) && g.history.length && (
     setStatus(turnText(), '');
   });
 } else newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

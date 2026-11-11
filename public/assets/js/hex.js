@@ -1,6 +1,6 @@
 // Hex: Gold joins top to bottom, Ivory joins left to right. Take turns placing stones; there are no draws.
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, tapConfirm } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, sideSwitch, movesFirst, animationSwitch, popIn, lightUp, animating, stopAnimations, hintButton, tapConfirm, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { wait } from './dice-ui.js';
@@ -10,7 +10,7 @@ const $ = (id) => document.getElementById(id);
 const SIZE_KEY = 'bgs-hex-size';
 const SWAP_KEY = 'bgs-hex-swap';
 const score = record('hex', { draws: false });
-const getLevel = levelSwitch('hex', () => {});
+const getLevel = levelSwitch('hex');
 const getOpp = opponentSwitch('hex', () => newGame(), { you: 'You', cpu: 'Computer', p1: 'Gold', p2: 'Ivory' });
 const vsCpu = () => getOpp() === 'cpu';
 // Against the computer you move first (gold, top to bottom), second (ivory, left to right) or either at random.
@@ -20,13 +20,13 @@ let gameNo = 0;   // a computer move still waiting when a new game starts is dro
 const cpuTurnNow = () => vsCpu() && !onlineOn && turn !== me;
 animationSwitch();
 const cellEl = (i) => svg.querySelector('.hx[data-i="' + i + '"]');
-const tap2 = tapConfirm();   // on small cells: tap once to preview, again to place
+const tap2 = tapConfirm({ large: () => n >= 11 });   // on the 11×11 board: tap once to preview, again to place
 // Show hint: Easy, against the computer
 const hint = hintButton({
   shown: () => vsCpu() && !onlineOn && getLevel() === 'easy',
   find: () => {
     if (!humanTurn()) return null;
-    if (canSwap()) return 'Gold’s stone is near the middle: swapping is a good idea';
+    if (canSwap()) return 'Swapping is a good idea here';
     return [cellEl(cpuPick(B, me, 'hard'))];
   }
 });
@@ -147,7 +147,7 @@ async function put(i, remote = false) {
   popIn(cellEl(i), 200);
   if (onlineOn) { setStatus(ol.myTurn() ? 'Your turn: join ' + (ol.mySeat() === 0 ? 'top to bottom' : 'left to right') : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
   setStatus(statusText(), (vsCpu() ? turn !== me : turn === 2) ? 'cpu' : '');
-  if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap to take over Gold’s stone', vsCpu() ? '' : 'cpu');
+  if (canSwap() && humanTurn()) setStatus((vsCpu() ? 'Your turn' : 'Ivory') + ': place a stone, or swap', vsCpu() ? '' : 'cpu');
   if (cpuTurnNow()) cpuTurn();
 }
 const statusText = () => (vsCpu() ? (turn === me ? 'Your turn: ' + goal(me) : 'Computer is thinking…') : (turn === 1 ? 'Gold: ' : 'Ivory: ') + goal(turn));
@@ -174,9 +174,9 @@ function swap(remote = false) {
   if (onlineOn && !remote) ol.send('s', 0, false);
   turn = 1;
   render();
-  if (onlineOn) { setStatus(ol.myTurn() ? 'Your friend swapped. Your turn: join top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
-  if (cpuTurnNow()) { setStatus('You swapped: the stone is yours now. Computer is thinking…', 'cpu'); cpuTurn(); return; }
-  setStatus(vsCpu() ? 'The computer swapped: your stone is now theirs. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
+  if (onlineOn) { setStatus(ol.myTurn() ? 'Swapped. Your turn: top to bottom' : 'Waiting for your friend', ol.myTurn() ? '' : 'cpu'); return; }
+  if (cpuTurnNow()) { setStatus('You swapped. Computer is thinking…', 'cpu'); cpuTurn(); return; }
+  setStatus(vsCpu() ? 'The computer swapped. Your turn' : 'Ivory swapped. Gold: join top to bottom', '');
 }
 function finish(w) {
   over = true; render();
@@ -216,7 +216,7 @@ document.querySelector('[data-hsize]').parentElement.classList.add('online-hide'
 document.querySelector('[data-hsize]').parentElement.previousElementSibling.classList.add('online-hide');
 document.querySelectorAll('[data-hsize]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.hsize) === n));
-  b.addEventListener('click', () => { if (busy) return; n = Number(b.dataset.hsize); store.set(SIZE_KEY, n); document.querySelectorAll('[data-hsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.hsize) === n))); newGame(); });
+  b.addEventListener('click', async () => { if (busy || Number(b.dataset.hsize) === n || !(await confirmNewGame())) return; n = Number(b.dataset.hsize); store.set(SIZE_KEY, n); document.querySelectorAll('[data-hsize]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.hsize) === n))); newGame(); });
 });
 $('new-game').addEventListener('click', () => { if (!busy && !onlineOn) newGame(); });
 $('new-game').classList.add('online-hide');
@@ -238,7 +238,7 @@ document.querySelector('[data-hswap]').parentElement.previousElementSibling.clas
 document.querySelectorAll('[data-hswap]').forEach((b) => {
   const paint = () => document.querySelectorAll('[data-hswap]').forEach((x) => x.setAttribute('aria-pressed', String((x.dataset.hswap === 'on') === swapRule)));
   paint();
-  b.addEventListener('click', () => { if (busy) return; swapRule = b.dataset.hswap === 'on'; store.set(SWAP_KEY, swapRule); paint(); newGame(); });
+  b.addEventListener('click', async () => { if (busy || (b.dataset.hswap === 'on') === swapRule || !(await confirmNewGame())) return; swapRule = b.dataset.hswap === 'on'; store.set(SWAP_KEY, swapRule); paint(); newGame(); });
 });
 ol = online('hex', {
   reset: () => newGame(),
@@ -251,3 +251,5 @@ ol = online('hex', {
 });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

@@ -555,6 +555,8 @@ def lesson_pages():
   <h1>{htmllib.escape(l["title"])}</h1>
   <p class="lede text-2">{htmllib.escape(l["summary"])} <span class="muted">{u["name"]} · lesson {num} of {len(u["lessons"])}.</span></p>
   <div id="lesson" data-course="{game}" data-lesson="{l["slug"]}"><noscript><p class="muted">The interactive board needs JavaScript. The lesson is written out below.</p></noscript></div>
+  <details class="lesson-text" open>
+  <summary>Read this lesson as text</summary>
   <section class="lesson-read page" aria-labelledby="read-h">
     <h2 id="read-h">The lesson in words</h2>
 {chr(10).join(read)}
@@ -564,7 +566,8 @@ def lesson_pages():
     <h2 id="faq-h">Questions</h2>
 {chr(10).join(faq)}
   </section>
-""" if faq else "") + f"""  <nav class="lesson-nav" aria-label="Lessons">{"".join(nav)}</nav>
+""" if faq else "") + f"""  </details>
+  <nav class="lesson-nav" aria-label="Lessons">{"".join(nav)}</nav>
   <p class="muted"><a href="/learn/{game}#path">See the whole {c["name"]} path</a> · <a href="{c["play"]}">Play {c["name"]} free</a></p>
 </article>"""
             title = l["title"] + " | BoardGameSite"

@@ -1,6 +1,6 @@
 // Spider Solitaire: build runs from King down to Ace in the same suit to clear them away. Two decks, ten columns.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, shake } from './solo.js';
@@ -66,7 +66,7 @@ function settle() {
 }
 function dealRow() {
   if (!S.stock.length || done) return;
-  if (S.cols.some((c) => !c.length)) { setStatus('Fill every column before dealing more cards', 'neutral'); shake(stockSlot, play); return; }
+  if (S.cols.some((c) => !c.length)) { setStatus('Fill every column before dealing', 'neutral'); shake(stockSlot, play); return; }
   history.push(clone(S));
   S.cols.forEach((c) => c.push({ id: S.stock.pop(), up: true }));
   moves++;
@@ -163,7 +163,7 @@ area.addEventListener('click', (e) => {
   if (id == null) { sel = null; return render(); }
   const at = locate(id);
   if (!at || !S.cols[at.i][at.k].up) return;
-  if (!movable(S.cols[at.i], at.k)) { shake(T.els.get(id), play); setStatus('Only a same-suit run in order can move together', 'neutral'); return; }
+  if (!movable(S.cols[at.i], at.k)) { shake(T.els.get(id), play); setStatus('Only a same-suit run can move together', 'neutral'); return; }
   const d = bestDest(at.i, at.k);
   if (!d.length) { shake(T.els.get(id), play); setStatus('No place to put that', 'neutral'); sel = null; return render(); }
   // one obvious place: move it
@@ -171,7 +171,7 @@ area.addEventListener('click', (e) => {
   if (d.length === 1 || strong.length === 1) { move(at.i, at.k, d.length === 1 ? d[0] : strong[0]); return after(); }
   sel = at;
   play('select');
-  setStatus('Tap where it should go, or tap it again for the best spot', 'neutral');
+  setStatus('Tap where it goes, or tap it again', 'neutral');
   render();
 });
 area.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('.pc')) { e.preventDefault(); e.target.click(); } });
@@ -215,7 +215,7 @@ function resume() {
   S = g.S; moves = g.moves | 0; history = []; sel = null; started = true; done = false;
   timer.start(Number(g.elapsed) || 0);
   render();
-  setStatus('Welcome back. Your game is where you left it', 'neutral');
+  setStatus('Your game is where you left it', 'neutral');
   return true;
 }
 window.addEventListener('pagehide', save);
@@ -228,3 +228,5 @@ const getLevel = levelSwitch('spider', (l) => { level = l; newGame(); });
 level = getLevel();
 measure();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

@@ -32,7 +32,7 @@ cardGame({
     const S = g.S, i = S.peaks.indexOf(id);
     if (i < 0) return;
     if (!free(S, i)) return g.shake(id);
-    if (!near(id, S.waste[S.waste.length - 1], g.rank)) { g.shake(id); g.status('Play a card one higher or one lower than the waste card', 'neutral'); return; }
+    if (!near(id, S.waste[S.waste.length - 1], g.rank)) { g.shake(id); g.status('Play a card one above or below the waste', 'neutral'); return; }
     g.push(); g.start();
     S.peaks[i] = null; S.waste.push(id); S.chain++; S.best = Math.max(S.best, S.chain);
     g.play(S.chain >= 5 ? 'king' : 'found');

@@ -1,7 +1,7 @@
 // Reversi page: against the computer, or two players taking turns on one device.
 import * as E from './reversi-engine.js';
 import { online, roomInLink } from './online.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, movesFirst, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, movesFirst, hintButton, moveHistory, askResume, modeName, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -158,7 +158,7 @@ function afterMove(next) {
     saveGame();
     const passer = friend() ? nameOf(next) + ' has no move.' : next !== me ? 'Computer has no move.' : 'You have no move.';
     if (!friendish() && mover !== me) {
-      setStatus(passer + ' Computer plays again', 'cpu');
+      setStatus(passer + ' It plays again', 'cpu');
       busy = true;
       setTurn(rowOf(mover));
       render();
@@ -268,3 +268,5 @@ ol = online('reversi', {
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); render(); }
 });
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

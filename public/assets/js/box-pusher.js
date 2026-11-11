@@ -162,7 +162,7 @@ function resume() {
   load(g.lv);
   if (g.boxes.length !== boxes.size) return false;
   boxes = new Set(g.boxes); player = g.player | 0; moves = g.moves | 0; pushes = g.pushes | 0; started = true;
-  setStatus('Welcome back to level ' + (lv + 1), 'neutral');
+  setStatus('Level ' + (lv + 1), 'neutral');
   render();
   return true;
 }

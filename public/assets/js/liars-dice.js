@@ -1,7 +1,7 @@
 // Liar's Dice: everyone rolls in secret, then bids on how many of a number are on the whole table.
 // Ones are wild. Call "Liar!" on a bid you don't believe. Lose a challenge, lose a die. Last player with dice wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, record, showResult, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -182,7 +182,8 @@ $('do-bid').addEventListener('click', () => {
 $('do-liar').addEventListener('click', () => { if (turn === 0 && bid && !busy && !over) callLiar(0); });
 document.querySelectorAll('[data-seats]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.seats) === seats));
-  b.addEventListener('click', () => {
+  b.addEventListener('click', async () => {
+    if (Number(b.dataset.seats) === seats || !(await confirmNewGame())) return;
     seats = Number(b.dataset.seats); store.set(SEATS_KEY, seats);
     document.querySelectorAll('[data-seats]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.seats) === seats)));
     newGame();
@@ -191,3 +192,5 @@ document.querySelectorAll('[data-seats]').forEach((b) => {
 $('new-game').addEventListener('click', () => { if (!busy) newGame(); });
 $('again').addEventListener('click', newGame);
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

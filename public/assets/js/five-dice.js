@@ -279,7 +279,7 @@ function resume() {
   over = false; busy = false; started = true; lastScored = null;
   buildCard();
   if (isCpu()) { dice = [0, 0, 0, 0, 0]; held = [false, false, false, false, false]; rollsLeft = 3; paintAll(); cpuTurn(); }
-  else { paintAll(); setStatus('Welcome back. Your game is where you left it'); }
+  else { paintAll(); setStatus('Your game is where you left it'); }
   return true;
 }
 

@@ -1,6 +1,6 @@
 // Crazy Eights: match the top card by suit or number. Eights are wild. First to empty their hand wins.
 import { store } from './site.js';
-import { setStatus, levelSwitch, record, showResult } from './game-ui.js';
+import { setStatus, levelSwitch, record, showResult, confirmNewGame, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { shake } from './solo.js';
@@ -11,7 +11,7 @@ import { online, roomInLink } from './online.js';
 
 const $ = (id) => document.getElementById(id);
 const score = record('eights');
-const getLevel = levelSwitch('eights', () => {});
+const getLevel = levelSwitch('eights');
 const N_KEY = 'bgs-eights-n';
 const NAMES = ['You', 'Rosa', 'Otto', 'Mei'];
 const area = $('area');
@@ -99,7 +99,7 @@ function refill() {
   const keep = discard.pop();
   pile = shuffle(discard, rand);
   discard = [keep];
-  setStatus('The discards were shuffled into a new pile', 'neutral');
+  setStatus('Discards shuffled into a new pile', 'neutral');
   return true;
 }
 function drawCard(s) {
@@ -203,7 +203,7 @@ area.addEventListener('click', (e) => {
   }
   const c = T.idFrom(e);
   if (c == null || !hands[me].includes(c)) return;
-  if (!fits(c)) { shake(T.els.get(c), play); setStatus('Match the suit or the number, or play an 8', 'neutral'); return; }
+  if (!fits(c)) { shake(T.els.get(c), play); setStatus('Match suit or number, or play an 8', 'neutral'); return; }
   if (rank(c) === 8) { choosing = c; setStatus('Pick the new suit', ''); return render(); }
   playCard(me, c);
   send('p' + c, 1 - me, over);
@@ -222,8 +222,8 @@ $('pass-btn').addEventListener('click', () => {
 });
 document.querySelectorAll('[data-cn]').forEach((b) => {
   b.setAttribute('aria-pressed', String(Number(b.dataset.cn) === n));
-  b.addEventListener('click', () => {
-    if (busy) return;
+  b.addEventListener('click', async () => {
+    if (busy || Number(b.dataset.cn) === n || !(await confirmNewGame())) return;
     n = Number(b.dataset.cn); store.set(N_KEY, n);
     document.querySelectorAll('[data-cn]').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.cn) === n)));
     newGame();
@@ -256,3 +256,5 @@ let raf = 0;
 window.addEventListener('resize', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { measure(); render(); }); });
 measure();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => !!discard && discard.length > 1 && !over);

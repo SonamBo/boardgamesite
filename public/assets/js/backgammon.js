@@ -1,7 +1,7 @@
 // Backgammon page: roll, then move your checkers by tapping a checker and then where it goes.
 import * as B from './backgammon-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, askResume, modeName } from './game-ui.js';
+import { setStatus, levelSwitch, opponentSwitch, record, showResult, animationSwitch, moveQueue, slide, askResume, modeName, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -274,3 +274,5 @@ $('new-game').addEventListener('click', () => { if (!busy && !(vsCpu() && turn =
 $('again').addEventListener('click', newGame);
 drawStatic();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

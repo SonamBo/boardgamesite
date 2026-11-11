@@ -1,7 +1,7 @@
 // Sudoku page: pick a square, then a number. Notes, undo, hints, a daily puzzle and saved games.
 import * as S from './sudoku-engine.js';
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, rng, seedFrom, today, dayNumber, shake } from './solo.js';
@@ -181,7 +181,7 @@ function afterMove(keepStatus) {
   if (S.isSolved(grid, solution)) return win();
   if (!keepStatus) {
     const filled = grid.every(Boolean);
-    if (filled) setStatus('Every square is full, but something clashes', 'neutral');
+    if (filled) setStatus('All filled, but something clashes', 'neutral');
     else setStatus(mode === 'daily' ? 'Daily puzzle #' + dayNumber(DATE) : LEVEL_NAME[level] + ' puzzle');
   }
   render();
@@ -258,7 +258,7 @@ function resume() {
   sel = null; done = false; started = true;
   timer.start(Number(g.elapsed) || 0);
   afterMove();
-  setStatus('Welcome back. Your puzzle is where you left it');
+  setStatus('Your puzzle is where you left it');
   return true;
 }
 window.addEventListener('pagehide', save);
@@ -328,3 +328,5 @@ if (mode === 'daily' && store.get(DAILY, {}).lastSolved === DATE) {
   $('again').textContent = 'Play a classic puzzle';
   $('result').hidden = false;
 } else if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

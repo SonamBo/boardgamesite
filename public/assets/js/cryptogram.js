@@ -1,6 +1,6 @@
 // Cryptogram: every letter of a saying has been swapped for another. Work out the code.
 import { store } from './site.js';
-import { setStatus, levelSwitch } from './game-ui.js';
+import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord } from './solo.js';
@@ -152,7 +152,7 @@ function set(p) {
 function check() {
   const ok = [...text.toLowerCase()].every((ch) => !A.includes(ch) || guess[code[ch]] === ch);
   if (ok) win();
-  else if ([...document.querySelectorAll('.cg-cell')].every((b) => guess[b.dataset.c])) setStatus('Every letter is filled, but something’s not right', 'neutral');
+  else if ([...document.querySelectorAll('.cg-cell')].every((b) => guess[b.dataset.c])) setStatus('All filled, but something’s not right', 'neutral');
 }
 
 function win() {
@@ -203,7 +203,7 @@ function resume() {
   given = new Set(g.given || []); sel = null; started = true; done = false;
   build();
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your code is where you left it', 'neutral');
+  setStatus('Your code is where you left it', 'neutral');
   render();
   return true;
 }
@@ -260,3 +260,5 @@ $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('crypto', (l) => { level = l; newGame(); });
 level = getLevel();
 if (!resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !done);

@@ -1,6 +1,6 @@
 // Tic-tac-toe: three in a row on a 3×3 grid. Against the computer (Easy / Medium / Hard),
 // two players on one device, or online with a friend by link (online.js; the token is the cell 0–8).
-import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn, sideSwitch, hintButton } from './game-ui.js';
+import { setStatus, showResult, hideResult, levelSwitch, opponentSwitch, record, setTurn, sideSwitch, hintButton, gameInProgress } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -9,7 +9,7 @@ const $ = (id) => document.getElementById(id);
 const LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 const X = 1, O = 2;
 const score = record('ttt');
-const getLevel = levelSwitch('ttt', () => {});
+const getLevel = levelSwitch('ttt');
 const getOpp = opponentSwitch('ttt', () => { if (!onlineOn) newGame(); });
 // Against the computer you play X (first), O, or take turns going first (Alternate).
 const getSide = sideSwitch('ttt', ['x', 'o', 'alt'], () => { if (!onlineOn) newGame(); }, 'alt');
@@ -209,3 +209,5 @@ ol = online('tic-tac-toe', {
   }
 });
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => !!board && board.some(Boolean) && !over);

@@ -134,7 +134,7 @@ function resume() {
   if (!g || !Array.isArray(g.pegs) || g.pegs.length !== 49) return false;
   pegs = g.pegs.map(Boolean); sel = null; history = []; started = true; done = false;
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your game is where you left it', 'neutral');
+  setStatus('Your game is where you left it', 'neutral');
   render();
   if (!anyMove()) finish();
   return true;

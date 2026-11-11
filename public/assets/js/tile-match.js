@@ -123,14 +123,14 @@ function render() {
   $('undo').disabled = !history.length || done;
   $('hint').disabled = done || !m.length;
   if (!done && left && !m.length) {
-    setStatus('No pairs left to match. Shuffle the tiles', 'cpu');
+    setStatus('No pairs left. Shuffle the tiles', 'cpu');
     $('shuffle').classList.add('btn-gold', 'raised'); $('shuffle').classList.remove('btn-outline');
   } else { $('shuffle').classList.remove('btn-gold', 'raised'); $('shuffle').classList.add('btn-outline'); }
 }
 
 function tap(i) {
   if (done || !present[i]) return;
-  if (!isFree(i, present)) { shake(tileEls[i], play); setStatus('That tile is blocked. Free tiles have an open side', 'neutral'); return; }
+  if (!isFree(i, present)) { shake(tileEls[i], play); setStatus('Blocked: free tiles have an open side', 'neutral'); return; }
   hintPair = null;
   if (sel == null || sel === i) { sel = sel === i ? null : i; play('select'); render(); return; }
   if (faces[sel] !== faces[i]) { sel = i; play('select'); render(); return; }
@@ -195,7 +195,7 @@ function resume() {
   if (!g || !Array.isArray(g.faces) || g.faces.length !== SLOTS.length || !Array.isArray(g.present) || !g.present.some(Boolean)) return false;
   faces = g.faces; present = g.present.map(Boolean); history = []; sel = null; started = true; done = false; hintPair = null;
   timer.start(Number(g.elapsed) || 0);
-  setStatus('Welcome back. Your table is where you left it', 'neutral');
+  setStatus('Your table is where you left it', 'neutral');
   render();
   return true;
 }

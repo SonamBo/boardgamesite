@@ -425,7 +425,12 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .back:hover { color: var(--text); }
 .game-layout { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
 .board-col { flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
-.board-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+/* The board header: title and buttons on one row, then the status message on a row of its own with room for
+   two lines, so the board below never moves when the message changes length */
+.board-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title tools" "status status"; align-items: center; column-gap: 12px; row-gap: 2px; }
+.board-head h1 { grid-area: title; min-width: 0; }
+.board-head .head-right { grid-area: tools; }
+.board-head > .status { grid-area: status; margin: 0; line-height: 1.3; min-height: 2.6em; display: flex; align-items: flex-start; }
 .board-head h1 { font-size: 40px; }
 .status { font-weight: 700; font-size: 17px; color: var(--brand-text); }
 .status.cpu { color: var(--rival-text); }
@@ -454,7 +459,8 @@ dialog::backdrop { background: rgba(0,0,0,.6); }
 .disc.last { box-shadow: inset 0 -4px 0 rgba(0,0,0,.22), 0 0 0 3px var(--text-hi); }
 @keyframes drop { from { transform: translateY(-260%); } to { transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .disc.drop { animation: none; } }
-/* Animation speed: Off (game-ui.js) stops the boards' own CSS animations too, as reduced motion does */
+/* Looping animations stop after three cycles and leave a still highlight; only the Letter Hive caret and the
+   dice tumbling while they roll repeat. Animation speed: Off (game-ui.js) stops the boards' own CSS animations too, as reduced motion does */
 [data-anim="off"] .game-layout *, [data-anim="off"] .lp-board * { animation: none !important; transition: none !important; }
 .board-hint { color: var(--muted); font-size: 14px; }
 
@@ -717,15 +723,12 @@ body.maxed .sol-table { min-height: calc(100dvh - 150px); }
   .panel { max-width: none; flex-basis: 100%; }
 }
 @media (max-width: 600px) {
-  .board-head { gap: 8px; }
+  .board-head { column-gap: 8px; }
   .board-head h1 { font-size: 30px; }
   .head-right { gap: 8px; }
-  .head-right .status { font-size: 15px; text-align: right; }
-  /* Compact game header on phones: title and buttons share one row, the status line sits under them. */
-  .board-head { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 4px 8px; }
-  .board-head h1 { font-size: 26px; grid-column: 1; }
-  .board-head .head-right { display: contents; }
-  .board-head .head-right .status { grid-row: 2; grid-column: 1 / -1; text-align: left; min-height: 20px; }
+  .board-head > .status { font-size: 15px; }
+  /* Compact game header on phones: smaller title so title and buttons share one row */
+  .board-head h1 { font-size: 26px; }
   a.back { min-height: 32px; margin-bottom: -8px; }
   .icon-btn { width: 44px; height: 44px; }
   .board-wrap { padding: 8px; }
@@ -737,10 +740,10 @@ body.maxed .sol-table { min-height: calc(100dvh - 150px); }
    Pages with data-fit-height on .game-layout: the board (the element after the board head) is no taller than the
    space left under the header and status line, so the status and the computer's reply stay in view without scrolling.
    game-ui.js measures that space into --fit-h (the calc is a fallback); --fit-ratio is the board's width ÷ height. */
-[data-fit-height] { --board-chrome: 200px; }
+[data-fit-height] { --board-chrome: 240px; }
 [data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { width: min(100%, max(240px, calc(var(--fit-h, 100dvh - var(--board-chrome)) * var(--fit-ratio, 1)))); }
 @media (max-width: 900px) {
-  [data-fit-height] { --board-chrome: calc(272px + env(safe-area-inset-bottom)); }
+  [data-fit-height] { --board-chrome: calc(312px + env(safe-area-inset-bottom)); }
   [data-fit-height] .board-col > .board-head + *, [data-fit-height] .board-col > .board-head + * + .peg-tools { margin-inline: auto; }
 }
 body.maxed [data-fit-height] .board-col > .board-head + *, body.maxed [data-fit-height] .board-col > .board-head + * + .peg-tools { width: 100%; }
@@ -1527,7 +1530,7 @@ body.maxed .dice-wrap { max-width: none; }
 .lu-board .star { font-size: 7px; text-anchor: middle; fill: rgba(60,40,30,.45); }
 .lu-board .tok circle:first-child { stroke: #1A1214; stroke-width: .6; }
 .lu-board .tok.can { cursor: pointer; }
-.lu-board .tok.can circle:first-child { stroke: #fff; stroke-width: 1; animation: lu-pulse 1s ease-in-out infinite; }
+.lu-board .tok.can circle:first-child { stroke: #fff; stroke-width: 1; animation: lu-pulse 1s ease-in-out 3; }   /* three pulses, then the white ring stays */
 .lu-board .tok:focus-visible { outline: none; }
 .lu-board .tok:focus-visible circle:first-child { stroke: var(--accent-text); stroke-width: 1.4; }
 @keyframes lu-pulse { 50% { stroke-width: .3; } }
@@ -1616,8 +1619,8 @@ body.maxed .dice-wrap { max-width: none; }
 .cs-cap { display: flex; flex-wrap: wrap; gap: 0; min-height: 22px; padding-left: 34px; }
 .cs-cap .pz { width: 22px; height: 22px; }
 /* Show hint (game-ui.js): the suggested move's squares pulse with a bright ring */
-.hinted { outline: 3px solid #3FB6A8; outline-offset: -3px; animation: hint-pulse 1s ease-in-out infinite; z-index: 2; }
-svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6A8 !important; stroke-width: .2; animation: hint-pulse 1s ease-in-out infinite; }
+.hinted { outline: 3px solid #3FB6A8; outline-offset: -3px; animation: hint-pulse 1s ease-in-out 3; z-index: 2; }
+svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6A8 !important; stroke-width: .2; animation: hint-pulse 1s ease-in-out 3; }
 .db-board .hinted { stroke-width: 2.2 !important; stroke-dasharray: none; opacity: 1; }
 .nm-board .hinted .hitc, .nm-board g.hinted .hitc { fill: rgba(63,182,168,.45); }
 @keyframes hint-pulse { 50% { opacity: .55; } }
@@ -1658,9 +1661,11 @@ svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6
 .mh-at { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- Mancala ---------- */
-.mc-wrap { max-width: 760px; }
+/* Mancala fills the board column like the other games: the fit-height rule sizes it, the board being about
+   3.7 times as wide as it's tall; seed counts grow with it (container units) */
+.mc-wrap { max-width: none; --fit-ratio: 3.7; }
 .mc-board { display: grid; grid-template-columns: 1.1fr repeat(6, 1fr) 1.1fr; grid-template-rows: 1fr 1fr; gap: clamp(4px, 1.4vw, 10px); padding: clamp(8px, 2vw, 16px); border-radius: 999px / 40%;
-  background: linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24); box-shadow: inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 4px #3A2818, 0 18px 40px rgba(0,0,0,.45); }
+  background: linear-gradient(180deg, #8B5E34, #6B4A2E 60%, #5A3C24); box-shadow: inset 0 3px 0 rgba(255,255,255,.12), 0 0 0 4px #3A2818, 0 18px 40px rgba(0,0,0,.45); container-type: inline-size; }
 .mc-row { display: contents; }
 .mc-pit { position: relative; aspect-ratio: 1; border: 0; padding: 0; border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3A2818, #24170E 75%); box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.12); cursor: default; }
 .mc-pit.store { grid-row: 1 / span 2; aspect-ratio: auto; border-radius: 999px; }
@@ -1672,10 +1677,10 @@ svg .hinted, .hinted:is(g, polygon, line, circle) { outline: none; stroke: #3FB6
 .mc-pit.store .seeds i { width: 24%; }
 /* a seed on its way from pit to pit (mancala.js) */
 .mc-board { position: relative; }
-.mc-fly { position: absolute; width: clamp(8px, 2.4vw, 15px); aspect-ratio: 1; margin: calc(clamp(8px, 2.4vw, 15px) / -2) 0 0 calc(clamp(8px, 2.4vw, 15px) / -2); border-radius: 50%; pointer-events: none; z-index: 5;
+.mc-fly { position: absolute; width: clamp(8px, 2.6cqw, 28px); aspect-ratio: 1; margin: calc(clamp(8px, 2.6cqw, 28px) / -2) 0 0 calc(clamp(8px, 2.6cqw, 28px) / -2); border-radius: 50%; pointer-events: none; z-index: 5;
   background: radial-gradient(circle at 35% 30%, hsl(calc(var(--h) * 1deg) 35% 85%), hsl(calc(var(--h) * 1deg) 30% 55%)); box-shadow: 0 2px 4px rgba(0,0,0,.55); }
-.mc-pit b { position: absolute; left: 50%; bottom: -2px; transform: translate(-50%, 50%); font: 700 13px/1 var(--body); color: var(--text); background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 99px; z-index: 1; }
-.mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: 16px; }
+.mc-pit b { position: absolute; left: 50%; bottom: -2px; transform: translate(-50%, 50%); font: 700 clamp(13px, 2.2cqw, 24px)/1 var(--body); color: var(--text); background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 99px; z-index: 1; }
+.mc-pit.store b { bottom: 8%; transform: translate(-50%, 0); font-size: clamp(16px, 2.7cqw, 30px); }
 .mc-pit.can { cursor: pointer; box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--you); }
 .mc-pit.last { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px var(--text-hi); }
 .mc-pit.sown { box-shadow: inset 0 4px 8px rgba(0,0,0,.6), 0 0 0 3px transparent; outline: 2px dashed var(--text-hi); outline-offset: 1px; }
@@ -1793,6 +1798,12 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 .lp-board-wrap[hidden] { display: none; }
 .lp-board.cs-board, .lp-board.grid8 { width: 100%; max-width: 560px; margin: 0 auto; }
 .lp-board.mc-board { width: 100%; max-width: 640px; margin: 0 auto; }
+/* square lesson boards never grow taller than the space they have: the window, less the lesson's top bar,
+   and on phones the instruction sheet fixed at the bottom (lesson.js also scrolls the board into view) */
+.lp-board:is(.cs-board, .grid8, .gm-board, .go-board, .nm-lesson, .db-lesson, .sdk-lesson, .mines-lesson, .pic-lesson) { max-width: min(560px, max(260px, calc(100dvh - 90px))); }
+@media (max-width: 900px) {
+  .lp-board:is(.cs-board, .grid8, .gm-board, .go-board, .nm-lesson, .db-lesson, .sdk-lesson, .mines-lesson, .pic-lesson) { max-width: min(560px, max(240px, calc(100dvh - 230px - env(safe-area-inset-bottom)))); }
+}
 .lp-card { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
 .lp-kicker { margin: 0; font: 600 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-text); }
 .lp-text { font-size: 17px; line-height: 1.55; color: var(--text); }
@@ -1838,6 +1849,10 @@ body.online [data-cpu-only], body.online .online-hide { display: none !important
 .lesson-crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; color: var(--muted); }
 .lesson-crumbs a { color: var(--text-2); }
 .lesson-read { max-width: 760px; }
+/* the lesson as text (build.py): open without JavaScript, folded away by lesson.js */
+.lesson-text { max-width: 760px; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+.lesson-text > summary { cursor: pointer; font-weight: 600; color: var(--accent-text); padding: 6px 0; width: fit-content; }
+.lesson-text[open] > summary { margin-bottom: 8px; }
 .lesson-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .path { display: flex; flex-direction: column; gap: 22px; }
 .path-unit h3 { margin: 0 0 4px; font: 600 26px/1.2 var(--display); }
@@ -2008,16 +2023,16 @@ body.ladder #undo, body.ladder #new-game, body.ladder .online-box, body.ladder .
 .pcheck { position: absolute; right: -4px; top: -6px; width: 24px; height: 24px; border-radius: 50%; background: #5FA36B; color: #0E1A10; font: 800 13px/24px var(--body); text-align: center; box-shadow: 0 0 0 3px var(--bg); }
 .plock { position: absolute; right: -2px; bottom: -6px; font-size: 15px; filter: grayscale(1); }
 .pbubble { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); z-index: 2; padding: 7px 12px; border-radius: 12px; background: var(--surface); border: 2px solid var(--border-strong); color: var(--accent-text);
-  font: 800 13px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; animation: pbob 1.6s ease-in-out infinite; }
+  font: 800 13px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; animation: pbob 1.6s ease-in-out 3; }
 .pbubble::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 11px; height: 11px; background: var(--surface); border-right: 2px solid var(--border-strong); border-bottom: 2px solid var(--border-strong); transform: translateX(-50%) rotate(45deg); }
 .pbubble.jump { position: static; transform: none; margin-bottom: 12px; color: var(--good); animation: none; }
-.pbubble.jump { animation: pbob2 1.6s ease-in-out infinite; }
+.pbubble.jump { animation: pbob2 1.6s ease-in-out 3; }
 @keyframes pbob { 50% { transform: translate(-50%, -5px); } }
 @keyframes pbob2 { 50% { transform: translateY(-5px); } }
 .prow:has(.pbubble.jump) { height: 140px; }
 .pchest { width: 76px; height: 66px; border-radius: 18px; font-size: 38px; background: var(--surface-2); box-shadow: 0 7px 0 #171213; }
 .pchest.locked { filter: grayscale(.85) brightness(.6); }
-.pchest.ready { background: radial-gradient(circle at 50% 38%, var(--you-hi), var(--you) 62%); box-shadow: 0 7px 0 var(--you-lo), 0 0 24px color-mix(in srgb, var(--accent-text) 55%, transparent); animation: pwiggle 2.4s ease-in-out infinite; }
+.pchest.ready { background: radial-gradient(circle at 50% 38%, var(--you-hi), var(--you) 62%); box-shadow: 0 7px 0 var(--you-lo), 0 0 24px color-mix(in srgb, var(--accent-text) 55%, transparent); animation: pwiggle 2.4s ease-in-out 3; }   /* then the glow stays */
 .pchest.opened { opacity: .6; }
 .pchest.shake { animation: shake .3s; }
 .pchest.opening { animation: popen .6s ease-out forwards; }
@@ -2673,3 +2688,14 @@ body.returning .hero { display: none; }
 }
 .lt-dock { display: contents; }
 @media (max-width: 900px) { .lt-dock { display: flex; } }
+
+/* Reduced motion: selected or picked things don't grow or lift; a still outline or ring marks them instead
+   (most of these already have a ring or a colour change, which stays) */
+@media (prefers-reduced-motion: reduce) {
+  .ck button.sel .piece { transform: none; outline: 3px solid var(--ck-ring); outline-offset: 2px; }
+  .peg-hole.sel i, .die.held .face, .lt-rtile.sel, .hn-disc.up, .tm-tile.sel, .sol-lesson .pc.sel, .dice-lesson .die.held { transform: none; }
+  .card-area .pc.sel { translate: none; }
+  .wgd-cell.last { transform: none; outline: 3px solid var(--brand); outline-offset: -3px; }
+  .sb-tile.pick span { transform: none; box-shadow: inset 0 0 0 3px var(--on-you); }
+  .un-tile:hover:not(:disabled), .cl-hand .pc.can:hover { transform: none; }
+}

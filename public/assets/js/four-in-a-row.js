@@ -2,7 +2,7 @@
 import * as E from './c4-engine.js';
 import { store, dateKey, yesterdayKey } from './site.js';
 import { onProgressLoaded } from './store.js';
-import { levelSwitch, opponentSwitch, record, sideSwitch, movesFirst, hintButton, hintCount, askResume, modeName } from './game-ui.js';
+import { levelSwitch, opponentSwitch, record, sideSwitch, movesFirst, hintButton, hintCount, askResume, modeName, gameInProgress } from './game-ui.js';
 import { play } from './sound.js';
 import { track } from './firebase.js';
 import { online, roomInLink } from './online.js';
@@ -346,3 +346,5 @@ if (mode === 'daily') {
   });
   if (roomInLink || !resumeClassic()) newGame();
 }
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

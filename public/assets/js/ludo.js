@@ -1,7 +1,7 @@
 // Ludo: race your four counters round the board and into your home. Roll a 6 to bring a counter out.
 // Land on an opponent to send them back to base (not on the starred safe squares).
 import { store } from './site.js';
-import { setStatus, record, showResult, animationSwitch, slide } from './game-ui.js';
+import { setStatus, record, showResult, animationSwitch, slide, gameInProgress, confirmNewGame } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { makeDie, paintDie, tumble, wait, d6 } from './dice-ui.js';
@@ -237,8 +237,8 @@ function paintSegs() {
   document.querySelectorAll('[data-lopp]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lopp === opp)));
   document.querySelectorAll('[data-ln]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.ln) === n)));
 }
-document.querySelectorAll('[data-lopp]').forEach((b) => b.addEventListener('click', () => { if (busy) return; opp = b.dataset.lopp; store.set(OPP_KEY, opp); paintSegs(); newGame(); }));
-document.querySelectorAll('[data-ln]').forEach((b) => b.addEventListener('click', () => { if (busy) return; n = Number(b.dataset.ln); store.set(N_KEY, n); paintSegs(); newGame(); }));
+document.querySelectorAll('[data-lopp]').forEach((b) => b.addEventListener('click', async () => { if (busy || b.dataset.lopp === opp || !(await confirmNewGame())) return; opp = b.dataset.lopp; store.set(OPP_KEY, opp); paintSegs(); newGame(); }));
+document.querySelectorAll('[data-ln]').forEach((b) => b.addEventListener('click', async () => { if (busy || Number(b.dataset.ln) === n || !(await confirmNewGame())) return; n = Number(b.dataset.ln); store.set(N_KEY, n); paintSegs(); newGame(); }));
 $('roll').addEventListener('click', () => { if (human(turn)) roll(); });
 document.addEventListener('keydown', (e) => { if ((e.key === 'r') && !e.target.closest?.('input')) { if (human(turn)) roll(); } });
 $('new-game').addEventListener('click', () => { if (!busy) newGame(); });
@@ -246,3 +246,5 @@ $('again').addEventListener('click', newGame);
 drawBoard();
 paintSegs();
 newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

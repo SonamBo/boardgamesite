@@ -1,6 +1,6 @@
 // Checkers page.
 import * as E from './checkers-engine.js';
-import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut, showCaptures, hintButton, moveHistory, askResume, modeName } from './game-ui.js';
+import { setStatus, showResult, hideResult, setTurn, levelSwitch, record, opponentSwitch, sideSwitch, animationSwitch, moveQueue, slide, fadeOut, showCaptures, hintButton, moveHistory, askResume, modeName, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { store } from './site.js';
 import { play } from './sound.js';
@@ -322,7 +322,8 @@ function resume() {
 
 document.getElementById('new-game').addEventListener('click', () => { if (!onlineOn) newGame(); });
 undoBtn.addEventListener('click', () => {
-  if (busy || over || onlineOn || !history.length || Q.busy()) return;
+  // a rated (ladder) game has no take-backs: Undo is hidden there, and does nothing if reached anyway
+  if (busy || over || onlineOn || L || !history.length || Q.busy()) return;
   // vs the computer, take back your move and its reply
   let h = history.pop();
   while (!friend() && h.turn !== me && history.length) h = history.pop();
@@ -346,3 +347,5 @@ ol = online('checkers', {
   onlineChanged: (on) => { onlineOn = on; document.body.classList.toggle('online', on); paintSides(); render(); }
 });
 if (roomInLink || !resume()) newGame();
+// a game under way (a move made, not finished): changing a setting that starts a new game asks first
+gameInProgress(() => started && !over);

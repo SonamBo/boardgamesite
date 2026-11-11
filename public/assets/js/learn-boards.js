@@ -1117,6 +1117,7 @@ function spiderBoard(el) {
 export function makeBoard(kind, el) {
   const board = kind === 'chess' ? chessBoard(el) : kind === 'checkers' ? checkersBoard(el) : kind === 'russian-checkers' ? checkersBoard(el, RK) : kind === 'hex' ? hexBoard(el) : kind === 'morris' ? morrisBoard(el) : kind === 'dots' ? dotsBoard(el) : kind === 'tricks' ? tricksBoard(el) : kind === 'gin' ? ginBoard(el) : kind === 'freecell' ? freecellBoard(el) : kind === 'spider' ? spiderBoard(el) : kind === 'dice' ? diceBoard(el) : kind === 'mines' ? minesBoard(el) : kind === 'nonogram' ? nonogramBoard(el) : kind === 'cryptogram' ? cryptogramBoard(el) : kind === 'mancala' ? mancalaBoard(el) : kind === 'sudoku' ? sudokuBoard(el) : kind === 'backgammon' ? backgammonBoard(el) : kind === 'solitaire' ? solitaireBoard(el) : ruleBoard(kind, el);
   board.onMove = (fn) => { board.moveFn = fn; };
-  board.onTap = (fn) => { board.tapFn = fn; };
+  // boards that disable squares outside tap mode need a repaint when tap mode starts or ends
+  board.onTap = (fn) => { const was = !!board.tapFn; board.tapFn = fn; if (was !== !!fn) board.mark(board.marks); };
   return board;
 }
