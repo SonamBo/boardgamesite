@@ -1,0 +1,220 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;src:url(../../public/assets/fonts/fredoka-latin.woff2);font-weight:300 700}
+@font-face{font-family:Nunito;src:url(../../public/assets/fonts/nunito-latin.woff2);font-weight:200 1000}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#FFF7EC;color:#3A2418;font-family:Nunito}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.brand{position:absolute;left:70px;top:70px;display:flex;align-items:center;gap:16px;font-family:Fredoka;font-weight:600;font-size:40px}
+.brand img{width:64px;height:64px;border-radius:14px}
+.title{position:absolute;left:70px;right:70px;top:165px;font-family:Fredoka;font-weight:600;font-size:64px;line-height:1.05}
+.title b{color:#EE6B1F;font-weight:600}
+.sub{position:absolute;left:72px;right:70px;top:320px;font-size:34px;font-weight:800;color:#8A6A55;line-height:1.25}
+.swap{transition:none}
+#mapbox{position:absolute;left:0;top:420px;width:1080px;height:900px;overflow:hidden}
+#map{position:absolute;inset:0;width:1080px;height:900px}
+#map path{stroke:#FFF7EC;stroke-linejoin:round}
+#pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;width:0;height:0}
+.pin i{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:6px solid #3A2418;box-shadow:0 3px 8px rgba(58,36,24,.3)}
+.pin svg{position:absolute;left:0;top:0;overflow:visible}
+.pin .lab{position:absolute;white-space:nowrap;padding:14px 22px 16px;border-radius:22px;background:#fff;box-shadow:0 8px 22px rgba(58,36,24,.18);border-left:12px solid #999}
+.pin .lab b{display:block;font-family:Fredoka;font-weight:600;font-size:40px;line-height:1.05}
+.pin .lab span{display:block;font-weight:800;font-size:28px;color:#8A6A55;margin-top:4px}
+#legend,#legend1{position:absolute;left:50px;right:50px;top:1335px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 10px}
+#legend div,#legend1 div{display:flex;align-items:center;gap:9px;padding:7px 16px 7px 10px;border-radius:999px;background:#fff;font-weight:900;font-size:25px;box-shadow:0 3px 10px rgba(58,36,24,.07)}
+#legend i,#legend1 i{width:24px;height:24px;border-radius:8px;flex:none}
+.cap{position:absolute;left:60px;right:60px;top:1545px;min-height:150px;padding:26px 32px;border-radius:28px;background:#fff;border-left:12px solid #EE6B1F;font-weight:800;font-size:40px;line-height:1.25;box-shadow:0 8px 24px rgba(58,36,24,.08)}
+.cap b{color:#EE6B1F}
+.src{position:absolute;left:72px;right:72px;top:1760px;font-size:25px;font-weight:700;color:#B48E73;line-height:1.3}
+#hook{position:absolute;inset:0;background:#FFF7EC;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 90px}
+#hook h1{font-family:Fredoka;font-weight:600;font-size:96px;line-height:1.05}
+#hook h1 b{color:#EE6B1F;font-weight:600}
+#hook p{margin-top:30px;font-size:44px;font-weight:800;color:#8A6A55}
+#hook img{width:420px;margin-bottom:30px}
+#end{position:absolute;inset:0;background:#FFF7EC;display:flex;flex-direction:column;align-items:center;padding:230px 80px 0;text-align:center}
+#end h2{font-family:Fredoka;font-weight:600;font-size:84px;line-height:1.05}
+#end h2 b{color:#EE6B1F;font-weight:600}
+#end p.q{margin-top:28px;font-size:42px;font-weight:800;color:#8A6A55}
+#end img{width:440px;margin-top:50px}
+#end .url{margin-top:20px;padding:22px 46px;border-radius:999px;background:#EE6B1F;color:#fff;font-family:Fredoka;font-weight:600;font-size:52px}
+#end .cta{margin-top:26px;font-size:36px;font-weight:800;color:#8A6A55}
+</style>
+<div id="stage">
+  <div class="brand"><img src="../../public/assets/icons/icon-512.png" alt="">BoardGameSite</div>
+  <div class="title" id="title"></div>
+  <div class="sub" id="sub"></div>
+  <div id="mapbox"><svg id="map" viewBox="0 0 2000 1667" preserveAspectRatio="xMidYMid meet"></svg><div id="pins"></div></div>
+  <div id="legend"></div><div id="legend1" class="leg1"></div>
+  <div class="cap" id="cap"></div>
+  <div class="src">Data: Google Trends, Nov 2025 – Nov 2026. Searches for each game in any language, 226 countries and territories.</div>
+  <div id="hook"><img src="../../public/assets/img/fox-think.webp" alt=""><h1>Which board game does <b>your country</b> Google most?</h1><p>We checked 37 games in 226 countries</p></div>
+  <div id="end"><h2>Did we get <b>your country</b> right?</h2><p class="q">Tell us in the comments</p><img src="../../public/assets/img/fox-trophy.webp" alt=""><div class="url">boardgamesite.com</div><p class="cta">Play Chess, Ludo, Backgammon, Checkers and 50+ more, free</p></div>
+</div>
+<script>
+const W = 2000, H = 973, BOX = [1080, 900];
+const FAM = {
+  chess: ['Chess', '#7C2236'], ludo: ['Ludo & cousins', '#F2A516'], checkers: ['Checkers', '#3B6FB6'],
+  scrabble: ['Scrabble', '#2E9E6B'], backgammon: ['Backgammon', '#8E5BB5'], carrom: ['Carrom', '#E0607E'],
+  cousins: ['Xiangqi, Janggi, Shogi', '#C53030'], mahjong: ['Mahjong', '#0E9AA7'], rummy: ['Rummikub & Okey', '#EE6B1F'],
+  yahtzee: ['Yahtzee', '#4C51BF'], monopoly: ['Monopoly', '#7FA33A'], catan: ['Catan', '#A0522D'], mancala: ['Oware & mancala', '#9C6B30'],
+  other: ['Other', '#9CA3AF'], none: ['No standout', '#E9DCCD'],
+};
+const NODATA = '#F2E8DC';
+// Camera views: [centre x, centre y, width] in map units (the box is 1080x900, so height = width / 1.2)
+const VIEW = { world: [1000, 470, 2000], europe: [1085, 150, 380], mideast: [1335, 300, 420], eastasia: [1625, 265, 330], africa: [1085, 470, 600], americas: [560, 470, 960] };
+// The story, in seconds
+const T = { hook: 2.8, a1: 2.8, a1fill: 2.2, a1pins: 6.4, a2: 10.8, a2fill: 13.2, tour: 15.6, step: 4.6, outro: 38.6, end: 41.2, dur: 46.2 };
+const TOUR = [
+  { view: 'europe', cap: 'Europe can’t agree. <b>Turkey</b> searches Okey 43 times more than the world does.', pins: [
+    { c: 'TR', name: 'Turkey', game: 'Okey', dx: 20, dy: -150 }, { c: 'GR', name: 'Greece', game: 'Tavli (backgammon)', dx: 30, dy: 200 },
+    { c: 'ES', name: 'Spain', game: 'Parchís', dx: -40, dy: 140 }, { c: 'NL', name: 'Netherlands', game: 'Rummikub', dx: -200, dy: -150 },
+    { c: 'DE', name: 'Germany', game: 'Kniffel (Yahtzee)', dx: 60, dy: -140 } ] },
+  { view: 'mideast', cap: 'South Asia flicks <b>Carrom</b>. Iran plays <b>Mench</b>, a Ludo named after a German game.', pins: [
+    { c: 'IN', name: 'India', game: 'Carrom', dx: 60, dy: 120 }, { c: 'PK', name: 'Pakistan', game: 'Ludo', dx: -230, dy: 150 },
+    { c: 'IR', name: 'Iran', game: 'Mench (Ludo)', dx: -60, dy: -150 }, { c: 'IL', name: 'Israel', game: 'Backgammon', dx: -260, dy: 30 } ] },
+  { view: 'eastasia', cap: 'East Asia has its own chess. Japan searches <b>Shogi</b> 90 times more than the world.', pins: [
+    { c: 'CN', name: 'China', game: 'Xiangqi', dx: -200, dy: -150 }, { c: 'VN', name: 'Vietnam', game: 'Cờ tướng (Xiangqi)', dx: -330, dy: 90 },
+    { c: 'KR', name: 'South Korea', game: 'Janggi', dx: 40, dy: -150 }, { c: 'JP', name: 'Japan', game: 'Shogi', dx: -120, dy: 130 } ] },
+  { view: 'africa', cap: '<b>Ludo</b> rules from Sudan to Sierra Leone. Ghana and Côte d’Ivoire sow seeds in <b>Oware</b>.', pins: [
+    { c: 'SD', name: 'Sudan', game: 'Ludo', dx: 60, dy: -130 }, { c: 'NG', name: 'Nigeria', game: 'Ludo', dx: -40, dy: 160 },
+    { c: 'GH', name: 'Ghana', game: 'Oware', dx: -320, dy: -160 }, { c: 'MZ', name: 'Mozambique', game: 'Checkers', dx: 40, dy: 70 } ] },
+  { view: 'americas', cap: 'The Americas split: <b>Scrabble</b> up north, <b>Parchís</b> in Cuba, <b>Catan</b> in Argentina.', pins: [
+    { c: 'US', name: 'USA', game: 'Scrabble', dx: -60, dy: -170 }, { c: 'CU', name: 'Cuba', game: 'Parchís', dx: 80, dy: -60 },
+    { c: 'BR', name: 'Brazil', game: 'Checkers (dama)', dx: 60, dy: 40 }, { c: 'AR', name: 'Argentina', game: 'Catan', dx: 50, dy: 60 } ] },
+];
+const A1PINS = [
+  { c: 'JP', name: 'Japan', game: 'Mahjong', dx: 10, dy: -170, at: 0 }, { c: 'FR', name: 'France', game: 'Scrabble', dx: -310, dy: -150, at: 0.9 },
+  { c: 'TD', name: 'Chad & Sudan', game: 'Ludo', dx: 60, dy: 150, at: 1.8 }, { c: 'SN', name: 'West Africa', game: 'Scrabble', dx: -120, dy: 190, at: 2.7 },
+];
+let D, S, shapes = {}, cent = {}, sweep = {};
+const $ = (id) => document.getElementById(id);
+const ease = (x) => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+const lerp = (a, b, k) => a + (b - a) * k;
+
+// paths are "M x y l dx dy ..." pieces; split any piece where it jumps across the date line
+function fixPath(d) {
+  let out = '';
+  for (const piece of d.split('M').filter(Boolean)) {
+    const nums = piece.replace(/[lz]/g, ' ').replace(/-/g, ' -').trim().split(/\s+/).map(Number);
+    let x = nums[0], y = nums[1], cur = [[x, y]];
+    const flush = () => { if (cur.length > 2) out += 'M' + cur.map((p) => p.join(' ')).join('L') + 'Z'; };
+    for (let i = 2; i + 1 < nums.length; i += 2) {
+      const dx = nums[i], dy = nums[i + 1];
+      x += dx; y += dy;
+      if (Math.abs(dx) > 900) { flush(); cur = []; }
+      cur.push([x, y]);
+    }
+    flush();
+  }
+  return out;
+}
+function famOf(code, map) {
+  if (map === 'top') { const g = D.top[code]; return g ? D.family[g] || 'other' : null; }
+  if (!(code in D.top)) return null;
+  const s = D.sig[code]; return s ? D.family[s.g] || 'other' : 'none';
+}
+window.setup = (data, shapeData) => {
+  D = data; S = shapeData;
+  const svg = $('map');
+  for (const [code, d] of Object.entries(S)) {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', fixPath(d)); p.setAttribute('fill', NODATA);
+    svg.appendChild(p); shapes[code] = p;
+    // label anchor: the centre of the country's largest piece
+    let best = null;
+    for (const piece of fixPath(d).split('M').filter(Boolean)) {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'path'); t.setAttribute('d', 'M' + piece); svg.appendChild(t);
+      const b = t.getBBox(); t.remove();
+      if (!best || b.width * b.height > best.width * best.height) best = b;
+    }
+    cent[code] = [best.x + best.width / 2, best.y + best.height / 2];
+    sweep[code] = cent[code][0] / W;
+  }
+  cent.FR = [1000, 160]; cent.US = [480, 230]; cent.NO = [1050, 85]; cent.TD = [1105, 380]; cent.SN = [925, 382];
+  const fams = ['ludo', 'checkers', 'scrabble', 'backgammon', 'carrom', 'cousins', 'rummy', 'mahjong', 'yahtzee', 'monopoly', 'catan', 'mancala'];
+  const n = {}; for (const g of Object.values(D.top)) n[g] = (n[g] || 0) + 1;
+  $('legend1').innerHTML = Object.entries(n).sort((a, b) => b[1] - a[1]).map(([g, c]) => `<div><i style="background:${FAM[D.family[g]][1]}"></i>${D.names[g]}: ${c} countries</div>`).join('');
+  $('legend').innerHTML = fams.map((f) => `<div><i style="background:${FAM[f][1]}"></i>${FAM[f][0]}</div>`).join('');
+  for (const list of [A1PINS, ...TOUR.map((s) => s.pins)]) for (const p of list) {
+    const el = document.createElement('div'); el.className = 'pin';
+    const sg = D.sig[p.c], top = D.top[p.c];
+    const fam = list === A1PINS ? D.family[top] : D.family[sg.g];
+    const line = list === A1PINS ? 'searched more than chess' : sg.x >= 10 ? `${Math.round(sg.x)}× the world’s rate` : `${sg.x.toFixed(1)}× the world’s rate`;
+    el.innerHTML = `<svg width="1" height="1"><line x1="0" y1="0" x2="${p.dx}" y2="${p.dy}" stroke="#3A2418" stroke-width="4" stroke-linecap="round"/></svg><i></i><div class="lab" style="border-left-color:${FAM[fam][1]}"><b>${p.name}: ${p.game}</b><span>${line}</span></div>`;
+    $('pins').appendChild(el); p.el = el; p.lab = el.querySelector('.lab');
+  }
+};
+function camera(t) {
+  const at = (name) => VIEW[name];
+  let from = at('world'), to = at('world'), k = 0;
+  for (let i = 0; i < TOUR.length; i++) {
+    const s = T.tour + i * T.step;
+    if (t >= s - 0.9) { from = i ? at(TOUR[i - 1].view) : at('world'); to = at(TOUR[i].view); k = ease((t - (s - 0.9)) / 0.9); }
+  }
+  if (t >= T.outro - 0.4) { from = at(TOUR[TOUR.length - 1].view); to = at('world'); k = ease((t - (T.outro - 0.4)) / 1.0); }
+  // zoom in log space so it doesn't lurch
+  const w = Math.exp(lerp(Math.log(from[2]), Math.log(to[2]), k));
+  return [lerp(from[0], to[0], k), lerp(from[1], to[1], k), w, w / 1.2];
+}
+function place(p, cam, show) {
+  const [cx, cy, w, h] = cam, sc = BOX[0] / w;
+  const [x, y] = cent[p.c];
+  const sx = (x - cx) * sc + BOX[0] / 2, sy = (y - cy) * sc + BOX[1] / 2;
+  p.el.style.transform = `translate(${sx}px,${sy}px)`;
+  p.el.style.opacity = show;
+  const lw = p.lab.offsetWidth, lh = p.lab.offsetHeight;
+  // the label hangs off the end of its line, kept inside the box
+  let lx = p.dx - (p.dx < 0 ? lw : 0), ly = p.dy - lh / 2;
+  lx = Math.max(-sx + 16, Math.min(BOX[0] - sx - lw - 16, lx));
+  ly = Math.max(-sy + 10, Math.min(BOX[1] - sy - lh - 10, ly));
+  p.lab.style.left = lx + 'px'; p.lab.style.top = ly + 'px';
+  p.lab.style.transform = `scale(${0.85 + 0.15 * show})`;
+}
+window.render = (t) => {
+  const cam = camera(t);
+  $('map').setAttribute('viewBox', `${cam[0] - cam[2] / 2} ${cam[1] - cam[3] / 2} ${cam[2]} ${cam[3]}`);
+  const sw = 1.2 * cam[2] / 2000;
+  // colours: act 1 fills west to east; at a2 chess drains away; then signatures fill west to east
+  for (const [code, p] of Object.entries(shapes)) {
+    const s = sweep[code];
+    const k1 = ease((t - T.a1 - s * T.a1fill) / 0.35);
+    const drain = ease((t - T.a2 - 0.6) / 0.8);
+    const k2 = ease((t - T.a2fill - s * 1.8) / 0.35);
+    const f1 = famOf(code, 'top'), f2 = famOf(code, 'sig');
+    let col = NODATA;
+    if (t < T.a2fill) {
+      if (f1) { col = mix(NODATA, FAM[f1][1], k1 * (f1 === 'chess' ? 1 - drain : 1)); }
+    } else {
+      const base = f1 && f1 !== 'chess' ? FAM[f1][1] : NODATA;
+      col = f2 ? mix(base, FAM[f2][1], k2) : base;
+    }
+    p.setAttribute('fill', col);
+    p.setAttribute('stroke-width', sw);
+  }
+  // headings and captions
+  const act2 = t >= T.a2;
+  $('title').innerHTML = act2 ? 'Each country’s <b>signature</b> board game' : 'The most-searched <b>board game</b> in every country';
+  $('sub').textContent = act2 ? 'The game it searches far more than the rest of the world' : 'Google searches for 37 games, in every language';
+  let cap = '';
+  if (t >= T.a1 + 2.0 && t < T.a1pins) cap = '<b>Chess</b> is number one in 173 of 226 countries.';
+  else if (t >= T.a1pins && t < T.a2) cap = 'But not everywhere: in Japan it’s <b>Mahjong</b>, in France and much of West Africa it’s <b>Scrabble</b>.';
+  else if (t >= T.a2 && t < T.tour - 0.9) cap = 'Now take chess off the board. Which game does each country love <b>more than anyone else</b>?';
+  for (let i = 0; i < TOUR.length; i++) { const s = T.tour + i * T.step; if (t >= s - 0.9 && t < s - 0.9 + T.step) cap = TOUR[i].cap; }
+  if (t >= T.outro - 0.4) cap = 'Mexico, Indonesia and 37 others have <b>no clear favourite</b> besides chess.';
+  $('cap').innerHTML = cap; $('cap').style.opacity = cap ? 1 : 0;
+  $('legend').style.opacity = ease((t - T.a2fill - 0.6) / 0.6);
+  $('legend1').style.opacity = ease((t - T.a1 - 2.0) / 0.5) * (1 - ease((t - T.a2) / 0.4));
+  // pins
+  for (const p of A1PINS) { const s = T.a1pins + p.at; place(p, cam, ease((t - s) / 0.35) * (1 - ease((t - T.a2) / 0.4))); }
+  TOUR.forEach((stop, i) => {
+    const s = T.tour + i * T.step;
+    stop.pins.forEach((p, j) => place(p, cam, ease((t - s - j * 0.5) / 0.35) * (1 - ease((t - (s + T.step - 1.0)) / 0.35))));
+  });
+  $('hook').style.opacity = 1 - ease((t - (T.hook - 0.5)) / 0.5);
+  $('end').style.opacity = ease((t - T.end) / 0.5);
+};
+function hex(c) { return [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)); }
+function mix(a, b, k) { const A = hex(a), B = hex(b); return 'rgb(' + A.map((v, i) => Math.round(v + (B[i] - v) * k)).join(',') + ')'; }
+window.T = T; window.TOUR = TOUR; window.A1PINS = A1PINS;
+</script>
