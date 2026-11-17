@@ -151,9 +151,78 @@
     "By continuing you agree to our": "Продолжая, вы принимаете документы:",
     "and": "и",
     "Terms": "Условия",
-    "Privacy Policy": "Политика конфиденциальности"
+    "Privacy Policy": "Политика конфиденциальности",
+    "You’ve been challenged!": "Вам бросили вызов!",
+    "Start on the marked square, so you both get the same opening.": "Начните с отмеченной клетки, чтобы у вас обоих было одинаковое начало.",
+    "Play a different game": "Сыграть другую партию",
+    "A tie: exactly the same time!": "Ничья: точно такое же время!",
+    "Challenge them back": "Бросить ответный вызов",
+    "Challenge a friend": "Бросить вызов другу",
+    "Try this deal again": "Сыграть этот расклад ещё раз",
+    "Try this board again": "Сыграть это поле ещё раз",
+    "Try this puzzle again": "Сыграть эту головоломку ещё раз",
+    "Challenge link copied. Paste it to a friend.": "Ссылка скопирована. Отправьте её другу.",
+    "Download the picture": "Скачать картинку",
+    "Can you beat me?": "Сможешь быстрее?",
+    "Start on the marked square": "Начните с отмеченной клетки",
+    "Send this exact deal to a friend and see who’s faster.": "Отправьте этот расклад другу и узнайте, кто быстрее.",
+    "Send this exact board to a friend and see who’s faster.": "Отправьте это поле другу и узнайте, кто быстрее.",
+    "Send this exact puzzle to a friend and see who’s faster.": "Отправьте эту головоломку другу и узнайте, кто быстрее.",
+    "Try again?": "Ещё раз?"
    },
    "patterns": [
+    [
+     "Same time, but you used (\\d+) fewer moves\\.",
+     "Время то же, но у вас на {1} ход(а) меньше."
+    ],
+    [
+     "Same time, but they used (\\d+) fewer moves\\.",
+     "Время то же, но у соперника на {1} ход(а) меньше."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact deal\\.",
+     "Побейте время {1} на этом раскладе."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact board\\.",
+     "Побейте время {1} на этом поле."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact puzzle\\.",
+     "Побейте время {1} в этой головоломке."
+    ],
+    [
+     "Their result: (\\d+) moves\\.",
+     "Результат соперника — ходов: {1}."
+    ],
+    [
+     "You beat their time by (\\d+:\\d\\d)!",
+     "Вы быстрее на {1}!"
+    ],
+    [
+     "They were faster by (\\d+:\\d\\d)\\.",
+     "Соперник быстрее на {1}."
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same deal\\?",
+     "Я прошёл «{1}» за {2}. Сможешь быстрее на том же раскладе?"
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same board\\?",
+     "Я прошёл «{1}» за {2}. Сможешь быстрее на том же поле?"
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same puzzle\\?",
+     "Я прошёл «{1}» за {2}. Сможешь быстрее в той же головоломке?"
+    ],
+    [
+     "(\\d+) moves",
+     "Ходов: {1}"
+    ],
+    [
+     "Row (\\d+), column (\\d+): start here",
+     "Ряд {1}, столбец {2}: начните здесь"
+    ],
     [
      "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
      "Бесплатных игр: {1}. Карты, стратегии, головоломки и игры со словами. Без регистрации."

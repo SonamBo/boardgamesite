@@ -3,7 +3,8 @@ import { store } from './site.js';
 import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
-import { clock, fmt, soloRecord, shake } from './solo.js';
+import { clock, fmt, soloRecord, shake, rng } from './solo.js';
+import { challengeFor, takeSeed, challengeWin } from './challenge.js';
 
 const $ = (id) => document.getElementById(id);
 const SIZES = { easy: 3, medium: 4, hard: 5 };
@@ -13,6 +14,9 @@ const timer = clock($('time'));
 const rec = soloRecord('bgs-slide-stats', { onPaint: paintRecord });
 
 let N, tiles, moves, started, done, level;
+let seed = null;   // the shuffle's seed, for a challenge link
+const CH = challengeFor('sliding-tiles');
+if (CH && SIZES[CH.o]) store.set('bgs-slide-level', CH.o);
 const els = [];
 
 function solved() { return tiles.every((v, i) => v === (i === N * N - 1 ? 0 : i + 1)); }
@@ -20,9 +24,10 @@ function solved() { return tiles.every((v, i) => v === (i === N * N - 1 ? 0 : i 
 function shuffle() {
   tiles = Array.from({ length: N * N }, (_, i) => (i === N * N - 1 ? 0 : i + 1));
   let blank = N * N - 1, last = -1;
+  const rand = rng(seed = takeSeed().seed);
   for (let k = 0; k < N * N * 40 || solved(); k++) {
     const opts = neighbours(blank).filter((j) => j !== last);
-    const j = opts[Math.floor(Math.random() * opts.length)];
+    const j = opts[Math.floor(rand() * opts.length)];
     [tiles[blank], tiles[j]] = [tiles[j], tiles[blank]];
     last = blank; blank = j;
   }
@@ -99,6 +104,7 @@ function win() {
   $('result').hidden = false;
   play('win', 0.15);
   track('game_end', { game: 'sliding-tiles', result: 'win', level, moves, seconds: Math.round(t / 1000) });
+  challengeWin({ seed, o: level, t, m: moves });
 }
 
 function paintRecord(stats, best) {
@@ -119,7 +125,7 @@ function newGame() {
   setStatus('Put the tiles in order, 1 to ' + (N * N - 1), 'neutral');
   render();
 }
-function save() { if (started && !done) store.set(SAVE, { level, tiles, moves, elapsed: timer.elapsed() }); }
+function save() { if (started && !done) store.set(SAVE, { level, tiles, moves, elapsed: timer.elapsed(), seed }); }
 function resume() {
   const g = store.get(SAVE, null);
   if (!g || g.level !== level || !Array.isArray(g.tiles) || g.tiles.length !== SIZES[level] ** 2) return false;
@@ -127,6 +133,7 @@ function resume() {
   if (new Set(g.tiles).size !== N * N) return false;
   build();
   tiles = g.tiles; moves = g.moves | 0; started = true; done = false;
+  seed = Number.isFinite(g.seed) ? g.seed : null;
   timer.start(Number(g.elapsed) || 0);
   setStatus('Your puzzle is where you left it', 'neutral');
   render();
@@ -152,6 +159,6 @@ $('new-game').addEventListener('click', () => { play('shuffle'); newGame(); });
 $('again').addEventListener('click', () => { play('shuffle'); newGame(); });
 const getLevel = levelSwitch('slide', (l) => { level = l; newGame(); });
 level = getLevel();
-if (!resume()) newGame();
+if (CH || !resume()) newGame();
 // a game under way (a move made, not finished): changing a setting that starts a new game asks first
 gameInProgress(() => started && !done);

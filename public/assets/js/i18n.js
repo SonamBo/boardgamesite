@@ -39,6 +39,8 @@
     if (record && !missing.has(k)) { missing.add(k); console.warn('[i18n] missing:', JSON.stringify(k)); }
     return null;
   }
+  // Scripts can translate text that never reaches the page (a share message, words drawn on a picture).
+  window.BGS_T = function (s) { var t = tr(s); return t == null ? s : t; };
   var ATTRS = ['aria-label', 'title', 'placeholder', 'alt', 'data-tip'];
   function skip(el) { return !el || el.closest('script,style,noscript,textarea,[translate=no],code'); }
   function text(n) {

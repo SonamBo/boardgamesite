@@ -3,7 +3,9 @@
 import { setStatus, levelSwitch, MASCOT, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
-import { clock, fmt, soloRecord } from './solo.js';
+import { clock, fmt, soloRecord, rng } from './solo.js';
+import { store } from './store.js';
+import { challengeFor, takeSeed, challengeWin } from './challenge.js';
 
 const $ = (id) => document.getElementById(id);
 const LEVELS = {
@@ -19,6 +21,14 @@ const timer = clock($('time'));
 const rec = soloRecord('bgs-mines-stats', { onPaint: paintRecord });
 
 let L, W, H, mines, open, flags, cells, started, over, opened, flagMode = false, levelKey;
+// Challenges: mines come from a seed, laid out on the board in its usual orientation (Hard turns on its side
+// on narrow screens), so a friend gets the same field. A challenge also fixes the first square, marked on the board.
+let tall = false, seed = 0, startC = null, chStart = null;
+const CH = challengeFor('mines');
+if (CH && LEVELS[CH.o]) store.set('bgs-mines-level', CH.o);
+const toCanon = (i) => { const x = i % W, y = Math.floor(i / W); return tall ? x * L.w + y : i; };
+const fromCanon = (c) => (tall ? (c % L.w) * W + Math.floor(c / L.w) : c);
+const startCell = () => (chStart != null && !started && chStart < W * H ? fromCanon(chStart) : -1);
 
 function neighbours(i) {
   const x = i % W, y = Math.floor(i / W), out = [];
@@ -32,11 +42,13 @@ function neighbours(i) {
 const count = (i) => neighbours(i).filter((j) => mines[j]).length;
 const flagCount = () => flags.filter(Boolean).length;
 
-function newGame() {
+function newGame(keepSeed) {
   L = LEVELS[levelKey];
+  if (!keepSeed) { const d = takeSeed(); seed = d.seed; chStart = d.st; }
+  startC = null;
   // Hard is 30 wide; on a narrow screen it turns on its side so the squares stay big enough to tap.
   const room = field.parentElement.clientWidth || 600;
-  const tall = L.w > L.h && room / L.w < 22;
+  tall = L.w > L.h && room / L.w < 22;
   W = tall ? L.h : L.w; H = tall ? L.w : L.h;
   mines = new Array(W * H).fill(false);
   open = new Array(W * H).fill(false);
@@ -70,13 +82,15 @@ function fitText() {
 
 function layMines(safe) {
   // Keep the first square and its neighbours clear, so the first tap always opens an area.
-  const keep = new Set([safe, ...neighbours(safe)]);
+  // Worked in the board's usual orientation, from the seed, so the same seed and first square give the same field anywhere.
+  const keep = new Set([safe, ...neighbours(safe)].map(toCanon));
   const spots = [];
-  for (let i = 0; i < W * H; i++) if (!keep.has(i)) spots.push(i);
+  for (let c = 0; c < W * H; c++) if (!keep.has(c)) spots.push(c);
+  const rand = rng(seed);
   for (let k = 0; k < L.mines; k++) {
-    const j = k + Math.floor(Math.random() * (spots.length - k));
+    const j = k + Math.floor(rand() * (spots.length - k));
     [spots[k], spots[j]] = [spots[j], spots[k]];
-    mines[spots[k]] = true;
+    mines[fromCanon(spots[k])] = true;
   }
 }
 
@@ -84,7 +98,10 @@ function dig(i) {
   if (over || flags[i]) return;
   if (open[i]) return chord(i);
   if (!started) {
+    const s = startCell();
+    if (s >= 0 && i !== s) { setStatus('Start on the marked square'); cells[s].focus(); return; }
     started = true;
+    startC = toCanon(i);
     layMines(i);
     timer.start(0);
     rec.played();
@@ -149,6 +166,7 @@ function win() {
   showResult('win', 'Field cleared!', L.name + ' in ' + fmt(t) + '.' + (record ? ' A new best time!' : ''));
   play('win', 0.1);
   track('game_end', { game: 'mines', result: 'win', level: levelKey, seconds: Math.round(t / 1000) });
+  challengeWin({ seed, o: levelKey, t, st: startC });
 }
 
 function lose(i) {
@@ -173,7 +191,7 @@ function showResult(kind, text, sub) {
 function render(boom = -1) {
   for (let i = 0; i < W * H; i++) {
     const b = cells[i];
-    let cls = 'mn', html = '', label;
+    let cls = i === startCell() ? 'mn start' : 'mn', html = '', label;
     const x = i % W + 1, y = Math.floor(i / W) + 1;
     if (open[i]) {
       const c = count(i);
@@ -188,7 +206,7 @@ function render(boom = -1) {
       cls += ' flag' + (over && !mines[i] ? ' wrong' : '');
       html = FLAG;
       label = 'flagged';
-    } else label = 'hidden';
+    } else label = i === startCell() ? 'start here' : 'hidden';
     if (b.className !== cls) b.className = cls;
     if (b.innerHTML !== html) b.innerHTML = html;
     b.setAttribute('aria-label', 'Row ' + y + ', column ' + x + ': ' + label);
@@ -275,6 +293,6 @@ levelKey = getLevel();
 paintMode();
 newGame();
 // A game in progress keeps its shape; between games, re-fit Hard to the screen.
-window.addEventListener('resize', () => { if (!started && levelKey === 'hard') newGame(); else fitText(); });
+window.addEventListener('resize', () => { if (!started && levelKey === 'hard') newGame(true); else fitText(); });
 // a game under way (a move made, not finished): changing a setting that starts a new game asks first
 gameInProgress(() => started && !over);

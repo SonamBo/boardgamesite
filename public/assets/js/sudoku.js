@@ -5,6 +5,7 @@ import { setStatus, levelSwitch, gameInProgress } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, rng, seedFrom, today, dayNumber, shake } from './solo.js';
+import { challengeFor, takeSeed, challengeWin } from './challenge.js';
 
 const $ = (id) => document.getElementById(id);
 const mode = new URLSearchParams(location.search).get('mode') === 'daily' ? 'daily' : 'classic';
@@ -19,6 +20,9 @@ const timer = clock($('time'));
 const rec = soloRecord('bgs-sdk-stats', { onPaint: paintRecord });
 
 let puzzle, solution, grid, notes, history, sel, notesOn = false, level, started, done, hints;
+let seed = null;   // a classic puzzle's seed, for a challenge link (the daily puzzle has its own share)
+const CH = mode === 'classic' ? challengeFor('sudoku') : null;
+if (CH && ['easy', 'medium', 'hard'].includes(CH.o)) store.set('bgs-sdk-level', CH.o);
 
 // ---------- Board ----------
 const boxes = Array.from({ length: 9 }, () => {
@@ -211,6 +215,7 @@ function win() {
   $('again').textContent = mode === 'daily' ? 'Play a classic puzzle' : 'New puzzle';
   play('win', 0.1);
   track('game_end', { game: 'sudoku', result: 'win', level: lvl, seconds: Math.round(t / 1000), hints });
+  if (mode === 'classic') challengeWin({ seed, o: level, t });
 }
 
 function yesterday() {
@@ -230,7 +235,8 @@ function paintRecord(stats, best) {
 function newGame() {
   const made = mode === 'daily'
     ? S.generate(rng(seedFrom('sudoku-' + DATE)), 'medium')
-    : S.generate(Math.random, level);
+    : S.generate(rng(seed = takeSeed().seed), level);
+  if (mode === 'daily') seed = null;
   puzzle = made.puzzle; solution = made.solution;
   grid = puzzle.slice();
   notes = new Array(81).fill(0);
@@ -243,7 +249,7 @@ function newGame() {
 
 function save() {
   if (done || !started) return;
-  store.set(SAVE, { date: DATE, level, puzzle, solution, grid, notes, hints, elapsed: timer.elapsed(), history: history.slice(-200) });
+  store.set(SAVE, { date: DATE, level, puzzle, solution, grid, notes, hints, elapsed: timer.elapsed(), history: history.slice(-200), seed });
 }
 const valid = (a) => Array.isArray(a) && a.length === 81 && a.every((v) => Number.isInteger(v) && v >= 0 && v <= 9);
 function resume() {
@@ -255,6 +261,7 @@ function resume() {
   notes = g.notes.map((n) => n | 0);
   history = Array.isArray(g.history) ? g.history : [];
   hints = g.hints | 0;
+  seed = mode === 'classic' && Number.isFinite(g.seed) ? g.seed : null;
   sel = null; done = false; started = true;
   timer.start(Number(g.elapsed) || 0);
   afterMove();
@@ -327,6 +334,6 @@ if (mode === 'daily' && store.get(DAILY, {}).lastSolved === DATE) {
   $('result-sub').textContent = 'A new daily puzzle arrives at midnight. Until then, try a classic puzzle.';
   $('again').textContent = 'Play a classic puzzle';
   $('result').hidden = false;
-} else if (!resume()) newGame();
+} else if (CH || !resume()) newGame();
 // a game under way (a move made, not finished): changing a setting that starts a new game asks first
 gameInProgress(() => started && !done);

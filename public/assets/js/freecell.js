@@ -5,6 +5,7 @@ import { setStatus } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
 import { clock, fmt, soloRecord, shake } from './solo.js';
+import { challengeFor, takeSeed, challengeWin } from './challenge.js';
 import { Table, slotEl, placeSlot, suit, rank, isRed, suitIcon } from './cards.js';
 
 const $ = (id) => document.getElementById(id);
@@ -18,6 +19,8 @@ const timer = clock($('time'));
 const rec = soloRecord('bgs-fc-stats', { onPaint: paintRecord });
 
 let S, history, moves, sel, started, done, dealNo, L = {};
+// A challenge is a classic deal number with a time to beat.
+const CH = challengeFor('freecell');
 
 // The classic numbered deals (1 to 32000).
 function dealCards(n) {
@@ -223,13 +226,16 @@ function win() {
   $('result').hidden = false;
   play('win', 0.1);
   track('game_end', { game: 'freecell', result: 'win', deal: dealNo, moves });
+  challengeWin({ seed: dealNo, t, m: moves });
 }
 function paintRecord(stats, best) {
   $('record').textContent = (stats.won || 0) + ' of ' + (stats.played || 0) + ' deals solved' + (best.all ? ' · best time ' + fmt(best.all) : '');
 }
 
 function newGame(n) {
-  dealNo = n || 1 + Math.floor(Math.random() * 32000);
+  // a friend's challenge deal first, then the deal asked for, else a random one
+  const d = takeSeed(n || 1 + Math.floor(Math.random() * 32000)).seed;
+  dealNo = d >= 1 && d <= 32000 ? d : 1 + Math.floor(Math.random() * 32000);
   S = dealCards(dealNo); history = []; moves = 0; sel = null; started = false; done = false;
   timer.reset();
   $('result').hidden = true;
@@ -283,4 +289,4 @@ dealForm.addEventListener('submit', (e) => {
 let raf = 0;
 window.addEventListener('resize', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { measure(); render(); }); });
 measure();
-if (!resume()) newGame();
+if (CH || !resume()) newGame();

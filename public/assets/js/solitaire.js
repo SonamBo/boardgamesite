@@ -5,6 +5,8 @@ import { onProgressLoaded } from './store.js';
 import { setStatus } from './game-ui.js';
 import { track } from './firebase.js';
 import { play } from './sound.js';
+import { rng } from './solo.js';
+import { challengeFor, takeSeed, challengeWin } from './challenge.js';
 
 const SAVE = 'bgs-sol-game';
 const DEFAULT_STATUS = 'Build each suit from Ace to King';
@@ -16,6 +18,10 @@ const statusEl = $('status');
 
 let state, history, moves, started, won, startTime, timerId, finishing;
 let drawMode = store.get('bgs-sol-draw', 1) === 3 ? 3 : 1;
+let seed = null;              // the deal's seed, for a challenge link
+// Opened from a friend's challenge: their draw setting and their deal.
+const CH = challengeFor('solitaire');
+if (CH && (CH.o === 1 || CH.o === 3)) { drawMode = CH.o; store.set('bgs-sol-draw', CH.o); }
 const stats = store.get('bgs-sol-stats', { played: 0, won: 0, best: null });
 const L = {};                 // layout numbers
 const locOf = new Map();      // card → where it is right now
@@ -247,6 +253,7 @@ function onWin() {
   store.set(SAVE, null);
   play('win', 0.15);
   track('game_end', { game: 'solitaire', result: 'win', draw: state.draw, seconds: Math.round(t / 1000) });
+  challengeWin({ seed, o: state.draw, t, m: moves });
   render();
 }
 
@@ -269,7 +276,8 @@ function autoFinish() {
 
 function newGame() {
   clearInterval(timerId);
-  state = S.deal(Math.random, drawMode);
+  seed = takeSeed().seed;
+  state = S.deal(rng(seed), drawMode);
   history = []; moves = 0; started = false; won = false; finishing = false;
   store.set(SAVE, null);
   $('time').textContent = '0:00';
@@ -281,7 +289,7 @@ function newGame() {
 // ---------- Save and resume ----------
 function saveGame() {
   if (won || !started) return;
-  store.set(SAVE, { state, history: history.slice(-150), moves, elapsed: Date.now() - startTime });
+  store.set(SAVE, { state, history: history.slice(-150), moves, elapsed: Date.now() - startTime, seed });
 }
 function validState(s) {
   if (!s || !Array.isArray(s.stock) || !Array.isArray(s.waste) || !Array.isArray(s.found) || !Array.isArray(s.tab)) return false;
@@ -295,6 +303,7 @@ function resume() {
   state = g.state;
   history = Array.isArray(g.history) ? g.history.filter(validState) : [];
   moves = g.moves | 0;
+  seed = Number.isFinite(g.seed) ? g.seed : null;
   started = true; won = false; finishing = false;
   drawMode = state.draw === 3 ? 3 : 1;
   paintDraw();
@@ -345,4 +354,4 @@ window.addEventListener('resize', () => {
 
 measure();
 paintRecord();
-if (!resume()) newGame();
+if (CH || !resume()) newGame();

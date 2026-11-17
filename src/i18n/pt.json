@@ -277,9 +277,78 @@
     "Snakes and Ladders": "Cobras e escadas",
     ", move here": ", mover para cá",
     ", for a gammon (double win)": ", com gammon (vitória dupla)",
-    ", for a backgammon (triple win)": ", com backgammon (vitória tripla)"
+    ", for a backgammon (triple win)": ", com backgammon (vitória tripla)",
+    "You’ve been challenged!": "Você foi desafiado!",
+    "Start on the marked square, so you both get the same opening.": "Comece na casa marcada para que os dois tenham a mesma abertura.",
+    "Play a different game": "Jogar outra partida",
+    "A tie: exactly the same time!": "Empate: exatamente o mesmo tempo!",
+    "Challenge them back": "Desafiar de volta",
+    "Challenge a friend": "Desafiar um amigo",
+    "Try this deal again": "Jogar esta mão de novo",
+    "Try this board again": "Jogar este campo de novo",
+    "Try this puzzle again": "Jogar este quebra-cabeça de novo",
+    "Challenge link copied. Paste it to a friend.": "Link do desafio copiado. Cole para um amigo.",
+    "Download the picture": "Baixar a imagem",
+    "Can you beat me?": "Consegue me vencer?",
+    "Start on the marked square": "Comece na casa marcada",
+    "Send this exact deal to a friend and see who’s faster.": "Envie esta mesma mão para um amigo e vejam quem é mais rápido.",
+    "Send this exact board to a friend and see who’s faster.": "Envie este mesmo campo para um amigo e vejam quem é mais rápido.",
+    "Send this exact puzzle to a friend and see who’s faster.": "Envie este mesmo quebra-cabeça para um amigo e vejam quem é mais rápido.",
+    "Try again?": "Tentar de novo?"
    },
    "patterns": [
+    [
+     "Same time, but you used (\\d+) fewer moves\\.",
+     "Mesmo tempo, mas com {1} jogadas a menos."
+    ],
+    [
+     "Same time, but they used (\\d+) fewer moves\\.",
+     "Mesmo tempo, mas o outro usou {1} jogadas a menos."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact deal\\.",
+     "Supere {1} com esta mesma mão."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact board\\.",
+     "Supere {1} neste mesmo campo."
+    ],
+    [
+     "Beat (\\d+:\\d\\d) on this exact puzzle\\.",
+     "Supere {1} neste mesmo quebra-cabeça."
+    ],
+    [
+     "Their result: (\\d+) moves\\.",
+     "Resultado: {1} jogadas."
+    ],
+    [
+     "You beat their time by (\\d+:\\d\\d)!",
+     "Você superou o tempo por {1}!"
+    ],
+    [
+     "They were faster by (\\d+:\\d\\d)\\.",
+     "Foi mais rápido que você por {1}."
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same deal\\?",
+     "Terminei {1} em {2}. Consegue me vencer com a mesma mão?"
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same board\\?",
+     "Terminei {1} em {2}. Consegue me vencer no mesmo campo?"
+    ],
+    [
+     "I finished (.+) in (\\d+:\\d\\d)\\. Can you beat me on the same puzzle\\?",
+     "Terminei {1} em {2}. Consegue me vencer no mesmo quebra-cabeça?"
+    ],
+    [
+     "(\\d+) moves",
+     "{1} jogadas"
+    ],
+    [
+     "Row (\\d+), column (\\d+): start here",
+     "Linha {1}, coluna {2}: comece aqui"
+    ],
     [
      "(\\d+) free games: cards, strategy, puzzles and words\\. No sign-up\\.",
      "{1} jogos grátis: cartas, estratégia, quebra-cabeças e palavras. Sem cadastro."
