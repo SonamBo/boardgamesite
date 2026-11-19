@@ -30,5 +30,5 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          BREVO_LIST_ID: ${{ vars.BREVO_LIST_ID }}
+          BREVO_LIST_ID: ${{ vars.BREVO_LIST_ID || secrets.BREVO_LIST_ID }}   # either kind works
         run: node tools/crm-sync.mjs ${{ inputs.dry && '--dry' || '' }}
