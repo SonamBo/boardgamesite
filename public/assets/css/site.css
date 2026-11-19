@@ -2724,3 +2724,10 @@ body.returning .hero { display: none; }
 .mn.start { box-shadow: inset 0 0 0 3px var(--brand); animation: chal-start 1.2s ease-in-out 3; }
 @keyframes chal-start { 50% { box-shadow: inset 0 0 0 5px var(--brand-hi); } }
 @media (prefers-reduced-motion: reduce) { .mn.start { animation: none; } }
+/* Reminder emails: opt-in at sign-up and on the account page */
+.auth-optin { display: flex; gap: 10px; align-items: flex-start; text-align: left; font-size: 14px; color: var(--text-2); margin: 2px 0 12px; cursor: pointer; }
+.auth-optin[hidden] { display: none; }
+.auth-optin input, .email-pref input { width: 20px; height: 20px; flex: none; margin-top: 1px; accent-color: var(--brand); }
+.email-pref { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; cursor: pointer; max-width: 620px; }
+.email-pref > span { display: flex; flex-direction: column; gap: 3px; }
+.email-pref small { font-size: 14px; }
