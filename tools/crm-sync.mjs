@@ -60,7 +60,7 @@ async function ensureAttributes() {
   for (const [name, type] of Object.entries(ATTRIBUTES)) {
     if (name === 'FIRSTNAME') continue; // Brevo has it already
     try { await brevo('POST', '/contacts/attributes/normal/' + name, { type }); }
-    catch (e) { if (!/already exist|duplicate/i.test(e.body || '')) throw e; }
+    catch (e) { if (!/already exist|duplicate|must be unique/i.test(e.body || '')) throw e; }
   }
 }
 async function listMembers() {
