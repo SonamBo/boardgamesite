@@ -140,7 +140,18 @@ export function attributesFor(doc, today) {
 }
 
 // ---------- Run ----------
-initializeApp({ credential: cert(JSON.parse(FIREBASE_SERVICE_ACCOUNT)) });
+const SA = JSON.parse(FIREBASE_SERVICE_ACCOUNT);
+initializeApp({ credential: cert(SA) });
+// a service account's address isn't secret; printing it shows which account needs the IAM roles
+console.log('Signed in as', SA.client_email, 'in project', SA.project_id);
+process.on('unhandledRejection', (e) => {
+  if (e && (e.code === 7 || e.code === 'auth/insufficient-permission' || /PERMISSION_DENIED|insufficient/i.test(e.message))) {
+    console.log('::error::' + SA.client_email + ' is missing a role. In Google Cloud IAM for ' + SA.project_id +
+      ', give it "Cloud Datastore Viewer" and "Firebase Authentication Viewer". See docs/CRM.md.');
+  }
+  console.error(e && e.message);
+  process.exit(1);
+});
 const db = getFirestore();
 const auth = getAuth();
 const today = day(new Date());
