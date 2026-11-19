@@ -312,7 +312,7 @@ function buildDialog() {
     '<img src="/assets/img/fox-wave.webp" alt="" width="280" height="280">' +
     '<h2 id="auth-title"></h2>' +
     '<p class="text-2 auth-sub"></p>' +
-    '<label class="auth-optin"><input type="checkbox" id="auth-optin"> <span>Email me streak reminders and new games. Unsubscribe any time.</span></label>' +
+    '<label class="auth-optin"><input type="checkbox" id="auth-optin" checked> <span>Email me streak reminders and new games. Unsubscribe any time.</span></label>' +
     '<button type="button" class="btn btn-light btn-block" data-auth="google">' + GOOGLE_ICON + 'Continue with Google</button>' +
     '<div class="or"><span>or</span></div>' +
     '<form class="auth-form" novalidate>' +
