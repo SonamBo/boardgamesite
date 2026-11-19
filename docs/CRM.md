@@ -6,7 +6,7 @@ nightly GitHub job keep Brevo up to date.
 
 ## How it fits together
 
-1. **Opt-in.** The sign-up box "Email me streak reminders and new games" (unticked by default) and the
+1. **Opt-in.** The sign-up box "Email me streak reminders and new games" (ticked by default; players can untick it) and the
    *Emails* switch on /account save `emails.reminders` on the player's Firestore profile
    (`users/{uid}`). Signed-in visits also stamp `lastSeen` once a day.
 2. **Nightly sync.** `.github/workflows/crm-sync.yml` runs `tools/crm-sync.mjs` every day at 17:47 IST.
