@@ -22,7 +22,8 @@ if (!FIREBASE_SERVICE_ACCOUNT || (!DRY && (!BREVO_API_KEY || !BREVO_LIST_ID))) {
   console.log('::warning::Missing FIREBASE_SERVICE_ACCOUNT, BREVO_API_KEY or BREVO_LIST_ID - nothing synced. See docs/CRM.md.');
   process.exit(0);
 }
-const LIST = Number(BREVO_LIST_ID);
+// BREVO_LIST_ID can be the list's number ("3", "#3") or its name ("Reminders")
+let LIST = Number(String(BREVO_LIST_ID || '').replace(/[^0-9]/g, '')) || 0;
 
 // ---------- Brevo ----------
 // Contact attributes the emails can use, e.g. {{ contact.STREAK }}. Created on first run if missing.
@@ -168,6 +169,14 @@ const contacts = docs.filter((d) => emails.has(d.uid)).map((d) => ({ email: emai
 console.log('Opted in:', docs.length, '| with a confirmed email:', contacts.length, '| streaks at risk:', contacts.filter((c) => c.attributes.STREAK_AT_RISK).length);
 
 if (DRY) process.exit(0);
+if (!LIST) {
+  const want = String(BREVO_LIST_ID || 'Reminders').trim().toLowerCase();
+  const r = await brevo('GET', '/contacts/lists?limit=50&offset=0');
+  const found = (r.lists || []).find((l) => l.name.trim().toLowerCase() === want) || (r.lists || []).find((l) => /remind/i.test(l.name));
+  if (!found) { console.log('::error::No Brevo list matches BREVO_LIST_ID. Use the list\'s number from its page in Brevo.'); process.exit(1); }
+  LIST = found.id;
+}
+console.log('Brevo list:', LIST);
 await ensureAttributes();
 let ok = 0, failed = 0;
 for (const c of contacts) {
