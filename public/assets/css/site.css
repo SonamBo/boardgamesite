@@ -2731,3 +2731,12 @@ body.returning .hero { display: none; }
 .email-pref { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; cursor: pointer; max-width: 620px; }
 .email-pref > span { display: flex; flex-direction: column; gap: 3px; }
 .email-pref small { font-size: 14px; }
+/* one-time reminder opt-in for players who signed up before reminders existed */
+.optin-ask { position: fixed; z-index: 55; right: 20px; bottom: 20px; max-width: 420px; display: flex; gap: 12px; align-items: flex-start; padding: 16px; box-shadow: 0 12px 40px rgba(40, 20, 10, .22); animation: optin-in .3s ease-out; }
+@keyframes optin-in { from { transform: translateY(16px); opacity: 0; } }
+.optin-ask img { width: 64px; height: 64px; flex: none; }
+.optin-ask p { margin: 0 0 6px; font-size: 15px; }
+.optin-ask-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.optin-ask-btns .btn { min-height: 44px; }
+@media (max-width: 760px) { .optin-ask { left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); max-width: none; } }
+@media (prefers-reduced-motion: reduce) { .optin-ask { animation: none; } }
