@@ -110,9 +110,29 @@ function flush() {
 store.onChange(queueSave);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
 
+// Reminder emails: the player's choice, kept on their profile for the nightly sync to the email tool.
+let emailPrefs = null;          // { reminders: bool } once the profile has loaded
+let signupOptIn = null;         // ticked in the sign-up form, applied when the new profile is made
+const SEEN_KEY = 'bgs-seen-day';
+const OPTIN_KEY = 'bgs-optin-pending';   // survives Google's full-page sign-in redirect
+export function getEmailPrefs() { return emailPrefs; }
+export async function setEmailPrefs(on) {
+  if (!user) throw new Error('not signed in');
+  await saveProfile(user.uid, { emails: { reminders: !!on, at: 'now' } });
+  emailPrefs = { reminders: !!on };
+  track('email_prefs', { reminders: on ? 1 : 0 });
+}
+// One "last visit" stamp a day, so reminders can tell who has been away.
+function markSeen(u) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (store.get(SEEN_KEY, null) === today + u.uid) return;
+  saveProfile(u.uid, { lastSeen: 'now' }).then(() => store.setQuiet(SEEN_KEY, today + u.uid)).catch(() => {});
+}
+
 async function syncOnSignIn(u) {
   const remote = await loadProfile(u.uid).catch(() => undefined);
   if (remote === undefined) return; // couldn't reach the database; try again next page load
+  emailPrefs = remote && remote.emails ? { reminders: !!remote.emails.reminders } : { reminders: false };
   const saved = (remote && remote.progress) || {};
   const merged = {};
   let localChanged = false;
@@ -123,6 +143,9 @@ async function syncOnSignIn(u) {
     if (JSON.stringify(value) !== JSON.stringify(local)) { store.setQuiet(key, value); localChanged = true; }
   }
   const data = { name: displayName(u).slice(0, 40), progress: merged };
+  if (signupOptIn === null) { const kept = store.get(OPTIN_KEY, null); if (kept !== null) signupOptIn = !!kept; }
+  store.setQuiet(OPTIN_KEY, null);
+  if (!remote && signupOptIn !== null) { data.emails = { reminders: signupOptIn, at: 'now' }; emailPrefs = { reminders: signupOptIn }; }
   if (!remote || JSON.stringify(saved) !== JSON.stringify(merged) || remote.name !== data.name) {
     try {
       await saveProfile(u.uid, data, !remote);
@@ -132,6 +155,8 @@ async function syncOnSignIn(u) {
     }
   }
   synced = true;
+  window.dispatchEvent(new Event('bgs-email-prefs'));
+  markSeen(u);
   flush();
   if (localChanged) window.dispatchEvent(new Event(PROGRESS_EVENT));
 }
@@ -262,6 +287,7 @@ function buildDialog() {
     '<img src="/assets/img/fox-wave.webp" alt="" width="280" height="280">' +
     '<h2 id="auth-title"></h2>' +
     '<p class="text-2 auth-sub"></p>' +
+    '<label class="auth-optin"><input type="checkbox" id="auth-optin"> <span>Email me streak reminders and new games. Unsubscribe any time.</span></label>' +
     '<button type="button" class="btn btn-light btn-block" data-auth="google">' + GOOGLE_ICON + 'Continue with Google</button>' +
     '<div class="or"><span>or</span></div>' +
     '<form class="auth-form" novalidate>' +
@@ -293,6 +319,7 @@ function buildDialog() {
     say('');
     busy(true);
     signingIn = true;
+    if (mode === 'signup') { signupOptIn = dialog.querySelector('#auth-optin').checked; store.setQuiet(OPTIN_KEY, signupOptIn ? 1 : 0); }
     store.setQuiet(AUTH_FLAG, 1); // so the next page picks up the sign-in if Google uses a full-page redirect
     listen();
     try {
@@ -335,6 +362,7 @@ function buildDialog() {
     try {
       if (mode === 'signup') {
         newName = name.slice(0, 40);
+        signupOptIn = dialog.querySelector('#auth-optin').checked;
         await signUpWithEmail(newName, email, password);
         paintSignedIn();
         track('sign_up', { method: 'email' });
@@ -364,6 +392,7 @@ function setMode(next) {
     ? 'Free. Save your wins and streaks, and pick them up on any device.'
     : 'Log in to pick up your record and streaks.';
   dialog.querySelector('#auth-name').hidden = !signup;
+  dialog.querySelector('.auth-optin').hidden = !signup;
   dialog.querySelector('#auth-pass').autocomplete = signup ? 'new-password' : 'current-password';
   dialog.querySelector('.auth-form [type=submit]').textContent = signup ? 'Create account' : 'Log in';
   dialog.querySelector('[data-auth="reset"]').hidden = signup;

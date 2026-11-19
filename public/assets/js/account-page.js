@@ -1,7 +1,7 @@
 // The /account page: who's signed in, their record, name change, log out, delete account.
 import { store } from './store.js';
 import { GAMES } from './games-data.js';
-import { whenReady, currentUser, displayName, signOutEverywhere, refreshUserUI, setLocalName, SYNC_KEYS } from './accounts.js';
+import { whenReady, currentUser, displayName, signOutEverywhere, refreshUserUI, setLocalName, SYNC_KEYS, getEmailPrefs, setEmailPrefs } from './accounts.js';
 import { updateName, saveProfile, deleteAccount, resendVerification, track } from './firebase.js';
 import { dailyStreak, noteToday } from './daily.js';
 
@@ -72,6 +72,31 @@ function paint() {
 whenReady().then(paint);
 window.addEventListener('bgs-user', paint);
 window.addEventListener('bgs-progress', paintStats);
+
+// ---------- Reminder emails ----------
+function paintEmailPrefs() {
+  const box = $('acc-reminders');
+  const prefs = getEmailPrefs();
+  box.disabled = !prefs;          // until the profile has loaded
+  box.checked = !!(prefs && prefs.reminders);
+}
+window.addEventListener('bgs-email-prefs', paintEmailPrefs);
+whenReady().then(paintEmailPrefs);
+$('acc-reminders').addEventListener('change', async (e) => {
+  const on = e.target.checked, msg = $('acc-email-msg');
+  msg.classList.remove('error');
+  e.target.disabled = true;
+  try {
+    await setEmailPrefs(on);
+    msg.textContent = on ? 'Done. We’ll send the odd reminder.' : 'Done. No more reminder emails.';
+  } catch (err) {
+    e.target.checked = !on;
+    msg.textContent = 'Couldn’t save that. Please try again.';
+    msg.classList.add('error');
+  } finally {
+    e.target.disabled = false;
+  }
+});
 
 // ---------- Change name ----------
 $('acc-name-form').addEventListener('submit', async (e) => {

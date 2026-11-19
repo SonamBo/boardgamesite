@@ -44,8 +44,12 @@ service cloud.firestore {
 
     // A player's saved progress: one small record per game (see SYNC_KEYS in public/assets/js/accounts.js).
     function validProfile(d) {
-      return d.keys().hasOnly(['name', 'progress', 'createdAt', 'updatedAt'])
+      return d.keys().hasOnly(['name', 'progress', 'createdAt', 'updatedAt', 'lastSeen', 'emails'])
         && (!('name' in d) || (d.name is string && d.name.size() <= 40))
+        // last visit (once a day) and the player's own choice about reminder emails
+        && (!('lastSeen' in d) || (d.lastSeen is timestamp && d.lastSeen <= request.time))
+        && (!('emails' in d) || (d.emails is map && d.emails.keys().hasOnly(['reminders', 'at'])
+            && d.emails.reminders is bool && d.emails.at is timestamp && d.emails.at <= request.time))
         && (!('progress' in d) || (d.progress is map && d.progress.size() <= 150))
         && d.updatedAt == request.time;
     }

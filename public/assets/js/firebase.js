@@ -149,6 +149,9 @@ export async function saveProfile(uid, data, isNew) {
   const { m, db } = await getDb();
   const ref = m.doc(db, 'users', uid);
   const payload = { ...data, updatedAt: m.serverTimestamp() };
+  // 'now' in these two fields means the server's clock
+  if (payload.lastSeen === 'now') payload.lastSeen = m.serverTimestamp();
+  if (payload.emails && payload.emails.at === 'now') payload.emails = { ...payload.emails, at: m.serverTimestamp() };
   if (isNew) payload.createdAt = m.serverTimestamp();
   await m.setDoc(ref, payload, { merge: true });
 }
