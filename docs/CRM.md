@@ -57,5 +57,5 @@ nightly GitHub job keep Brevo up to date.
 
 ## Privacy
 
-Opt-in only, unticked by default; every email has Brevo's unsubscribe link plus the account-page switch;
+The sign-up box is ticked by default (players can untick it); every email has Brevo's unsubscribe link plus the account-page switch;
 the privacy policy names Brevo. Deleting an account removes the player from the list on the next run.
