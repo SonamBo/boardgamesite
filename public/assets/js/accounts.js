@@ -122,6 +122,29 @@ export async function setEmailPrefs(on) {
   emailPrefs = { reminders: !!on };
   track('email_prefs', { reminders: on ? 1 : 0 });
 }
+// Players who signed up before reminders existed: ask once, in a small card, never by email.
+const ASKED_KEY = 'bgs-optin-asked';
+function askAboutReminders() {
+  if (!emailPrefs || !emailPrefs.unset || store.get(ASKED_KEY, null) || document.querySelector('.optin-ask')) return;
+  if (location.pathname === '/account' || document.body.classList.contains('in-lesson')) return;
+  const card = document.createElement('div');
+  card.className = 'optin-ask card';
+  card.setAttribute('role', 'dialog');
+  card.setAttribute('aria-labelledby', 'optin-ask-title');
+  card.innerHTML = '<img src="/assets/img/fox-flame.webp" alt="" width="64" height="64">' +
+    '<div><p id="optin-ask-title"><b>Want a nudge before your streak ends?</b></p>' +
+    '<p class="text-2">We’ll email you when a streak is about to break or your next lesson is waiting. A few emails a week at most, and you can stop any time.</p>' +
+    '<div class="optin-ask-btns"><button type="button" class="btn btn-gold" data-yes>Yes, remind me</button><button type="button" class="btn btn-outline" data-no>No thanks</button></div></div>';
+  const answer = async (on) => {
+    store.setQuiet(ASKED_KEY, 1);
+    card.remove();
+    try { await setEmailPrefs(on); } catch (e) { /* asked again on the account page */ }
+    track('optin_prompt', { answer: on ? 'yes' : 'no' });
+  };
+  card.querySelector('[data-yes]').addEventListener('click', () => answer(true));
+  card.querySelector('[data-no]').addEventListener('click', () => answer(false));
+  setTimeout(() => { document.body.appendChild(card); track('optin_prompt_shown'); }, 2500);
+}
 // One "last visit" stamp a day, so reminders can tell who has been away.
 function markSeen(u) {
   const today = new Date().toISOString().slice(0, 10);
@@ -132,7 +155,8 @@ function markSeen(u) {
 async function syncOnSignIn(u) {
   const remote = await loadProfile(u.uid).catch(() => undefined);
   if (remote === undefined) return; // couldn't reach the database; try again next page load
-  emailPrefs = remote && remote.emails ? { reminders: !!remote.emails.reminders } : { reminders: false };
+  // unset: they have never been asked (accounts made before reminders existed)
+  emailPrefs = remote && remote.emails ? { reminders: !!remote.emails.reminders } : { reminders: false, unset: true };
   const saved = (remote && remote.progress) || {};
   const merged = {};
   let localChanged = false;
@@ -156,6 +180,7 @@ async function syncOnSignIn(u) {
   }
   synced = true;
   window.dispatchEvent(new Event('bgs-email-prefs'));
+  askAboutReminders();
   markSeen(u);
   flush();
   if (localChanged) window.dispatchEvent(new Event(PROGRESS_EVENT));
