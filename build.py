@@ -251,7 +251,7 @@ def cats_html():
         n = len(in_cat(key))
         label = f'<small class="live">{count_label(n)}</small>' if n else "<small>Coming soon</small>"
         tiles.append(
-            f'    <a class="cat card" href="/games/{key}"><img src="/assets/img/{c["icon"]}" alt="" width="96" height="96">'
+            f'    <a class="cat card" href="/games/{key}"><img src="/assets/img/{c["icon"]}" alt="{c["name"]}" width="96" height="96">'
             f'<span><b>{c["name"]}</b>{label}</span></a>'
         )
     return '<div class="cats">\n' + "\n".join(tiles) + "\n  </div>"
@@ -296,7 +296,7 @@ def learn_cats_html():
         if key == "multiplayer":
             continue
         n = len([1 for s, g in in_cat(key) if has_guide(s)])
-        tiles.append(f'    <a class="cat card" href="#learn-{key}"><img src="/assets/img/{c["icon"]}" alt="" width="96" height="96">'
+        tiles.append(f'    <a class="cat card" href="#learn-{key}"><img src="/assets/img/{c["icon"]}" alt="{c["name"]}" width="96" height="96">'
                      f'<span><b>{c["name"]}</b><small class="live">{n} guides</small></span></a>')
     return '<div class="cats">\n' + "\n".join(tiles) + "\n  </div>"
 

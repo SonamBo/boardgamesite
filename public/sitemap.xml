@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/about</loc><lastmod>2026-11-01</lastmod></url>
   <url><loc>https://boardgamesite.com/articles</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/articles/best-2-player-board-games-online</loc><lastmod>2026-11-07</lastmod></url>
@@ -10,7 +10,7 @@
   <url><loc>https://boardgamesite.com/articles/solitaire-vs-freecell-vs-spider</loc><lastmod>2026-11-07</lastmod></url>
   <url><loc>https://boardgamesite.com/contact</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://boardgamesite.com/daily</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://boardgamesite.com/de</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://boardgamesite.com/de</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/de/spielen/backgammon</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/de/spielen/dame</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/de/spielen/kaesekaestchen</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/dots-and-boxes.jpg</image:loc></image:image></url>
@@ -24,7 +24,7 @@
   <url><loc>https://boardgamesite.com/de/spielen/solitaer</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/de/spielen/sudoku</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/de/spielen/vier-gewinnt</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/es</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/es</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/es/jugar/4-en-raya</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/four-in-a-row.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/es/jugar/ajedrez</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/chess.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/es/jugar/backgammon</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
@@ -38,7 +38,7 @@
   <url><loc>https://boardgamesite.com/es/jugar/solitario</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/es/jugar/sudoku</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/es/jugar/timbiriche</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/dots-and-boxes.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/fr</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://boardgamesite.com/fr</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/fr/jouer/backgammon</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/backgammon.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/fr/jouer/dames</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/fr/jouer/dames-russes</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/russian-checkers.jpg</image:loc></image:image></url>
@@ -377,7 +377,7 @@
   <url><loc>https://boardgamesite.com/play/word-ladder</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-ladder.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/play/word-search</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/word-search.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/privacy</loc><lastmod>2026-11-19</lastmod></url>
-  <url><loc>https://boardgamesite.com/pt</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://boardgamesite.com/pt</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/pt/jogar/campo-minado</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/pt/jogar/cobras-e-escadas</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/snakes-and-ladders.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/pt/jogar/damas</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/checkers.jpg</image:loc></image:image></url>
@@ -391,7 +391,7 @@
   <url><loc>https://boardgamesite.com/pt/jogar/reversi</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/reversi.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/pt/jogar/sudoku</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/sudoku.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/pt/jogar/xadrez</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/chess.jpg</image:loc></image:image></url>
-  <url><loc>https://boardgamesite.com/ru</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://boardgamesite.com/ru</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://boardgamesite.com/ru/igry/kosynka</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/solitaire.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/ru/igry/saper</loc><lastmod>2026-11-11</lastmod><image:image><image:loc>https://boardgamesite.com/assets/img/og/mines.jpg</image:loc></image:image></url>
   <url><loc>https://boardgamesite.com/teachers</loc><lastmod>2026-11-11</lastmod></url>
