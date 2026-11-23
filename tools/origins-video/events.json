@@ -1,0 +1,198 @@
+[
+ {
+  "game": "Senet",
+  "place": "Egypt",
+  "when": "c. 2600 BC",
+  "lat": 29.87,
+  "lon": 31.22,
+  "era": "ancient",
+  "fact": "Painted in Egyptian tombs. One of the oldest board games we know."
+ },
+ {
+  "game": "Royal Game of Ur",
+  "place": "Iraq",
+  "when": "c. 2600 BC",
+  "lat": 30.96,
+  "lon": 46.1,
+  "era": "ancient",
+  "fact": "A race game found in the royal graves at Ur."
+ },
+ {
+  "game": "Go",
+  "place": "China",
+  "when": "300s BC",
+  "lat": 34.6,
+  "lon": 112.4,
+  "era": "ancient",
+  "fact": "First written mention in the Zuo Zhuan chronicle, more than 2,300 years ago."
+ },
+ {
+  "game": "Mancala",
+  "place": "Israel",
+  "when": "AD 200s",
+  "lat": 31.81,
+  "lon": 34.78,
+  "era": "classical",
+  "fact": "The oldest certain boards, in a Roman bathhouse at Gedera. The game family spread across Africa."
+ },
+ {
+  "game": "Chaturanga",
+  "place": "India",
+  "when": "AD 500s",
+  "lat": 25.6,
+  "lon": 85.1,
+  "era": "classical",
+  "fact": "The ancestor of chess, first clearly mentioned in the Gupta Empire."
+ },
+ {
+  "game": "Nard",
+  "place": "Persia",
+  "when": "AD 500s",
+  "lat": 29.6,
+  "lon": 52.5,
+  "era": "classical",
+  "fact": "A forerunner of backgammon. Its oldest rule book dates from this century."
+ },
+ {
+  "game": "Patolli",
+  "place": "Mexico",
+  "when": "by AD 650",
+  "lat": 19.69,
+  "lon": -98.84,
+  "era": "classical",
+  "fact": "A race game of Teotihuacan, played across Mesoamerica."
+ },
+ {
+  "game": "Hnefatafl",
+  "place": "Viking lands",
+  "when": "700s",
+  "lat": 59.13,
+  "lon": 10.23,
+  "era": "classical",
+  "fact": "The Vikings' game: a king escapes to the corners of the board."
+ },
+ {
+  "game": "Xiangqi",
+  "place": "China",
+  "when": "800s",
+  "lat": 34.26,
+  "lon": 108.94,
+  "era": "classical",
+  "fact": "Chinese chess. Its rules are first described in a Tang dynasty story."
+ },
+ {
+  "game": "Chess",
+  "place": "Spain & Sicily",
+  "when": "900s",
+  "lat": 37.88,
+  "lon": -4.78,
+  "era": "classical",
+  "fact": "Chess reaches Europe from Persia, through Spain and Sicily.",
+  "from": [
+   [
+    25.6,
+    85.1
+   ],
+   [
+    29.6,
+    52.5
+   ]
+  ]
+ },
+ {
+  "game": "Shogi",
+  "place": "Japan",
+  "when": "1000s",
+  "lat": 34.68,
+  "lon": 135.8,
+  "era": "medieval",
+  "fact": "The oldest pieces, found at Nara, date to about 1058."
+ },
+ {
+  "game": "Checkers",
+  "place": "France",
+  "when": "c. 1100",
+  "lat": 43.6,
+  "lon": 1.44,
+  "era": "medieval",
+  "fact": "Already played around 1100, probably in the south of France."
+ },
+ {
+  "game": "Dominoes",
+  "place": "China",
+  "when": "1200s",
+  "lat": 30.27,
+  "lon": 120.15,
+  "era": "medieval",
+  "fact": "First mentioned in Song dynasty China. Reached France in the 1700s."
+ },
+ {
+  "game": "Pachisi",
+  "place": "India",
+  "when": "1500s",
+  "lat": 27.09,
+  "lon": 77.66,
+  "era": "medieval",
+  "fact": "Emperor Akbar's giant courtyard boards are its earliest sure evidence."
+ },
+ {
+  "game": "Mahjong",
+  "place": "China",
+  "when": "1800s",
+  "lat": 31.23,
+  "lon": 121.47,
+  "era": "modern",
+  "fact": "Appeared around Shanghai in the mid to late 1800s."
+ },
+ {
+  "game": "Reversi",
+  "place": "England",
+  "when": "1883",
+  "lat": 51.5,
+  "lon": -0.12,
+  "era": "modern",
+  "fact": "Two Englishmen both claimed to have invented it. Japan's Othello followed in 1971."
+ },
+ {
+  "game": "Ludo",
+  "place": "England",
+  "when": "1896",
+  "lat": 52.6,
+  "lon": -1.9,
+  "era": "modern",
+  "fact": "A simpler Pachisi, sold in England from 1896.",
+  "from": [
+   [
+    27.09,
+    77.66
+   ]
+  ]
+ },
+ {
+  "game": "Monopoly",
+  "place": "USA",
+  "when": "1903",
+  "lat": 38.9,
+  "lon": -77.0,
+  "era": "modern",
+  "fact": "Began as Lizzie Magie's Landlord's Game. Parker Brothers sold Monopoly from 1935."
+ },
+ {
+  "game": "Scrabble",
+  "place": "USA",
+  "when": "1931",
+  "lat": 41.7,
+  "lon": -73.9,
+  "era": "modern",
+  "fact": "Alfred Butts' Criss-Crosswords, renamed Scrabble in 1948."
+ },
+ {
+  "game": "Catan",
+  "place": "Germany",
+  "when": "1995",
+  "lat": 49.87,
+  "lon": 8.65,
+  "era": "modern",
+  "fact": "Klaus Teuber's Settlers of Catan, first published in Germany."
+ }
+]

@@ -1,0 +1,174 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:Fredoka;src:url(../../public/assets/fonts/fredoka-latin.woff2);font-weight:300 700}
+@font-face{font-family:Nunito;src:url(../../public/assets/fonts/nunito-latin.woff2);font-weight:200 1000}
+*{box-sizing:border-box;margin:0}
+body{background:#FFF7EC;color:#3A2418;font-family:Nunito;overflow:hidden}
+#map path.land{fill:#EADBC8;stroke:#FFF7EC;stroke-linejoin:round}
+.brand{display:flex;align-items:center;gap:16px;font-family:Fredoka;font-weight:600}
+.pinn{font-family:Fredoka;font-weight:600;fill:#fff;text-anchor:middle;dominant-baseline:central}
+/* ---- video ---- */
+body.video{width:1080px;height:1920px}
+.video #stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.video .brand{position:absolute;left:70px;top:70px;font-size:40px}
+.video .brand img{width:64px;height:64px;border-radius:14px}
+.video .title{position:absolute;left:70px;right:70px;top:165px;font-family:Fredoka;font-weight:600;font-size:66px;line-height:1.05}
+.video .title b{color:#EE6B1F;font-weight:600}
+.video #year{position:absolute;left:70px;top:330px;font-family:Fredoka;font-weight:600;font-size:110px;color:#EE6B1F;line-height:1}
+.video #mapbox{position:absolute;left:0;top:480px;width:1080px;height:860px;overflow:hidden}
+.video #map{width:1080px;height:860px}
+.video .card{position:absolute;left:60px;right:60px;top:1390px;min-height:330px;padding:34px 40px;border-radius:30px;background:#fff;border-left:14px solid #EE6B1F;box-shadow:0 8px 24px rgba(58,36,24,.1)}
+.video .card .g{font-family:Fredoka;font-weight:600;font-size:68px;line-height:1.05}
+.video .card .p{margin-top:8px;font-size:36px;font-weight:900;color:#8A6A55}
+.video .card .f{margin-top:18px;font-size:40px;font-weight:800;line-height:1.28}
+.video .src{position:absolute;left:72px;right:72px;top:1780px;font-size:25px;font-weight:700;color:#B48E73}
+.video #hook,.video #end{position:absolute;inset:0;background:#FFF7EC;display:flex;flex-direction:column;align-items:center;text-align:center}
+.video #hook{justify-content:center;padding:0 90px}
+.video #hook h1{font-family:Fredoka;font-weight:600;font-size:100px;line-height:1.05}
+.video #hook h1 b{color:#EE6B1F;font-weight:600}
+.video #hook p{margin-top:30px;font-size:44px;font-weight:800;color:#8A6A55}
+.video #hook img{width:420px;margin-bottom:30px}
+.video #end{padding:230px 80px 0}
+.video #end h2{font-family:Fredoka;font-weight:600;font-size:84px;line-height:1.05}
+.video #end h2 b{color:#EE6B1F;font-weight:600}
+.video #end p.q{margin-top:28px;font-size:42px;font-weight:800;color:#8A6A55}
+.video #end img{width:440px;margin-top:50px}
+.video #end .url{margin-top:20px;padding:22px 46px;border-radius:999px;background:#EE6B1F;color:#fff;font-family:Fredoka;font-weight:600;font-size:52px}
+.video #end .cta{margin-top:26px;font-size:36px;font-weight:800;color:#8A6A55}
+.video #list,.video .ptitle,.video .psub,.video .legend{display:none}
+/* ---- poster ---- */
+body.poster{width:2400px;height:1640px}
+.poster #stage{position:relative;width:2400px;height:1640px;padding:60px 70px}
+.poster #hook,.poster #end,.poster #year,.poster .card,.poster .title{display:none}
+.poster .head{display:flex;justify-content:space-between;align-items:flex-end}
+.poster .ptitle{font-family:Fredoka;font-weight:600;font-size:76px;line-height:1}
+.poster .ptitle b{color:#EE6B1F;font-weight:600}
+.poster .psub{margin-top:14px;font-size:32px;font-weight:800;color:#8A6A55}
+.poster .brand{font-size:38px}
+.poster .brand img{width:60px;height:60px;border-radius:13px}
+.poster #mapbox{position:relative;margin-top:26px;width:2260px;height:960px}
+.poster #map{width:2260px;height:960px}
+.poster .legend{position:absolute;left:30px;bottom:24px;display:flex;gap:14px}
+.poster .legend div{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 10px;border-radius:999px;background:#fff;font-weight:900;font-size:24px}
+.poster .legend i{width:24px;height:24px;border-radius:50%}
+.poster #list{margin-top:26px;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-flow:column;grid-template-rows:repeat(5,auto);gap:10px 30px}
+.poster #list div{display:flex;align-items:baseline;gap:12px;font-size:27px;font-weight:800;line-height:1.25}
+.poster #list i{flex:none;width:40px;height:40px;border-radius:50%;color:#fff;font-style:normal;font-family:Fredoka;font-weight:600;font-size:22px;display:flex;align-items:center;justify-content:center;transform:translateY(8px)}
+.poster #list b{font-family:Fredoka;font-weight:600;font-size:30px}
+.poster #list span{color:#8A6A55}
+.poster .src{position:absolute;left:70px;right:70px;bottom:34px;font-size:23px;font-weight:700;color:#B48E73}
+</style>
+<div id="stage">
+  <div class="head"><div><div class="ptitle">Where the world’s <b>board games</b> were born</div><div class="psub">From Egyptian tombs to German kitchen tables: the earliest sure evidence of 20 classic games</div></div>
+    <div class="brand"><img src="../../public/assets/icons/icon-512.png" alt="">BoardGameSite</div></div>
+  <div class="title">Where the world’s <b>board games</b> were born</div>
+  <div id="year"></div>
+  <div id="mapbox"><svg id="map" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="legend"><div><i style="background:#8E5BB5"></i>Ancient</div><div><i style="background:#2E9E6B"></i>AD 1–1000</div><div><i style="background:#3B6FB6"></i>1000–1800</div><div><i style="background:#EE6B1F"></i>Since 1800</div></div></div>
+  <div class="card" id="card"><div class="g"></div><div class="p"></div><div class="f"></div></div>
+  <div id="list"></div>
+  <div class="src">Dates are the earliest sure evidence, not the moment of invention. Sources: Wikipedia articles on each game and the British Museum (Ur). Map: Natural Earth.</div>
+  <div id="hook"><img src="../../public/assets/img/fox-think.webp" alt=""><h1>Where were your favourite <b>board games</b> born?</h1><p>4,600 years in under a minute</p></div>
+  <div id="end"><h2>Which game is <b>your</b> family’s favourite?</h2><p class="q">Tell us in the comments</p><img src="../../public/assets/img/fox-trophy.webp" alt=""><div class="url">boardgamesite.com</div><p class="cta">Play Chess, Go, Mancala, Ludo and 50+ more, free</p></div>
+</div>
+<script>
+const W = 2000, H = 973;
+const ERA = { ancient: '#8E5BB5', classical: '#2E9E6B', medieval: '#3B6FB6', modern: '#EE6B1F' };
+// Equal Earth, the same projection and scale as shapes.json
+const A1 = 1.340264, A2 = -0.081106, A3 = 0.000893, A4 = 0.003796, M = Math.sqrt(3) / 2;
+function ee(lon, lat) { const l = lon * Math.PI / 180, p = lat * Math.PI / 180; const th = Math.asin(M * Math.sin(p)), t2 = th * th, t6 = t2 * t2 * t2; return [l * Math.cos(th) / (M * (A1 + 3 * A2 * t2 + t6 * (7 * A3 + 9 * A4 * t2))), th * (A1 + A2 * t2 + t6 * (A3 + A4 * t2))]; }
+const XM = ee(180, 0)[0], YM = ee(0, 90)[1], K = W / (2 * XM);
+const P = (lat, lon) => { const [x, y] = ee(lon, lat); return [(x + XM) * K, (YM - y) * K]; };
+// poster only: pins that sit on top of each other are pushed apart (screen pixels) with a short line back
+const NUDGE = { Senet: [-30, 26], Mancala: [20, -26], Go: [34, -30], Xiangqi: [-36, 14], Dominoes: [-38, 22], Mahjong: [30, -22], Reversi: [-44, 16], Ludo: [-14, -36], Monopoly: [-14, 18], Scrabble: [14, -18] };
+const T = { hook: 2.6, step: 1.95, n: 0, outro: 0, end: 0, dur: 0 };
+let EV = [], MODE = 'video', BOX = [1080, 860];
+const $ = (id) => document.getElementById(id);
+const ease = (x) => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
+const lerp = (a, b, k) => a + (b - a) * k;
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+function fixPath(d) {
+  let out = '';
+  for (const piece of d.split('M').filter(Boolean)) {
+    const nums = piece.replace(/[lz]/g, ' ').replace(/-/g, ' -').trim().split(/\s+/).map(Number);
+    let x = nums[0], y = nums[1], cur = [[x, y]];
+    const flush = () => { if (cur.length > 2) out += 'M' + cur.map((p) => p.join(' ')).join('L') + 'Z'; };
+    for (let i = 2; i + 1 < nums.length; i += 2) { const dx = nums[i], dy = nums[i + 1]; x += dx; y += dy; if (Math.abs(dx) > 900) { flush(); cur = []; } cur.push([x, y]); }
+    flush();
+  }
+  return out;
+}
+window.setup = (events, shapes, mode) => {
+  EV = events; MODE = mode; document.body.className = mode;
+  BOX = mode === 'poster' ? [2260, 960] : [1080, 860];
+  T.n = EV.length; T.outro = T.hook + T.n * T.step; T.end = T.outro + 3.2; T.dur = T.end + 5;
+  const svg = $('map');
+  for (const d of Object.values(shapes)) el('path', { d: fixPath(d), class: 'land' }, svg);
+  EV.forEach((e, i) => {
+    e.xy = P(e.lat, e.lon); e.i = i;
+    if (e.from) {
+      const pts = [...e.from.map(([la, lo]) => P(la, lo)), e.xy];
+      let d = 'M' + pts[0].join(' ');
+      for (let j = 1; j < pts.length; j++) { const [a, b] = [pts[j - 1], pts[j]]; const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 - Math.hypot(b[0] - a[0], b[1] - a[1]) * 0.18; d += ` Q${mx} ${my} ${b[0]} ${b[1]}`; }
+      e.arc = el('path', { d, fill: 'none', stroke: ERA[e.era], 'stroke-width': 4, 'stroke-dasharray': '10 8', 'stroke-linecap': 'round', opacity: 0 }, svg);
+    }
+  });
+  for (const e of EV) {
+    e.lead = el('line', { stroke: '#3A2418', 'stroke-width': 1, opacity: 0 }, svg);
+    e.g = el('g', {}, svg);
+    e.dot = el('circle', { r: 11, fill: ERA[e.era], stroke: '#fff', 'stroke-width': 3 }, e.g);
+    e.num = el('text', { class: 'pinn', 'font-size': 12 }, e.g); e.num.textContent = e.i + 1;
+  }
+  $('list').innerHTML = EV.map((e) => `<div><i style="background:${ERA[e.era]}">${e.i + 1}</i><span><b>${e.game}</b> <span>${e.place}, ${e.when}</span></span></div>`).join('');
+};
+function cam(t) {
+  if (MODE === 'poster') return [1020, 345, 1500];
+  const world = [1000, 470, 1800], view = (e) => [Math.max(420, Math.min(1580, e.xy[0])), Math.max(260, Math.min(700, e.xy[1] + 40)), 840];
+  if (t < T.hook) return world;
+  const i = Math.min(T.n - 1, Math.floor((t - T.hook) / T.step));
+  const k = ease((t - T.hook - i * T.step) / 0.7);
+  const from = i ? view(EV[i - 1]) : world, to = view(EV[i]);
+  let c = [lerp(from[0], to[0], k), lerp(from[1], to[1], k), Math.exp(lerp(Math.log(from[2]), Math.log(to[2]), k))];
+  if (t >= T.outro - 0.3) { const k2 = ease((t - (T.outro - 0.3)) / 1.1); c = [lerp(to[0], world[0], k2), lerp(to[1], world[1], k2), Math.exp(lerp(Math.log(to[2]), Math.log(world[2]), k2))]; }
+  return c;
+}
+window.render = (t) => {
+  const [cx, cy, w] = cam(t), h = w * BOX[1] / BOX[0];
+  $('map').setAttribute('viewBox', `${cx - w / 2} ${cy - h / 2} ${w} ${h}`);
+  const s = w / BOX[0];   // map units per screen pixel: keeps pins the same size on screen
+  const cur = MODE === 'poster' ? -1 : Math.floor((t - T.hook) / T.step);
+  for (const e of EV) {
+    const at = T.hook + e.i * T.step;
+    const show = MODE === 'poster' ? 1 : ease((t - at - 0.35) / 0.3);
+    const big = MODE === 'poster' ? 1.9 : e.i === cur && t < T.outro ? 4.2 : 2.6;
+    const nd = MODE === 'poster' && NUDGE[e.game] ? NUDGE[e.game] : [0, 0];
+    const px = e.xy[0] + nd[0] * s, py = e.xy[1] + nd[1] * s;
+    e.g.setAttribute('transform', `translate(${px} ${py}) scale(${s * big * (0.6 + 0.4 * show)})`);
+    if (nd[0] || nd[1]) { e.lead.setAttribute('x1', e.xy[0]); e.lead.setAttribute('y1', e.xy[1]); e.lead.setAttribute('x2', px); e.lead.setAttribute('y2', py); e.lead.setAttribute('stroke-width', 2.5 * s); e.lead.setAttribute('opacity', 0.7); }
+    e.g.setAttribute('opacity', show);
+    if (e.arc) { e.arc.setAttribute('opacity', show); e.arc.setAttribute('stroke-width', 4 * s * (MODE === 'poster' ? 1 : 1.4)); e.arc.setAttribute('stroke-dasharray', `${10 * s} ${8 * s}`); }
+  }
+  for (const p of document.querySelectorAll('#map path.land')) p.setAttribute('stroke-width', 1.4 * s);
+  if (MODE === 'poster') return;
+  const e = EV[Math.max(0, Math.min(T.n - 1, cur))];
+  $('year').textContent = t < T.hook ? '' : t >= T.outro ? '20 games, 4,600 years' : e.when;
+  $('year').style.fontSize = t >= T.outro ? '72px' : '110px';
+  const c = $('card');
+  if (t >= T.hook && t < T.outro) {
+    c.style.opacity = 1; c.style.borderLeftColor = ERA[e.era];
+    c.querySelector('.g').textContent = `${e.i + 1}. ${e.game}`; c.querySelector('.g').style.color = ERA[e.era];
+    c.querySelector('.p').textContent = `${e.place} · ${e.when}`;
+    c.querySelector('.f').textContent = e.fact;
+    const k = ease((t - T.hook - (cur) * T.step - 0.05) / 0.25); c.style.transform = `translateY(${(1 - k) * 30}px)`; c.style.opacity = k;
+  } else if (t >= T.outro) {
+    c.style.opacity = 1; c.style.transform = 'none'; c.style.borderLeftColor = '#EE6B1F';
+    c.querySelector('.g').textContent = 'Born on four continents'; c.querySelector('.g').style.color = '#3A2418';
+    c.querySelector('.p').textContent = 'Ancient · AD 1–1000 · 1000–1800 · since 1800';
+    c.querySelector('.f').textContent = 'Chess and Ludo both came to Europe from India.';
+  } else c.style.opacity = 0;
+  $('hook').style.opacity = 1 - ease((t - (T.hook - 0.5)) / 0.5);
+  $('end').style.opacity = ease((t - T.end) / 0.5);
+};
+window.T = T;
+</script>
