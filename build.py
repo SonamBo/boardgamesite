@@ -213,7 +213,7 @@ def related_html(skip, lang="en"):
     )
 
 
-def game_card(slug, g, lazy=True, lang="en"):
+def game_card(slug, g, lazy=True, lang="en", desc=True):
     if lang != "en":
         name, card = gname(slug, lang), gname(slug, lang, "card")
         chips = "".join(f'<span class="chip">{T(lang, c)}</span>' for c in g["chips"])
@@ -222,8 +222,7 @@ def game_card(slug, g, lazy=True, lang="en"):
       <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="{name}" width="480" height="360"{loading}></a>
       <div class="game-body">
         <h3>{name}</h3>
-        <p>{card}</p>
-        <div class="chips">{chips}</div>
+{"        <p>" + card + "</p>\n" if desc else ""}        <div class="chips">{chips}</div>
         <a class="btn btn-green btn-block" href="/play/{slug}" aria-label="{T(lang, 'Play')} {name}">{T(lang, 'Play')}</a>
       </div>
     </article>"""
@@ -234,8 +233,7 @@ def game_card(slug, g, lazy=True, lang="en"):
       <a class="game-art" href="/play/{slug}" tabindex="-1" aria-hidden="true"><img src="/assets/img/thumb/{slug}.webp" alt="{g["name"]} game" width="480" height="360"{loading}></a>
       <div class="game-body">
         <h3>{g["name"]}</h3>
-        <p>{g["card"]}</p>
-        <div class="chips">{chips}</div>
+{"        <p>" + g["card"] + "</p>\n" if desc else ""}        <div class="chips">{chips}</div>
         <a class="btn btn-green btn-block" href="/play/{slug}" aria-label="Play {g["name"]}">Play</a>{learn}
       </div>
     </article>"""
@@ -266,7 +264,7 @@ def shelves_html():
         games = in_cat(key)
         if not games:
             continue
-        cards = "\n".join(game_card(s, g, lazy=not first) for s, g in games[:4])
+        cards = "\n".join(game_card(s, g, lazy=not first, desc=False) for s, g in games[:4])
         first = False
         more = f'<a class="link-green" href="/games/{key}">See all {count_label(len(games))}</a>' if len(games) > 4 else ""
         out.append(
