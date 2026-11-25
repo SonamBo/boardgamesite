@@ -2109,7 +2109,8 @@ canvas.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; z-inde
 .punit-fox { width: 96px; height: auto; flex: none; margin: -26px -6px -16px 0; }
 .punit.ladder .punit-head { overflow: visible; }
 .ladder-box { position: relative; }
-.ladder-fox { position: absolute; right: 8px; top: 6px; width: 64px; height: auto; pointer-events: none; }
+.ladder-fox { position: absolute; right: 10px; top: 8px; width: 52px; height: auto; pointer-events: none; }
+.ladder-box .ladder-vs { margin-top: 22px; }   /* clears the fox so it never covers the bot's name */
 .ladder-box .ladder-kicker { padding-right: 70px; }
 .page-head-fox { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .page-head-fox img { width: 110px; height: auto; flex: none; margin: -12px 0 -20px; }
