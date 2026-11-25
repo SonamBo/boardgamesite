@@ -93,20 +93,17 @@ export function welcome() {
     box.querySelector('.onb-browse').addEventListener('click', () => done('browse'));
   }
   function stepPlay() {
-    frame(2, 2, stepIntent, 'fox-point', 'Let’s play!', 'Pick one to start. Every game is on the home page too.',
-      '<div class="onb-opts onb-games onb-play">' + PLAY.map((g) => '<button type="button" class="onb-opt card" data-v="' + g.id + '">' +
-        '<img src="/assets/img/thumb/' + g.id + '.webp" alt="" width="480" height="360"><b>' + g.name + '</b></button>').join('') +
-      '</div><button type="button" class="btn btn-outline onb-browse onb-all">Browse all ' + ALL.length + ' games</button>');
+    // every game, the popular six first, in a list that scrolls under the fox
+    const first = PLAY.map((g) => g.id);
+    const list = PLAY.concat(ALL.filter((g) => !first.includes(g.slug)).map((g) => ({ id: g.slug, name: g.name })));
+    frame(2, 2, stepIntent, 'fox-point', 'Let’s play!', 'Pick a game to start.',
+      '<div class="onb-opts onb-games onb-play" role="list" aria-label="All ' + list.length + ' games">' + list.map((g, i) => '<button type="button" role="listitem" class="onb-opt card" data-v="' + g.id + '">' +
+        '<img src="/assets/img/thumb/' + g.id + '.webp" alt="" width="480" height="360"' + (i > 5 ? ' loading="lazy"' : '') + '><b>' + g.name + '</b></button>').join('') + '</div>');
     box.querySelectorAll('.onb-opt').forEach((b) => b.addEventListener('click', () => {
       pick.game = b.dataset.v;
       done('play');
       location.href = '/play/' + pick.game;
     }));
-    box.querySelector('.onb-browse').addEventListener('click', () => {
-      done('browse');
-      const all = document.getElementById('games');
-      if (all) all.scrollIntoView({ block: 'start' });
-    });
   }
 
   function stepGame() {

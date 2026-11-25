@@ -2740,3 +2740,6 @@ body.returning .hero { display: none; }
 .optin-ask-btns .btn { min-height: 44px; }
 @media (max-width: 760px) { .optin-ask { left: 12px; right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); max-width: none; } }
 @media (prefers-reduced-motion: reduce) { .optin-ask { animation: none; } }
+/* welcome "Play" step: every game in a list that scrolls, the fox and question stay put */
+.onb-games.onb-play { max-height: calc(100dvh - 300px); min-height: 260px; overflow-y: auto; overscroll-behavior: contain; padding: 4px 4px 12px; margin: 0 -4px; }
+@media (max-width: 640px) { .onb-games.onb-play { max-height: calc(100dvh - 230px); } }
