@@ -52,6 +52,7 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
         <div class="lp-text"></div>
         <div class="lp-choices"></div>
         <div class="lp-pips" aria-hidden="true"></div>
+        <p class="lp-task" hidden></p>
         <div class="lp-sheet">
           <div class="lp-sheet-msg"><span class="lp-mark" aria-hidden="true"></span><div><b class="lp-verdict"></b><p class="lp-feedback" role="status" aria-live="polite"></p></div></div>
           <div class="lp-actions">
@@ -147,6 +148,9 @@ export function runLesson(el, course, lesson, next, index, opts = {}) {
     $('.lp-next').disabled = s.type !== 'info';
     $('.lp-next').textContent = k === steps.length - 1 ? 'Finish lesson' : 'Continue';
     feedback(s.type === 'info' ? '' : s.prompt || '');
+    // the task sits on its own line above the button; on phones the fixed bottom sheet carries it instead
+    $('.lp-task').textContent = s.type === 'info' ? '' : s.prompt || '';
+    $('.lp-task').hidden = s.type === 'info' || !s.prompt;
     face(s.type === 'info' ? 'surprised' : 'think');
     board.onMove(null);
     board.onTap(null);
