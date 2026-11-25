@@ -109,7 +109,7 @@ export function welcome() {
   function stepGame() {
     frame(2, 4, stepIntent, 'fox-hello', 'Great, let’s learn!', 'Which game would you like to get good at?',
       '<div class="onb-opts onb-games">' + GAMES.map((g) => '<button type="button" class="onb-opt card" data-v="' + g.id + '">' +
-        '<img src="/assets/img/thumb/' + g.id + '.webp" alt="" width="480" height="360"><b>' + g.name + '</b><span>' + g.blurb + '</span></button>').join('') + '</div>');
+        '<img src="/assets/img/thumb/' + g.id + '.webp" alt="" width="480" height="360"><b>' + g.name + '</b></button>').join('') + '</div>');
     box.querySelectorAll('.onb-opt').forEach((b) => b.addEventListener('click', () => { pick.game = b.dataset.v; stepLevel(); }));
   }
   function stepLevel() {

@@ -2278,6 +2278,10 @@ body.returning .hero { display: none; }
 .lp-verdict:empty { display: none; }
 .lp-mark { display: none; flex: none; width: 40px; height: 40px; border-radius: 50%; place-items: center; font: 800 20px/1 var(--body); }
 .lp-sheet.good, .lp-sheet.bad { animation: lpsheet .25s ease-out; }
+/* The task reads as an instruction above the button, not as text inside a box. The sheet only colours in once you answer. */
+.lp-task { margin: 4px 0 0; font-size: 17px; font-weight: 800; line-height: 1.4; color: var(--text); }
+.lp-sheet:not(.good):not(.bad) { background: transparent; padding-top: 4px; }
+.lp-sheet:not(.good):not(.bad) .lp-sheet-msg { display: none; }
 .lp-sheet.good { background: color-mix(in srgb, var(--good) 20%, var(--surface)); }
 .lp-sheet.bad { background: color-mix(in srgb, var(--bad) 18%, var(--surface)); }
 .lp-sheet.good .lp-verdict, .lp-sheet.good .lp-feedback { color: var(--good); }
@@ -2293,6 +2297,9 @@ body.returning .hero { display: none; }
   body.in-lesson .lp-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; margin: 0; border-radius: 20px 20px 0 0;
     padding: 14px max(16px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
     border-top: 1px solid var(--border); box-shadow: 0 -10px 30px var(--shadow); background: var(--side); }
+  body.in-lesson .lp-task { display: none; }
+  body.in-lesson .lp-sheet:not(.good):not(.bad) { background: var(--side); padding-top: 14px; }
+  body.in-lesson .lp-sheet:not(.good):not(.bad) .lp-sheet-msg { display: flex; }
   body.in-lesson .lp-sheet.good { background: color-mix(in srgb, var(--good) 22%, var(--side)); }
   body.in-lesson .lp-sheet.bad { background: color-mix(in srgb, var(--bad) 20%, var(--side)); }
   body.in-lesson .lp-actions { justify-content: stretch; }
@@ -2381,7 +2388,8 @@ body.returning .hero { display: none; }
   .onb-title { font-size: 20px; }
   .onb-games { grid-template-columns: 1fr; }
   .onb-games .onb-opt { display: grid; grid-template-columns: 96px 1fr; column-gap: 12px; row-gap: 2px; align-content: center; }
-  .onb-games .onb-opt img { grid-row: span 2; align-self: center; }
+  .onb-games .onb-opt img { align-self: center; }
+  .onb-games .onb-opt b { align-self: center; }
 }
 /* daily goal on the welcome-back home */
 .wb-goal { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
